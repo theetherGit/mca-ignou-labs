@@ -27,7 +27,12 @@ const baseSchema = s.object({
   navLabel: s.string().optional(),
   raw: s.raw(),
   toc: s.toc(),
-  section: s.enum(["Overview", "MCS-216", "MCS-217"]),
+  section: s.enum([
+    "Overview",
+    "MCS-216 Section 1",
+    "MCS-216 Section 2",
+    "MCS-217",
+  ]),
   lastModified: timestamp(),
   priority: s.number().optional(),
 });

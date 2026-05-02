@@ -18,7 +18,8 @@ export function getSectionDocs(section: Doc["section"], pathPrefix = "/docs/") {
     }));
 }
 
-const mcs216 = getSectionDocs("MCS-216");
+const mcs216Section1 = getSectionDocs("MCS-216 Section 1");
+const mcs216Section2 = getSectionDocs("MCS-216 Section 2");
 const mcs217 = getSectionDocs("MCS-217");
 
 export const navigation = defineNavigation({
@@ -44,8 +45,12 @@ export const navigation = defineNavigation({
   ],
   sections: [
     {
-      title: "MCS-216",
-      items: mcs216,
+      title: "MCS-216 - Section 1",
+      items: mcs216Section1,
+    },
+    {
+      title: "MCS-216 - Section 2",
+      items: mcs216Section2,
     },
     {
       title: "MCS-217",

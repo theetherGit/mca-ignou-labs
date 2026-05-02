@@ -1,7 +1,7 @@
 ---
 title: Session 1
 description: Implementation of Simple Algorithms
-section: MCS-216
+section: MCS-216 Section 1
 ---
 
 <script>
@@ -51,17 +51,17 @@ The algorithm follows a simple recursive process:
 The GCD is 6.
 
 ### Python Implementation
-```python title="Euclid.py" showLineNumbers file=../../lib/code/mcs-216/session-1/1/1.py 
+```python title="Euclid.py" showLineNumbers file=../../../lib/code/mcs-216/session-1/1/1.py 
 
 ```
 
 ### C Implementation
-```c title="Euclid.c" showLineNumbers file=../../lib/code/mcs-216/session-1/1/1.c 
+```c title="Euclid.c" showLineNumbers file=../../../lib/code/mcs-216/session-1/1/1.c 
 
 ```
 
 ### Rust Implementation
-```rust title="Euclid.rs" showLineNumbers file=../../lib/code/mcs-216/session-1/1/1.rs
+```rust title="Euclid.rs" showLineNumbers file=../../../lib/code/mcs-216/session-1/1/1.rs
 
 ```
 
@@ -120,17 +120,17 @@ P(3) = (((((6 * 3 + 5) * 3 + 4) * 3 - 3) * 3 + 2) * 3 + 8) * 3 - 7
 | 3 | (33×2)+(−7) | 59 |
 
 ### Python Implementation
-```python title="horners-method.py" showLineNumbers file=../../lib/code/mcs-216/session-1/2/2-horner.py 
+```python title="horners-method.py" showLineNumbers file=../../../lib/code/mcs-216/session-1/2/2-horner.py 
 
 ```
 
 ### C Implementation
-```c title="horners-method.c" showLineNumbers file=../../lib/code/mcs-216/session-1/2/2-horner.c 
+```c title="horners-method.c" showLineNumbers file=../../../lib/code/mcs-216/session-1/2/2-horner.c 
 
 ```
 
 ### Rust Implementation
-```rust title="horners-method.rs" showLineNumbers file=../../lib/code/mcs-216/session-1/2/2-horner.rs
+```rust title="horners-method.rs" showLineNumbers file=../../../lib/code/mcs-216/session-1/2/2-horner.rs
 
 ```
 
@@ -163,17 +163,17 @@ In Brute Force, for each term `a_k * x^k`, you calculate `x` multiplied by itsel
 Total Multiplications: `2 + 1 = 3`. (Horner would only use 2).
 
 ### Python Implementation
-```python title="horners-method.py" showLineNumbers file=../../lib/code/mcs-216/session-1/2/2-brute.py 
+```python title="horners-method.py" showLineNumbers file=../../../lib/code/mcs-216/session-1/2/2-brute.py 
 
 ```
 
 ### C Implementation
-```c title="horners-method.c" showLineNumbers file=../../lib/code/mcs-216/session-1/2/2-brute.c 
+```c title="horners-method.c" showLineNumbers file=../../../lib/code/mcs-216/session-1/2/2-brute.c 
 
 ```
 
 ### Rust Implementation
-```rust title="horners-method.rs" showLineNumbers file=../../lib/code/mcs-216/session-1/2/2-brute.rs
+```rust title="horners-method.rs" showLineNumbers file=../../../lib/code/mcs-216/session-1/2/2-brute.rs
 
 ```
 
@@ -262,30 +262,39 @@ For `n=4`:
 
 
 ### Python Implementation
-```python title="matrix-multiplation.py" showLineNumbers file=../../lib/code/mcs-216/session-1/3/3.py 
+```python title="matrix-multiplation.py" showLineNumbers file=../../../lib/code/mcs-216/session-1/3/3.py 
 
 ```
 
 ### C Implementation
-```c title="matrix-multiplation.c" showLineNumbers file=../../lib/code/mcs-216/session-1/3/3.c 
+```c title="matrix-multiplation.c" showLineNumbers file=../../../lib/code/mcs-216/session-1/3/3.c 
 
 ```
 
 ### Rust Implementation
-```rust title="matrix-multiplation.rs" showLineNumbers file=../../lib/code/mcs-216/session-1/3/3.rs
+```rust title="matrix-multiplation.rs" showLineNumbers file=../../../lib/code/mcs-216/session-1/3/3.rs
 
 ```
 
-### Output
-```sh
-Result Matrix C:
-  14   10    9   15
-  34   26   25   47
-  54   42   41   79
-  74   58   57  111
+## Binary Exponentiation
 
-Outer-most loop runs: 4 times
-Inner-most loop runs: 64 times
-Total Multiplications: 64
-Total Additions: 64
-```
+Q4: Implement left to right and right to left binary exponentiation methods for the following problems: <br />
+(i) 4^512 <br />(ii) 3^31 <br />
+Calculate the followings for problems (i) and(ii) <br />
+- How many times the loops will be executed? 
+- How many times the multiplication and additions operations will be executed?
+
+## Bubble Sort
+
+Q5: Implement Bubble Sort algorithm for the following list of numbers: <br />
+<strong>55 25 15 40 60 35 17 65 75 10</strong> <br />
+Calculate <br />
+(i) a number of exchange operations <br />
+(ii) a number oftimes comparison operations <br /> 
+(iii) a number of times the inner and outer loops will iterate?
+
+## Selection Sort
+
+Q6: Implement Selection Sort algorithm on a similar set of data as in Q5 and <br />
+(i)perform similar operations on the above example <br />
+(ii) make a comparison between the two algorithms in terms of best case and worst case complexities.
