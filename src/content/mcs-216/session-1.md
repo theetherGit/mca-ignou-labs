@@ -117,18 +117,80 @@ P(3) = (((((6 * 3 + 5) * 3 + 4) * 3 - 3) * 3 + 2) * 3 + 8) * 3 - 7
 | 3 | (33×2)+(−7) | 59 |
 
 ### Python Implementation
-```python title="horners-method.py" showLineNumbers file=../../lib/code/mcs-216/session-1/2/2.py 
+```python title="horners-method.py" showLineNumbers file=../../lib/code/mcs-216/session-1/2/2-horner.py 
 
 ```
 
 ### C Implementation
-```c title="horners-method.c" showLineNumbers file=../../lib/code/mcs-216/session-1/2/2.c 
+```c title="horners-method.c" showLineNumbers file=../../lib/code/mcs-216/session-1/2/2-horner.c 
 
 ```
 
 ### Rust Implementation
-```rust title="horners-method.rs" showLineNumbers file=../../lib/code/mcs-216/session-1/2/2.rs
+```rust title="horners-method.rs" showLineNumbers file=../../lib/code/mcs-216/session-1/2/2-horner.rs
 
 ```
 
-## 2. (ii) Brute Force
+## 2. (ii) Brute Force Method
+
+Q2 (ii): Apply a brute force method to implement the above ploynomial expression from 2(i) and compare  it with horner's methodin terms of number of multiplication operations.
+
+### What is Brute Force Method?
+
+In Brute Force, for each term `a_k * x^k`, you calculate `x` multiplied by itself `k` times, then multiply by the coefficient `a_k`.
+
+### Algorithm
+
+- Initialize `total_sum = 0`.
+- For each term `a_k x^k`:
+  - Calculate `power_val = x^k` (using a loop or power function).
+  - Calculate `term_val = a_k * power_val`.
+  - Add `term_val` to `total_sum`.
+- Return `total_sum`.
+
+### Example
+
+**Polynomial**: `3x^2 + 2x + 5` at `x=4`
+
+- Term 1 `(3x^2): 4 * 4 = 16`; `16 * 3 = 48` (2 mults)
+- Term 2 `(2x^1): 2 * 4 = 8` (1 mult)
+- Term 3 `(5)`: 5 (0 mults)
+- Sum: `48 + 8 + 5 = 61`.
+
+Total Multiplications: `2 + 1 = 3`. (Horner would only use 2).
+
+### Python Implementation
+```python title="horners-method.py" showLineNumbers file=../../lib/code/mcs-216/session-1/2/2-brute.py 
+
+```
+
+### C Implementation
+```c title="horners-method.c" showLineNumbers file=../../lib/code/mcs-216/session-1/2/2-brute.c 
+
+```
+
+### Rust Implementation
+```rust title="horners-method.rs" showLineNumbers file=../../lib/code/mcs-216/session-1/2/2-brute.rs
+
+```
+
+### Complexity Comparison
+
+| Metric | Horner's Method | Brute Force Method |
+| ------ | --------------- | ------------------ |
+| Multiplications | n (6) | 2n(n+1)​+n (21) |
+| Additions | n (6) | n (6) |
+| Time Complexity | O(n) | O(n2) |
+
+**Brute Force** method is significantly more expensive because the inner loop recalculates powers from scratch for every single term, whereas **Horner's Rule** reuses the result of the previous multiplication.
+
+### Comparison (Honer vs Brute)
+
+**Brute Force Multiplications**: 
+- To calculate `x^6`, you do 5 multiplications. 
+- Then 1 more to multiply by the coefficient 6. 
+- Totaling `k` multiplications for a term of degree `k`.
+- For degree 6: `6+5+4+3+2+1 = 21` multiplications.
+
+**Horner's Method Multiplications**: 
+- As shown previously, this only requires 6 multiplications.
