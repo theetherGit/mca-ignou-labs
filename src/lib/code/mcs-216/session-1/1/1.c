@@ -2,31 +2,37 @@
 #include <stdlib.h>
 
 /**
- * Calculates GCD using the Euclidean Algorithm.
- * Returns the result as a long long to prevent overflow for large inputs.
+ * Calculates GCD and updates operation counters via pointers.
  */
-long long get_gcd(long long a, long long b) {
-    // Use absolute values to ensure the result is positive
+long long gcd_metrics(long long a, long long b, int *mods, int *assigns) {
+    *mods = 0;
+    *assigns = 0;
+
     a = llabs(a);
     b = llabs(b);
+    *assigns += 2;
 
     while (b != 0) {
-        // Temp variable stores the remainder before we overwrite 'b'
         long long remainder = a % b;
+        (*mods)++;
 
-        // Update 'a' with the current 'b'
         a = b;
-
-        // Update 'b' with the calculated remainder
         b = remainder;
+        *assigns += 2;
     }
 
-    // When the loop finishes, 'a' holds the GCD
     return a;
 }
 
 int main() {
-    long long num1 = 270, num2 = 192;
-    printf("GCD of %lld and %lld is %lld\n", num1, num2, get_gcd(num1, num2));
+    int mod_count, assign_count;
+    long long a = 15265, b = 15;
+
+    long long result = gcd_metrics(a, b, &mod_count, &assign_count);
+
+    printf("GCD(%lld, %lld) = %lld\n", a, b, result);
+    printf("Total Modulo Operations: %d\n", mod_count);
+    printf("Total Assignment Operations: %d\n", assign_count);
+
     return 0;
 }

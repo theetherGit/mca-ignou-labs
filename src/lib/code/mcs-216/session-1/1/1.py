@@ -1,20 +1,30 @@
-def get_gcd(a, b):
+def gcd_with_stats(a, b):
     """
-    Computes the GCD using the iterative Euclidean Algorithm.
-    Works for any integer size in Python 3.
+    Computes GCD and tracks modulo and assignment operations.
     """
-    # Ensure we work with absolute values to handle negative inputs
+    mod_count = 0
+    assign_count = 0
+
+    # Absolute values for mathematical consistency
     a, b = abs(a), abs(b)
+    assign_count += 2
 
-    # Loop until the remainder (b) becomes 0
-    while b != 0:
-        # a % b calculates the remainder of a divided by b
-        # We update a to be the previous b, and b to be the remainder
-        a, b = b, a % b
+    while b:
+        # Modulo operation
+        remainder = a % b
+        mod_count += 1
 
-    # When b is 0, a contains the GCD
-    return a
+        # Assignment operations (a = b, b = remainder)
+        a = b
+        b = remainder
+        assign_count += 2
 
-# Example usage:
-num1, num2 = 270, 192
-print(f"GCD of {num1} and {num2} is: {get_gcd(num1, num2)}")
+    return a, mod_count, assign_count
+
+# Input values
+val_a, val_b = 15265, 15
+result, mods, assigns = gcd_with_stats(val_a, val_b)
+
+print(f"GCD({val_a}, {val_b}) = {result}")
+print(f"Modulo Operations: {mods}")
+print(f"Assignment Operations: {assigns}")

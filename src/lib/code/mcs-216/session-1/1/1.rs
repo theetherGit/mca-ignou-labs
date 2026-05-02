@@ -1,21 +1,26 @@
-fn get_gcd(mut a: u64, mut b: u64) -> u64 {
-    // We use u64 (64-bit unsigned integer) for large positive numbers
-    // The algorithm continues as long as b is not zero
-    while b != 0 {
-        // Calculate the remainder
-        let remainder = a % b;
+fn gcd_with_metrics(mut a: i64, mut b: i64) -> (i64, u32, u32) {
+    let mut mod_ops = 0;
+    let mut assign_ops = 0;
 
-        // Update 'a' to 'b' and 'b' to the remainder for the next iteration
+    // Initial assignments to absolute values
+    a = a.abs();
+    b = b.abs();
+    assign_ops += 2;
+
+    while b != 0 {
+        let remainder = a % b;
+        mod_ops += 1;
+
         a = b;
         b = remainder;
+        assign_ops += 2;
     }
 
-    // Once b hits zero, a is the greatest common divisor
-    a
+    (a, mod_ops, assign_ops)
 }
 
 fn main() {
-    let x = 270;
-    let y = 192;
-    println!("The GCD of {} and {} is {}", x, y, get_gcd(x, y));
+    let (result, mods, assigns) = gcd_with_metrics(15265, 15);
+    println!("GCD: {}", result);
+    println!("Modulo Ops: {}, Assignment Ops: {}", mods, assigns);
 }
