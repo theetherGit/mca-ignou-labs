@@ -1,6 +1,6 @@
 ---
 title: Getting Started
-description: A quick guide to get started using Svecodocs
+description: A quick guide to get started using Syntax Lab
 section: Overview
 ---
 
@@ -8,75 +8,70 @@ section: Overview
 	import { Callout } from "@ethercorps/kit";
 </script>
 
-The following guide will walk you through the process of getting a Svecodocs project up and running.
+This guide will help you set up your local environment and show you how to run the lab exercises across C, Python, and Rust. Whether you are working locally or need a quick online fix, we’ve got you covered.
 
-## Clone the starter template
 
-Clone the Svecodocs starter template:
+## Local Environment Setup
 
-```bash
-pnpx degit svecosystem/svecodocs/starter
-```
+Before running the code, ensure you have the necessary compilers and interpreters installed.
 
-## Navigation
+| Language | Requirement | Recommended Version | Check Command |
+| -------- | ----------- | ------------------- | ------------- |
+| C | GCC or Clang | GCC 11+ | gcc --version | 
+| Python | Python 3 | 3.10+ | python3 --version |
+| Rust |Rust & Cargo | Stable (1.70+) | rustc --version |
 
-The starter template comes with a basic navigation structure to get your started. To customize the navigation, adjust the `src/lib/navigation.ts` file.
+## How to Run Code Directly
 
-```ts
-import { createNavigation } from "@ethercorps/kit";
+### C (Compiled)
+- Compile:
+  ```sh
+  gcc filename.c -o filename
+  ```
+- Execute: `./solution` (or `solution.exe` on `Windows`)
 
-export const navigation = createNavigation({
-	// Customize the navigation here
-});
-```
+### Python (Interpreted)
+- Execute:
+  ```sh
+  python3 solution.py
+  ```
 
-## Site config
+### Rust (Systems)
+- Quick Run: 
+  ```bash 
+  rustc solution.rs && ./solution
+  ```
+- Modern Way: If using Cargo, just run 
+  ```bash
+  cargo run
+  ```
 
-The site config is used to configure site-wide settings, such as the title, description, keywords, ogImage, and other metadata.
+## Online Playgrounds
 
-The config is located in the `src/lib/site-config.ts` file.
+If you are away from your main machine or having setup issues, use these highly reliable online environments:
 
-```ts
-import { defineSiteConfig } from "@ethercorps/kit";
+- [GDB Online](https://www.onlinegdb.com/): Best for C and Python. It features a built-in debugger which is great for tracing logic during labs.
 
-export const siteConfig = defineSiteConfig({
-	title: "Svecodocs",
-	description: "A SvelteKit docs starter template",
-	keywords: ["sveltekit", "docs", "starter", "template"],
-	ogImage: {
-		url: "https://docs.sveco.dev/og.png",
-		height: 630,
-		width: 1200,
-	},
-});
-```
+- [Rust Playground](https://play.rust-lang.org/?version=stable&mode=debug): The official "scratchpad" for Rust. It allows you to test code and even see the assembly/LLVM output.
 
-### Per-Route Site Config
+- [Replit](https://replit.com/): A full collaborative IDE. You can create a "Repl" for any of the three languages and share the link with the group to debug together in real-time.
 
-You can override any part of the site config on a per-route basis using the `useSiteConfig` hook.
+- [Programiz Online Compiler](https://www.programiz.com/): Very lightweight and fast for quick logic checks in C and Python.
 
-<Callout type="warning" title="Under Development">
-This feature is still being worked on.
-</Callout>
+## Official Reference Docs
 
-## Theme
+0. **C Reference**: [cppreference.com (C section)](https://en.cppreference.com/c) — The gold standard for C syntax and standard libraries.
 
-The starter template comes with the default Svecodocs theme (orange). To customize the theme, adjust the import in the `src/app.css` file to reflect the color scheme you want to use for your project. Each theme has been designed to work well in both light and dark mode.
+0. **Python Docs**: [docs.python.org](https://doc.rust-lang.org/book/) — Excellent for looking up built-in functions and library modules.
 
-```css {1-2}
-/* @import "@ethercorps/kit/themes/orange.css"; */
-@import "@ethercorps/kit/themes/emerald.css";
-@import "@ethercorps/kit/globals.css";
-```
+0. **Rust Book**: [doc.rust-lang.org/book/](https://doc.rust-lang.org/book/) — Known as "The Book," it is the best way to understand Rust's unique ownership model.
 
-## Logo
+0. **GNOU MCA Portal**: [eGyanKosh](https://egyankosh.ac.in/) — For your official MCS-216 and MCS-217 course material and lab manuals.
 
-To customize the logo displayed in the sidebar header, head to the `src/routes/(docs)/+layout.svelte` file and adjust the contents of the `logo` snippet. If the logo has a light and dark version, ensure to handle those similarly to the default Svecosystem logo.
+## Quick Tips for Success
 
-```svelte title="src/routes/(docs)/+layout.svelte"
-{#snippet logo()}
-	<LogoDark class="hidden h-7 dark:block" />
-	<LogoLight class="block h-7 dark:hidden" />
-	<span class="sr-only">The project name here</span>
-{/snippet}
-```
+- **Terminal Pro-Tip**: Use the `Tab` key to auto-complete file names in your terminal. It saves time and prevents typos.
+
+- **Consistent Formatting**: We recommend using the **Zed** or **VS Code** editor. Using a consistent editor helps us troubleshoot each other's code much faster.
+
+- **Errors are Teachers**: In **Rust** and *C*, the compiler error usually tells you exactly what is wrong. Read the full error message before asking for help!

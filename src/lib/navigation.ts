@@ -1,7 +1,7 @@
 import { defineNavigation } from "@ethercorps/kit";
 import ChalkboardTeacher from "phosphor-svelte/lib/ChalkboardTeacherIcon";
 import RocketLaunch from "phosphor-svelte/lib/RocketLaunchIcon";
-import Tag from "phosphor-svelte/lib/TagIcon";
+import Warning from "phosphor-svelte/lib/WarningIcon";
 import { getAllDocs } from "./utils.js";
 import type { Doc } from "$content/index";
 import { preCalculateNavigationNeighbors } from "$lib/navigation-neighbors";
@@ -31,8 +31,14 @@ export const navigation = defineNavigation({
     },
     {
       title: "Important Notice",
-      href: "/docs/getting-started",
+      href: "/docs/important-notice",
       description: "Guidelines for using the content in this repository.",
+      icon: Warning,
+    },
+    {
+      title: "Getting Started",
+      href: "/docs/getting-started",
+      description: "A quick guide to get started using Syntax Lab",
       icon: RocketLaunch,
     },
   ],
