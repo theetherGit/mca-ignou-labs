@@ -16,7 +16,7 @@ export const siteConfig = defineSiteConfig({
     url: "https://github.com/theetherGit/mca-ignou-labs/blob/main/LICENSE",
   },
   links: {
-    x: "https://x.com/theetherGit",
+    x: "https://x.com/theether0",
     github: "https://github.com/theetherGit/mca-ignou-labs",
   },
 });

@@ -1,3 +1,9 @@
 @import "@ethercorps/kit/theme-blue.css";
 @import "@ethercorps/kit/globals.css";
 @source "../node_modules/@ethercorps/kit";
+
+@media print {
+    .no-print {
+        display: none !important;
+    }
+}

@@ -1,8 +1,12 @@
 <script lang="ts">
-	import { DocPage } from "@ethercorps/kit";
-    import {getNavigationNeighbors} from "$lib/navigation";
-    import {page} from "$app/state";
-	let { data } = $props();
+    import { DocPage } from "@ethercorps/kit";
+    import { getNavigationNeighbors } from "$lib/navigation";
+    import { page } from "$app/state";
+    let { data } = $props();
 </script>
 
-<DocPage component={data.component} {...data.metadata} navigationNeighbors={getNavigationNeighbors(page.url.pathname)}/>
+<DocPage
+    component={data.component}
+    {...data.metadata}
+    navigationNeighbors={getNavigationNeighbors(page.url.pathname)}
+/>

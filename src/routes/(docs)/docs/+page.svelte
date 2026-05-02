@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { DocPage } from "@ethercorps/kit";
+    import { Button, DocPage } from "@ethercorps/kit";
     import { getNavigationNeighbors } from "$lib/navigation";
     import { page } from "$app/state";
     let { data } = $props();
