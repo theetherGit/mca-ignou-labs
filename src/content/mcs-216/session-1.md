@@ -197,3 +197,95 @@ Total Multiplications: `2 + 1 = 3`. (Horner would only use 2).
 
 **Horner's Method Multiplications**: 
 - As shown previously, this only requires 6 multiplications.
+
+
+## 3. Matrix Multiplication
+
+Q3: Implement matrix multiplication of two matrices A[4,4] & B[4,4] abd calculate: <br />
+(i) how many times the inner-most and outer-most loops will run <br />
+(ii) total number of multiplications and additions in computing the multiplication
+
+### Explanation
+Matrix multiplication computes a resultant matrix C from two input matrices A and B such that:
+```latex
+C[i][j] = Σ (A[i][k] × B[k][j])   for k = 0 to n-1
+```
+
+For `n×n` matrices, this requires **three nested loops**:
+
+- **Outer loop (`i`)**: Iterates over rows of `A`
+- **Middle loop (`j`)**: Iterates over columns of `B`
+- **Inner-most loop (`k`)**: Computes the dot product between the `i`-th row of `A` and `j`-th column of `B`
+
+Each inner iteration performs **one multiplication** `(A[i][k] * B[k][j])` and one addition (`+=` to accumulate into `C[i][j]`). The total **time complexity** is **O(n³)** and **space complexity** is **O(n²)** for the result matrix.
+
+### Algorithm & Pseudocode
+
+```py showLineNumbers
+INPUT: A[4][4], B[4][4]
+OUTPUT: C[4][4]
+
+Initialize C[4][4] with zeros
+For i from 0 to 3:
+    For j from 0 to 3:
+        For k from 0 to 3:
+            C[i][j] += A[i][k] * B[k][j]
+Return C
+```
+
+### Answer
+
+#### (i) Loop Execution Count
+| Loop Position | Iteration Count | Reason |
+| ------------- | --------------- | ------ |
+| Outer-most (`i`) | `4` times | Runs once per row of `A` | 
+| Inner-most (`k`) | `64` times |Executes for every `(i, j)` pair: `4 × 4 × 4 = 64` |
+
+#### (ii) Total Arithmetic Operations
+
+| Operation | Count | Explanation |
+| --------- | ----- | ----------- |
+| Multiplications | `64` | `1` per inner iteration → `n³ = 4³ = 64` |
+| Additions | `64` | Each `C[i][j] += ...` performs 1 accumulation addition per inner step |
+
+
+### Execution Trace (Conceptual)
+
+For `n=4`:
+
+- `i=0`: `j` runs 0..3 → `k` runs 4 times each → 16 inner executions
+- `i=1`: same → 16 inner executions
+- `i=2`: same → 16 inner executions
+- `i=3`: same → 16 inner executions
+- **Total inner executions** = `16 × 4 = 64`
+- Each inner step: `1 mul + 1 add` → `64 mul + 64 add`
+
+
+### Python Implementation
+```python title="matrix-multiplation.py" showLineNumbers file=../../lib/code/mcs-216/session-1/3/3.py 
+
+```
+
+### C Implementation
+```c title="matrix-multiplation.c" showLineNumbers file=../../lib/code/mcs-216/session-1/3/3.c 
+
+```
+
+### Rust Implementation
+```rust title="matrix-multiplation.rs" showLineNumbers file=../../lib/code/mcs-216/session-1/3/3.rs
+
+```
+
+### Output
+```sh
+Result Matrix C:
+  14   10    9   15
+  34   26   25   47
+  54   42   41   79
+  74   58   57  111
+
+Outer-most loop runs: 4 times
+Inner-most loop runs: 64 times
+Total Multiplications: 64
+Total Additions: 64
+```
