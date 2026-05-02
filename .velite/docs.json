@@ -1,0 +1,103 @@
+[
+  {
+    "title": "Getting Started",
+    "description": "A quick guide to get started using Svecodocs",
+    "path": "getting-started",
+    "content": "<script>\n\timport { Callout } from \"@ethercorps/kit\";\n</script>\n<p>The following guide will walk you through the process of getting a Svecodocs project up and running.</p>\n<h2>Clone the starter template</h2>\n<p>Clone the Svecodocs starter template:</p>\n<pre><code class=\"language-bash\">pnpx degit svecosystem/svecodocs/starter\n</code></pre>\n<h2>Navigation</h2>\n<p>The starter template comes with a basic navigation structure to get your started. To customize the navigation, adjust the <code>src/lib/navigation.ts</code> file.</p>\n<pre><code class=\"language-ts\">import { createNavigation } from \"@ethercorps/kit\";\n\nexport const navigation = createNavigation({\n\t// Customize the navigation here\n});\n</code></pre>\n<h2>Site config</h2>\n<p>The site config is used to configure site-wide settings, such as the title, description, keywords, ogImage, and other metadata.</p>\n<p>The config is located in the <code>src/lib/site-config.ts</code> file.</p>\n<pre><code class=\"language-ts\">import { defineSiteConfig } from \"@ethercorps/kit\";\n\nexport const siteConfig = defineSiteConfig({\n\ttitle: \"Svecodocs\",\n\tdescription: \"A SvelteKit docs starter template\",\n\tkeywords: [\"sveltekit\", \"docs\", \"starter\", \"template\"],\n\togImage: {\n\t\turl: \"https://docs.sveco.dev/og.png\",\n\t\theight: 630,\n\t\twidth: 1200,\n\t},\n});\n</code></pre>\n<h3>Per-Route Site Config</h3>\n<p>You can override any part of the site config on a per-route basis using the <code>useSiteConfig</code> hook.</p>\n<callout type=\"warning\" title=\"Under Development\">\nThis feature is still being worked on.\n</callout>\n<h2>Theme</h2>\n<p>The starter template comes with the default Svecodocs theme (orange). To customize the theme, adjust the import in the <code>src/app.css</code> file to reflect the color scheme you want to use for your project. Each theme has been designed to work well in both light and dark mode.</p>\n<pre><code class=\"language-css\" metastring=\"{1-2}\">/* @import \"@ethercorps/kit/themes/orange.css\"; */\n@import \"@ethercorps/kit/themes/emerald.css\";\n@import \"@ethercorps/kit/globals.css\";\n</code></pre>\n<h2>Logo</h2>\n<p>To customize the logo displayed in the sidebar header, head to the <code>src/routes/(docs)/+layout.svelte</code> file and adjust the contents of the <code>logo</code> snippet. If the logo has a light and dark version, ensure to handle those similarly to the default Svecosystem logo.</p>\n<pre><code class=\"language-svelte\" metastring=\"title=&#x22;src/routes/(docs)/+layout.svelte&#x22;\">{#snippet logo()}\n\t&#x3C;LogoDark class=\"hidden h-7 dark:block\" />\n\t&#x3C;LogoLight class=\"block h-7 dark:hidden\" />\n\t&#x3C;span class=\"sr-only\">The project name here&#x3C;/span>\n{/snippet}\n</code></pre>",
+    "raw": "<script>\n\timport { Callout } from \"@ethercorps/kit\";\n</script>\n\nThe following guide will walk you through the process of getting a Svecodocs project up and running.\n\n## Clone the starter template\n\nClone the Svecodocs starter template:\n\n```bash\npnpx degit svecosystem/svecodocs/starter\n```\n\n## Navigation\n\nThe starter template comes with a basic navigation structure to get your started. To customize the navigation, adjust the `src/lib/navigation.ts` file.\n\n```ts\nimport { createNavigation } from \"@ethercorps/kit\";\n\nexport const navigation = createNavigation({\n\t// Customize the navigation here\n});\n```\n\n## Site config\n\nThe site config is used to configure site-wide settings, such as the title, description, keywords, ogImage, and other metadata.\n\nThe config is located in the `src/lib/site-config.ts` file.\n\n```ts\nimport { defineSiteConfig } from \"@ethercorps/kit\";\n\nexport const siteConfig = defineSiteConfig({\n\ttitle: \"Svecodocs\",\n\tdescription: \"A SvelteKit docs starter template\",\n\tkeywords: [\"sveltekit\", \"docs\", \"starter\", \"template\"],\n\togImage: {\n\t\turl: \"https://docs.sveco.dev/og.png\",\n\t\theight: 630,\n\t\twidth: 1200,\n\t},\n});\n```\n\n### Per-Route Site Config\n\nYou can override any part of the site config on a per-route basis using the `useSiteConfig` hook.\n\n<Callout type=\"warning\" title=\"Under Development\">\nThis feature is still being worked on.\n</Callout>\n\n## Theme\n\nThe starter template comes with the default Svecodocs theme (orange). To customize the theme, adjust the import in the `src/app.css` file to reflect the color scheme you want to use for your project. Each theme has been designed to work well in both light and dark mode.\n\n```css {1-2}\n/* @import \"@ethercorps/kit/themes/orange.css\"; */\n@import \"@ethercorps/kit/themes/emerald.css\";\n@import \"@ethercorps/kit/globals.css\";\n```\n\n## Logo\n\nTo customize the logo displayed in the sidebar header, head to the `src/routes/(docs)/+layout.svelte` file and adjust the contents of the `logo` snippet. If the logo has a light and dark version, ensure to handle those similarly to the default Svecosystem logo.\n\n```svelte title=\"src/routes/(docs)/+layout.svelte\"\n{#snippet logo()}\n\t<LogoDark class=\"hidden h-7 dark:block\" />\n\t<LogoLight class=\"block h-7 dark:hidden\" />\n\t<span class=\"sr-only\">The project name here</span>\n{/snippet}\n```",
+    "toc": [
+      {
+        "title": "Clone the starter template",
+        "url": "#clone-the-starter-template",
+        "items": []
+      },
+      {
+        "title": "Navigation",
+        "url": "#navigation",
+        "items": []
+      },
+      {
+        "title": "Site config",
+        "url": "#site-config",
+        "items": [
+          {
+            "title": "Per-Route Site Config",
+            "url": "#per-route-site-config",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Theme",
+        "url": "#theme",
+        "items": []
+      },
+      {
+        "title": "Logo",
+        "url": "#logo",
+        "items": []
+      }
+    ],
+    "section": "Overview",
+    "lastModified": "2026-05-01T11:40:37.267Z",
+    "slug": "getting-started",
+    "slugFull": "/getting-started"
+  },
+  {
+    "title": "Introduction",
+    "description": "What exactly is Svecodocs?",
+    "path": "index",
+    "content": "<script>\n\timport { Callout } from '@ethercorps/kit'\n</script>\n<p>After spending countless hours building documentation sites for various projects, we decided to build a docs package/starter template that we can use for future projects. This project is a result of that effort.</p>\n<p>Svecodocs is a starting point/utility library for building documentation sites under the <a href=\"https://github.com/svecosystem\">Svecosystem</a> umbrella. The code is open source, but it's built and maintained for our own specific needs, so we won't be accepting any public feature requests.</p>\n<p>You are more than welcome to fork the project and customize it to your own needs.</p>\n<h2>Features</h2>\n<ul>\n<li><strong>Markdown-based docs</strong>. Write docs using Markdown and Svelte components</li>\n<li><strong>Light and dark mode</strong>. Toggle between light and dark mode</li>\n<li><strong>Syntax highlighting</strong>. Code blocks are automatically highlighted</li>\n<li><strong>SEO-friendly</strong>. Meta tags and Open Graph support out of the box</li>\n<li><strong>Pre-built components</strong>. Tabs, callouts, and more to use within the documentation</li>\n<li><strong>Custom unified plugins</strong>. Custom remark and rehype plugins to give more flexibility over the rendered HTML</li>\n<li><strong>shadcn-svelte</strong>. Beautifully designed Svelte components</li>\n<li><strong>Tailwind v4</strong>. Tailwind CSS v4 is used for styling</li>\n</ul>",
+    "raw": "<script>\n\timport { Callout } from '@ethercorps/kit'\n</script>\n\nAfter spending countless hours building documentation sites for various projects, we decided to build a docs package/starter template that we can use for future projects. This project is a result of that effort.\n\nSvecodocs is a starting point/utility library for building documentation sites under the [Svecosystem](https://github.com/svecosystem) umbrella. The code is open source, but it's built and maintained for our own specific needs, so we won't be accepting any public feature requests.\n\nYou are more than welcome to fork the project and customize it to your own needs.\n\n## Features\n\n- **Markdown-based docs**. Write docs using Markdown and Svelte components\n- **Light and dark mode**. Toggle between light and dark mode\n- **Syntax highlighting**. Code blocks are automatically highlighted\n- **SEO-friendly**. Meta tags and Open Graph support out of the box\n- **Pre-built components**. Tabs, callouts, and more to use within the documentation\n- **Custom unified plugins**. Custom remark and rehype plugins to give more flexibility over the rendered HTML\n- **shadcn-svelte**. Beautifully designed Svelte components\n- **Tailwind v4**. Tailwind CSS v4 is used for styling",
+    "toc": [
+      {
+        "title": "Features",
+        "url": "#features",
+        "items": []
+      }
+    ],
+    "section": "Overview",
+    "lastModified": "2026-05-01T11:16:09.000Z",
+    "slug": "index",
+    "slugFull": "/index"
+  },
+  {
+    "title": "Session 1",
+    "description": "Implementation of Simple Algorithms",
+    "path": "mcs-216/session-1",
+    "content": "<p>This session is to implement small problems such as Euclid's Algorithm for GCD, polynomial expression evaluation through Horner's method, algorithms for evaluation of exponentiation and simple sorting algorithms. Selection sort bengs by finding the least element in the arrat which is moved to first position. Then the second least element is searched for and moved to the second position in the array. This process continues until the entire array is sorted.</p>\n<h2>Objective</h2>\n<ul>\n<li>Implement Euclid's Algorithm to find GCD</li>\n<li>Implement Horner's method for polynomial expression</li>\n<li>Compare performance of Horner's method with brute-force method</li>\n<li>Implement simple sorting algorithms</li>\n<li>Implement multiplication of two matrices</li>\n</ul>\n<h2>Euclid's Algorithm</h2>\n<p>Q1: Implement Euclid's Algorithm to find GCD(15265, 15) and calculate the number of times mod and assigment operations will be required.</p>\n<h3>Python Implementation</h3>\n<pre><code class=\"language-python\">def gcd(a, b):\n    while b:    \n        a, b = b, a % b\n    return a\n</code></pre>\n<h3>C Implementation</h3>\n<pre><code class=\"language-c\">#include &#x3C;stdio.h>\n\nint gcd(int a, int b) {\n    while (b != 0) {\n        int temp = b;\n        b = a % b;\n        a = temp;\n    }\n    return a;\n}\n</code></pre>\n<h3>Rust Implementation</h3>\n<pre><code class=\"language-rust\">gcd(mut a: i32, mut b: i32) -> i32 {\n    while b != 0 {\n        let temp = b;\n        b = a % b;\n        a = temp;\n    }\n    return a\n}\n</code></pre>",
+    "raw": "This session is to implement small problems such as Euclid's Algorithm for GCD, polynomial expression evaluation through Horner's method, algorithms for evaluation of exponentiation and simple sorting algorithms. Selection sort bengs by finding the least element in the arrat which is moved to first position. Then the second least element is searched for and moved to the second position in the array. This process continues until the entire array is sorted.\n\n## Objective\n\n- Implement Euclid's Algorithm to find GCD\n- Implement Horner's method for polynomial expression\n- Compare performance of Horner's method with brute-force method\n- Implement simple sorting algorithms\n- Implement multiplication of two matrices\n\n## Euclid's Algorithm\n\nQ1: Implement Euclid's Algorithm to find GCD(15265, 15) and calculate the number of times mod and assigment operations will be required.\n\n### Python Implementation\n```python\ndef gcd(a, b):\n    while b:    \n        a, b = b, a % b\n    return a\n```\n\n### C Implementation\n```c\n#include <stdio.h>\n\nint gcd(int a, int b) {\n    while (b != 0) {\n        int temp = b;\n        b = a % b;\n        a = temp;\n    }\n    return a;\n}\n```\n\n### Rust Implementation\n```rust\ngcd(mut a: i32, mut b: i32) -> i32 {\n    while b != 0 {\n        let temp = b;\n        b = a % b;\n        a = temp;\n    }\n    return a\n}\n```",
+    "toc": [
+      {
+        "title": "Objective",
+        "url": "#objective",
+        "items": []
+      },
+      {
+        "title": "Euclid's Algorithm",
+        "url": "#euclids-algorithm",
+        "items": [
+          {
+            "title": "Python Implementation",
+            "url": "#python-implementation",
+            "items": []
+          },
+          {
+            "title": "C Implementation",
+            "url": "#c-implementation",
+            "items": []
+          },
+          {
+            "title": "Rust Implementation",
+            "url": "#rust-implementation",
+            "items": []
+          }
+        ]
+      }
+    ],
+    "section": "MCS-216",
+    "lastModified": "2026-05-02T02:14:38.647Z",
+    "slug": "mcs-216/session-1",
+    "slugFull": "/mcs-216/session-1"
+  }
+]

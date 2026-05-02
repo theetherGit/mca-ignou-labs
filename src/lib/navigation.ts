@@ -1,0 +1,55 @@
+import { defineNavigation } from "@ethercorps/kit";
+import ChalkboardTeacher from "phosphor-svelte/lib/ChalkboardTeacherIcon";
+import RocketLaunch from "phosphor-svelte/lib/RocketLaunchIcon";
+import Tag from "phosphor-svelte/lib/TagIcon";
+import { getAllDocs } from "./utils.js";
+import type { Doc } from "$content/index";
+import { preCalculateNavigationNeighbors } from "$lib/navigation-neighbors";
+
+const allDocs = getAllDocs();
+
+export function getSectionDocs(section: Doc["section"], pathPrefix = "/docs/") {
+  return allDocs
+    .filter((doc) => doc.section === section)
+    .map((doc) => ({
+      title: doc.title,
+      href: `${pathPrefix}${doc.slug}`,
+      description: doc.description,
+    }));
+}
+
+const mcs216 = getSectionDocs("MCS-216");
+const mcs217 = getSectionDocs("MCS-217");
+
+export const navigation = defineNavigation({
+  anchors: [
+    {
+      title: "Introduction",
+      href: "/docs",
+      description: "What is Syntax Lab?",
+      icon: ChalkboardTeacher,
+    },
+    {
+      title: "Important Notice",
+      href: "/docs/getting-started",
+      description: "Guidelines for using the content in this repository.",
+      icon: RocketLaunch,
+    },
+  ],
+  sections: [
+    {
+      title: "MCS-216",
+      items: mcs216,
+    },
+    {
+      title: "MCS-217",
+      items: mcs217,
+    },
+  ],
+});
+
+export const neighborLookup = preCalculateNavigationNeighbors(navigation);
+
+export function getNavigationNeighbors(pathname: string) {
+  return neighborLookup.get(pathname);
+}
