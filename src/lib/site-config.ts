@@ -1,7 +1,7 @@
 import { defineSiteConfig } from "@ethercorps/kit";
 
 export const siteConfig = defineSiteConfig({
-  name: "Svecodocs",
+  name: "Syntax Lab",
   url: "https://syntax.theether.in",
   ogImage: {
     url: "https://docs.sveco.dev/og.png",

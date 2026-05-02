@@ -5,8 +5,16 @@ section: MCS-216
 ---
 
 <script>
-  import { Callout } from "@ethercorps/kit";
+  import { Callout, Button } from "@ethercorps/kit";
+
+  function printHandler() {
+    window.print();
+  }
 </script>
+
+## Print Page
+
+<Button class="mt-2" onclick={printHandler}>Print</Button>
 
 This session is to implement small problems such as Euclid's Algorithm for GCD, polynomial expression evaluation through Horner's method, algorithms for evaluation of exponentiation and simple sorting algorithms. Selection sort bengs by finding the least element in the arrat which is moved to first position. Then the second least element is searched for and moved to the second position in the array. This process continues until the entire array is sorted.
 
