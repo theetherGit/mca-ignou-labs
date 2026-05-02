@@ -5,14 +5,17 @@ import adapter from "@sveltejs/adapter-cloudflare";
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-	preprocess: [mdsx(mdsxConfig), vitePreprocess()],
-	kit: {
-		alias: {
-			"$content/*": ".velite/*",
-		},
-		adapter: adapter(),
-	},
-	extensions: [".svelte", ".md"],
+  preprocess: [mdsx(mdsxConfig), vitePreprocess()],
+  kit: {
+    alias: {
+      "$content/*": ".velite/*",
+    },
+    adapter: adapter(),
+    serviceWorker: {
+      register: true,
+    },
+  },
+  extensions: [".svelte", ".md"],
 };
 
 export default config;

@@ -1,6 +1,4 @@
 <script lang="ts">
-    import SvecosystemDark from "$lib/components/logos/svecosystem-dark.svelte";
-    import SvecosystemLight from "$lib/components/logos/svecosystem-light.svelte";
     import { DocsLayout } from "@ethercorps/kit";
     import { navigation } from "$lib/navigation";
 
