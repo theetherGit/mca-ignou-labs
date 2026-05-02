@@ -1,6 +1,10 @@
 {
-  "name": "mca-ignou-labs",
-  "pages_build_output_dir": ".svelte-kit/cloudflare",
-  "compatibility_date": "2025-05-01",
-  "compatibility_flags": ["nodejs_compat"]
+  "name": "mca-ignou-lab",
+  "main": ".svelte-kit/cloudflare",
+  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_date": "<2026-05-01>",
+  "assets": {
+    "binding": "ASSETS",
+    "directory": ".svelte-kit/cloudflare"
+  }
 }
