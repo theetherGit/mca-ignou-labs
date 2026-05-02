@@ -312,17 +312,74 @@
     "title": "Session 1",
     "description": "Preliminaries",
     "path": "mcs-216/section-2/session-1",
-    "content": "<script>\n  import { Callout } from \"@ethercorps/kit\";\n  import PrintButton from \"$lib/components/print-button.svelte\"\n</script>\n<printbutton>\n<p>Javascript is a high-level, interpreted programming language that is widely used for web development. It was created by Brendan Eich in 1995 and has since become one of the most popular programming languages in the world. JavaScript is primarily used for client-side scripting, allowing developers to create interactive and dynamic web pages. It can also be used on the server-side with environments like Node.js, Deno, Bun and Cloudflare Workers (don't mix with web workers).</p>\n<p>In this session, we will introduce the basic JavsScript constructs, conditional statements amd control flow statements. Lab manual inlcudes good examples and exercises to practice these concepts.</p>\n<h2>Objectives</h2>\n<p>The objectives of this session are to:</p>\n<ul>\n<li>Understand the basic JavaScript constructs</li>\n<li>Unserstand Conditional statements and control flow statements</li>\n</ul></printbutton>",
-    "raw": "<script>\n  import { Callout } from \"@ethercorps/kit\";\n  import PrintButton from \"$lib/components/print-button.svelte\"\n</script>\n\n<PrintButton />\n\n\nJavascript is a high-level, interpreted programming language that is widely used for web development. It was created by Brendan Eich in 1995 and has since become one of the most popular programming languages in the world. JavaScript is primarily used for client-side scripting, allowing developers to create interactive and dynamic web pages. It can also be used on the server-side with environments like Node.js, Deno, Bun and Cloudflare Workers (don't mix with web workers).\n\nIn this session, we will introduce the basic JavsScript constructs, conditional statements amd control flow statements. Lab manual inlcudes good examples and exercises to practice these concepts.\n\n<Callout type=\"note\">\n    <!--- space here --->\n    Before trying the solutions provided for the exercises, try to solve them on your own. This will help you understand the concepts better and improve your problem-solving skills.<br/> <br />\n    Also, Lab manual includes great examples before exercises, make sure to go through them as well.\n    <!--- space here --->\n</Callout>\n\n## Objectives\n\nThe objectives of this session are to:\n- Understand the basic JavaScript constructs\n- Unserstand Conditional statements and control flow statements",
+    "content": "<script>\n  import { Callout } from \"@ethercorps/kit\";\n  import PrintButton from \"$lib/components/print-button.svelte\"\n</script>\n<printbutton>\n<p>Javascript is a high-level, interpreted programming language that is widely used for web development. It was created by Brendan Eich in 1995 and has since become one of the most popular programming languages in the world. JavaScript is primarily used for client-side scripting, allowing developers to create interactive and dynamic web pages. It can also be used on the server-side with environments like Node.js, Deno, Bun and Cloudflare Workers (don't mix with web workers).</p>\n<p>In this session, we will introduce the basic JavsScript constructs, conditional statements amd control flow statements. Lab manual inlcudes good examples and exercises to practice these concepts.</p>\n<h2>Objectives</h2>\n<p>The objectives of this session are to:</p>\n<ul>\n<li>Understand the basic JavaScript constructs</li>\n<li>Unserstand Conditional statements and control flow statements</li>\n</ul>\n<h2>Arthimetic Operators</h2>\n<h3>Problem Statement</h3>\n<p>Q1: Write a JavaScript code to perform the two digit arithmetic operations: Addition, Subtraction, Multiplication and Division.</p>\n<h3>Approach</h3>\n<p>To perform arithmetic operations on two digits, we can follow these steps:</p>\n<ul>\n<li>Define two variables to hold the digits we want to operate on.</li>\n<li>Use the arithmetic operators (<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>) to perform the desired operations.</li>\n<li>Print the results to the console.</li>\n</ul>\n<h3>Code Implementation</h3>\n<pre><code class=\"language-js\" metastring=\"title=&#x22;arithmetic-operation.js&#x22; showLineNumbers file=../../../lib/code/mcs-216/section-2/session-1/arithmetic-operation.js\"></code></pre>\n<h3>Explanation</h3>\n<ul>\n<li>\n<p><strong>Variables</strong>: We use <code>const</code> (constant) because these values aren't changing during the script's execution. If you want to change them later, you would use <code>let</code>.</p>\n</li>\n<li>\n<p><strong>Arithmetic Operators</strong>: JavaScript uses standard mathematical symbols: <code>+</code>, <code>-</code>, <code>*</code>, and <code>/</code>.</p>\n</li>\n<li>\n<p><strong>Console.log</strong>: This is the standard method to print output to the debugging console.</p>\n</li>\n<li>\n<p><strong>Division Safety</strong>: In computer science, \"Division by Zero\" is a common logical error. Including a conditional <code>if</code> check demonstrates good programming practice for your lab submission.</p>\n</li>\n<li>\n<p><strong>String Concatenation</strong>: Using the <code>+</code> symbol between a string (text in quotes) and a variable allows us to combine them into a single readable sentence for the output.</p>\n</li>\n</ul>\n<h2>Pattern Printing</h2>\n<h3>Problem Statement</h3>\n<p>Q2: Write a JavaScript code to print 1 for 1 time 2 for 2 times, 3 for 3 times and so on up to 10.</p>\n<h3>Approach</h3>\n<p>The goal is to create a visual pattern where each number <code>n</code> repeats itself <code>n</code> times on a single line. To achieve this, we need Nested Loops:</p>\n<ul>\n<li><strong>The Outer Loop</strong> will act as a counter that moves from 1 to 10. This tells us which number we are currently processing.</li>\n<li><strong>The Inner Loop</strong> will run based on the value of the outer loop. If the outer loop is at 5, the inner loop will execute 5 times to print the digit \"5\".</li>\n<li>We will collect the digits in a string for each row so they stay on the same line, then print that row before moving to the next number.</li>\n</ul>\n<h3>Code Implementation</h3>\n<pre><code class=\"language-js\" metastring=\"title=&#x22;pattern-printing.js&#x22; showLineNumbers file=../../../lib/code/mcs-216/section-2/session-1/pattern-printing.js\"></code></pre>\n<h3>Explanation</h3>\n<ul>\n<li>\n<p><strong>Nested Loop Logic</strong>: Think of this like a clock. The outer loop is the \"hour\" hand (moving slowly), and the inner loop is the \"minute\" hand (completing a full cycle for every single step the hour hand takes).</p>\n</li>\n<li>\n<p><strong>Dynamic Range</strong>: The inner loop condition <code>j &#x3C;= i</code> is what makes the pattern triangular. Because the limit of the inner loop depends on the current value of the outer loop, the rows get progressively longer.</p>\n</li>\n<li>\n<p><strong>String Accumulation</strong>: In JavaScript, <code>console.log()</code> automatically adds a new line. To get numbers like <code>2 2</code> on the same line, we must first build a string (<code>rowOutput</code>) and print it once the inner loop finishes its work for that row.</p>\n</li>\n<li>\n<p><strong>trim() Method</strong>: We use <code>.trim()</code> at the end to remove the very last space of each row, ensuring the output is clean for your lab record.</p>\n</li>\n</ul>\n<h2>Portfolio Exercise</h2>\n<p>Q3: Discuss first with the group</p></printbutton>",
+    "raw": "<script>\n  import { Callout } from \"@ethercorps/kit\";\n  import PrintButton from \"$lib/components/print-button.svelte\"\n</script>\n\n<PrintButton />\n\n\nJavascript is a high-level, interpreted programming language that is widely used for web development. It was created by Brendan Eich in 1995 and has since become one of the most popular programming languages in the world. JavaScript is primarily used for client-side scripting, allowing developers to create interactive and dynamic web pages. It can also be used on the server-side with environments like Node.js, Deno, Bun and Cloudflare Workers (don't mix with web workers).\n\nIn this session, we will introduce the basic JavsScript constructs, conditional statements amd control flow statements. Lab manual inlcudes good examples and exercises to practice these concepts.\n\n<Callout type=\"note\">\n    <!--- space here --->\n    Before trying the solutions provided for the exercises, try to solve them on your own. This will help you understand the concepts better and improve your problem-solving skills.<br/> <br />\n    Also, Lab manual includes great examples before exercises, make sure to go through them as well.\n    <!--- space here --->\n</Callout>\n\n## Objectives\n\nThe objectives of this session are to:\n- Understand the basic JavaScript constructs\n- Unserstand Conditional statements and control flow statements\n\n## Arthimetic Operators\n\n### Problem Statement\n\nQ1: Write a JavaScript code to perform the two digit arithmetic operations: Addition, Subtraction, Multiplication and Division.\n\n### Approach\nTo perform arithmetic operations on two digits, we can follow these steps:\n- Define two variables to hold the digits we want to operate on.\n- Use the arithmetic operators (`+`, `-`, `*`, `/`) to perform the desired operations.\n- Print the results to the console.\n\n### Code Implementation\n\n```js title=\"arithmetic-operation.js\" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-1/arithmetic-operation.js\n\n```\n\n### Explanation\n\n- **Variables**: We use `const` (constant) because these values aren't changing during the script's execution. If you want to change them later, you would use `let`.\n\n- **Arithmetic Operators**: JavaScript uses standard mathematical symbols: `+`, `-`, `*`, and `/`.\n\n- **Console.log**: This is the standard method to print output to the debugging console.\n\n- **Division Safety**: In computer science, \"Division by Zero\" is a common logical error. Including a conditional `if` check demonstrates good programming practice for your lab submission.\n\n- **String Concatenation**: Using the `+` symbol between a string (text in quotes) and a variable allows us to combine them into a single readable sentence for the output.\n\n## Pattern Printing\n\n### Problem Statement\nQ2: Write a JavaScript code to print 1 for 1 time 2 for 2 times, 3 for 3 times and so on up to 10.\n\n### Approach\n\nThe goal is to create a visual pattern where each number `n` repeats itself `n` times on a single line. To achieve this, we need Nested Loops:\n\n- **The Outer Loop** will act as a counter that moves from 1 to 10. This tells us which number we are currently processing.\n- **The Inner Loop** will run based on the value of the outer loop. If the outer loop is at 5, the inner loop will execute 5 times to print the digit \"5\".\n- We will collect the digits in a string for each row so they stay on the same line, then print that row before moving to the next number.\n\n### Code Implementation\n\n```js title=\"pattern-printing.js\" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-1/pattern-printing.js\n\n```\n\n### Explanation\n\n- **Nested Loop Logic**: Think of this like a clock. The outer loop is the \"hour\" hand (moving slowly), and the inner loop is the \"minute\" hand (completing a full cycle for every single step the hour hand takes).\n\n- **Dynamic Range**: The inner loop condition `j <= i` is what makes the pattern triangular. Because the limit of the inner loop depends on the current value of the outer loop, the rows get progressively longer.\n\n- **String Accumulation**: In JavaScript, `console.log()` automatically adds a new line. To get numbers like `2 2` on the same line, we must first build a string (`rowOutput`) and print it once the inner loop finishes its work for that row.\n\n- **trim() Method**: We use `.trim()` at the end to remove the very last space of each row, ensuring the output is clean for your lab record.\n\n\n## Portfolio Exercise\n\nQ3: Discuss first with the group",
     "toc": [
       {
         "title": "Objectives",
         "url": "#objectives",
         "items": []
+      },
+      {
+        "title": "Arthimetic Operators",
+        "url": "#arthimetic-operators",
+        "items": [
+          {
+            "title": "Problem Statement",
+            "url": "#problem-statement",
+            "items": []
+          },
+          {
+            "title": "Approach",
+            "url": "#approach",
+            "items": []
+          },
+          {
+            "title": "Code Implementation",
+            "url": "#code-implementation",
+            "items": []
+          },
+          {
+            "title": "Explanation",
+            "url": "#explanation",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Pattern Printing",
+        "url": "#pattern-printing",
+        "items": [
+          {
+            "title": "Problem Statement",
+            "url": "#problem-statement-1",
+            "items": []
+          },
+          {
+            "title": "Approach",
+            "url": "#approach-1",
+            "items": []
+          },
+          {
+            "title": "Code Implementation",
+            "url": "#code-implementation-1",
+            "items": []
+          },
+          {
+            "title": "Explanation",
+            "url": "#explanation-1",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Portfolio Exercise",
+        "url": "#portfolio-exercise",
+        "items": []
       }
     ],
     "section": "MCS-216 Section 2",
-    "lastModified": "2026-05-02T12:32:32.369Z",
+    "lastModified": "2026-05-02T13:39:46.780Z",
     "slug": "mcs-216/section-2/session-1",
     "slugFull": "/mcs-216/section-2/session-1"
   }
