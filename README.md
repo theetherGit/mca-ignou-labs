@@ -1,39 +1,73 @@
-# sv
+# Syntax Lab: MCA Lab Companion
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Welcome to **Syntax Lab**, a digital handbook and deep-dive resource designed for IGNOU's **MCS-216** (DAA and Web Design) and **MCS-217** (Software Engineering) courses.
 
-## Creating a project
+This project bridges the gap between academic requirements and modern software engineering practices by providing multi-language implementations and deep conceptual explanations.
 
-If you're seeing this, you've probably already done this step. Congrats!
+## 🚀 Key Features
+
+- **Polyglot Implementation**: Every logic-based problem is implemented in:
+  - **Python**: For rapid prototyping and readability.
+  - **C**: For low-level memory and hardware interaction (Primary for IGNOU).
+  - **Rust**: For exploring modern memory safety and performance.
+- **Deep Explanations**: We break down underlying logic, memory management, and algorithmic complexity.
+- **Example-Driven Learning**: Real-world scenarios to help retain abstract concepts for exams and viva-voce.
+
+## 🛠️ Local Environment Setup
+
+To run the lab exercises locally, ensure you have the following installed:
+
+| Language | Requirement | Recommended Version | Check Command |
+| -------- | ----------- | ------------------- | ------------- |
+| **C** | GCC or Clang | GCC 11+ | `gcc --version` | 
+| **Python** | Python 3 | 3.10+ | `python3 --version` |
+| **Rust** | Rust & Cargo | Stable (1.70+) | `rustc --version` |
+
+### How to Run Code Directly
+
+- **C**: `gcc filename.c -o solution && ./solution`
+- **Python**: `python3 solution.py`
+- **Rust**: `rustc solution.rs && ./solution` (or `cargo run`)
+
+## 💻 Site Development
+
+This site is built with SvelteKit and Velite.
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (Latest LTS)
+- [pnpm](https://pnpm.io/)
+
+### Installation
 
 ```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
+pnpm install
 ```
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+### Development Server
 
 ```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+pnpm dev
 ```
 
-## Building
-
-To create a production version of your app:
+### Building for Production
 
 ```bash
-npm run build
+pnpm build
 ```
 
-You can preview the production build with `npm run preview`.
+## ⚠️ Important Notice for Students
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
-# mca-ignou-labs
+1. **Academic Integrity**: Use these resources to understand logic. Do not copy-paste code directly into lab journals.
+2. **Exam Focus**: Ensure proficiency in C and Python, as they are the primary languages required by IGNOU.
+3. **Viva-Voce**: Pay attention to the "Deep Explanation" sections in the documentation to prepare for oral exams.
+
+## 📚 Official References
+
+- [C Reference](https://en.cppreference.com/c)
+- [Python Docs](https://docs.python.org/3/)
+- [Rust Book](https://doc.rust-lang.org/book/)
+- [IGNOU eGyanKosh](https://egyankosh.ac.in/)
+
+---
+Built with ❤️ by [The Ether](https://theether.in)
