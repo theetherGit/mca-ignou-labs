@@ -27,6 +27,7 @@
     "tailwindcss": "^4.2.4",
     "typescript": "^5.9.3",
     "velite": "^0.2.4",
-    "vite": "^7.3.2"
+    "vite": "^7.3.2",
+    "wrangler": "^4.87.0"
   }
 }
