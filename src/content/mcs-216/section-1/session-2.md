@@ -74,17 +74,17 @@ Maximum Knapsack Capacity = 15 <br />
 
 ## Implementation
 
-#### Python
+### Python
 ```python title="horners-method.py" showLineNumbers file=../../../lib/code/mcs-216/session-2/knapsack.py 
 
 ```
 
-#### C Language
+### C Language
 ```c title="horners-method.c" showLineNumbers file=../../../lib/code/mcs-216/session-2/knapsack.c 
 
 ```
 
-#### Rust
+### Rust
 ```rust title="horners-method.rs" showLineNumbers file=../../../lib/code/mcs-216/session-2/knapsack.rs
 
 ```
