@@ -2,6 +2,7 @@
   "name": "Syntax Lab by The Ether",
   "short_name": "Syntax Lab",
   "description": "A specialized environment for technical experimentation and documentation.",
+  "display_override": ["window-controls-overlay"],
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
@@ -26,5 +27,20 @@
   "background_color": "#ffffff",
   "display": "standalone",
   "start_url": "/",
-  "scope": "/"
+  "scope": "/",
+  "screenshots": [
+    {
+      "src": "desktop-screenshot.webp",
+      "type": "image/webp",
+      "sizes": "3840x2266",
+      "form_factor": "wide",
+      "label": "Desktop view of my PWA"
+    },
+    {
+      "src": "mobile-screenshot.png",
+      "type": "image/png",
+      "sizes": "782x1686",
+      "label": "Mobile view of my PWA"
+    }
+  ]
 }
