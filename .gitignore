@@ -20,5 +20,8 @@ Thumbs.db
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
-/.wrangler
+.wrangler
 .idea
+**/__pycache__
+output
+dist

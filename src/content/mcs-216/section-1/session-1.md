@@ -276,7 +276,7 @@ For `n=4`:
 
 ```
 
-## Binary Exponentiation
+## 4. Binary Exponentiation
 
 Q4: Implement left to right and right to left binary exponentiation methods for the following problems: <br />
 (i) 4^512 <br />(ii) 3^31 <br />
@@ -284,7 +284,30 @@ Calculate the followings for problems (i) and(ii) <br />
 - How many times the loops will be executed? 
 - How many times the multiplication and additions operations will be executed?
 
-## Bubble Sort
+### Explanation
+
+Binary exponentiation, also known as exponentiation by squaring, is an efficient algorithm for computing large powers of a number. It reduces the number of multiplications needed by using the properties of exponents.
+
+The algorithm can be implemented in two ways: left-to-right and right-to-left.
+- **Left-to-Right**: Start from the highest bit of the exponent and work downwards.
+- **Right-to-Left**: Start from the lowest bit of the exponent and work upwards.
+- Both methods have a time complexity of O(log n) and require O(1) space.
+- The number of multiplications depends on the number of bits in the exponent and the number of 1s in the binary representation of the exponent.
+- For example, for `4^512`, the exponent `512` in binary is `1000000000`, which has 1 bit set to 1. For `3^31`, the exponent `31` in binary is `11111`, which has 5 bits set to 1.
+
+### Python Implementation
+```python title="binary-exponentiation.py" showLineNumbers file=../../../lib/code/mcs-216/session-1/4/4.py 
+
+```
+### C Implementation
+```c title="binary-exponentiation.c" showLineNumbers file=../../../lib/code/mcs-216/session-1/4/4.c 
+
+```
+### Rust Implementation
+```rust title="binary-exponentiation.rs" showLineNumbers file=../../../lib/code/mcs-216/session-1/4/4.rs
+```
+
+## 5. Bubble Sort
 
 Q5: Implement Bubble Sort algorithm for the following list of numbers: <br />
 <strong>55 25 15 40 60 35 17 65 75 10</strong> <br />
@@ -293,8 +316,63 @@ Calculate <br />
 (ii) a number oftimes comparison operations <br /> 
 (iii) a number of times the inner and outer loops will iterate?
 
-## Selection Sort
+### Explanation
+Bubble Sort is a simple sorting algorithm that repeatedly steps through the list, compares adjacent elements and swaps them if they are in the wrong order. The process is repeated until the list is sorted. The algorithm gets its name because smaller elements "bubble" to the top of the list.
+- The outer loop runs `n-1` times, where `n` is the number of elements in the list.
+- The inner loop runs `n-i-1` times for each iteration of the outer loop, where `i` is the current iteration of the outer loop.
+- The number of comparisons is the sum of the inner loop iterations, which is `n(n-1)/2` in the worst case.
+- The number of exchanges depends on the initial order of the elements. In the worst case (when the list is in reverse order), the number of exchanges is also `n(n-1)/2`.
+
+### Python Implementation
+```python title="bubble-sort.py" showLineNumbers file=../../../lib/code/mcs-216/session-1/5/5.py 
+
+```
+
+### C Implementation
+```c title="bubble-sort.c" showLineNumbers file=../../../lib/code/mcs-216/session-1/5/5.c
+```
+
+### Rust Implementation
+```rust title="bubble-sort.rs" showLineNumbers file=../../../lib/code/mcs-216/session-1/5/5.rs
+
+```
+
+## 6. Selection Sort
 
 Q6: Implement Selection Sort algorithm on a similar set of data as in Q5 and <br />
 (i)perform similar operations on the above example <br />
 (ii) make a comparison between the two algorithms in terms of best case and worst case complexities.
+
+### Explanation
+Selection Sort is a simple comparison-based sorting algorithm. It divides the input list into two parts: the sorted part at the left end and the unsorted part at the right end. Initially, the sorted part is empty and the unsorted part is the entire list. The algorithm repeatedly selects the smallest (or largest, depending on sorting order) element from the unsorted part and moves it to the end of the sorted part.
+- The outer loop runs `n-1` times, where `n` is the number of elements in the list.
+- The inner loop runs `n-i-1` times for each iteration of the outer loop, where `i` is the current iteration of the outer loop.
+- The number of comparisons is the same as Bubble Sort, which is `n(n-1)/2` in the worst case.
+- The number of exchanges is `n-1` in the worst case, as each element is moved at most once.
+
+### Python Implementation
+```python title="selection-sort.py" showLineNumbers file=../../../lib/code/mcs-216/session-1/6/6.py 
+
+```
+
+### C Implementation
+```c title="selection-sort.c" showLineNumbers file=../../../lib/code/mcs-216/session-1/6/6.c
+
+```
+
+### Rust Implementation
+```rust title="selection-sort.rs" showLineNumbers file=../../../lib/code/mcs-216/session-1/6/6.rs
+
+```
+
+### Comparison of Bubble Sort and Selection Sort
+| Metric | Bubble Sort | Selection Sort |
+| ------ | ----------- | -------------- |
+| Best Case Time Complexity | O(n) | O(n^2) |
+| Worst Case Time Complexity | O(n^2) | O(n^2) |
+| Number of Comparisons | O(n^2) | O(n^2) |
+| Number of Exchanges | O(n^2) | O(n) |
+
+- Bubble Sort can be optimized to stop if no swaps are made, which gives it a best case time complexity of O(n) when the list is already sorted. Selection Sort, on the other hand, always requires O(n^2) comparisons regardless of the initial order of the elements. However, Selection Sort performs fewer exchanges than Bubble Sort, making it more efficient in terms of the number of swaps, especially for large lists.
+- In summary, Bubble Sort is generally more efficient for small or nearly sorted lists, while Selection Sort can be more efficient for larger lists where the cost of swapping is high.
+- For the given list of numbers, both algorithms will perform the same number of comparisons, but Bubble Sort may perform more exchanges than Selection Sort depending on the initial order of the elements.
