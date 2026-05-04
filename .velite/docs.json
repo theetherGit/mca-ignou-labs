@@ -443,11 +443,70 @@
     "title": "Session 2",
     "description": "Fractional Knapsack Problem",
     "path": "mcs-216/section-1/session-2",
-    "content": "",
-    "raw": "",
-    "toc": [],
+    "content": "<h2>Fractional Knapsack Problem</h2>\n<p>The fractional knapsack problem is a variation of the classic knapsack problem where you are allowed to take fractions of items rather than having to take whole items. The goal is to maximize the total value of the items you can carry in a knapsack with a given weight capacity. It's a greedy algorithm problem that can be solved efficiently by following a specific approach.</p>\n<h3>Solution Approach</h3>\n<ol>\n<li>\n<p><strong>Calculate Value-to-Weight Ratio</strong>: For each item, calculate the value-to-weight ratio, which is the value of the item divided by its weight. This ratio helps to determine which items are more valuable per unit of weight.</p>\n</li>\n<li>\n<p><strong>Sort Items</strong>: Sort the items in descending order based on their value-to-weight ratio. This ensures that you consider the most valuable items first.</p>\n</li>\n<li>\n<p><strong>Initialize Variables</strong>: Initialize a variable to keep track of the total value and the remaining weight capacity of the knapsack.</p>\n</li>\n<li>\n<p><strong>Iterate Through Sorted Items</strong>: Iterate through the sorted list of items. For each item, check if it can fit in the remaining weight capacity of the knapsack.</p>\n<ul>\n<li>If the item can fit completely, add its full value to the total value and decrease the remaining weight capacity accordingly.</li>\n<li>If the item cannot fit completely, take the fraction of the item that can fit in the remaining weight capacity, add the corresponding fraction of the value to the total value, and set the remaining weight capacity to zero (since the knapsack is now full).</li>\n</ul>\n</li>\n<li>\n<p><strong>Return Total Value</strong>: After iterating through all the items, return the total value of the items in the knapsack.</p>\n</li>\n</ol>\n<h3>Example</h3>\n<p>Suppose you have the following items with their weights and values:</p>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<table><thead><tr><th>Item</th><th>Weight</th><th>Value</th></tr></thead><tbody><tr><td>1</td><td>10</td><td>60</td></tr><tr><td>2</td><td>20</td><td>100</td></tr><tr><td>3</td><td>30</td><td>120</td></tr></tbody></table>\n<p>And the knapsack has a weight capacity of 50. The value-to-weight ratios for the items are:</p>\n<ul>\n<li>Item 1: 60/10 = 6</li>\n<li>Item 2: 100/20 = 5</li>\n<li>Item 3: 120/30 = 4\nSorting the items by their value-to-weight ratio gives us:</li>\n</ul>\n<ol>\n<li>Item 1 (6)</li>\n<li>Item 2 (5)</li>\n<li>Item 3 (4)\nNow, we can start filling the knapsack:</li>\n</ol>\n<ul>\n<li>Item 1 can fit completely (weight 10), so we add its full value (60) to the total value and reduce the remaining capacity to 40.</li>\n<li>Item 2 can also fit completely (weight 20), so we add its full value (100) to the total value and reduce the remaining capacity to 20.</li>\n<li>Item 3 cannot fit completely (weight 30), but we can take a fraction of it. We can take 20/30 of item 3, which gives us a value of (20/30) * 120 = 80. We add this to the total value and reduce the remaining capacity to 0.\nThe total value in the knapsack is 60 (from item 1) + 100 (from item 2) + 80 (from item 3) = 240. Therefore, the maximum value that can be obtained with the given weight capacity is 240.</li>\n</ul>\n<h3>Time Complexity</h3>\n<p>The time complexity of the fractional knapsack problem is O(n log n) due to the sorting step, where n is the number of items. The rest of the operations (calculating ratios and iterating through the items) take O(n) time.</p>\n<h2>Objectives</h2>\n<p>The main objectives of this session are to:</p>\n<ul>\n<li>Implement Fractional Knapsack Problem</li>\n<li>Test the implementation on different problem instances</li>\n<li>Implement greedy technique in general</li>\n</ul>\n<h3>Problem Statement</h3>\n<p>Implement Fractional Knapsack Algorithm and find out optimal result for the following problem instances:</p>\n<h4>Question 1</h4>\n<p>(P1, P2, P3, P4, P5, P6, P7) = (15, 5, 20, 8, 7, 20, 6) <br>\n(W1, W2, W3, W4, W5, W6, W7) = (3, 4, 6, 8, 2, 2, 3) <br>\nMaximum Knapsack Capacity = 18 <br></p>\n<h4>Question 2</h4>\n<p>(P1, P2, P3, P4, P5) = (20, 30, 40, 32, 55) <br>\n(W1, W2, W3, W4, W5) = (5, 8, 10, 12, 15) <br>\nMaximum Knapsack Capacity = 50 <br></p>\n<h4>Question 3</h4>\n<p>(P1, P2, P3, P4, P5, P6, P7) = (12, 10, 8, 11, 14, 7, 9) <br>\n(W1, W2, W3, W4, W5, W6, W7) = (4, 6, 5, 7, 3, 1, 6) <br>\nMaximum Knapsack Capacity = 15 <br></p>\n<h2>Implementation</h2>\n<h4>Python</h4>\n<pre><code class=\"language-python\" metastring=\"title=&#x22;horners-method.py&#x22; showLineNumbers file=../../../lib/code/mcs-216/session-2/knapsack.py \"></code></pre>\n<h4>C Language</h4>\n<pre><code class=\"language-c\" metastring=\"title=&#x22;horners-method.c&#x22; showLineNumbers file=../../../lib/code/mcs-216/session-2/knapsack.c \"></code></pre>\n<h4>Rust</h4>\n<pre><code class=\"language-rust\" metastring=\"title=&#x22;horners-method.rs&#x22; showLineNumbers file=../../../lib/code/mcs-216/session-2/knapsack.rs\"></code></pre>\n<h2>Conclusion</h2>\n<p>The fractional knapsack problem is a fundamental problem in combinatorial optimization that can be efficiently solved using a greedy algorithm. By calculating the value-to-weight ratio and sorting the items accordingly, we can maximize the total value of the items in the knapsack while respecting the weight capacity. This problem has practical applications in various fields such as resource allocation, budgeting, and logistics. Understanding the fractional knapsack problem and its solution approach is essential for solving more complex optimization problems in computer science and operations research.</p>",
+    "raw": "## Fractional Knapsack Problem\nThe fractional knapsack problem is a variation of the classic knapsack problem where you are allowed to take fractions of items rather than having to take whole items. The goal is to maximize the total value of the items you can carry in a knapsack with a given weight capacity. It's a greedy algorithm problem that can be solved efficiently by following a specific approach.\n\n### Solution Approach\n\n1. **Calculate Value-to-Weight Ratio**: For each item, calculate the value-to-weight ratio, which is the value of the item divided by its weight. This ratio helps to determine which items are more valuable per unit of weight.\n\n2. **Sort Items**: Sort the items in descending order based on their value-to-weight ratio. This ensures that you consider the most valuable items first.\n\n3. **Initialize Variables**: Initialize a variable to keep track of the total value and the remaining weight capacity of the knapsack.\n\n4. **Iterate Through Sorted Items**: Iterate through the sorted list of items. For each item, check if it can fit in the remaining weight capacity of the knapsack.\n   - If the item can fit completely, add its full value to the total value and decrease the remaining weight capacity accordingly.\n   - If the item cannot fit completely, take the fraction of the item that can fit in the remaining weight capacity, add the corresponding fraction of the value to the total value, and set the remaining weight capacity to zero (since the knapsack is now full).\n \n5. **Return Total Value**: After iterating through all the items, return the total value of the items in the knapsack.\n\n### Example\nSuppose you have the following items with their weights and values:\n| Item | Weight | Value |\n|------|--------|-------| \n| 1    | 10     | 60    |\n| 2    | 20     | 100   | \n| 3    | 30     | 120   |\n\nAnd the knapsack has a weight capacity of 50. The value-to-weight ratios for the items are:\n- Item 1: 60/10 = 6\n- Item 2: 100/20 = 5\n- Item 3: 120/30 = 4\nSorting the items by their value-to-weight ratio gives us:\n1. Item 1 (6)\n2. Item 2 (5)\n3. Item 3 (4)\nNow, we can start filling the knapsack:\n- Item 1 can fit completely (weight 10), so we add its full value (60) to the total value and reduce the remaining capacity to 40.\n- Item 2 can also fit completely (weight 20), so we add its full value (100) to the total value and reduce the remaining capacity to 20.\n- Item 3 cannot fit completely (weight 30), but we can take a fraction of it. We can take 20/30 of item 3, which gives us a value of (20/30) * 120 = 80. We add this to the total value and reduce the remaining capacity to 0.\nThe total value in the knapsack is 60 (from item 1) + 100 (from item 2) + 80 (from item 3) = 240. Therefore, the maximum value that can be obtained with the given weight capacity is 240.\n\n### Time Complexity\nThe time complexity of the fractional knapsack problem is O(n log n) due to the sorting step, where n is the number of items. The rest of the operations (calculating ratios and iterating through the items) take O(n) time.\n\n## Objectives\n\nThe main objectives of this session are to:\n- Implement Fractional Knapsack Problem\n- Test the implementation on different problem instances\n- Implement greedy technique in general\n\n### Problem Statement\n\nImplement Fractional Knapsack Algorithm and find out optimal result for the following problem instances:\n\n#### Question 1 \n(P1, P2, P3, P4, P5, P6, P7) = (15, 5, 20, 8, 7, 20, 6) <br />\n(W1, W2, W3, W4, W5, W6, W7) = (3, 4, 6, 8, 2, 2, 3) <br />\nMaximum Knapsack Capacity = 18 <br />\n\n#### Question 2\n(P1, P2, P3, P4, P5) = (20, 30, 40, 32, 55) <br />\n(W1, W2, W3, W4, W5) = (5, 8, 10, 12, 15) <br />\nMaximum Knapsack Capacity = 50 <br />\n\n#### Question 3\n(P1, P2, P3, P4, P5, P6, P7) = (12, 10, 8, 11, 14, 7, 9) <br />\n(W1, W2, W3, W4, W5, W6, W7) = (4, 6, 5, 7, 3, 1, 6) <br />\nMaximum Knapsack Capacity = 15 <br />\n\n## Implementation\n\n#### Python\n```python title=\"horners-method.py\" showLineNumbers file=../../../lib/code/mcs-216/session-2/knapsack.py \n\n```\n\n#### C Language\n```c title=\"horners-method.c\" showLineNumbers file=../../../lib/code/mcs-216/session-2/knapsack.c \n\n```\n\n#### Rust\n```rust title=\"horners-method.rs\" showLineNumbers file=../../../lib/code/mcs-216/session-2/knapsack.rs\n\n```\n\n## Conclusion\nThe fractional knapsack problem is a fundamental problem in combinatorial optimization that can be efficiently solved using a greedy algorithm. By calculating the value-to-weight ratio and sorting the items accordingly, we can maximize the total value of the items in the knapsack while respecting the weight capacity. This problem has practical applications in various fields such as resource allocation, budgeting, and logistics. Understanding the fractional knapsack problem and its solution approach is essential for solving more complex optimization problems in computer science and operations research.",
+    "toc": [
+      {
+        "title": "Fractional Knapsack Problem",
+        "url": "#fractional-knapsack-problem",
+        "items": [
+          {
+            "title": "Solution Approach",
+            "url": "#solution-approach",
+            "items": []
+          },
+          {
+            "title": "Example",
+            "url": "#example",
+            "items": []
+          },
+          {
+            "title": "Time Complexity",
+            "url": "#time-complexity",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Objectives",
+        "url": "#objectives",
+        "items": [
+          {
+            "title": "Problem Statement",
+            "url": "#problem-statement",
+            "items": [
+              {
+                "title": "Question 1",
+                "url": "#question-1",
+                "items": []
+              },
+              {
+                "title": "Question 2",
+                "url": "#question-2",
+                "items": []
+              },
+              {
+                "title": "Question 3",
+                "url": "#question-3",
+                "items": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Implementation",
+        "url": "#implementation",
+        "items": []
+      },
+      {
+        "title": "Conclusion",
+        "url": "#conclusion",
+        "items": []
+      }
+    ],
     "section": "MCS-216 Section 1",
-    "lastModified": "2026-05-02T12:11:17.125Z",
+    "lastModified": "2026-05-04T09:10:22.105Z",
     "slug": "mcs-216/section-1/session-2",
     "slugFull": "/mcs-216/section-1/session-2"
   }
