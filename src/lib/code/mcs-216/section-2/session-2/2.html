@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>PC Processors Scroll List</title>
+        <style>
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                font-family:
+                    system-ui,
+                    -apple-system,
+                    sans-serif;
+                background: #0f172a;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100svh;
+                padding: 12px;
+            }
+
+            .scroll-container {
+                width: 100%;
+                max-width: 420px;
+                height: 50svh;
+                background: #ffffff;
+                border-radius: 16px;
+                box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+                overflow-y: auto;
+                scroll-behavior: smooth;
+                position: relative;
+            }
+
+            .list-header {
+                position: sticky;
+                top: 0;
+                background: #1e293b;
+                color: #f8fafc;
+                padding: 18px;
+                text-align: center;
+                font-size: 1.15rem;
+                font-weight: 600;
+                z-index: 10;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                letter-spacing: 0.5px;
+            }
+
+            .processor-list {
+                list-style: none;
+            }
+
+            .processor-item {
+                padding: 16px 20px;
+                border-bottom: 1px solid #e2e8f0;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                transition: background 0.2s ease;
+            }
+
+            .processor-item:last-child {
+                border-bottom: none;
+            }
+
+            .processor-item:hover {
+                background: #f1f5f9;
+            }
+
+            .item-number {
+                width: 32px;
+                height: 32px;
+                background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 0.75rem;
+                font-weight: 700;
+                flex-shrink: 0;
+            }
+
+            .item-name {
+                font-size: 1rem;
+                color: #0f172a;
+                font-weight: 500;
+            }
+
+            /* Custom Scrollbar */
+            .scroll-container::-webkit-scrollbar {
+                width: 8px;
+            }
+            .scroll-container::-webkit-scrollbar-track {
+                background: #f8fafc;
+            }
+            .scroll-container::-webkit-scrollbar-thumb {
+                background: #cbd5e1;
+                border-radius: 4px;
+                border: 2px solid #f8fafc;
+            }
+            .scroll-container::-webkit-scrollbar-thumb:hover {
+                background: #94a3b8;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="scroll-container">
+            <div class="list-header">PC Processors</div>
+            <ul class="processor-list" id="processorList"></ul>
+        </div>
+
+        <script>
+            const processors = [
+                "Intel i7",
+                "Motorola 68000",
+                "AMD Athlon",
+                "Intel 8088",
+                "AMD Ryzen",
+                "Intel Pentium MMX",
+                "Intel i3",
+                "Intel Pentium II",
+                "Intel Pentium III",
+                "Intel i5",
+                "Intel Celeron",
+                "PowerPC G3",
+                "PowerPC G4",
+            ];
+
+            const listEl = document.getElementById("processorList");
+
+            // Generate list items dynamically
+            processors.forEach((proc, index) => {
+                const li = document.createElement("li");
+                li.className = "processor-item";
+                li.innerHTML = `
+                <div class="item-number">${index + 1}</div>
+                <div class="item-name">${proc}</div>
+            `;
+                listEl.appendChild(li);
+            });
+        </script>
+    </body>
+</html>

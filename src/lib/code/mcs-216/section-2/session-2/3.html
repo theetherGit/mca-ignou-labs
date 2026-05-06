@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Apply Now - TechNova Solutions</title>
+        <style>
+            :root {
+                --primary: #2563eb;
+                --primary-hover: #1d4ed8;
+                --bg: #f8fafc;
+                --surface: #ffffff;
+                --text: #0f172a;
+                --text-muted: #475569;
+                --border: #cbd5e1;
+                --focus-ring: rgba(37, 99, 235, 0.3);
+                --error: #ef4444;
+                --success: #10b981;
+                --radius: 10px;
+                --shadow:
+                    0 4px 6px -1px rgb(0 0 0 / 0.1),
+                    0 2px 4px -2px rgb(0 0 0 / 0.1);
+            }
+
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                font-family:
+                    system-ui,
+                    -apple-system,
+                    "Segoe UI",
+                    Roboto,
+                    sans-serif;
+                background: var(--bg);
+                color: var(--text);
+                line-height: 1.5;
+                padding: 2rem 1rem;
+                min-height: 100vh;
+            }
+
+            .container {
+                max-width: 900px;
+                margin: 0 auto;
+                background: var(--surface);
+                padding: 2.5rem;
+                border-radius: var(--radius);
+                box-shadow: var(--shadow);
+            }
+
+            header {
+                text-align: center;
+                margin-bottom: 2rem;
+                padding-bottom: 1.5rem;
+                border-bottom: 1px solid var(--border);
+            }
+
+            header h1 {
+                font-size: 1.75rem;
+                font-weight: 700;
+                color: var(--text);
+            }
+
+            header p {
+                color: var(--text-muted);
+                margin-top: 0.25rem;
+            }
+
+            form {
+                display: flex;
+                flex-direction: column;
+                gap: 1.75rem;
+            }
+
+            fieldset {
+                border: 1px solid var(--border);
+                border-radius: var(--radius);
+                padding: 1.5rem;
+                background: #fdfdfd;
+            }
+
+            legend {
+                font-weight: 600;
+                padding: 0 0.5rem;
+                color: var(--primary);
+                font-size: 1.1rem;
+            }
+
+            .form-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 1.25rem;
+            }
+
+            .form-group {
+                display: flex;
+                flex-direction: column;
+                gap: 0.4rem;
+            }
+
+            .form-group.full-width {
+                grid-column: 1 / -1;
+            }
+
+            label {
+                font-size: 0.9rem;
+                font-weight: 500;
+                color: var(--text);
+            }
+
+            label .req {
+                color: var(--error);
+                margin-left: 2px;
+            }
+
+            input,
+            textarea,
+            select {
+                padding: 0.75rem;
+                border: 1px solid var(--border);
+                border-radius: 8px;
+                font-size: 0.95rem;
+                font-family: inherit;
+                transition:
+                    border-color 0.2s,
+                    box-shadow 0.2s;
+                background: #fff;
+            }
+
+            input:focus,
+            textarea:focus {
+                outline: none;
+                border-color: var(--primary);
+                box-shadow: 0 0 0 3px var(--focus-ring);
+            }
+
+            input:invalid:not(:placeholder-shown) {
+                border-color: var(--error);
+            }
+
+            textarea {
+                resize: vertical;
+                min-height: 100px;
+            }
+
+            /* Slider Styling */
+            .slider-wrapper {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                margin-top: 0.5rem;
+            }
+
+            input[type="range"] {
+                flex: 1;
+                cursor: pointer;
+                accent-color: var(--primary);
+            }
+
+            .slider-value {
+                min-width: 3ch;
+                text-align: center;
+                font-weight: 600;
+                background: var(--bg);
+                padding: 0.3rem 0.6rem;
+                border-radius: 6px;
+                border: 1px solid var(--border);
+            }
+
+            /* Referees Grid */
+            .referees-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 1.5rem;
+            }
+
+            .referee-card {
+                background: #fff;
+                border: 1px solid var(--border);
+                border-radius: 8px;
+                padding: 1.25rem;
+            }
+
+            .referee-card h3 {
+                margin-bottom: 1rem;
+                font-size: 1rem;
+                color: var(--text-muted);
+                border-bottom: 1px dashed var(--border);
+                padding-bottom: 0.5rem;
+            }
+
+            /* Submit Button */
+            button[type="submit"] {
+                background: var(--primary);
+                color: white;
+                border: none;
+                padding: 1rem 2rem;
+                font-size: 1rem;
+                font-weight: 600;
+                border-radius: 8px;
+                cursor: pointer;
+                transition:
+                    background 0.2s,
+                    transform 0.1s;
+                margin-top: 1rem;
+                align-self: flex-start;
+            }
+
+            button[type="submit"]:hover {
+                background: var(--primary-hover);
+            }
+            button[type="submit"]:active {
+                transform: scale(0.98);
+            }
+            button[type="submit"]:disabled {
+                background: var(--text-muted);
+                cursor: not-allowed;
+                opacity: 0.7;
+            }
+
+            /* Message Toast */
+            .message {
+                padding: 1rem;
+                border-radius: 8px;
+                margin-top: 1rem;
+                display: none;
+                font-weight: 500;
+                text-align: center;
+            }
+
+            .message.success {
+                background: #dcfce7;
+                color: #166534;
+                border: 1px solid #bbf7d0;
+                display: block;
+            }
+
+            .message.error {
+                background: #fee2e2;
+                color: #991b1b;
+                border: 1px solid #fecaca;
+                display: block;
+            }
+
+            @media (max-width: 768px) {
+                .container {
+                    padding: 1.5rem;
+                }
+                .referees-grid {
+                    grid-template-columns: 1fr;
+                }
+                button[type="submit"] {
+                    width: 100%;
+                    align-self: center;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Ethercorps Solutions</h1>
+                <p>Online Job Application Portal</p>
+            </header>
+
+            <form id="applicationForm" novalidate>
+                <!-- Personal & Contact -->
+                <fieldset>
+                    <legend>Personal & Contact Information</legend>
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label for="position"
+                                >Position Applied For
+                                <span class="req">*</span></label
+                            >
+                            <input
+                                type="text"
+                                id="position"
+                                name="position"
+                                placeholder="e.g. Senior Frontend Developer"
+                                required
+                                autofocus
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="fullName"
+                                >Full Name <span class="req">*</span></label
+                            >
+                            <input
+                                type="text"
+                                id="fullName"
+                                name="fullName"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="nationality"
+                                >Nationality <span class="req">*</span></label
+                            >
+                            <input
+                                type="text"
+                                id="nationality"
+                                name="nationality"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="dob"
+                                >Date of Birth <span class="req">*</span></label
+                            >
+                            <input type="date" id="dob" name="dob" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="email"
+                                >Email Address <span class="req">*</span></label
+                            >
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="you@example.com"
+                                required
+                            />
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="address">Address</label>
+                            <textarea
+                                id="address"
+                                name="address"
+                                rows="2"
+                                required
+                            ></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone"
+                                >Telephone Number
+                                <span class="req">*</span></label
+                            >
+                            <input
+                                type="tel"
+                                id="phone"
+                                name="phone"
+                                placeholder="+1 (555) 000-0000"
+                                required
+                            />
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Education -->
+                <fieldset>
+                    <legend>Education & Qualifications</legend>
+                    <div class="form-group">
+                        <label for="education"
+                            >Educational History & Qualifications</label
+                        >
+                        <textarea
+                            id="education"
+                            name="education"
+                            placeholder="Degrees, certifications, institutions, graduation dates..."
+                        ></textarea>
+                    </div>
+                </fieldset>
+
+                <!-- Work Experience -->
+                <fieldset>
+                    <legend>Work Experience & Training</legend>
+                    <div class="form-group">
+                        <label for="employmentHistory"
+                            >Employer History & Training</label
+                        >
+                        <textarea
+                            id="employmentHistory"
+                            name="employmentHistory"
+                            rows="4"
+                            placeholder="Previous companies, roles, key responsibilities, training programs..."
+                        ></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="yearsExp"
+                            >Years of Experience (Max 10)</label
+                        >
+                        <div class="slider-wrapper">
+                            <input
+                                type="range"
+                                id="yearsExp"
+                                name="yearsExp"
+                                min="0"
+                                max="10"
+                                step="1"
+                                value="0"
+                            />
+                            <output id="yearsExpOutput" class="slider-value"
+                                >0</output
+                            >
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Personal Statement -->
+                <fieldset>
+                    <legend>Personal Statement</legend>
+                    <div class="form-group">
+                        <label for="personalStatement"
+                            >Why are you a strong candidate?
+                            <span class="req">*</span></label
+                        >
+                        <textarea
+                            id="personalStatement"
+                            name="personalStatement"
+                            rows="4"
+                            placeholder="Highlight your skills, motivation, and career objectives..."
+                            required
+                        ></textarea>
+                    </div>
+                </fieldset>
+
+                <!-- Referees -->
+                <fieldset>
+                    <legend>Referees</legend>
+                    <div class="referees-grid">
+                        <div class="referee-card">
+                            <h3>Referee 1</h3>
+                            <div class="form-group">
+                                <label for="ref1Name">Full Name</label>
+                                <input
+                                    type="text"
+                                    id="ref1Name"
+                                    name="ref1Name"
+                                    required
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label for="ref1Occupation">Occupation</label>
+                                <input
+                                    type="text"
+                                    id="ref1Occupation"
+                                    name="ref1Occupation"
+                                    required
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label for="ref1Relationship"
+                                    >Relationship</label
+                                >
+                                <input
+                                    type="text"
+                                    id="ref1Relationship"
+                                    name="ref1Relationship"
+                                    placeholder="e.g. Former Manager"
+                                    required
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label for="ref1Address">Address</label>
+                                <textarea
+                                    id="ref1Address"
+                                    name="ref1Address"
+                                    rows="2"
+                                    required
+                                ></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="ref1Phone">Telephone</label>
+                                <input
+                                    type="tel"
+                                    id="ref1Phone"
+                                    name="ref1Phone"
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        <div class="referee-card">
+                            <h3>Referee 2</h3>
+                            <div class="form-group">
+                                <label for="ref2Name">Full Name</label>
+                                <input
+                                    type="text"
+                                    id="ref2Name"
+                                    name="ref2Name"
+                                    required
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label for="ref2Occupation">Occupation</label>
+                                <input
+                                    type="text"
+                                    id="ref2Occupation"
+                                    name="ref2Occupation"
+                                    required
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label for="ref2Relationship"
+                                    >Relationship</label
+                                >
+                                <input
+                                    type="text"
+                                    id="ref2Relationship"
+                                    name="ref2Relationship"
+                                    required
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label for="ref2Address">Address</label>
+                                <textarea
+                                    id="ref2Address"
+                                    name="ref2Address"
+                                    rows="2"
+                                    required
+                                ></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="ref2Phone">Telephone</label>
+                                <input
+                                    type="tel"
+                                    id="ref2Phone"
+                                    name="ref2Phone"
+                                    required
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <button type="submit" id="submitBtn">Submit Application</button>
+                <div id="formMessage" class="message" aria-live="polite"></div>
+            </form>
+        </div>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const form = document.getElementById("applicationForm");
+                const slider = document.getElementById("yearsExp");
+                const sliderOutput = document.getElementById("yearsExpOutput");
+                const submitBtn = document.getElementById("submitBtn");
+                const messageDiv = document.getElementById("formMessage");
+
+                // Update slider output dynamically
+                slider.addEventListener("input", () => {
+                    sliderOutput.textContent = slider.value;
+                });
+
+                // Handle form submission
+                form.addEventListener("submit", (e) => {
+                    e.preventDefault();
+                    messageDiv.className = "message"; // Reset classes
+                    messageDiv.style.display = "none";
+
+                    // Trigger native HTML5 validation
+                    if (!form.checkValidity()) {
+                        form.reportValidity();
+                        return;
+                    }
+
+                    // Simulate async submission
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = "Submitting...";
+
+                    // Collect form data (for demonstration)
+                    const formData = new FormData(form);
+                    const data = Object.fromEntries(formData.entries());
+                    console.log("Application Data:", data);
+
+                    // Mock API delay
+                    setTimeout(() => {
+                        messageDiv.textContent =
+                            "✅ Application submitted successfully! We will review your details and contact you shortly.";
+                        messageDiv.classList.add("success");
+                        messageDiv.style.display = "block";
+
+                        // Reset form
+                        form.reset();
+                        sliderOutput.textContent = "0";
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = "Submit Application";
+
+                        // Scroll to message
+                        messageDiv.scrollIntoView({
+                            behavior: "smooth",
+                            block: "nearest",
+                        });
+                    }, 1500);
+                });
+            });
+        </script>
+    </body>
+</html>

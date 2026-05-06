@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Vanilla Expression Calculator</title>
+        <style>
+            .demo-1 {
+                color: black;
+            }
+            /* Replicates: grid grid-cols-2 border p-1 w-1/3 mt-3 gap-1 */
+            .grid-container {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                border: 1px solid #333;
+                color: black;
+                padding: 0.25rem;
+                width: 33.333%;
+                margin-top: 0.75rem;
+                gap: 0.25rem;
+                box-sizing: border-box;
+                font-family:
+                    system-ui,
+                    -apple-system,
+                    sans-serif;
+            }
+
+            /* Replicates: border p-1 px-2 font-bold */
+            .grid-item,
+            .grid-input {
+                border: 1px solid #333;
+                padding: 0.25rem 0.5rem;
+                font-weight: bold;
+                box-sizing: border-box;
+                margin: 0;
+                color: black;
+            }
+
+            .grid-input {
+                outline: none;
+                background: #fff;
+            }
+
+            .grid-input:focus {
+                border-color: #2563eb;
+                box-shadow: 0 0 0 1px #2563eb;
+            }
+
+            .grid-header {
+                background-color: #f3f4f6;
+            }
+        </style>
+    </head>
+    <body class="demo-1">
+        <div class="grid-container">
+            <p class="grid-item grid-header">Expression</p>
+            <p class="grid-item grid-header">Result</p>
+
+            <input type="text" class="grid-input" id="expression-1" />
+            <input type="text" class="grid-input" id="result-1" readonly />
+
+            <input type="text" class="grid-input" id="expression-2" />
+            <input type="text" class="grid-input" id="result-2" readonly />
+        </div>
+
+        <script>
+            // 1. Mirror the $state object
+            const inputvalue = {
+                1: "1+1",
+                2: "1+1*2",
+                result1: "2",
+                result2: "3",
+            };
+
+            // 2. Cache DOM elements for performance
+            const els = {
+                expr1: document.getElementById("expression-1"),
+                res1: document.getElementById("result-1"),
+                expr2: document.getElementById("expression-2"),
+                res2: document.getElementById("result-2"),
+            };
+
+            // 3. Initialize inputs with default state
+            els.expr1.value = inputvalue[1];
+            els.res1.value = inputvalue.result1;
+            els.expr2.value = inputvalue[2];
+            els.res2.value = inputvalue.result2;
+
+            // 4. Core calculation function
+            function onInputChange(index) {
+                const exprEl = index === 1 ? els.expr1 : els.expr2;
+                const resEl = index === 1 ? els.res1 : els.res2;
+
+                // Sync DOM -> State
+                inputvalue[index] = exprEl.value;
+
+                try {
+                    // Note: eval() is used as requested. In production, consider a math parser
+                    // like math.js or new Function() for better security & performance.
+                    const result = eval(inputvalue[index]);
+
+                    // Sync State -> DOM
+                    inputvalue[`result${index}`] = result;
+                    resEl.value = result;
+                } catch (error) {
+                    inputvalue[`result${index}`] = "Error";
+                    resEl.value = "Error";
+                }
+            }
+
+            // 5. Attach event listeners
+            // Using 'input' fires on every keystroke (better UX for calculators).
+            // Change to 'change' if you only want it to fire on blur/enter.
+            els.expr1.addEventListener("input", () => onInputChange(1));
+            els.expr2.addEventListener("input", () => onInputChange(2));
+        </script>
+    </body>
+</html>
