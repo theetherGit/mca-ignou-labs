@@ -1,6 +1,5 @@
 from itertools import permutations
 
-
 def solve_brute_force(jobs):
     # jobs is a list of tuples: (name, time)
     all_configs = list(permutations(jobs))

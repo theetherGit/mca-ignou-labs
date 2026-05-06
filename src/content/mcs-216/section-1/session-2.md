@@ -4,7 +4,12 @@ description: Fractional Knapsack Problem
 section: MCS-216 Section 1
 ---
 
-## Fractional Knapsack Problem
+<script>
+  import PrintButton from "$lib/components/print-button.svelte"
+</script>
+
+<PrintButton />
+
 The fractional knapsack problem is a variation of the classic knapsack problem where you are allowed to take fractions of items rather than having to take whole items. The goal is to maximize the total value of the items you can carry in a knapsack with a given weight capacity. It's a greedy algorithm problem that can be solved efficiently by following a specific approach.
 
 ### Solution Approach
@@ -53,7 +58,7 @@ The main objectives of this session are to:
 - Test the implementation on different problem instances
 - Implement greedy technique in general
 
-### Problem Statement
+## Problem Statement
 
 Implement Fractional Knapsack Algorithm and find out optimal result for the following problem instances:
 
@@ -75,17 +80,17 @@ Maximum Knapsack Capacity = 15 <br />
 ## Implementation
 
 ### Python
-```python title="horners-method.py" showLineNumbers file=../../../lib/code/mcs-216/session-2/knapsack.py 
+```python title="Knapsack.py" showLineNumbers file=../../../lib/code/mcs-216/session-2/knapsack.py 
 
 ```
 
 ### C Language
-```c title="horners-method.c" showLineNumbers file=../../../lib/code/mcs-216/session-2/knapsack.c 
+```c title="Knapsack.c" showLineNumbers file=../../../lib/code/mcs-216/session-2/knapsack.c 
 
 ```
 
 ### Rust
-```rust title="horners-method.rs" showLineNumbers file=../../../lib/code/mcs-216/session-2/knapsack.rs
+```rust title="Knapsack.rs" showLineNumbers file=../../../lib/code/mcs-216/session-2/knapsack.rs
 
 ```
 

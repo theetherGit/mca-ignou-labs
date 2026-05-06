@@ -4,6 +4,12 @@ description: Task Scheduling Algorithms
 section: MCS-216 Section 1
 ---
 
+<script>
+  import PrintButton from "$lib/components/print-button.svelte"
+</script>
+
+<PrintButton />
+
 A task scheduling problem is formulated as an optimization problem which in which we need to determine the set of tasks from the given tasks that can ve accomplished withintheir deadlines along with their order of scheduling such that the profilt is maximum. So, this is a maximixation optimization problem with a constraint that tasks must be completed within their deadlines.
 
 ## Objective 
@@ -34,17 +40,17 @@ The total time spent in jobs by the system is the sum of the finishing times of 
 ### Implementation
 
 ### Python
-```python title="horners-method.py" showLineNumbers file=../../../lib/code/mcs-216/session-3/1/1.py 
+```python title="task-scheduling.py" showLineNumbers file=../../../lib/code/mcs-216/session-3/1/1.py 
 
 ```
 
 ### C Language
-```c title="horners-method.c" showLineNumbers file=../../../lib/code/mcs-216/session-3/1/1.c 
+```c title="task-scheduling.c" showLineNumbers file=../../../lib/code/mcs-216/session-3/1/1.c 
 
 ```
 
 ### Rust
-```rust title="horners-method.rs" showLineNumbers file=../../../lib/code/mcs-216/session-3/1/1.rs
+```rust title="task-scheduling.rs" showLineNumbers file=../../../lib/code/mcs-216/session-3/1/1.rs
 
 ```
 
@@ -76,17 +82,17 @@ The total time spent in the system can be calculated as follows:
 ### Implementation
 
 ### Python
-```python title="horners-method.py" showLineNumbers file=../../../lib/code/mcs-216/session-3/2/2.py 
+```python title="task-scheduling.py" showLineNumbers file=../../../lib/code/mcs-216/session-3/2/2.py 
 
 ``` 
 
 ### C Language
-```c title="horners-method.c" showLineNumbers file=../../../lib/code/mcs-216/session-3/2/2.c 
+```c title="task-scheduling.c" showLineNumbers file=../../../lib/code/mcs-216/session-3/2/2.c 
 
 ```
 
 ### Rust
-```rust title="horners-method.rs" showLineNumbers file=../../../lib/code/mcs-216/session-3/2/2.rs
+```rust title="task-scheduling.rs" showLineNumbers file=../../../lib/code/mcs-216/session-3/2/2.rs
 
 ```
 
@@ -122,17 +128,17 @@ To maximize the total profits while scheduling jobs with deadlines, we can use a
 ### Implementation
 
 ### Python
-```python title="horners-method.py" showLineNumbers file=../../../lib/code/mcs-216/session-3/3/3.py 
+```python title="task-scheduling.py" showLineNumbers file=../../../lib/code/mcs-216/session-3/3/3.py 
 
 ```
 
 ### C Language
-```c title="horners-method.c" showLineNumbers file=../../../lib/code/mcs-216/session-3/3/3.c 
+```c title="task-scheduling.c" showLineNumbers file=../../../lib/code/mcs-216/session-3/3/3.c 
 
 ```
 
 ### Rust
-```rust title="horners-method.rs" showLineNumbers file=../../../lib/code/mcs-216/session-3/3/3.rs
+```rust title="task-scheduling.rs" showLineNumbers file=../../../lib/code/mcs-216/session-3/3/3.rs
 
 ```
 
