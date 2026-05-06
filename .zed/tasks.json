@@ -6,7 +6,7 @@
     "allow_concurrent_runs": false,
     "reveal": "always",
     "show_command": false,
-    "reveal_target": "dock",
+    "reveal_target": "center",
   },
   {
     "label": "Run python",
@@ -14,6 +14,7 @@
     "use_new_terminal": true,
     "allow_concurrent_runs": false,
     "reveal": "always",
+    "reveal_target": "center",
     "show_command": false,
   },
   {
@@ -22,6 +23,7 @@
     "use_new_terminal": true,
     "allow_concurrent_runs": false,
     "reveal": "always",
+    "reveal_target": "center",
     "show_command": false,
   },
 ]
