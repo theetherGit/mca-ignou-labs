@@ -1440,5 +1440,113 @@
     "lastModified": "2026-05-07T11:19:36.746Z",
     "slug": "mcs-216/section-2/session-5",
     "slugFull": "/mcs-216/section-2/session-5"
+  },
+  {
+    "title": "Session 6",
+    "description": "HTML DOM Navigation",
+    "path": "mcs-216/section-2/session-6",
+    "content": "<script>\n  import { Callout } from \"@ethercorps/kit\";\n  import PrintButton from \"$lib/components/print-button.svelte\";\n  \n  import Question4 from \"$lib/components/demo/mcs-216/section-2/session-6/4.svelte\"\n</script>\n<printbutton>\n<p>HTML DOM interprets an HTML document as a hierarchical tree of nodes. This session focuses on DOM Navigation, which allows JavaScript to traverse this tree using parent-child-sibling relationships. Additionally, this session covers dynamic DOM Manipulation: creating, inserting, and removing HTML elements programmatically without page reloads.</p>\n<h2>Objectives</h2>\n<ul>\n<li>Navigate between DOM nodes using built-in relationship properties</li>\n<li>Dynamically create and attach new HTML elements to the document</li>\n<li>Remove existing elements or child nodes from the DOM tree</li>\n<li>Implement interactive UI updates through hands-on DOM exercises</li>\n</ul>\n<h2>DOM Navigation Properties</h2>\n<p>Every DOM node exposes properties to access its relatives in the tree:</p>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<table><thead><tr><th>Property</th><th>Description</th><th>Example</th></tr></thead><tbody><tr><td><code>parentNode</code></td><td>Returns the direct parent node</td><td><code>el.parentNode</code></td></tr><tr><td><code>childNodes</code></td><td>Returns a <code>NodeList</code> of all direct children</td><td><code>el.childNodes[0]</code></td></tr><tr><td><code>firstChild</code> / <code>lastChild</code></td><td>Returns the first/last child node</td><td><code>el.firstChild</code></td></tr><tr><td><code>nextSibling</code> / <code>previousSibling</code></td><td>Returns adjacent sibling nodes</td><td><code>el.nextSibling</code></td></tr></tbody></table>\n<h3>Important Notes:</h3>\n<ul>\n<li><code>childNodes</code> includes <strong>text nodes</strong> (whitespace counts as a node). To skip them, use <code>children</code> or check <code>nodeType === 1</code>.</li>\n<li><code>nodeValue</code> extracts the text content of a text node.</li>\n<li><code>nodeName</code> returns the tag name in <strong>UPPERCASE</strong> (e.g., <code>DIV</code>, <code>P</code>).</li>\n</ul>\n<pre><code class=\"language-js\">// Example: Accessing text inside &#x3C;h3 id=\"heading1\">Hello&#x3C;/h3>\nlet h3 = document.getElementById(\"heading1\");\nconsole.log(h3.firstChild.nodeValue); // \"Hello\"\nconsole.log(h3.nodeName);             // \"H3\"\n</code></pre>\n<h2>Creating &#x26; Adding Elements</h2>\n<ul>\n<li><strong>Create Element</strong>: <code>document.createElement(\"tag\")</code></li>\n<li><strong>Create Text Node</strong>: <code>document.createTextNode(\"text\")</code></li>\n<li><strong>Attach Text to Element</strong>: <code>element.appendChild(textNode)</code></li>\n<li><strong>Insert into DOM</strong>:\n<ul>\n<li><code>parent.appendChild(newEl)</code> -> Adds as <strong>last child</strong></li>\n<li><code>parent.insertBefore(newEl, referenceEl)</code> -> Inserts <strong>before</strong> a specific child</li>\n</ul>\n</li>\n</ul>\n<h2>Removing Elements</h2>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<table><thead><tr><th>Method</th><th>Usage</th><th>Behavior</th></tr></thead><tbody><tr><td><code>element.remove()</code></td><td>Modern, direct</td><td>Removes the element itself</td></tr><tr><td><code>parent.removeChild(child)</code></td><td>Legacy</td><td>Removes a specific child from its parent</td></tr></tbody></table>\n<h2>Question 1</h2>\n<h3>Problem Statement</h3>\n<p>Which function on the document object should be used to retrieve a HTML element uniquely?</p>\n<h3>Answer</h3>\n<pre><code class=\"language-js\">document.getElementById(id)\n</code></pre>\n<blockquote>\n<p>Note: <code>document.querySelector(\"#id\")</code> also works, but <code>getElementById</code> is faster and specifically designed for unique ID retrieval.</p>\n</blockquote>\n<h2>Question 2</h2>\n<h3>Problem Statement</h3>\n<p>Which JavaScript function can be used to dynamically add a event listener to a HTML element?</p>\n<h3>Answer</h3>\n<pre><code class=\"language-js\">element.addEventListener(eventType, callbackFunction)\n</code></pre>\n<p>OR</p>\n<pre><code class=\"language-js\">parentElement.insertBefore(newElement, referenceElement)\n</code></pre>\n<h2>Question 3</h2>\n<h3>Problem Statement</h3>\n<p>Which method should be used to add a new HTML child element?</p>\n<h3>Answer</h3>\n<pre><code class=\"language-js\">parentElement.appendChild(newElement)\n</code></pre>\n<p>OR</p>\n<pre><code class=\"language-js\">parentElement.insertBefore(newElement, referenceElement)\n</code></pre>\n<h2>Question 4</h2>\n<h3>Problem Statement</h3>\n<p>USe the DOM API, create a product page which shows the prices of a laptop and a cell phone. You may use paragraph tag to wrap these elements. When the user clicks on add button, you should able to add TV with price details and when you click on delete button then cell phone details will be deleted.</p>\n<h3>Preview (Working)</h3>\n<question4>\n<h3>Code</h3>\n<pre><code class=\"language-html\" metastring=\"title=&#x22;product-page.html&#x22; showLineNumbers file=../../../lib/code/mcs-216/section-2/session-6/4.html\"></code></pre></question4></printbutton>",
+    "raw": "<script>\n  import { Callout } from \"@ethercorps/kit\";\n  import PrintButton from \"$lib/components/print-button.svelte\";\n  \n  import Question4 from \"$lib/components/demo/mcs-216/section-2/session-6/4.svelte\"\n</script>\n\n<PrintButton />\n\nHTML DOM interprets an HTML document as a hierarchical tree of nodes. This session focuses on DOM Navigation, which allows JavaScript to traverse this tree using parent-child-sibling relationships. Additionally, this session covers dynamic DOM Manipulation: creating, inserting, and removing HTML elements programmatically without page reloads.\n\n## Objectives\n\n- Navigate between DOM nodes using built-in relationship properties\n- Dynamically create and attach new HTML elements to the document\n- Remove existing elements or child nodes from the DOM tree\n- Implement interactive UI updates through hands-on DOM exercises\n\n## DOM Navigation Properties\n\nEvery DOM node exposes properties to access its relatives in the tree:\n\n| Property | Description | Example |\n|----------|-------------|---------|\n| `parentNode` | Returns the direct parent node | `el.parentNode` |\n| `childNodes` | Returns a `NodeList` of all direct children | `el.childNodes[0]` |\n| `firstChild` / `lastChild` | Returns the first/last child node | `el.firstChild` |\n| `nextSibling` / `previousSibling` | Returns adjacent sibling nodes | `el.nextSibling` |\n\n### Important Notes:\n- `childNodes` includes **text nodes** (whitespace counts as a node). To skip them, use `children` or check `nodeType === 1`.\n- `nodeValue` extracts the text content of a text node.\n- `nodeName` returns the tag name in **UPPERCASE** (e.g., `DIV`, `P`).\n\n```js\n// Example: Accessing text inside <h3 id=\"heading1\">Hello</h3>\nlet h3 = document.getElementById(\"heading1\");\nconsole.log(h3.firstChild.nodeValue); // \"Hello\"\nconsole.log(h3.nodeName);             // \"H3\"\n```\n\n## Creating & Adding Elements\n\n- **Create Element**: `document.createElement(\"tag\")`\n- **Create Text Node**: `document.createTextNode(\"text\")`\n- **Attach Text to Element**: `element.appendChild(textNode)`\n- **Insert into DOM**:\n  - `parent.appendChild(newEl)` -> Adds as **last child**\n  - `parent.insertBefore(newEl, referenceEl)` -> Inserts **before** a specific child\n\n## Removing Elements\n\n| Method | Usage | Behavior |\n|--------|-------|----------|\n| `element.remove()` | Modern, direct | Removes the element itself |\n| `parent.removeChild(child)` |  Legacy | Removes a specific child from its parent |\n\n## Question 1\n\n### Problem Statement\n\nWhich function on the document object should be used to retrieve a HTML element uniquely?\n\n### Answer\n\n```js\ndocument.getElementById(id)\n```\n\n> Note: `document.querySelector(\"#id\")` also works, but `getElementById` is faster and specifically designed for unique ID retrieval.\n\n## Question 2\n\n### Problem Statement\n\nWhich JavaScript function can be used to dynamically add a event listener to a HTML element?\n\n### Answer\n\n```js\nelement.addEventListener(eventType, callbackFunction)\n```\nOR \n```js\nparentElement.insertBefore(newElement, referenceElement)\n```\n\n## Question 3\n\n### Problem Statement\n\nWhich method should be used to add a new HTML child element?\n\n### Answer\n\n```js\nparentElement.appendChild(newElement)\n```\nOR\n```js\nparentElement.insertBefore(newElement, referenceElement)\n```\n\n\n## Question 4\n\n### Problem Statement\n\nUSe the DOM API, create a product page which shows the prices of a laptop and a cell phone. You may use paragraph tag to wrap these elements. When the user clicks on add button, you should able to add TV with price details and when you click on delete button then cell phone details will be deleted.\n\n### Preview (Working)\n\n<Question4 />\n\n### Code\n\n```html title=\"product-page.html\" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-6/4.html\n\n```",
+    "toc": [
+      {
+        "title": "Objectives",
+        "url": "#objectives",
+        "items": []
+      },
+      {
+        "title": "DOM Navigation Properties",
+        "url": "#dom-navigation-properties",
+        "items": [
+          {
+            "title": "Important Notes:",
+            "url": "#important-notes",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Creating & Adding Elements",
+        "url": "#creating--adding-elements",
+        "items": []
+      },
+      {
+        "title": "Removing Elements",
+        "url": "#removing-elements",
+        "items": []
+      },
+      {
+        "title": "Question 1",
+        "url": "#question-1",
+        "items": [
+          {
+            "title": "Problem Statement",
+            "url": "#problem-statement",
+            "items": []
+          },
+          {
+            "title": "Answer",
+            "url": "#answer",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Question 2",
+        "url": "#question-2",
+        "items": [
+          {
+            "title": "Problem Statement",
+            "url": "#problem-statement-1",
+            "items": []
+          },
+          {
+            "title": "Answer",
+            "url": "#answer-1",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Question 3",
+        "url": "#question-3",
+        "items": [
+          {
+            "title": "Problem Statement",
+            "url": "#problem-statement-2",
+            "items": []
+          },
+          {
+            "title": "Answer",
+            "url": "#answer-2",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Question 4",
+        "url": "#question-4",
+        "items": [
+          {
+            "title": "Problem Statement",
+            "url": "#problem-statement-3",
+            "items": []
+          },
+          {
+            "title": "Preview (Working)",
+            "url": "#preview-working",
+            "items": []
+          },
+          {
+            "title": "Code",
+            "url": "#code",
+            "items": []
+          }
+        ]
+      }
+    ],
+    "section": "MCS-216 Section 2",
+    "lastModified": "2026-05-07T18:00:06.767Z",
+    "slug": "mcs-216/section-2/session-6",
+    "slugFull": "/mcs-216/section-2/session-6"
   }
 ]

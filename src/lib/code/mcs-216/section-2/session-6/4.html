@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Session 6: DOM Navigation & Manipulation</title>
+        <style>
+            body {
+                font-family: sans-serif;
+                padding: 20px;
+            }
+            .container {
+                max-width: 600px;
+                margin: auto;
+            }
+            p {
+                background: #f0f0f0;
+                padding: 10px;
+                margin: 8px 0;
+                border-radius: 4px;
+            }
+            button {
+                padding: 8px 15px;
+                margin-right: 10px;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h2>Product Details</h2>
+            <div id="productList">
+                <p id="laptop">💻 Laptop: $1,200</p>
+                <p id="cellphone">📱 Cell Phone: $800</p>
+            </div>
+            <br />
+            <button id="addBtn">Add TV</button>
+            <button id="deleteBtn">Delete Cell Phone</button>
+        </div>
+
+        <script>
+            // Add TV using DOM Navigation & Creation
+            document.getElementById("addBtn").addEventListener("click", () => {
+                const tvEl = document.createElement("p");
+                const tvText = document.createTextNode("📺 TV: $1,500");
+                tvEl.appendChild(tvText);
+
+                // Insert before the delete button's container or at end
+                document.getElementById("productList").appendChild(tvEl);
+            });
+
+            // Delete Cell Phone using removeChild
+            document
+                .getElementById("deleteBtn")
+                .addEventListener("click", () => {
+                    const phone = document.getElementById("cellphone");
+                    if (phone && phone.parentNode) {
+                        phone.parentNode.removeChild(phone);
+                    }
+                });
+        </script>
+    </body>
+</html>
