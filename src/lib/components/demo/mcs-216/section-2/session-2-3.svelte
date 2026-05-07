@@ -208,7 +208,7 @@
                         <textarea
                             bind:value={formData.employmentHistory}
                             rows="3"
-                            class={`${inputBase} resize-y min-h-[100px]`}
+                            class={`${inputBase} resize-y min-h-25`}
                             placeholder="Previous companies, roles, key responsibilities, training programs..."
                         ></textarea>
                     </div>
