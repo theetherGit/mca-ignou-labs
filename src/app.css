@@ -7,3 +7,7 @@
         display: none !important;
     }
 }
+
+#content code:not(pre > code):not(.custom) {
+    color: var(--color-orange-400);
+}

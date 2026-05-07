@@ -145,7 +145,7 @@ Design an HTML page using JavaScript as shown below. When Try button is pressed,
 
 ### Code
 
-```html title="form.html" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-4/1.html
+```html title="button-on-click.html" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-4/1.html
 
 ```
 
@@ -168,7 +168,7 @@ Modify the below snippet of the code to change the src attribute of the image el
 
 ### Code
 
-```html title="form.html" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-4/2.html
+```html title="image-change.html" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-4/2.html
 
 ```
 
@@ -185,6 +185,6 @@ Write the JavaScript code to change the color of the HTML element h2 to green, o
 
 ### Code
 
-```html title="form.html" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-4/3.html
+```html title="color-change.html" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-4/3.html
 
 ```
