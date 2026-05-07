@@ -113,14 +113,14 @@
       }
     ],
     "section": "MCS-217",
-    "lastModified": "2026-05-07T02:46:28.529Z",
+    "lastModified": "2026-05-07T07:40:08.100Z",
     "slug": "mcs-217/introduction",
     "slugFull": "/mcs-217/introduction"
   },
   {
     "title": "Session 1",
     "description": "Scope Statement for the Online Railway Reservation System",
-    "path": "mcs-217/section-1",
+    "path": "mcs-217/session-1",
     "content": "<script>\n  import PrintButton from \"$lib/components/print-button.svelte\"\n</script>\n<printbutton>\n<h2>Problem Statement</h2>\n<p>Suppose that you need to build software for a Railway Reservation System. Write a statement of scope that describes the software.</p>\n<h2>Statement of Scope</h2>\n<p>The Railway Reservation System is used to Create Reservation, Cancel Reservation, Viewing/updating Train Information, viewing reservation status, generating reports, Updating/Viewing train schedule, updating reservation details, Managing journey time, Arrival/Departure time, Seat availability etc. online. This System will reduce the time and effort for going to railway office and applying for these facilities for transportation.</p>\n<p>Reservation is created from any Railway Station which is updated automatically in all the stations. Hence, there is no confusion to the Reservation Clerk in all the stations to create the Reservation. This can be possible by maintaining Global Database. Representatives present at different stations can access the global database and can easily understand the remaining reservation seats. It provides the ability to create reservation from different places for a train and the clients can easily be able to book reservation seats. It provides various options and diversity to the customer as well as more time to book tickets:</p>\n<ul>\n<li>The Seats of Reservation cannot be more than the seats of Train at that date</li>\n<li>Sending the reservation details to the registered email and mobile number such as confirmation message or Any changes in their booking and railway timing should be notified by message to the user.</li>\n<li>All payment modes is supported. Easy and fast refund on cancelation of ticket.</li>\n<li>Booking railway staff to help old age and physically disabled person.</li>\n<li>Google map linked for trekking route, live location sharing facilities and time and other facilities related to health and meal.</li>\n<li>Twenty-four-7 accessibility and response service.</li>\n<li>Language support: it should be multilingual.</li>\n<li>Voice recognition system also be available which reduces the effort and time to write each detail manually. Lost and found section also available in the system.</li>\n<li>The software will run on both mobile and desktop and on every browser.</li>\n<li>User friendly, simple and easy interface for users. Proper guidance for using the software should be there.</li>\n<li>Secure access of private information (client's subtleties). Confidential data such as account or card details are not stored anywhere and is fully secured system.</li>\n</ul>\n<p>The system is so secured and clerk and manager utilize it. Nobody can able to access the system without his or her permission because of providing login facility to the system. The password is in the form of cipher text by using cryptography technology, so it cannot be hacked by any person. The global database can pass through network in order to utilized by managers or clerks at different places. So, we want to provide network security because of the data not hacked by the other persons when it is going through network cables. This network security is provided by the cryptography technology.</p></printbutton>",
     "raw": "<script>\n  import PrintButton from \"$lib/components/print-button.svelte\"\n</script>\n\n<PrintButton />\n\n## Problem Statement\n\nSuppose that you need to build software for a Railway Reservation System. Write a statement of scope that describes the software.\n\n## Statement of Scope\n\nThe Railway Reservation System is used to Create Reservation, Cancel Reservation, Viewing/updating Train Information, viewing reservation status, generating reports, Updating/Viewing train schedule, updating reservation details, Managing journey time, Arrival/Departure time, Seat availability etc. online. This System will reduce the time and effort for going to railway office and applying for these facilities for transportation.\n \nReservation is created from any Railway Station which is updated automatically in all the stations. Hence, there is no confusion to the Reservation Clerk in all the stations to create the Reservation. This can be possible by maintaining Global Database. Representatives present at different stations can access the global database and can easily understand the remaining reservation seats. It provides the ability to create reservation from different places for a train and the clients can easily be able to book reservation seats. It provides various options and diversity to the customer as well as more time to book tickets:\n\n- The Seats of Reservation cannot be more than the seats of Train at that date\n- Sending the reservation details to the registered email and mobile number such as confirmation message or Any changes in their booking and railway timing should be notified by message to the user.\n- All payment modes is supported. Easy and fast refund on cancelation of ticket.\n- Booking railway staff to help old age and physically disabled person.\n- Google map linked for trekking route, live location sharing facilities and time and other facilities related to health and meal.\n- Twenty-four-7 accessibility and response service.\n- Language support: it should be multilingual.\n- Voice recognition system also be available which reduces the effort and time to write each detail manually. Lost and found section also available in the system.\n- The software will run on both mobile and desktop and on every browser.\n- User friendly, simple and easy interface for users. Proper guidance for using the software should be there.\n- Secure access of private information (client's subtleties). Confidential data such as account or card details are not stored anywhere and is fully secured system.\n\nThe system is so secured and clerk and manager utilize it. Nobody can able to access the system without his or her permission because of providing login facility to the system. The password is in the form of cipher text by using cryptography technology, so it cannot be hacked by any person. The global database can pass through network in order to utilized by managers or clerks at different places. So, we want to provide network security because of the data not hacked by the other persons when it is going through network cables. This network security is provided by the cryptography technology.",
     "toc": [
@@ -137,8 +137,8 @@
     ],
     "section": "MCS-217",
     "lastModified": "2026-05-07T02:47:38.614Z",
-    "slug": "mcs-217/section-1",
-    "slugFull": "/mcs-217/section-1"
+    "slug": "mcs-217/session-1",
+    "slugFull": "/mcs-217/session-1"
   },
   {
     "title": "Session 2",
@@ -189,298 +189,6 @@
     "lastModified": "2026-05-07T03:03:02.180Z",
     "slug": "mcs-217/session-2",
     "slugFull": "/mcs-217/session-2"
-  },
-  {
-    "title": "Session 1",
-    "description": "Preliminaries",
-    "path": "mcs-216/section-2/session-1",
-    "content": "<script>\n  import { Callout } from \"@ethercorps/kit\";\n  import PrintButton from \"$lib/components/print-button.svelte\"\n  import InfoIcon from \"phosphor-svelte/lib/InfoIcon\"\n</script>\n<printbutton>\n<p>Javascript is a high-level, interpreted programming language that is widely used for web development. It was created by Brendan Eich in 1995 and has since become one of the most popular programming languages in the world. JavaScript is primarily used for client-side scripting, allowing developers to create interactive and dynamic web pages. It can also be used on the server-side with environments like Node.js, Deno, Bun and Cloudflare Workers (don't mix with web workers).</p>\n<p>In this session, we will introduce the basic JavsScript constructs, conditional statements amd control flow statements. Lab manual inlcudes good examples and exercises to practice these concepts.</p>\n<h2>Objectives</h2>\n<p>The objectives of this session are to:</p>\n<ul>\n<li>Understand the basic JavaScript constructs</li>\n<li>Unserstand Conditional statements and control flow statements</li>\n</ul>\n<h2>Arthimetic Operators</h2>\n<h3>Problem Statement</h3>\n<p>Q1: Write a JavaScript code to perform the two digit arithmetic operations: Addition, Subtraction, Multiplication and Division.</p>\n<h3>Approach</h3>\n<p>To perform arithmetic operations on two digits, we can follow these steps:</p>\n<ul>\n<li>Define two variables to hold the digits we want to operate on.</li>\n<li>Use the arithmetic operators (<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>) to perform the desired operations.</li>\n<li>Print the results to the console.</li>\n</ul>\n<h3>Code Implementation</h3>\n<pre><code class=\"language-js\" metastring=\"title=&#x22;arithmetic-operation.js&#x22; showLineNumbers file=../../../lib/code/mcs-216/section-2/session-1/arithmetic-operation.js\"></code></pre>\n<h3>Explanation</h3>\n<ul>\n<li>\n<p><strong>Variables</strong>: We use <code>const</code> (constant) because these values aren't changing during the script's execution. If you want to change them later, you would use <code>let</code>.</p>\n</li>\n<li>\n<p><strong>Arithmetic Operators</strong>: JavaScript uses standard mathematical symbols: <code>+</code>, <code>-</code>, <code>*</code>, and <code>/</code>.</p>\n</li>\n<li>\n<p><strong>Console.log</strong>: This is the standard method to print output to the debugging console.</p>\n</li>\n<li>\n<p><strong>Division Safety</strong>: In computer science, \"Division by Zero\" is a common logical error. Including a conditional <code>if</code> check demonstrates good programming practice for your lab submission.</p>\n</li>\n<li>\n<p><strong>String Concatenation</strong>: Using the <code>+</code> symbol between a string (text in quotes) and a variable allows us to combine them into a single readable sentence for the output.</p>\n</li>\n</ul>\n<h2>Pattern Printing</h2>\n<h3>Problem Statement</h3>\n<p>Q2: Write a JavaScript code to print 1 for 1 time 2 for 2 times, 3 for 3 times and so on up to 10.</p>\n<h3>Approach</h3>\n<p>The goal is to create a visual pattern where each number <code>n</code> repeats itself <code>n</code> times on a single line. To achieve this, we need Nested Loops:</p>\n<ul>\n<li><strong>The Outer Loop</strong> will act as a counter that moves from 1 to 10. This tells us which number we are currently processing.</li>\n<li><strong>The Inner Loop</strong> will run based on the value of the outer loop. If the outer loop is at 5, the inner loop will execute 5 times to print the digit \"5\".</li>\n<li>We will collect the digits in a string for each row so they stay on the same line, then print that row before moving to the next number.</li>\n</ul>\n<h3>Code Implementation</h3>\n<pre><code class=\"language-js\" metastring=\"title=&#x22;pattern-printing.js&#x22; showLineNumbers file=../../../lib/code/mcs-216/section-2/session-1/pattern-printing.js\"></code></pre>\n<h3>Explanation</h3>\n<ul>\n<li>\n<p><strong>Nested Loop Logic</strong>: Think of this like a clock. The outer loop is the \"hour\" hand (moving slowly), and the inner loop is the \"minute\" hand (completing a full cycle for every single step the hour hand takes).</p>\n</li>\n<li>\n<p><strong>Dynamic Range</strong>: The inner loop condition <code>j &#x3C;= i</code> is what makes the pattern triangular. Because the limit of the inner loop depends on the current value of the outer loop, the rows get progressively longer.</p>\n</li>\n<li>\n<p><strong>String Accumulation</strong>: In JavaScript, <code>console.log()</code> automatically adds a new line. To get numbers like <code>2 2</code> on the same line, we must first build a string (<code>rowOutput</code>) and print it once the inner loop finishes its work for that row.</p>\n</li>\n<li>\n<p><strong>trim() Method</strong>: We use <code>.trim()</code> at the end to remove the very last space of each row, ensuring the output is clean for your lab record.</p>\n</li>\n</ul>\n<h2>Portfolio Exercise</h2>\n<p>Q3: Discuss first with the group</p></printbutton>",
-    "raw": "<script>\n  import { Callout } from \"@ethercorps/kit\";\n  import PrintButton from \"$lib/components/print-button.svelte\"\n  import InfoIcon from \"phosphor-svelte/lib/InfoIcon\"\n</script>\n\n<PrintButton />\n\nJavascript is a high-level, interpreted programming language that is widely used for web development. It was created by Brendan Eich in 1995 and has since become one of the most popular programming languages in the world. JavaScript is primarily used for client-side scripting, allowing developers to create interactive and dynamic web pages. It can also be used on the server-side with environments like Node.js, Deno, Bun and Cloudflare Workers (don't mix with web workers).\n\nIn this session, we will introduce the basic JavsScript constructs, conditional statements amd control flow statements. Lab manual inlcudes good examples and exercises to practice these concepts.\n\n<Callout type=\"tip\" icon={InfoIcon} title=\"Suggestion\">\n    <!--- space here --->\n    Before trying the solutions provided for the exercises, try to solve them on your own. This will help you understand the concepts better and improve your problem-solving skills.<br/> <br />\n    Also, Lab manual includes great examples before exercises, make sure to go through them as well.\n    <!--- space here --->\n</Callout>\n\n## Objectives\n\nThe objectives of this session are to:\n- Understand the basic JavaScript constructs\n- Unserstand Conditional statements and control flow statements\n\n## Arthimetic Operators\n\n### Problem Statement\n\nQ1: Write a JavaScript code to perform the two digit arithmetic operations: Addition, Subtraction, Multiplication and Division.\n\n### Approach\nTo perform arithmetic operations on two digits, we can follow these steps:\n- Define two variables to hold the digits we want to operate on.\n- Use the arithmetic operators (`+`, `-`, `*`, `/`) to perform the desired operations.\n- Print the results to the console.\n\n### Code Implementation\n\n```js title=\"arithmetic-operation.js\" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-1/arithmetic-operation.js\n\n```\n\n### Explanation\n\n- **Variables**: We use `const` (constant) because these values aren't changing during the script's execution. If you want to change them later, you would use `let`.\n\n- **Arithmetic Operators**: JavaScript uses standard mathematical symbols: `+`, `-`, `*`, and `/`.\n\n- **Console.log**: This is the standard method to print output to the debugging console.\n\n- **Division Safety**: In computer science, \"Division by Zero\" is a common logical error. Including a conditional `if` check demonstrates good programming practice for your lab submission.\n\n- **String Concatenation**: Using the `+` symbol between a string (text in quotes) and a variable allows us to combine them into a single readable sentence for the output.\n\n## Pattern Printing\n\n### Problem Statement\nQ2: Write a JavaScript code to print 1 for 1 time 2 for 2 times, 3 for 3 times and so on up to 10.\n\n### Approach\n\nThe goal is to create a visual pattern where each number `n` repeats itself `n` times on a single line. To achieve this, we need Nested Loops:\n\n- **The Outer Loop** will act as a counter that moves from 1 to 10. This tells us which number we are currently processing.\n- **The Inner Loop** will run based on the value of the outer loop. If the outer loop is at 5, the inner loop will execute 5 times to print the digit \"5\".\n- We will collect the digits in a string for each row so they stay on the same line, then print that row before moving to the next number.\n\n### Code Implementation\n\n```js title=\"pattern-printing.js\" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-1/pattern-printing.js\n\n```\n\n### Explanation\n\n- **Nested Loop Logic**: Think of this like a clock. The outer loop is the \"hour\" hand (moving slowly), and the inner loop is the \"minute\" hand (completing a full cycle for every single step the hour hand takes).\n\n- **Dynamic Range**: The inner loop condition `j <= i` is what makes the pattern triangular. Because the limit of the inner loop depends on the current value of the outer loop, the rows get progressively longer.\n\n- **String Accumulation**: In JavaScript, `console.log()` automatically adds a new line. To get numbers like `2 2` on the same line, we must first build a string (`rowOutput`) and print it once the inner loop finishes its work for that row.\n\n- **trim() Method**: We use `.trim()` at the end to remove the very last space of each row, ensuring the output is clean for your lab record.\n\n\n## Portfolio Exercise\n\nQ3: Discuss first with the group",
-    "toc": [
-      {
-        "title": "Objectives",
-        "url": "#objectives",
-        "items": []
-      },
-      {
-        "title": "Arthimetic Operators",
-        "url": "#arthimetic-operators",
-        "items": [
-          {
-            "title": "Problem Statement",
-            "url": "#problem-statement",
-            "items": []
-          },
-          {
-            "title": "Approach",
-            "url": "#approach",
-            "items": []
-          },
-          {
-            "title": "Code Implementation",
-            "url": "#code-implementation",
-            "items": []
-          },
-          {
-            "title": "Explanation",
-            "url": "#explanation",
-            "items": []
-          }
-        ]
-      },
-      {
-        "title": "Pattern Printing",
-        "url": "#pattern-printing",
-        "items": [
-          {
-            "title": "Problem Statement",
-            "url": "#problem-statement-1",
-            "items": []
-          },
-          {
-            "title": "Approach",
-            "url": "#approach-1",
-            "items": []
-          },
-          {
-            "title": "Code Implementation",
-            "url": "#code-implementation-1",
-            "items": []
-          },
-          {
-            "title": "Explanation",
-            "url": "#explanation-1",
-            "items": []
-          }
-        ]
-      },
-      {
-        "title": "Portfolio Exercise",
-        "url": "#portfolio-exercise",
-        "items": []
-      }
-    ],
-    "section": "MCS-216 Section 2",
-    "lastModified": "2026-05-06T15:47:29.649Z",
-    "slug": "mcs-216/section-2/session-1",
-    "slugFull": "/mcs-216/section-2/session-1"
-  },
-  {
-    "title": "Session 2",
-    "description": "HTML Forms",
-    "path": "mcs-216/section-2/session-2",
-    "content": "<script>\n  import { Callout } from \"@ethercorps/kit\";\n  import PrintButton from \"$lib/components/print-button.svelte\"\n  import InfoIcon from \"phosphor-svelte/lib/InfoIcon\"\n\n  import Question1Preview from \"$lib/components/demo/mcs-216/section-2/session-2-1.svelte\"\n  import Question2Preview from \"$lib/components/demo/mcs-216/section-2/session-2-2.svelte\"\n  import Question3Preview from \"$lib/components/demo/mcs-216/section-2/session-2-3.svelte\"\n</script>\n<printbutton>\n<p>HTML Forms are a fundamental building block of interactive web development, designed to collect user input dynamically at runtime. In this session, you will gain a foundational understanding of how to create, structure, and implement HTML forms to gather information from users. The data entered through these forms is typically transmitted to a web server for processing, validation, and storage.</p>\n<p>Forms are widely used to collect essential information such as usernames, passwords, contact details (e-mail IDs, mobile numbers), and other user preferences. This session introduces the core <code>&#x3C;form></code> container element and explores the various input controls it can hold, including:</p>\n<ul>\n<li>Text fields &#x26; text areas</li>\n<li>Radio buttons &#x26; checkboxes</li>\n<li>Submit &#x26; clickable buttons</li>\n<li>Labels for accessibility and clarity</li>\n<li>HTML5-specific input types (e.g., email, search, url, date, month, time)</li>\n</ul>\n<h2>Objective</h2>\n<p>After Completing this session, one should be able to:</p>\n<ul>\n<li>Understand the HTML form element</li>\n<li>use the form element in HTML</li>\n<li>use HTML to acquire user input and process it</li>\n<li>Create forms with basic elements like textboxes, checkboxes, radio buttons and submit buttons.</li>\n<li>Create forms using HTML5 elements like E-Mail address field and form validation</li>\n</ul>\n<h2>Question 1</h2>\n<h3>Problem Statement</h3>\n<p>Create an HTML webpage, as shown in the figure [2.1]. The user can specify any expression as input. Use form element to collect the user data.</p>\n<h5>Figure 2.1 (Demo)</h5>\n<ul>\n<li>Reference by question</li>\n<li>Working demo for preview</li>\n</ul>\n<question1preview>\n<h3>Code</h3>\n<pre><code class=\"language-html\" metastring=\"title=&#x22;form.html&#x22; showLineNumbers file=../../../lib/code/mcs-216/section-2/session-2/1.html\"></code></pre>\n<h2>Question 2</h2>\n<h3>Problem Statement</h3>\n<p>Create a scrolling list that shows five items from the following list of PC processors: Intel i7, Motorola 68000, AMD Athlon , Intel 8088, AMD Ryzon, Intel Pentium MMX, Intel i3, Intel Pentium II, Intel Pentium III, Intel i5, Intel Celeron, PowerPC G3, PowerPC G4.</p>\n<h3>Preview</h3>\n<question2preview>\n<h3>Code</h3>\n<pre><code class=\"language-html\" metastring=\"title=&#x22;list-scroller.html&#x22; showLineNumbers file=../../../lib/code/mcs-216/section-2/session-2/2.html\"></code></pre>\n<h2>Question 3</h2>\n<h3>Problem Statement</h3>\n<p>Design a webpage for a software company to accept on-line job applications. The\nwebpage must be designed to use form with elements:</p>\n<ul>\n<li>Position applied for (autofocus), name, nationality, date of birth (selected from an\nauto picker), address (in a text area), telephone number and email (required).</li>\n<li>Educational history and qualifications.</li>\n<li>Work experience/employment/training in terms of employer history and number of years of experience selected from a slider. Set maximum years of experience to 10 years.</li>\n<li>Personal statement.</li>\n<li>Two referees including names, occupation, relationship, address, telephone.</li>\n</ul>\n<h3>Preview</h3>\n<question3preview>\n<h3>Code</h3>\n<pre><code class=\"language-html\" metastring=\"title=&#x22;job-portal.html&#x22; showLineNumbers file=../../../lib/code/mcs-216/section-2/session-2/3.html\"></code></pre></question3preview></question2preview></question1preview></printbutton>",
-    "raw": "<script>\n  import { Callout } from \"@ethercorps/kit\";\n  import PrintButton from \"$lib/components/print-button.svelte\"\n  import InfoIcon from \"phosphor-svelte/lib/InfoIcon\"\n\n  import Question1Preview from \"$lib/components/demo/mcs-216/section-2/session-2-1.svelte\"\n  import Question2Preview from \"$lib/components/demo/mcs-216/section-2/session-2-2.svelte\"\n  import Question3Preview from \"$lib/components/demo/mcs-216/section-2/session-2-3.svelte\"\n</script>\n\n<PrintButton />\n\nHTML Forms are a fundamental building block of interactive web development, designed to collect user input dynamically at runtime. In this session, you will gain a foundational understanding of how to create, structure, and implement HTML forms to gather information from users. The data entered through these forms is typically transmitted to a web server for processing, validation, and storage.\n\nForms are widely used to collect essential information such as usernames, passwords, contact details (e-mail IDs, mobile numbers), and other user preferences. This session introduces the core `<form>` container element and explores the various input controls it can hold, including:\n- Text fields & text areas\n- Radio buttons & checkboxes\n- Submit & clickable buttons\n- Labels for accessibility and clarity\n- HTML5-specific input types (e.g., email, search, url, date, month, time)\n\n<Callout type=\"tip\" icon={InfoIcon} title=\"Suggestion\">\n    <!-- Space here -->\n    Before trying the solutions provided for the exercises, try to solve them on your own. This will help you understand the concepts better and improve your problem-solving skills.<br/> <br />\n    Also, Lab manual includes great examples before exercises, make sure to go through them as well.\n    <!-- Space here -->\n</Callout>\n\n## Objective\n\nAfter Completing this session, one should be able to:\n- Understand the HTML form element\n- use the form element in HTML\n- use HTML to acquire user input and process it\n- Create forms with basic elements like textboxes, checkboxes, radio buttons and submit buttons.\n- Create forms using HTML5 elements like E-Mail address field and form validation\n\n## Question 1\n\n### Problem Statement\n\nCreate an HTML webpage, as shown in the figure [2.1]. The user can specify any expression as input. Use form element to collect the user data.\n\n##### Figure 2.1 (Demo)\n- Reference by question\n- Working demo for preview\n\n<Question1Preview />\n\n### Code\n\n```html title=\"form.html\" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-2/1.html\n\n```\n\n## Question 2\n\n### Problem Statement\n\nCreate a scrolling list that shows five items from the following list of PC processors: Intel i7, Motorola 68000, AMD Athlon , Intel 8088, AMD Ryzon, Intel Pentium MMX, Intel i3, Intel Pentium II, Intel Pentium III, Intel i5, Intel Celeron, PowerPC G3, PowerPC G4.\n\n### Preview\n\n<Question2Preview />\n\n### Code\n\n```html title=\"list-scroller.html\" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-2/2.html\n\n```\n\n## Question 3\n\n### Problem Statement\n\nDesign a webpage for a software company to accept on-line job applications. The\nwebpage must be designed to use form with elements:\n\n- Position applied for (autofocus), name, nationality, date of birth (selected from an\nauto picker), address (in a text area), telephone number and email (required).\n- Educational history and qualifications.\n- Work experience/employment/training in terms of employer history and number of years of experience selected from a slider. Set maximum years of experience to 10 years.\n- Personal statement.\n- Two referees including names, occupation, relationship, address, telephone.\n\n### Preview\n\n<Question3Preview />\n\n### Code\n\n```html title=\"job-portal.html\" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-2/3.html\n\n```",
-    "toc": [
-      {
-        "title": "Objective",
-        "url": "#objective",
-        "items": []
-      },
-      {
-        "title": "Question 1",
-        "url": "#question-1",
-        "items": [
-          {
-            "title": "Problem Statement",
-            "url": "#problem-statement",
-            "items": []
-          },
-          {
-            "title": "Code",
-            "url": "#code",
-            "items": []
-          }
-        ]
-      },
-      {
-        "title": "Question 2",
-        "url": "#question-2",
-        "items": [
-          {
-            "title": "Problem Statement",
-            "url": "#problem-statement-1",
-            "items": []
-          },
-          {
-            "title": "Preview",
-            "url": "#preview",
-            "items": []
-          },
-          {
-            "title": "Code",
-            "url": "#code-1",
-            "items": []
-          }
-        ]
-      },
-      {
-        "title": "Question 3",
-        "url": "#question-3",
-        "items": [
-          {
-            "title": "Problem Statement",
-            "url": "#problem-statement-2",
-            "items": []
-          },
-          {
-            "title": "Preview",
-            "url": "#preview-1",
-            "items": []
-          },
-          {
-            "title": "Code",
-            "url": "#code-2",
-            "items": []
-          }
-        ]
-      }
-    ],
-    "section": "MCS-216 Section 2",
-    "lastModified": "2026-05-07T02:09:44.722Z",
-    "slug": "mcs-216/section-2/session-2",
-    "slugFull": "/mcs-216/section-2/session-2"
-  },
-  {
-    "title": "Session 3",
-    "description": "Cascading Styling Sheet (CSS)",
-    "path": "mcs-216/section-2/session-3",
-    "content": "<script>\n  import { Callout } from \"@ethercorps/kit\";\n  import PrintButton from \"$lib/components/print-button.svelte\"\n  import Question1HomePage from \"$lib/components/demo/mcs-216/section-2/session-3/1-timetable/index.svelte\"\n  import Question2 from \"$lib/components/demo/mcs-216/section-2/session-3/2-personal/personal-info.svelte\"\n</script>\n<printbutton>\n<p>CSS (Cascading Style Sheets) is a core web technology designed to separate the visual presentation and layout of a webpage from its structural HTML content. In web development, maintaining a consistent look and feel across multiple pages is essential for user familiarity and professional design. CSS streamlines this process, especially in collaborative environments where teams of developers need to apply uniform styling across large projects without duplicating design code.</p>\n<p>This session introduces how CSS enables developers to efficiently style and layout web pages. Key capabilities covered include controlling:</p>\n<ul>\n<li>Typography &#x26; text formatting (fonts, colors, sizes, spacing)</li>\n<li>Page layout &#x26; structure (multi-column arrangements, positioning)</li>\n<li>Visual enhancements &#x26; animations (decorative features, transitions)</li>\n</ul>\n<h2>Objective</h2>\n<p>After Completing this session, one should be able to:</p>\n<ul>\n<li>Create CSS for a webpage</li>\n<li>Embed CSS inline and external into an HTML code.</li>\n</ul>\n<h2>Methods to implement CSS in HTML</h2>\n<p>There are three methods to implement CSS in HTML: Inline, Internal and External CSS.</p>\n<h3>Internal CSS</h3>\n<ul>\n<li><strong>What it is</strong>: CSS rules defined directly within a single HTML document.</li>\n<li><strong>Where it goes</strong>: Placed inside the <code>&#x3C;head></code> tag section using <code>&#x3C;style></code> tags.</li>\n<li><strong>Scope</strong>: Applies globally to all elements within that specific HTML page only.</li>\n<li><strong>Example</strong>:\n<pre><code class=\"language-html\">&#x3C;head>\n  &#x3C;style>\n    body { background-color: green; }\n    h1 { margin-left: 20px; color: red; }\n  &#x3C;/style>\n&#x3C;/head>\n</code></pre>\n</li>\n<li>Best for: Styling a single page when you don't want to create a separate file.</li>\n</ul>\n<h3>Inline CSS</h3>\n<ul>\n<li>\n<p><strong>What it is</strong>: CSS applied directly to a specific HTML element.</p>\n</li>\n<li>\n<p><strong>Where it goes</strong>: Added as a <code>style</code> attribute directly inside the opening tag of the element.</p>\n</li>\n<li>\n<p><strong>Scope</strong>: Element-specific. It only affects the exact tag it's attached to.</p>\n</li>\n<li>\n<p><strong>Example</strong>:</p>\n<pre><code class=\"language-html\">&#x3C;h2 style=\"text-align: right; color: red;\">This is a heading&#x3C;/h2>\n&#x3C;p style=\"text-align: justify; color: green;\">This is a paragraph.&#x3C;/p>\n</code></pre>\n</li>\n<li>\n<p><strong>Best for</strong>: Quick, one-off styling. However, it's not recommended for large projects as it mixes content with presentation and reduces maintainability.</p>\n</li>\n</ul>\n<h3>External CSS</h3>\n<ul>\n<li>\n<p><strong>What it is</strong>: CSS written in a completely separate file with a .css extension.</p>\n</li>\n<li>\n<p><strong>Where it goes</strong>: Linked to the HTML document using the <code>link></code> tag inside the <code>&#x3C;head></code> section.</p>\n</li>\n<li>\n<p><strong>Scope</strong>: Can be attached to multiple HTML pages, ensuring a consistent look across an entire website.</p>\n</li>\n<li>\n<p><strong>Example</strong>:</p>\n<pre><code class=\"language-html\" metastring=\"title=&#x22;file.html&#x22;\">&#x3C;head>\n  &#x3C;link rel=\"stylesheet\" href=\"external-css.css\">\n&#x3C;/head>\n</code></pre>\n<pre><code class=\"language-css\" metastring=\"title=&#x22;external-css.css&#x22;\">body { background-color: lightblue; }\nh2 { color: navy; margin-left: 20px; }\n</code></pre>\n</li>\n</ul>\n<h3>Cascading Priority</h3>\n<p>When multiple styles are applied to the same element, the browser follows a cascading priority rule to determine which style wins. From highest to lowest priority:</p>\n<ul>\n<li>Inline style (Highest priority → overrides everything)</li>\n<li>External &#x26; Internal style sheets (Equal priority; whichever loads last usually wins)</li>\n<li>Browser default styles (Lowest priority)</li>\n</ul>\n<blockquote>\n<p>Example: If an external stylesheet sets <code>h2 { color: blue; }</code> but you add <code>style=\"color: red;\"</code> directly to that <code>&#x3C;h2></code> tag, the text will render red because inline styles take precedence.</p>\n</blockquote>\n<h2>Question 1</h2>\n<h3>Problem Statement</h3>\n<p>Create an HTML website to display the time table of all the 4 years of B. Tech. (even semester of each year).It should contain a home page where link to each year's time table is listed. On click to any year time table a new web page should be open displaying the corresponding time table. Apply the following effects on the table using CSS:</p>\n<ul>\n<li>Common to all:\n<ul>\n<li>Display day names (Mon, Tue etc...) in bold format with the first\nletter in the dayname in uppercase.</li>\n<li>Display lunch slightly in bigger font other than the remaining text.</li>\n</ul>\n</li>\n<li>Specific to each year:\n<ul>\n<li>For 1st year\n<ul>\n<li>Apply blue as the background colour and white for the colour of\nthe text in the table header.</li>\n</ul>\n</li>\n<li>For 2nd year\n<ul>\n<li>Apply green as the background colour and white for the colour of\nthe text in the table header.</li>\n</ul>\n</li>\n<li>For 3rd year\n<ul>\n<li>Apply purple as the background colour and white for the colour\nof the text in the table header.</li>\n</ul>\n</li>\n<li>For 4th year\n<ul>\n<li>Apply yellow as the background colour and black for the colour\nof the text in the table header.</li>\n</ul>\n</li>\n</ul>\n</li>\n</ul>\n<h3>Solution</h3>\n<h3>File Structure</h3>\n<pre><code class=\"language-sh\">📂 B.Tech_Timetable/\n ├── index.html          (Home Page)\n ├── year1.html          (1st Year Timetable)\n ├── year2.html          (2nd Year Timetable)\n ├── year3.html          (3rd Year Timetable)\n ├── year4.html          (4th Year Timetable)\n └── style.css           (External CSS File)\n</code></pre>\n<h3>Code Files</h3>\n<h3>Homepage</h3>\n<pre><code class=\"language-html\" metastring=\"title=&#x22;index.html&#x22; showLineNumbers file=../../../lib/code/mcs-216/section-2/session-3/B.Tech_Timetable/index.html\"></code></pre>\n<h3>Ist Year</h3>\n<pre><code class=\"language-html\" metastring=\"title=&#x22;year1.html&#x22; showLineNumbers file=../../../lib/code/mcs-216/section-2/session-3/B.Tech_Timetable/year1.html\"></code></pre>\n<h3>IInd Year</h3>\n<pre><code class=\"language-html\" metastring=\"title=&#x22;year2.html&#x22; showLineNumbers file=../../../lib/code/mcs-216/section-2/session-3/B.Tech_Timetable/year2.html\"></code></pre>\n<h3>IIIrd Year</h3>\n<pre><code class=\"language-html\" metastring=\"title=&#x22;year3.html&#x22; showLineNumbers file=../../../lib/code/mcs-216/section-2/session-3/B.Tech_Timetable/year3.html\"></code></pre>\n<h3>IVth Year</h3>\n<pre><code class=\"language-html\" metastring=\"title=&#x22;year4.html&#x22; showLineNumbers file=../../../lib/code/mcs-216/section-2/session-3/B.Tech_Timetable/year4.html\"></code></pre>\n<h3>Common Style Sheet</h3>\n<pre><code class=\"language-css\" metastring=\"title=&#x22;year4.html&#x22; showLineNumbers file=../../../lib/code/mcs-216/section-2/session-3/B.Tech_Timetable/style.css\"></code></pre>\n<h3>Preview (Working)</h3>\n<question1homepage>\n<h2>Question 2</h2>\n<h3>Problem Statement</h3>\n<p>Create an HTML webpage to show personal information i.e. name, class, qualifications, photo,address etc. Make use of tables as when possible. Apply the following styleinformation using CSS:</p>\n<ul>\n<li>Display the heading of the page in Arial font and with font size of 18px.</li>\n<li>Align all the field names like Name, Class, Photo etc to left in the table.</li>\n<li>Apply yellow color as background colour in left side cells contains field names like Name, Class etc...</li>\n<li>Set college logo as background image to the web page.</li>\n</ul>\n<h3>File Structure</h3>\n<pre><code class=\"language-sh\">📂 PersonalInfo/\n ├── index.html\n ├── style.css\n ├── college-logo.png   (Replace with your actual logo file)\n └── student-photo.jpg  (Replace with your actual photo file)\n</code></pre>\n<h3>Code Files</h3>\n<h3>Homepage</h3>\n<pre><code class=\"language-html\" metastring=\"title=&#x22;index.html&#x22; showLineNumbers file=../../../lib/code/mcs-216/section-2/session-3/personal-info/index.html\"></code></pre>\n<h3>Style Sheet</h3>\n<pre><code class=\"language-css\" metastring=\"title=&#x22;style.css&#x22; showLineNumbers file=../../../lib/code/mcs-216/section-2/session-3/personal-info/style.css\"></code></pre>\n<h3>Preview (Working)</h3>\n<question2></question2></question1homepage></printbutton>",
-    "raw": "<script>\n  import { Callout } from \"@ethercorps/kit\";\n  import PrintButton from \"$lib/components/print-button.svelte\"\n  import Question1HomePage from \"$lib/components/demo/mcs-216/section-2/session-3/1-timetable/index.svelte\"\n  import Question2 from \"$lib/components/demo/mcs-216/section-2/session-3/2-personal/personal-info.svelte\"\n</script>\n\n<PrintButton />\n\nCSS (Cascading Style Sheets) is a core web technology designed to separate the visual presentation and layout of a webpage from its structural HTML content. In web development, maintaining a consistent look and feel across multiple pages is essential for user familiarity and professional design. CSS streamlines this process, especially in collaborative environments where teams of developers need to apply uniform styling across large projects without duplicating design code.\n\nThis session introduces how CSS enables developers to efficiently style and layout web pages. Key capabilities covered include controlling:\n\n- Typography & text formatting (fonts, colors, sizes, spacing)\n- Page layout & structure (multi-column arrangements, positioning)\n- Visual enhancements & animations (decorative features, transitions)\n\n## Objective\n\nAfter Completing this session, one should be able to:\n- Create CSS for a webpage\n- Embed CSS inline and external into an HTML code.\n\n## Methods to implement CSS in HTML\n\nThere are three methods to implement CSS in HTML: Inline, Internal and External CSS.\n\n### Internal CSS\n\n- **What it is**: CSS rules defined directly within a single HTML document.\n- **Where it goes**: Placed inside the `<head>` tag section using `<style>` tags.\n- **Scope**: Applies globally to all elements within that specific HTML page only.\n- **Example**:\n  ```html\n  <head>\n    <style>\n      body { background-color: green; }\n      h1 { margin-left: 20px; color: red; }\n    </style>\n  </head>\n  ```\n- Best for: Styling a single page when you don't want to create a separate file.\n\n### Inline CSS\n\n- **What it is**: CSS applied directly to a specific HTML element.\n- **Where it goes**: Added as a `style` attribute directly inside the opening tag of the element.\n- **Scope**: Element-specific. It only affects the exact tag it's attached to.\n- **Example**:\n  ```html\n  <h2 style=\"text-align: right; color: red;\">This is a heading</h2>\n  <p style=\"text-align: justify; color: green;\">This is a paragraph.</p>\n  ```\n\n- **Best for**: Quick, one-off styling. However, it's not recommended for large projects as it mixes content with presentation and reduces maintainability.\n\n###  External CSS\n\n- **What it is**: CSS written in a completely separate file with a .css extension.\n- **Where it goes**: Linked to the HTML document using the `link>` tag inside the `<head>` section.\n- **Scope**: Can be attached to multiple HTML pages, ensuring a consistent look across an entire website.\n- **Example**:\n  ```html title=\"file.html\"\n  <head>\n    <link rel=\"stylesheet\" href=\"external-css.css\">\n  </head>\n  ```\n\n  ```css title=\"external-css.css\"\n  body { background-color: lightblue; }\n  h2 { color: navy; margin-left: 20px; }\n  ```\n\n### Cascading Priority\n\nWhen multiple styles are applied to the same element, the browser follows a cascading priority rule to determine which style wins. From highest to lowest priority:\n\n- Inline style (Highest priority → overrides everything)\n- External & Internal style sheets (Equal priority; whichever loads last usually wins)\n- Browser default styles (Lowest priority)\n\n> Example: If an external stylesheet sets `h2 { color: blue; }` but you add `style=\"color: red;\"` directly to that `<h2>` tag, the text will render red because inline styles take precedence.\n\n## Question 1\n\n### Problem Statement\n\nCreate an HTML website to display the time table of all the 4 years of B. Tech. (even semester of each year).It should contain a home page where link to each year's time table is listed. On click to any year time table a new web page should be open displaying the corresponding time table. Apply the following effects on the table using CSS:\n\n- Common to all:\n  - Display day names (Mon, Tue etc...) in bold format with the first\n  letter in the dayname in uppercase.\n  - Display lunch slightly in bigger font other than the remaining text.\n- Specific to each year:\n  - For 1st year\n    - Apply blue as the background colour and white for the colour of\n    the text in the table header.\n  - For 2nd year\n    - Apply green as the background colour and white for the colour of\n    the text in the table header.\n  - For 3rd year\n    - Apply purple as the background colour and white for the colour\n    of the text in the table header.\n  - For 4th year\n    - Apply yellow as the background colour and black for the colour\n    of the text in the table header.\n\n### Solution\n\n### File Structure\n\n```sh\n📂 B.Tech_Timetable/\n ├── index.html          (Home Page)\n ├── year1.html          (1st Year Timetable)\n ├── year2.html          (2nd Year Timetable)\n ├── year3.html          (3rd Year Timetable)\n ├── year4.html          (4th Year Timetable)\n └── style.css           (External CSS File)\n```\n\n### Code Files\n\n### Homepage\n\n```html title=\"index.html\" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-3/B.Tech_Timetable/index.html\n\n```\n\n### Ist Year\n\n```html title=\"year1.html\" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-3/B.Tech_Timetable/year1.html\n\n```\n\n### IInd Year\n\n```html title=\"year2.html\" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-3/B.Tech_Timetable/year2.html\n\n```\n\n### IIIrd Year\n\n```html title=\"year3.html\" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-3/B.Tech_Timetable/year3.html\n\n```\n\n### IVth Year\n\n```html title=\"year4.html\" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-3/B.Tech_Timetable/year4.html\n\n```\n\n### Common Style Sheet\n\n```css title=\"year4.html\" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-3/B.Tech_Timetable/style.css\n\n```\n\n\n### Preview (Working)\n\n<Question1HomePage />\n\n\n## Question 2\n\n\n### Problem Statement\n\nCreate an HTML webpage to show personal information i.e. name, class, qualifications, photo,address etc. Make use of tables as when possible. Apply the following styleinformation using CSS:\n\n- Display the heading of the page in Arial font and with font size of 18px.\n- Align all the field names like Name, Class, Photo etc to left in the table.\n- Apply yellow color as background colour in left side cells contains field names like Name, Class etc...\n- Set college logo as background image to the web page.\n\n### File Structure\n\n```sh\n📂 PersonalInfo/\n ├── index.html\n ├── style.css\n ├── college-logo.png   (Replace with your actual logo file)\n └── student-photo.jpg  (Replace with your actual photo file)\n```\n\n### Code Files\n\n### Homepage\n\n```html title=\"index.html\" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-3/personal-info/index.html\n\n```\n\n### Style Sheet\n\n```css title=\"style.css\" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-3/personal-info/style.css\n\n```\n\n### Preview (Working)\n\n<Question2 />",
-    "toc": [
-      {
-        "title": "Objective",
-        "url": "#objective",
-        "items": []
-      },
-      {
-        "title": "Methods to implement CSS in HTML",
-        "url": "#methods-to-implement-css-in-html",
-        "items": [
-          {
-            "title": "Internal CSS",
-            "url": "#internal-css",
-            "items": []
-          },
-          {
-            "title": "Inline CSS",
-            "url": "#inline-css",
-            "items": []
-          },
-          {
-            "title": "External CSS",
-            "url": "#external-css",
-            "items": []
-          },
-          {
-            "title": "Cascading Priority",
-            "url": "#cascading-priority",
-            "items": []
-          }
-        ]
-      },
-      {
-        "title": "Question 1",
-        "url": "#question-1",
-        "items": [
-          {
-            "title": "Problem Statement",
-            "url": "#problem-statement",
-            "items": []
-          },
-          {
-            "title": "Solution",
-            "url": "#solution",
-            "items": []
-          },
-          {
-            "title": "File Structure",
-            "url": "#file-structure",
-            "items": []
-          },
-          {
-            "title": "Code Files",
-            "url": "#code-files",
-            "items": []
-          },
-          {
-            "title": "Homepage",
-            "url": "#homepage",
-            "items": []
-          },
-          {
-            "title": "Ist Year",
-            "url": "#ist-year",
-            "items": []
-          },
-          {
-            "title": "IInd Year",
-            "url": "#iind-year",
-            "items": []
-          },
-          {
-            "title": "IIIrd Year",
-            "url": "#iiird-year",
-            "items": []
-          },
-          {
-            "title": "IVth Year",
-            "url": "#ivth-year",
-            "items": []
-          },
-          {
-            "title": "Common Style Sheet",
-            "url": "#common-style-sheet",
-            "items": []
-          },
-          {
-            "title": "Preview (Working)",
-            "url": "#preview-working",
-            "items": []
-          }
-        ]
-      },
-      {
-        "title": "Question 2",
-        "url": "#question-2",
-        "items": [
-          {
-            "title": "Problem Statement",
-            "url": "#problem-statement-1",
-            "items": []
-          },
-          {
-            "title": "File Structure",
-            "url": "#file-structure-1",
-            "items": []
-          },
-          {
-            "title": "Code Files",
-            "url": "#code-files-1",
-            "items": []
-          },
-          {
-            "title": "Homepage",
-            "url": "#homepage-1",
-            "items": []
-          },
-          {
-            "title": "Style Sheet",
-            "url": "#style-sheet",
-            "items": []
-          },
-          {
-            "title": "Preview (Working)",
-            "url": "#preview-working-1",
-            "items": []
-          }
-        ]
-      }
-    ],
-    "section": "MCS-216 Section 2",
-    "lastModified": "2026-05-07T05:04:24.188Z",
-    "slug": "mcs-216/section-2/session-3",
-    "slugFull": "/mcs-216/section-2/session-3"
   },
   {
     "title": "Session 1",
@@ -1158,5 +866,430 @@
     "lastModified": "2026-05-06T14:48:34.507Z",
     "slug": "mcs-216/section-1/session-5",
     "slugFull": "/mcs-216/section-1/session-5"
+  },
+  {
+    "title": "Session 1",
+    "description": "Preliminaries",
+    "path": "mcs-216/section-2/session-1",
+    "content": "<script>\n  import { Callout } from \"@ethercorps/kit\";\n  import PrintButton from \"$lib/components/print-button.svelte\"\n  import InfoIcon from \"phosphor-svelte/lib/InfoIcon\"\n</script>\n<printbutton>\n<p>Javascript is a high-level, interpreted programming language that is widely used for web development. It was created by Brendan Eich in 1995 and has since become one of the most popular programming languages in the world. JavaScript is primarily used for client-side scripting, allowing developers to create interactive and dynamic web pages. It can also be used on the server-side with environments like Node.js, Deno, Bun and Cloudflare Workers (don't mix with web workers).</p>\n<p>In this session, we will introduce the basic JavsScript constructs, conditional statements amd control flow statements. Lab manual inlcudes good examples and exercises to practice these concepts.</p>\n<h2>Objectives</h2>\n<p>The objectives of this session are to:</p>\n<ul>\n<li>Understand the basic JavaScript constructs</li>\n<li>Unserstand Conditional statements and control flow statements</li>\n</ul>\n<h2>Arthimetic Operators</h2>\n<h3>Problem Statement</h3>\n<p>Q1: Write a JavaScript code to perform the two digit arithmetic operations: Addition, Subtraction, Multiplication and Division.</p>\n<h3>Approach</h3>\n<p>To perform arithmetic operations on two digits, we can follow these steps:</p>\n<ul>\n<li>Define two variables to hold the digits we want to operate on.</li>\n<li>Use the arithmetic operators (<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>) to perform the desired operations.</li>\n<li>Print the results to the console.</li>\n</ul>\n<h3>Code Implementation</h3>\n<pre><code class=\"language-js\" metastring=\"title=&#x22;arithmetic-operation.js&#x22; showLineNumbers file=../../../lib/code/mcs-216/section-2/session-1/arithmetic-operation.js\"></code></pre>\n<h3>Explanation</h3>\n<ul>\n<li>\n<p><strong>Variables</strong>: We use <code>const</code> (constant) because these values aren't changing during the script's execution. If you want to change them later, you would use <code>let</code>.</p>\n</li>\n<li>\n<p><strong>Arithmetic Operators</strong>: JavaScript uses standard mathematical symbols: <code>+</code>, <code>-</code>, <code>*</code>, and <code>/</code>.</p>\n</li>\n<li>\n<p><strong>Console.log</strong>: This is the standard method to print output to the debugging console.</p>\n</li>\n<li>\n<p><strong>Division Safety</strong>: In computer science, \"Division by Zero\" is a common logical error. Including a conditional <code>if</code> check demonstrates good programming practice for your lab submission.</p>\n</li>\n<li>\n<p><strong>String Concatenation</strong>: Using the <code>+</code> symbol between a string (text in quotes) and a variable allows us to combine them into a single readable sentence for the output.</p>\n</li>\n</ul>\n<h2>Pattern Printing</h2>\n<h3>Problem Statement</h3>\n<p>Q2: Write a JavaScript code to print 1 for 1 time 2 for 2 times, 3 for 3 times and so on up to 10.</p>\n<h3>Approach</h3>\n<p>The goal is to create a visual pattern where each number <code>n</code> repeats itself <code>n</code> times on a single line. To achieve this, we need Nested Loops:</p>\n<ul>\n<li><strong>The Outer Loop</strong> will act as a counter that moves from 1 to 10. This tells us which number we are currently processing.</li>\n<li><strong>The Inner Loop</strong> will run based on the value of the outer loop. If the outer loop is at 5, the inner loop will execute 5 times to print the digit \"5\".</li>\n<li>We will collect the digits in a string for each row so they stay on the same line, then print that row before moving to the next number.</li>\n</ul>\n<h3>Code Implementation</h3>\n<pre><code class=\"language-js\" metastring=\"title=&#x22;pattern-printing.js&#x22; showLineNumbers file=../../../lib/code/mcs-216/section-2/session-1/pattern-printing.js\"></code></pre>\n<h3>Explanation</h3>\n<ul>\n<li>\n<p><strong>Nested Loop Logic</strong>: Think of this like a clock. The outer loop is the \"hour\" hand (moving slowly), and the inner loop is the \"minute\" hand (completing a full cycle for every single step the hour hand takes).</p>\n</li>\n<li>\n<p><strong>Dynamic Range</strong>: The inner loop condition <code>j &#x3C;= i</code> is what makes the pattern triangular. Because the limit of the inner loop depends on the current value of the outer loop, the rows get progressively longer.</p>\n</li>\n<li>\n<p><strong>String Accumulation</strong>: In JavaScript, <code>console.log()</code> automatically adds a new line. To get numbers like <code>2 2</code> on the same line, we must first build a string (<code>rowOutput</code>) and print it once the inner loop finishes its work for that row.</p>\n</li>\n<li>\n<p><strong>trim() Method</strong>: We use <code>.trim()</code> at the end to remove the very last space of each row, ensuring the output is clean for your lab record.</p>\n</li>\n</ul>\n<h2>Portfolio Exercise</h2>\n<p>Q3: Discuss first with the group</p></printbutton>",
+    "raw": "<script>\n  import { Callout } from \"@ethercorps/kit\";\n  import PrintButton from \"$lib/components/print-button.svelte\"\n  import InfoIcon from \"phosphor-svelte/lib/InfoIcon\"\n</script>\n\n<PrintButton />\n\nJavascript is a high-level, interpreted programming language that is widely used for web development. It was created by Brendan Eich in 1995 and has since become one of the most popular programming languages in the world. JavaScript is primarily used for client-side scripting, allowing developers to create interactive and dynamic web pages. It can also be used on the server-side with environments like Node.js, Deno, Bun and Cloudflare Workers (don't mix with web workers).\n\nIn this session, we will introduce the basic JavsScript constructs, conditional statements amd control flow statements. Lab manual inlcudes good examples and exercises to practice these concepts.\n\n<Callout type=\"tip\" icon={InfoIcon} title=\"Suggestion\">\n    <!--- space here --->\n    Before trying the solutions provided for the exercises, try to solve them on your own. This will help you understand the concepts better and improve your problem-solving skills.<br/> <br />\n    Also, Lab manual includes great examples before exercises, make sure to go through them as well.\n    <!--- space here --->\n</Callout>\n\n## Objectives\n\nThe objectives of this session are to:\n- Understand the basic JavaScript constructs\n- Unserstand Conditional statements and control flow statements\n\n## Arthimetic Operators\n\n### Problem Statement\n\nQ1: Write a JavaScript code to perform the two digit arithmetic operations: Addition, Subtraction, Multiplication and Division.\n\n### Approach\nTo perform arithmetic operations on two digits, we can follow these steps:\n- Define two variables to hold the digits we want to operate on.\n- Use the arithmetic operators (`+`, `-`, `*`, `/`) to perform the desired operations.\n- Print the results to the console.\n\n### Code Implementation\n\n```js title=\"arithmetic-operation.js\" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-1/arithmetic-operation.js\n\n```\n\n### Explanation\n\n- **Variables**: We use `const` (constant) because these values aren't changing during the script's execution. If you want to change them later, you would use `let`.\n\n- **Arithmetic Operators**: JavaScript uses standard mathematical symbols: `+`, `-`, `*`, and `/`.\n\n- **Console.log**: This is the standard method to print output to the debugging console.\n\n- **Division Safety**: In computer science, \"Division by Zero\" is a common logical error. Including a conditional `if` check demonstrates good programming practice for your lab submission.\n\n- **String Concatenation**: Using the `+` symbol between a string (text in quotes) and a variable allows us to combine them into a single readable sentence for the output.\n\n## Pattern Printing\n\n### Problem Statement\nQ2: Write a JavaScript code to print 1 for 1 time 2 for 2 times, 3 for 3 times and so on up to 10.\n\n### Approach\n\nThe goal is to create a visual pattern where each number `n` repeats itself `n` times on a single line. To achieve this, we need Nested Loops:\n\n- **The Outer Loop** will act as a counter that moves from 1 to 10. This tells us which number we are currently processing.\n- **The Inner Loop** will run based on the value of the outer loop. If the outer loop is at 5, the inner loop will execute 5 times to print the digit \"5\".\n- We will collect the digits in a string for each row so they stay on the same line, then print that row before moving to the next number.\n\n### Code Implementation\n\n```js title=\"pattern-printing.js\" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-1/pattern-printing.js\n\n```\n\n### Explanation\n\n- **Nested Loop Logic**: Think of this like a clock. The outer loop is the \"hour\" hand (moving slowly), and the inner loop is the \"minute\" hand (completing a full cycle for every single step the hour hand takes).\n\n- **Dynamic Range**: The inner loop condition `j <= i` is what makes the pattern triangular. Because the limit of the inner loop depends on the current value of the outer loop, the rows get progressively longer.\n\n- **String Accumulation**: In JavaScript, `console.log()` automatically adds a new line. To get numbers like `2 2` on the same line, we must first build a string (`rowOutput`) and print it once the inner loop finishes its work for that row.\n\n- **trim() Method**: We use `.trim()` at the end to remove the very last space of each row, ensuring the output is clean for your lab record.\n\n\n## Portfolio Exercise\n\nQ3: Discuss first with the group",
+    "toc": [
+      {
+        "title": "Objectives",
+        "url": "#objectives",
+        "items": []
+      },
+      {
+        "title": "Arthimetic Operators",
+        "url": "#arthimetic-operators",
+        "items": [
+          {
+            "title": "Problem Statement",
+            "url": "#problem-statement",
+            "items": []
+          },
+          {
+            "title": "Approach",
+            "url": "#approach",
+            "items": []
+          },
+          {
+            "title": "Code Implementation",
+            "url": "#code-implementation",
+            "items": []
+          },
+          {
+            "title": "Explanation",
+            "url": "#explanation",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Pattern Printing",
+        "url": "#pattern-printing",
+        "items": [
+          {
+            "title": "Problem Statement",
+            "url": "#problem-statement-1",
+            "items": []
+          },
+          {
+            "title": "Approach",
+            "url": "#approach-1",
+            "items": []
+          },
+          {
+            "title": "Code Implementation",
+            "url": "#code-implementation-1",
+            "items": []
+          },
+          {
+            "title": "Explanation",
+            "url": "#explanation-1",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Portfolio Exercise",
+        "url": "#portfolio-exercise",
+        "items": []
+      }
+    ],
+    "section": "MCS-216 Section 2",
+    "lastModified": "2026-05-06T15:47:29.649Z",
+    "slug": "mcs-216/section-2/session-1",
+    "slugFull": "/mcs-216/section-2/session-1"
+  },
+  {
+    "title": "Session 2",
+    "description": "HTML Forms",
+    "path": "mcs-216/section-2/session-2",
+    "content": "<script>\n  import { Callout } from \"@ethercorps/kit\";\n  import PrintButton from \"$lib/components/print-button.svelte\"\n  import InfoIcon from \"phosphor-svelte/lib/InfoIcon\"\n\n  import Question1Preview from \"$lib/components/demo/mcs-216/section-2/session-2-1.svelte\"\n  import Question2Preview from \"$lib/components/demo/mcs-216/section-2/session-2-2.svelte\"\n  import Question3Preview from \"$lib/components/demo/mcs-216/section-2/session-2-3.svelte\"\n</script>\n<printbutton>\n<p>HTML Forms are a fundamental building block of interactive web development, designed to collect user input dynamically at runtime. In this session, you will gain a foundational understanding of how to create, structure, and implement HTML forms to gather information from users. The data entered through these forms is typically transmitted to a web server for processing, validation, and storage.</p>\n<p>Forms are widely used to collect essential information such as usernames, passwords, contact details (e-mail IDs, mobile numbers), and other user preferences. This session introduces the core <code>&#x3C;form></code> container element and explores the various input controls it can hold, including:</p>\n<ul>\n<li>Text fields &#x26; text areas</li>\n<li>Radio buttons &#x26; checkboxes</li>\n<li>Submit &#x26; clickable buttons</li>\n<li>Labels for accessibility and clarity</li>\n<li>HTML5-specific input types (e.g., email, search, url, date, month, time)</li>\n</ul>\n<h2>Objective</h2>\n<p>After Completing this session, one should be able to:</p>\n<ul>\n<li>Understand the HTML form element</li>\n<li>use the form element in HTML</li>\n<li>use HTML to acquire user input and process it</li>\n<li>Create forms with basic elements like textboxes, checkboxes, radio buttons and submit buttons.</li>\n<li>Create forms using HTML5 elements like E-Mail address field and form validation</li>\n</ul>\n<h2>Question 1</h2>\n<h3>Problem Statement</h3>\n<p>Create an HTML webpage, as shown in the figure [2.1]. The user can specify any expression as input. Use form element to collect the user data.</p>\n<h5>Figure 2.1 (Demo)</h5>\n<ul>\n<li>Reference by question</li>\n<li>Working demo for preview</li>\n</ul>\n<question1preview>\n<h3>Code</h3>\n<pre><code class=\"language-html\" metastring=\"title=&#x22;form.html&#x22; showLineNumbers file=../../../lib/code/mcs-216/section-2/session-2/1.html\"></code></pre>\n<h2>Question 2</h2>\n<h3>Problem Statement</h3>\n<p>Create a scrolling list that shows five items from the following list of PC processors: Intel i7, Motorola 68000, AMD Athlon , Intel 8088, AMD Ryzon, Intel Pentium MMX, Intel i3, Intel Pentium II, Intel Pentium III, Intel i5, Intel Celeron, PowerPC G3, PowerPC G4.</p>\n<h3>Preview</h3>\n<question2preview>\n<h3>Code</h3>\n<pre><code class=\"language-html\" metastring=\"title=&#x22;list-scroller.html&#x22; showLineNumbers file=../../../lib/code/mcs-216/section-2/session-2/2.html\"></code></pre>\n<h2>Question 3</h2>\n<h3>Problem Statement</h3>\n<p>Design a webpage for a software company to accept on-line job applications. The\nwebpage must be designed to use form with elements:</p>\n<ul>\n<li>Position applied for (autofocus), name, nationality, date of birth (selected from an\nauto picker), address (in a text area), telephone number and email (required).</li>\n<li>Educational history and qualifications.</li>\n<li>Work experience/employment/training in terms of employer history and number of years of experience selected from a slider. Set maximum years of experience to 10 years.</li>\n<li>Personal statement.</li>\n<li>Two referees including names, occupation, relationship, address, telephone.</li>\n</ul>\n<h3>Preview</h3>\n<question3preview>\n<h3>Code</h3>\n<pre><code class=\"language-html\" metastring=\"title=&#x22;job-portal.html&#x22; showLineNumbers file=../../../lib/code/mcs-216/section-2/session-2/3.html\"></code></pre></question3preview></question2preview></question1preview></printbutton>",
+    "raw": "<script>\n  import { Callout } from \"@ethercorps/kit\";\n  import PrintButton from \"$lib/components/print-button.svelte\"\n  import InfoIcon from \"phosphor-svelte/lib/InfoIcon\"\n\n  import Question1Preview from \"$lib/components/demo/mcs-216/section-2/session-2-1.svelte\"\n  import Question2Preview from \"$lib/components/demo/mcs-216/section-2/session-2-2.svelte\"\n  import Question3Preview from \"$lib/components/demo/mcs-216/section-2/session-2-3.svelte\"\n</script>\n\n<PrintButton />\n\nHTML Forms are a fundamental building block of interactive web development, designed to collect user input dynamically at runtime. In this session, you will gain a foundational understanding of how to create, structure, and implement HTML forms to gather information from users. The data entered through these forms is typically transmitted to a web server for processing, validation, and storage.\n\nForms are widely used to collect essential information such as usernames, passwords, contact details (e-mail IDs, mobile numbers), and other user preferences. This session introduces the core `<form>` container element and explores the various input controls it can hold, including:\n- Text fields & text areas\n- Radio buttons & checkboxes\n- Submit & clickable buttons\n- Labels for accessibility and clarity\n- HTML5-specific input types (e.g., email, search, url, date, month, time)\n\n<Callout type=\"tip\" icon={InfoIcon} title=\"Suggestion\">\n    <!-- Space here -->\n    Before trying the solutions provided for the exercises, try to solve them on your own. This will help you understand the concepts better and improve your problem-solving skills.<br/> <br />\n    Also, Lab manual includes great examples before exercises, make sure to go through them as well.\n    <!-- Space here -->\n</Callout>\n\n## Objective\n\nAfter Completing this session, one should be able to:\n- Understand the HTML form element\n- use the form element in HTML\n- use HTML to acquire user input and process it\n- Create forms with basic elements like textboxes, checkboxes, radio buttons and submit buttons.\n- Create forms using HTML5 elements like E-Mail address field and form validation\n\n## Question 1\n\n### Problem Statement\n\nCreate an HTML webpage, as shown in the figure [2.1]. The user can specify any expression as input. Use form element to collect the user data.\n\n##### Figure 2.1 (Demo)\n- Reference by question\n- Working demo for preview\n\n<Question1Preview />\n\n### Code\n\n```html title=\"form.html\" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-2/1.html\n\n```\n\n## Question 2\n\n### Problem Statement\n\nCreate a scrolling list that shows five items from the following list of PC processors: Intel i7, Motorola 68000, AMD Athlon , Intel 8088, AMD Ryzon, Intel Pentium MMX, Intel i3, Intel Pentium II, Intel Pentium III, Intel i5, Intel Celeron, PowerPC G3, PowerPC G4.\n\n### Preview\n\n<Question2Preview />\n\n### Code\n\n```html title=\"list-scroller.html\" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-2/2.html\n\n```\n\n## Question 3\n\n### Problem Statement\n\nDesign a webpage for a software company to accept on-line job applications. The\nwebpage must be designed to use form with elements:\n\n- Position applied for (autofocus), name, nationality, date of birth (selected from an\nauto picker), address (in a text area), telephone number and email (required).\n- Educational history and qualifications.\n- Work experience/employment/training in terms of employer history and number of years of experience selected from a slider. Set maximum years of experience to 10 years.\n- Personal statement.\n- Two referees including names, occupation, relationship, address, telephone.\n\n### Preview\n\n<Question3Preview />\n\n### Code\n\n```html title=\"job-portal.html\" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-2/3.html\n\n```",
+    "toc": [
+      {
+        "title": "Objective",
+        "url": "#objective",
+        "items": []
+      },
+      {
+        "title": "Question 1",
+        "url": "#question-1",
+        "items": [
+          {
+            "title": "Problem Statement",
+            "url": "#problem-statement",
+            "items": []
+          },
+          {
+            "title": "Code",
+            "url": "#code",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Question 2",
+        "url": "#question-2",
+        "items": [
+          {
+            "title": "Problem Statement",
+            "url": "#problem-statement-1",
+            "items": []
+          },
+          {
+            "title": "Preview",
+            "url": "#preview",
+            "items": []
+          },
+          {
+            "title": "Code",
+            "url": "#code-1",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Question 3",
+        "url": "#question-3",
+        "items": [
+          {
+            "title": "Problem Statement",
+            "url": "#problem-statement-2",
+            "items": []
+          },
+          {
+            "title": "Preview",
+            "url": "#preview-1",
+            "items": []
+          },
+          {
+            "title": "Code",
+            "url": "#code-2",
+            "items": []
+          }
+        ]
+      }
+    ],
+    "section": "MCS-216 Section 2",
+    "lastModified": "2026-05-07T02:09:44.722Z",
+    "slug": "mcs-216/section-2/session-2",
+    "slugFull": "/mcs-216/section-2/session-2"
+  },
+  {
+    "title": "Session 3",
+    "description": "Cascading Styling Sheet (CSS)",
+    "path": "mcs-216/section-2/session-3",
+    "content": "<script>\n  import { Callout } from \"@ethercorps/kit\";\n  import PrintButton from \"$lib/components/print-button.svelte\"\n  import Question1HomePage from \"$lib/components/demo/mcs-216/section-2/session-3/1-timetable/index.svelte\"\n  import Question2 from \"$lib/components/demo/mcs-216/section-2/session-3/2-personal/personal-info.svelte\"\n</script>\n<printbutton>\n<p>CSS (Cascading Style Sheets) is a core web technology designed to separate the visual presentation and layout of a webpage from its structural HTML content. In web development, maintaining a consistent look and feel across multiple pages is essential for user familiarity and professional design. CSS streamlines this process, especially in collaborative environments where teams of developers need to apply uniform styling across large projects without duplicating design code.</p>\n<p>This session introduces how CSS enables developers to efficiently style and layout web pages. Key capabilities covered include controlling:</p>\n<ul>\n<li>Typography &#x26; text formatting (fonts, colors, sizes, spacing)</li>\n<li>Page layout &#x26; structure (multi-column arrangements, positioning)</li>\n<li>Visual enhancements &#x26; animations (decorative features, transitions)</li>\n</ul>\n<h2>Objective</h2>\n<p>After Completing this session, one should be able to:</p>\n<ul>\n<li>Create CSS for a webpage</li>\n<li>Embed CSS inline and external into an HTML code.</li>\n</ul>\n<h2>Methods to implement CSS in HTML</h2>\n<p>There are three methods to implement CSS in HTML: Inline, Internal and External CSS.</p>\n<h3>Internal CSS</h3>\n<ul>\n<li><strong>What it is</strong>: CSS rules defined directly within a single HTML document.</li>\n<li><strong>Where it goes</strong>: Placed inside the <code>&#x3C;head></code> tag section using <code>&#x3C;style></code> tags.</li>\n<li><strong>Scope</strong>: Applies globally to all elements within that specific HTML page only.</li>\n<li><strong>Example</strong>:\n<pre><code class=\"language-html\">&#x3C;head>\n  &#x3C;style>\n    body { background-color: green; }\n    h1 { margin-left: 20px; color: red; }\n  &#x3C;/style>\n&#x3C;/head>\n</code></pre>\n</li>\n<li>Best for: Styling a single page when you don't want to create a separate file.</li>\n</ul>\n<h3>Inline CSS</h3>\n<ul>\n<li>\n<p><strong>What it is</strong>: CSS applied directly to a specific HTML element.</p>\n</li>\n<li>\n<p><strong>Where it goes</strong>: Added as a <code>style</code> attribute directly inside the opening tag of the element.</p>\n</li>\n<li>\n<p><strong>Scope</strong>: Element-specific. It only affects the exact tag it's attached to.</p>\n</li>\n<li>\n<p><strong>Example</strong>:</p>\n<pre><code class=\"language-html\">&#x3C;h2 style=\"text-align: right; color: red;\">This is a heading&#x3C;/h2>\n&#x3C;p style=\"text-align: justify; color: green;\">This is a paragraph.&#x3C;/p>\n</code></pre>\n</li>\n<li>\n<p><strong>Best for</strong>: Quick, one-off styling. However, it's not recommended for large projects as it mixes content with presentation and reduces maintainability.</p>\n</li>\n</ul>\n<h3>External CSS</h3>\n<ul>\n<li>\n<p><strong>What it is</strong>: CSS written in a completely separate file with a .css extension.</p>\n</li>\n<li>\n<p><strong>Where it goes</strong>: Linked to the HTML document using the <code>link></code> tag inside the <code>&#x3C;head></code> section.</p>\n</li>\n<li>\n<p><strong>Scope</strong>: Can be attached to multiple HTML pages, ensuring a consistent look across an entire website.</p>\n</li>\n<li>\n<p><strong>Example</strong>:</p>\n<pre><code class=\"language-html\" metastring=\"title=&#x22;file.html&#x22;\">&#x3C;head>\n  &#x3C;link rel=\"stylesheet\" href=\"external-css.css\">\n&#x3C;/head>\n</code></pre>\n<pre><code class=\"language-css\" metastring=\"title=&#x22;external-css.css&#x22;\">body { background-color: lightblue; }\nh2 { color: navy; margin-left: 20px; }\n</code></pre>\n</li>\n</ul>\n<h3>Cascading Priority</h3>\n<p>When multiple styles are applied to the same element, the browser follows a cascading priority rule to determine which style wins. From highest to lowest priority:</p>\n<ul>\n<li>Inline style (Highest priority → overrides everything)</li>\n<li>External &#x26; Internal style sheets (Equal priority; whichever loads last usually wins)</li>\n<li>Browser default styles (Lowest priority)</li>\n</ul>\n<blockquote>\n<p>Example: If an external stylesheet sets <code>h2 { color: blue; }</code> but you add <code>style=\"color: red;\"</code> directly to that <code>&#x3C;h2></code> tag, the text will render red because inline styles take precedence.</p>\n</blockquote>\n<h2>Question 1</h2>\n<h3>Problem Statement</h3>\n<p>Create an HTML website to display the time table of all the 4 years of B. Tech. (even semester of each year).It should contain a home page where link to each year's time table is listed. On click to any year time table a new web page should be open displaying the corresponding time table. Apply the following effects on the table using CSS:</p>\n<ul>\n<li>Common to all:\n<ul>\n<li>Display day names (Mon, Tue etc...) in bold format with the first\nletter in the dayname in uppercase.</li>\n<li>Display lunch slightly in bigger font other than the remaining text.</li>\n</ul>\n</li>\n<li>Specific to each year:\n<ul>\n<li>For 1st year\n<ul>\n<li>Apply blue as the background colour and white for the colour of\nthe text in the table header.</li>\n</ul>\n</li>\n<li>For 2nd year\n<ul>\n<li>Apply green as the background colour and white for the colour of\nthe text in the table header.</li>\n</ul>\n</li>\n<li>For 3rd year\n<ul>\n<li>Apply purple as the background colour and white for the colour\nof the text in the table header.</li>\n</ul>\n</li>\n<li>For 4th year\n<ul>\n<li>Apply yellow as the background colour and black for the colour\nof the text in the table header.</li>\n</ul>\n</li>\n</ul>\n</li>\n</ul>\n<h3>Solution</h3>\n<h3>File Structure</h3>\n<pre><code class=\"language-sh\">📂 B.Tech_Timetable/\n ├── index.html          (Home Page)\n ├── year1.html          (1st Year Timetable)\n ├── year2.html          (2nd Year Timetable)\n ├── year3.html          (3rd Year Timetable)\n ├── year4.html          (4th Year Timetable)\n └── style.css           (External CSS File)\n</code></pre>\n<h3>Code Files</h3>\n<h3>Homepage</h3>\n<pre><code class=\"language-html\" metastring=\"title=&#x22;index.html&#x22; showLineNumbers file=../../../lib/code/mcs-216/section-2/session-3/B.Tech_Timetable/index.html\"></code></pre>\n<h3>Ist Year</h3>\n<pre><code class=\"language-html\" metastring=\"title=&#x22;year1.html&#x22; showLineNumbers file=../../../lib/code/mcs-216/section-2/session-3/B.Tech_Timetable/year1.html\"></code></pre>\n<h3>IInd Year</h3>\n<pre><code class=\"language-html\" metastring=\"title=&#x22;year2.html&#x22; showLineNumbers file=../../../lib/code/mcs-216/section-2/session-3/B.Tech_Timetable/year2.html\"></code></pre>\n<h3>IIIrd Year</h3>\n<pre><code class=\"language-html\" metastring=\"title=&#x22;year3.html&#x22; showLineNumbers file=../../../lib/code/mcs-216/section-2/session-3/B.Tech_Timetable/year3.html\"></code></pre>\n<h3>IVth Year</h3>\n<pre><code class=\"language-html\" metastring=\"title=&#x22;year4.html&#x22; showLineNumbers file=../../../lib/code/mcs-216/section-2/session-3/B.Tech_Timetable/year4.html\"></code></pre>\n<h3>Common Style Sheet</h3>\n<pre><code class=\"language-css\" metastring=\"title=&#x22;year4.html&#x22; showLineNumbers file=../../../lib/code/mcs-216/section-2/session-3/B.Tech_Timetable/style.css\"></code></pre>\n<h3>Preview (Working)</h3>\n<question1homepage>\n<h2>Question 2</h2>\n<h3>Problem Statement</h3>\n<p>Create an HTML webpage to show personal information i.e. name, class, qualifications, photo,address etc. Make use of tables as when possible. Apply the following styleinformation using CSS:</p>\n<ul>\n<li>Display the heading of the page in Arial font and with font size of 18px.</li>\n<li>Align all the field names like Name, Class, Photo etc to left in the table.</li>\n<li>Apply yellow color as background colour in left side cells contains field names like Name, Class etc...</li>\n<li>Set college logo as background image to the web page.</li>\n</ul>\n<h3>File Structure</h3>\n<pre><code class=\"language-sh\">📂 PersonalInfo/\n ├── index.html\n ├── style.css\n ├── college-logo.png   (Replace with your actual logo file)\n └── student-photo.jpg  (Replace with your actual photo file)\n</code></pre>\n<h3>Code Files</h3>\n<h3>Homepage</h3>\n<pre><code class=\"language-html\" metastring=\"title=&#x22;index.html&#x22; showLineNumbers file=../../../lib/code/mcs-216/section-2/session-3/personal-info/index.html\"></code></pre>\n<h3>Style Sheet</h3>\n<pre><code class=\"language-css\" metastring=\"title=&#x22;style.css&#x22; showLineNumbers file=../../../lib/code/mcs-216/section-2/session-3/personal-info/style.css\"></code></pre>\n<h3>Preview (Working)</h3>\n<question2></question2></question1homepage></printbutton>",
+    "raw": "<script>\n  import { Callout } from \"@ethercorps/kit\";\n  import PrintButton from \"$lib/components/print-button.svelte\"\n  import Question1HomePage from \"$lib/components/demo/mcs-216/section-2/session-3/1-timetable/index.svelte\"\n  import Question2 from \"$lib/components/demo/mcs-216/section-2/session-3/2-personal/personal-info.svelte\"\n</script>\n\n<PrintButton />\n\nCSS (Cascading Style Sheets) is a core web technology designed to separate the visual presentation and layout of a webpage from its structural HTML content. In web development, maintaining a consistent look and feel across multiple pages is essential for user familiarity and professional design. CSS streamlines this process, especially in collaborative environments where teams of developers need to apply uniform styling across large projects without duplicating design code.\n\nThis session introduces how CSS enables developers to efficiently style and layout web pages. Key capabilities covered include controlling:\n\n- Typography & text formatting (fonts, colors, sizes, spacing)\n- Page layout & structure (multi-column arrangements, positioning)\n- Visual enhancements & animations (decorative features, transitions)\n\n## Objective\n\nAfter Completing this session, one should be able to:\n- Create CSS for a webpage\n- Embed CSS inline and external into an HTML code.\n\n## Methods to implement CSS in HTML\n\nThere are three methods to implement CSS in HTML: Inline, Internal and External CSS.\n\n### Internal CSS\n\n- **What it is**: CSS rules defined directly within a single HTML document.\n- **Where it goes**: Placed inside the `<head>` tag section using `<style>` tags.\n- **Scope**: Applies globally to all elements within that specific HTML page only.\n- **Example**:\n  ```html\n  <head>\n    <style>\n      body { background-color: green; }\n      h1 { margin-left: 20px; color: red; }\n    </style>\n  </head>\n  ```\n- Best for: Styling a single page when you don't want to create a separate file.\n\n### Inline CSS\n\n- **What it is**: CSS applied directly to a specific HTML element.\n- **Where it goes**: Added as a `style` attribute directly inside the opening tag of the element.\n- **Scope**: Element-specific. It only affects the exact tag it's attached to.\n- **Example**:\n  ```html\n  <h2 style=\"text-align: right; color: red;\">This is a heading</h2>\n  <p style=\"text-align: justify; color: green;\">This is a paragraph.</p>\n  ```\n\n- **Best for**: Quick, one-off styling. However, it's not recommended for large projects as it mixes content with presentation and reduces maintainability.\n\n###  External CSS\n\n- **What it is**: CSS written in a completely separate file with a .css extension.\n- **Where it goes**: Linked to the HTML document using the `link>` tag inside the `<head>` section.\n- **Scope**: Can be attached to multiple HTML pages, ensuring a consistent look across an entire website.\n- **Example**:\n  ```html title=\"file.html\"\n  <head>\n    <link rel=\"stylesheet\" href=\"external-css.css\">\n  </head>\n  ```\n\n  ```css title=\"external-css.css\"\n  body { background-color: lightblue; }\n  h2 { color: navy; margin-left: 20px; }\n  ```\n\n### Cascading Priority\n\nWhen multiple styles are applied to the same element, the browser follows a cascading priority rule to determine which style wins. From highest to lowest priority:\n\n- Inline style (Highest priority → overrides everything)\n- External & Internal style sheets (Equal priority; whichever loads last usually wins)\n- Browser default styles (Lowest priority)\n\n> Example: If an external stylesheet sets `h2 { color: blue; }` but you add `style=\"color: red;\"` directly to that `<h2>` tag, the text will render red because inline styles take precedence.\n\n## Question 1\n\n### Problem Statement\n\nCreate an HTML website to display the time table of all the 4 years of B. Tech. (even semester of each year).It should contain a home page where link to each year's time table is listed. On click to any year time table a new web page should be open displaying the corresponding time table. Apply the following effects on the table using CSS:\n\n- Common to all:\n  - Display day names (Mon, Tue etc...) in bold format with the first\n  letter in the dayname in uppercase.\n  - Display lunch slightly in bigger font other than the remaining text.\n- Specific to each year:\n  - For 1st year\n    - Apply blue as the background colour and white for the colour of\n    the text in the table header.\n  - For 2nd year\n    - Apply green as the background colour and white for the colour of\n    the text in the table header.\n  - For 3rd year\n    - Apply purple as the background colour and white for the colour\n    of the text in the table header.\n  - For 4th year\n    - Apply yellow as the background colour and black for the colour\n    of the text in the table header.\n\n### Solution\n\n### File Structure\n\n```sh\n📂 B.Tech_Timetable/\n ├── index.html          (Home Page)\n ├── year1.html          (1st Year Timetable)\n ├── year2.html          (2nd Year Timetable)\n ├── year3.html          (3rd Year Timetable)\n ├── year4.html          (4th Year Timetable)\n └── style.css           (External CSS File)\n```\n\n### Code Files\n\n### Homepage\n\n```html title=\"index.html\" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-3/B.Tech_Timetable/index.html\n\n```\n\n### Ist Year\n\n```html title=\"year1.html\" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-3/B.Tech_Timetable/year1.html\n\n```\n\n### IInd Year\n\n```html title=\"year2.html\" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-3/B.Tech_Timetable/year2.html\n\n```\n\n### IIIrd Year\n\n```html title=\"year3.html\" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-3/B.Tech_Timetable/year3.html\n\n```\n\n### IVth Year\n\n```html title=\"year4.html\" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-3/B.Tech_Timetable/year4.html\n\n```\n\n### Common Style Sheet\n\n```css title=\"year4.html\" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-3/B.Tech_Timetable/style.css\n\n```\n\n\n### Preview (Working)\n\n<Question1HomePage />\n\n\n## Question 2\n\n\n### Problem Statement\n\nCreate an HTML webpage to show personal information i.e. name, class, qualifications, photo,address etc. Make use of tables as when possible. Apply the following styleinformation using CSS:\n\n- Display the heading of the page in Arial font and with font size of 18px.\n- Align all the field names like Name, Class, Photo etc to left in the table.\n- Apply yellow color as background colour in left side cells contains field names like Name, Class etc...\n- Set college logo as background image to the web page.\n\n### File Structure\n\n```sh\n📂 PersonalInfo/\n ├── index.html\n ├── style.css\n ├── college-logo.png   (Replace with your actual logo file)\n └── student-photo.jpg  (Replace with your actual photo file)\n```\n\n### Code Files\n\n### Homepage\n\n```html title=\"index.html\" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-3/personal-info/index.html\n\n```\n\n### Style Sheet\n\n```css title=\"style.css\" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-3/personal-info/style.css\n\n```\n\n### Preview (Working)\n\n<Question2 />",
+    "toc": [
+      {
+        "title": "Objective",
+        "url": "#objective",
+        "items": []
+      },
+      {
+        "title": "Methods to implement CSS in HTML",
+        "url": "#methods-to-implement-css-in-html",
+        "items": [
+          {
+            "title": "Internal CSS",
+            "url": "#internal-css",
+            "items": []
+          },
+          {
+            "title": "Inline CSS",
+            "url": "#inline-css",
+            "items": []
+          },
+          {
+            "title": "External CSS",
+            "url": "#external-css",
+            "items": []
+          },
+          {
+            "title": "Cascading Priority",
+            "url": "#cascading-priority",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Question 1",
+        "url": "#question-1",
+        "items": [
+          {
+            "title": "Problem Statement",
+            "url": "#problem-statement",
+            "items": []
+          },
+          {
+            "title": "Solution",
+            "url": "#solution",
+            "items": []
+          },
+          {
+            "title": "File Structure",
+            "url": "#file-structure",
+            "items": []
+          },
+          {
+            "title": "Code Files",
+            "url": "#code-files",
+            "items": []
+          },
+          {
+            "title": "Homepage",
+            "url": "#homepage",
+            "items": []
+          },
+          {
+            "title": "Ist Year",
+            "url": "#ist-year",
+            "items": []
+          },
+          {
+            "title": "IInd Year",
+            "url": "#iind-year",
+            "items": []
+          },
+          {
+            "title": "IIIrd Year",
+            "url": "#iiird-year",
+            "items": []
+          },
+          {
+            "title": "IVth Year",
+            "url": "#ivth-year",
+            "items": []
+          },
+          {
+            "title": "Common Style Sheet",
+            "url": "#common-style-sheet",
+            "items": []
+          },
+          {
+            "title": "Preview (Working)",
+            "url": "#preview-working",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Question 2",
+        "url": "#question-2",
+        "items": [
+          {
+            "title": "Problem Statement",
+            "url": "#problem-statement-1",
+            "items": []
+          },
+          {
+            "title": "File Structure",
+            "url": "#file-structure-1",
+            "items": []
+          },
+          {
+            "title": "Code Files",
+            "url": "#code-files-1",
+            "items": []
+          },
+          {
+            "title": "Homepage",
+            "url": "#homepage-1",
+            "items": []
+          },
+          {
+            "title": "Style Sheet",
+            "url": "#style-sheet",
+            "items": []
+          },
+          {
+            "title": "Preview (Working)",
+            "url": "#preview-working-1",
+            "items": []
+          }
+        ]
+      }
+    ],
+    "section": "MCS-216 Section 2",
+    "lastModified": "2026-05-07T05:04:24.188Z",
+    "slug": "mcs-216/section-2/session-3",
+    "slugFull": "/mcs-216/section-2/session-3"
+  },
+  {
+    "title": "Session 4",
+    "description": "JavaScript HTML DOM",
+    "path": "mcs-216/section-2/session-4",
+    "content": "<script>\n  import { Callout } from \"@ethercorps/kit\";\n  import PrintButton from \"$lib/components/print-button.svelte\";\n  import Question1 from \"$lib/components/demo/mcs-216/section-2/session-4/1.svelte\"\n  import Question2 from \"$lib/components/demo/mcs-216/section-2/session-4/2.svelte\"\n  import Question3 from \"$lib/components/demo/mcs-216/section-2/session-4/3.svelte\"\n</script>\n<printbutton>\n<p>The <strong>Document Object Model (DOM)</strong> is a W3C-standard, language-independent interface that allows programs and scripts to dynamically access, modify, add, or remove the content, structure, and style of a web document. While the W3C DOM is categorized into Core DOM (all document types), XML DOM, and <strong>HTML DOM</strong>, this session focuses specifically on the HTML DOM, which is the standard model for HTML documents.</p>\n<p>When a browser loads an HTML page, it automatically parses the markup and constructs a hierarchical <strong>DOM tree</strong>. This tree represents the document's structure through parent-child node relationships, where:</p>\n<ul>\n<li>The entire document is a <code>document</code> node</li>\n<li>Every HTML tag is an <code>element</code> node</li>\n<li>Text inside elements is a <code>text</code> node</li>\n<li>HTML comments are <code>comment</code> nodes</li>\n</ul>\n<p>The HTML DOM bridges static HTML with dynamic JavaScript by treating every element, attribute, and piece of content as a <strong>JavaScript object</strong>. This object-oriented representation enables developers to:</p>\n<ul>\n<li>✅ Access or locate any element using IDs, tag names, or class names</li>\n<li>✅ Modify element content (innerHTML), attributes, and CSS styles on-the-fly</li>\n<li>✅ Dynamically create, append, or remove HTML elements</li>\n<li>✅ React to user interactions through DOM events (clicks, inputs, loads, etc.)</li>\n</ul>\n<p>By leveraging the HTML DOM, you can transform static web pages into highly interactive, real-time applications without requiring page reloads. This session introduces the core DOM programming interface, node navigation techniques, and practical methods for manipulating HTML content and styles using JavaScript.</p>\n<h2>Objective</h2>\n<p>After completing this session one should be able to:</p>\n<ul>\n<li>Add, Modify or delete the existing content of HTML elements.</li>\n<li>Modify a CSS style in the HTML page.</li>\n<li>React to existing HTML DOM events in page.</li>\n</ul>\n<h2>DOM Tree (Node Types)</h2>\n<p>When a browser parses HTML, it builds a node tree:</p>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<table><thead><tr><th>Node Type</th><th>Description</th><th>Example</th></tr></thead><tbody><tr><td><code>document</code></td><td>Root node of the entire page</td><td><code>document</code></td></tr><tr><td><code>element</code></td><td>HTML tags</td><td><code>&#x3C;div></code>, <code>&#x3C;p></code>, <code>&#x3C;img></code></td></tr><tr><td><code>text</code></td><td>Content inside elements</td><td><code>\"Hello World\"</code> inside <code>&#x3C;p></code></td></tr><tr><td><code>attribute</code></td><td>Element attributes (treated as nodes in legacy DOM)</td><td><code>id=\"btn\"</code>, <code>src=\"img.jpg\"</code></td></tr><tr><td><code>comment</code></td><td>HTML comments</td><td><code>&#x3C;!-- hidden --></code></td></tr></tbody></table>\n<h3>Parent-Child-Sibling Relationships</h3>\n<ul>\n<li><code>&#x3C;html></code> → parent of <code>&#x3C;head></code> &#x26; <code>&#x3C;body></code></li>\n<li><code>&#x3C;body></code> → parent of <code>&#x3C;h1></code> &#x26; <code>&#x3C;p></code></li>\n<li><code>&#x3C;h1></code> &#x26; <code>&#x3C;p></code> → siblings</li>\n</ul>\n<h2>Accessing Elements (DOM Methods)</h2>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<table><thead><tr><th>Method</th><th>Returns</th><th>Best For</th></tr></thead><tbody><tr><td><code>document.getElementById(\"id\")</code></td><td>Single element</td><td>Fastest &#x26; most reliable</td></tr><tr><td><code>document.getElementsByClassName(\"class\")</code></td><td>HTMLCollection (Live)</td><td>Multiple elements sharing a class</td></tr><tr><td><code>document.getElementsByTagName(\"tag\")</code></td><td>HTMLCollection (Live)</td><td>All elements of a specific tag</td></tr><tr><td><code>document.querySelector(\"selector\")</code></td><td>First matching element</td><td>Modern, CSS-like selectors</td></tr><tr><td><code>document.querySelectorAll(\"selector\")</code></td><td>NodeList (static)</td><td>All matching elements</td></tr></tbody></table>\n<h2>Modifying Element</h2>\n<h3>Content</h3>\n<pre><code class=\"language-js\">element.innerHTML = \"&#x3C;b>New HTML&#x3C;/b>\";   // Parses HTML (risk of XSS if user input)\nelement.textContent = \"Plain text only\";  // Safer, faster, ignores HTML tags\nelement.innerText = \"Visible text only\";  // Respects CSS styling (e.g., hidden elements)\n</code></pre>\n<h3>Attributes</h3>\n<pre><code class=\"language-js\">// Direct property (works for standard attributes)\nimg.src = \"new.jpg\";\nlink.href = \"https://example.com\";\n\n// Universal method (works for custom/data attributes)\nelement.setAttribute(\"data-role\", \"admin\");\nlet val = element.getAttribute(\"data-role\");\n</code></pre>\n<h3>Styles</h3>\n<pre><code class=\"language-js\">// JS uses camelCase for multi-word CSS properties\nelement.style.backgroundColor = \"lightblue\";\nelement.style.fontSize = \"18px\";\nelement.style.marginLeft = \"20px\";\n</code></pre>\n<h2>Create &#x26; Append Element</h2>\n<pre><code class=\"language-js\">let newP = document.createElement(\"p\");          // &#x3C;p>&#x3C;/p>\nlet txt = document.createTextNode(\"Hello DOM\");  // \"Hello DOM\"\nnewP.appendChild(txt);                           // &#x3C;p>Hello DOM&#x3C;/p>\ndocument.body.appendChild(newP);                 // Adds to end of &#x3C;body>\n</code></pre>\n<h2>Insert at Specific Position</h2>\n<pre><code class=\"language-js\">let parent = document.getElementById(\"container\");\nlet reference = document.getElementById(\"refItem\");\nparent.insertBefore(newP, reference); // Inserts newP before reference\n</code></pre>\n<h2>Remove Elements</h2>\n<pre><code class=\"language-js\">// Modern (recommended)\nelement.remove(); \n\n// Legacy (manual's syntax)\nparent.removeChild(childElement);\n</code></pre>\n<h2>Question 1</h2>\n<h3>Problem Statement</h3>\n<p>Design an HTML page using JavaScript as shown below. When Try button is pressed, the Full Name should be shown below the Try button.<br>\n(Hint: Use concatenation to get Full Name). <br>\n(Please refer to images in lab manual)</p>\n<h3>Preview (Working)</h3>\n<question1>\n<h3>Code</h3>\n<pre><code class=\"language-html\" metastring=\"title=&#x22;form.html&#x22; showLineNumbers file=../../../lib/code/mcs-216/section-2/session-4/1.html\"></code></pre>\n<h2>Question 2</h2>\n<h3>Problem Statement</h3>\n<p>Modify the below snippet of the code to change the src attribute of the image element to \"pqr.jpg\" using  HTML DOM.</p>\n<pre><code class=\"language-html\">&#x3C;img id=\"pic\" src=\"old.jpg\">\n&#x3C;script>\n//Write your code here.\n&#x3C;/script>\n</code></pre>\n<h3>Preview (Working)</h3>\n<question2>\n<h3>Code</h3>\n<pre><code class=\"language-html\" metastring=\"title=&#x22;form.html&#x22; showLineNumbers file=../../../lib/code/mcs-216/section-2/session-4/2.html\"></code></pre>\n<h2>Question 3</h2>\n<h3>Problem Statement</h3>\n<p>Write the JavaScript code to change the color of the HTML element h2 to green, on click the change color button.</p>\n<h3>Preview (Working)</h3>\n<question3>\n<h3>Code</h3>\n<pre><code class=\"language-html\" metastring=\"title=&#x22;form.html&#x22; showLineNumbers file=../../../lib/code/mcs-216/section-2/session-4/3.html\"></code></pre></question3></question2></question1></printbutton>",
+    "raw": "<script>\n  import { Callout } from \"@ethercorps/kit\";\n  import PrintButton from \"$lib/components/print-button.svelte\";\n  import Question1 from \"$lib/components/demo/mcs-216/section-2/session-4/1.svelte\"\n  import Question2 from \"$lib/components/demo/mcs-216/section-2/session-4/2.svelte\"\n  import Question3 from \"$lib/components/demo/mcs-216/section-2/session-4/3.svelte\"\n</script>\n\n<PrintButton />\n\nThe **Document Object Model (DOM)** is a W3C-standard, language-independent interface that allows programs and scripts to dynamically access, modify, add, or remove the content, structure, and style of a web document. While the W3C DOM is categorized into Core DOM (all document types), XML DOM, and **HTML DOM**, this session focuses specifically on the HTML DOM, which is the standard model for HTML documents.\n\nWhen a browser loads an HTML page, it automatically parses the markup and constructs a hierarchical **DOM tree**. This tree represents the document's structure through parent-child node relationships, where:\n\n- The entire document is a `document` node\n- Every HTML tag is an `element` node\n- Text inside elements is a `text` node\n- HTML comments are `comment` nodes\n\nThe HTML DOM bridges static HTML with dynamic JavaScript by treating every element, attribute, and piece of content as a **JavaScript object**. This object-oriented representation enables developers to:\n\n- ✅ Access or locate any element using IDs, tag names, or class names\n- ✅ Modify element content (innerHTML), attributes, and CSS styles on-the-fly\n- ✅ Dynamically create, append, or remove HTML elements\n- ✅ React to user interactions through DOM events (clicks, inputs, loads, etc.)\n\nBy leveraging the HTML DOM, you can transform static web pages into highly interactive, real-time applications without requiring page reloads. This session introduces the core DOM programming interface, node navigation techniques, and practical methods for manipulating HTML content and styles using JavaScript.\n\n## Objective\n\nAfter completing this session one should be able to:\n- Add, Modify or delete the existing content of HTML elements.\n- Modify a CSS style in the HTML page.\n- React to existing HTML DOM events in page.\n\n##  DOM Tree (Node Types)\nWhen a browser parses HTML, it builds a node tree:\n\n| Node Type | Description | Example |\n|-----------|-------------|---------|\n| `document` | Root node of the entire page | `document` |\n| `element` | HTML tags | `<div>`, `<p>`, `<img>` |\n| `text` | Content inside elements | `\"Hello World\"` inside `<p>` |\n| `attribute` | Element attributes (treated as nodes in legacy DOM) | `id=\"btn\"`, `src=\"img.jpg\"` |\n| `comment` | HTML comments | `<!-- hidden -->` |\n\n### Parent-Child-Sibling Relationships\n\n- `<html>` → parent of `<head>` & `<body>`\n- `<body>` → parent of `<h1>` & `<p>`\n- `<h1>` & `<p>` → siblings\n\n## Accessing Elements (DOM Methods)\n\n| Method | Returns | Best For |\n|--------|---------|----------|\n| `document.getElementById(\"id\")` | Single element | Fastest & most reliable |\n| `document.getElementsByClassName(\"class\")` | HTMLCollection (Live) | Multiple elements sharing a class |\n| `document.getElementsByTagName(\"tag\")` | HTMLCollection (Live) | All elements of a specific tag |\n| `document.querySelector(\"selector\")` | First matching element | Modern, CSS-like selectors |\n| `document.querySelectorAll(\"selector\")` | NodeList (static) | All matching elements |\n\n## Modifying Element\n\n### Content \n\n```js\nelement.innerHTML = \"<b>New HTML</b>\";   // Parses HTML (risk of XSS if user input)\nelement.textContent = \"Plain text only\";  // Safer, faster, ignores HTML tags\nelement.innerText = \"Visible text only\";  // Respects CSS styling (e.g., hidden elements)\n```\n\n### Attributes\n\n```js\n// Direct property (works for standard attributes)\nimg.src = \"new.jpg\";\nlink.href = \"https://example.com\";\n\n// Universal method (works for custom/data attributes)\nelement.setAttribute(\"data-role\", \"admin\");\nlet val = element.getAttribute(\"data-role\");\n```\n\n### Styles\n\n```js\n// JS uses camelCase for multi-word CSS properties\nelement.style.backgroundColor = \"lightblue\";\nelement.style.fontSize = \"18px\";\nelement.style.marginLeft = \"20px\";\n```\n\n## Create & Append Element\n\n```js\nlet newP = document.createElement(\"p\");          // <p></p>\nlet txt = document.createTextNode(\"Hello DOM\");  // \"Hello DOM\"\nnewP.appendChild(txt);                           // <p>Hello DOM</p>\ndocument.body.appendChild(newP);                 // Adds to end of <body>\n```\n\n## Insert at Specific Position\n\n```js\nlet parent = document.getElementById(\"container\");\nlet reference = document.getElementById(\"refItem\");\nparent.insertBefore(newP, reference); // Inserts newP before reference\n```\n\n## Remove Elements\n\n```js\n// Modern (recommended)\nelement.remove(); \n\n// Legacy (manual's syntax)\nparent.removeChild(childElement);\n```\n\n<Callout type=\"tip\" title=\"Suggestion\">\n    <!-- Space here -->\n    See Example 1 in Lab manual. It covers all the main methods mentioned above.\n    <!-- Space here -->\n</Callout>\n\n\n## Question 1\n\n### Problem Statement\n\nDesign an HTML page using JavaScript as shown below. When Try button is pressed, the Full Name should be shown below the Try button.<br />\n(Hint: Use concatenation to get Full Name). <br />\n(Please refer to images in lab manual)\n\n### Preview (Working)\n\n<Question1 />\n\n### Code\n\n```html title=\"form.html\" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-4/1.html\n\n```\n\n## Question 2\n\n### Problem Statement\n\nModify the below snippet of the code to change the src attribute of the image element to \"pqr.jpg\" using  HTML DOM.\n\n```html \n<img id=\"pic\" src=\"old.jpg\">\n<script>\n//Write your code here.\n</script>\n```\n\n### Preview (Working)\n\n<Question2 />\n\n### Code\n\n```html title=\"form.html\" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-4/2.html\n\n```\n\n## Question 3\n\n### Problem Statement\n\nWrite the JavaScript code to change the color of the HTML element h2 to green, on click the change color button.\n\n\n### Preview (Working)\n\n<Question3 />\n\n### Code\n\n```html title=\"form.html\" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-4/3.html\n\n```",
+    "toc": [
+      {
+        "title": "Objective",
+        "url": "#objective",
+        "items": []
+      },
+      {
+        "title": "DOM Tree (Node Types)",
+        "url": "#dom-tree-node-types",
+        "items": [
+          {
+            "title": "Parent-Child-Sibling Relationships",
+            "url": "#parent-child-sibling-relationships",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Accessing Elements (DOM Methods)",
+        "url": "#accessing-elements-dom-methods",
+        "items": []
+      },
+      {
+        "title": "Modifying Element",
+        "url": "#modifying-element",
+        "items": [
+          {
+            "title": "Content",
+            "url": "#content",
+            "items": []
+          },
+          {
+            "title": "Attributes",
+            "url": "#attributes",
+            "items": []
+          },
+          {
+            "title": "Styles",
+            "url": "#styles",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Create & Append Element",
+        "url": "#create--append-element",
+        "items": []
+      },
+      {
+        "title": "Insert at Specific Position",
+        "url": "#insert-at-specific-position",
+        "items": []
+      },
+      {
+        "title": "Remove Elements",
+        "url": "#remove-elements",
+        "items": []
+      },
+      {
+        "title": "Question 1",
+        "url": "#question-1",
+        "items": [
+          {
+            "title": "Problem Statement",
+            "url": "#problem-statement",
+            "items": []
+          },
+          {
+            "title": "Preview (Working)",
+            "url": "#preview-working",
+            "items": []
+          },
+          {
+            "title": "Code",
+            "url": "#code",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Question 2",
+        "url": "#question-2",
+        "items": [
+          {
+            "title": "Problem Statement",
+            "url": "#problem-statement-1",
+            "items": []
+          },
+          {
+            "title": "Preview (Working)",
+            "url": "#preview-working-1",
+            "items": []
+          },
+          {
+            "title": "Code",
+            "url": "#code-1",
+            "items": []
+          }
+        ]
+      },
+      {
+        "title": "Question 3",
+        "url": "#question-3",
+        "items": [
+          {
+            "title": "Problem Statement",
+            "url": "#problem-statement-2",
+            "items": []
+          },
+          {
+            "title": "Preview (Working)",
+            "url": "#preview-working-2",
+            "items": []
+          },
+          {
+            "title": "Code",
+            "url": "#code-2",
+            "items": []
+          }
+        ]
+      }
+    ],
+    "section": "MCS-216 Section 2",
+    "lastModified": "2026-05-07T09:04:47.676Z",
+    "slug": "mcs-216/section-2/session-4",
+    "slugFull": "/mcs-216/section-2/session-4"
   }
 ]

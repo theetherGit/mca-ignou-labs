@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Session 4: JavaScript DOM Exercises</title>
+        <style>
+            body {
+                font-family: "Segoe UI", sans-serif;
+                margin: 20px;
+                background: #f4f4f4;
+            }
+            .exercise {
+                background: #fff;
+                padding: 20px;
+                margin-bottom: 20px;
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+            input,
+            button {
+                padding: 8px 12px;
+                margin: 5px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+            button {
+                cursor: pointer;
+                background: #0056b3;
+                color: #fff;
+                border: none;
+            }
+            button:hover {
+                background: #003d82;
+            }
+            img {
+                border: 2px solid #333;
+                border-radius: 4px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1 style="text-align: center">
+            Session 4: JavaScript HTML DOM Exercises
+        </h1>
+        <div class="exercise">
+            <h2>Ex 3: Change H2 Color</h2>
+            <h2 id="heading1" style="color: red">
+                This heading will turn green
+            </h2>
+            <button id="btnChangeColor">Change Color</button>
+        </div>
+
+        <script>
+            document.getElementById("btnChangeColor").onclick = function () {
+                document.getElementById("heading1").style.color = "green";
+            };
+        </script>
+    </body>
+</html>
