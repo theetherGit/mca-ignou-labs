@@ -1,0 +1,70 @@
+/* Requirement: Set college logo as background image */
+body {
+    background-image: url("college-logo.jpg");
+    background-size: cover; /* Scales image to cover viewport */
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* Keeps logo fixed while scrolling */
+    background-position: center;
+    margin: 0;
+    padding: 40px 20px;
+    font-family: sans-serif;
+}
+
+/* Requirement: Heading in Arial font, 18px size */
+h1 {
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+    text-align: center;
+    color: #222;
+    background-color: rgba(
+        255,
+        255,
+        255,
+        0.85
+    ); /* Semi-transparent for readability */
+    padding: 10px 20px;
+    border-radius: 5px;
+    display: inline-block;
+    margin-bottom: 25px;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.info-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #aaa;
+}
+
+td {
+    padding: 12px;
+    border: 1px solid #aaa;
+}
+
+/* Requirements: Left cells yellow background + left-aligned text */
+td:first-child {
+    background-color: yellow;
+    text-align: left;
+    font-weight: bold;
+    width: 35%;
+}
+
+td:last-child {
+    text-align: left; /* Optional: keeps data aligned consistently */
+}
+
+img {
+    border: 1px solid #888;
+    padding: 2px;
+    background: #fff;
+}

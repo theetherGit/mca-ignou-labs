@@ -1,0 +1,81 @@
+/* Base Styles */
+.timetable-body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    margin: 20px;
+    background-color: #f4f4f4;
+
+    h1 {
+        text-align: center;
+        color: #333;
+    }
+
+    nav ul {
+        list-style-type: none;
+        padding: 0;
+        text-align: center;
+    }
+    nav ul li {
+        display: inline;
+        margin: 0 15px;
+    }
+    nav ul li a {
+        text-decoration: none;
+        color: #0056b3;
+        font-weight: bold;
+        font-size: 18px;
+    }
+
+    /* Table Base Styles */
+    table {
+        width: 90%;
+        margin: 20px auto;
+        border-collapse: collapse;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    th,
+    td {
+        border: 1px solid #444;
+        padding: 12px;
+        text-align: center;
+    }
+
+    /* ✅ COMMON EFFECT 1: Day names bold & first letter uppercase */
+    thead th {
+        font-weight: bold;
+        text-transform: capitalize;
+    }
+
+    /* ✅ COMMON EFFECT 2: Lunch slightly bigger font */
+    .lunch {
+        font-size: 1.25em;
+        font-weight: bold;
+        letter-spacing: 2px;
+    }
+
+    /* ✅ YEAR-SPECIFIC HEADER STYLES */
+    .year1 th {
+        background-color: blue;
+        color: white;
+    }
+    .year2 th {
+        background-color: green;
+        color: white;
+    }
+    .year3 th {
+        background-color: purple;
+        color: white;
+    }
+    .year4 th {
+        background-color: yellow;
+        color: black;
+    }
+
+    .back-link {
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+        font-size: 16px;
+    }
+}
