@@ -32,6 +32,15 @@ Forms are widely used to collect essential information such as usernames, passwo
     <!-- Space here -->
 </Callout>
 
+## Objective
+
+After Completing this session, one should be able to:
+- Understand the HTML form element
+- use the form element in HTML
+- use HTML to acquire user input and process it
+- Create forms with basic elements like textboxes, checkboxes, radio buttons and submit buttons.
+- Create forms using HTML5 elements like E-Mail address field and form validation
+
 ## Question 1
 
 ### Problem Statement
