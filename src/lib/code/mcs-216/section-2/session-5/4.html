@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Ex4: Mouse Events on Image</title>
+    </head>
+    <body style="font-family: sans-serif; padding: 20px; text-align: center">
+        <h2>Exercise 4: Image Mouse Events</h2>
+        <img
+            id="dynamicImg"
+            src="https://placehold.co/200x200/cccccc/333?text=Default"
+            alt="Event Target"
+            style="border: 2px solid #333; margin: 20px 0"
+        />
+        <p id="eventLog" style="font-style: italic; color: #555">
+            Hover or click the image
+        </p>
+
+        <script>
+            const img = document.getElementById("dynamicImg");
+            const log = document.getElementById("eventLog");
+
+            img.addEventListener("mouseover", () => {
+                img.src =
+                    "https://placehold.co/200x200/3498db/fff?text=Mouse+Over";
+                log.textContent = "Event: mouseover";
+            });
+            img.addEventListener("mouseout", () => {
+                img.src =
+                    "https://placehold.co/200x200/95a5a6/fff?text=Mouse+Out";
+                log.textContent = "Event: mouseout";
+            });
+            img.addEventListener("mousedown", () => {
+                img.src =
+                    "https://placehold.co/200x200/e74c3c/fff?text=Mouse+Down";
+                log.textContent = "Event: mousedown";
+            });
+            img.addEventListener("mouseup", () => {
+                img.src =
+                    "https://placehold.co/200x200/2ecc71/fff?text=Mouse+Up";
+                log.textContent = "Event: mouseup";
+            });
+        </script>
+    </body>
+</html>

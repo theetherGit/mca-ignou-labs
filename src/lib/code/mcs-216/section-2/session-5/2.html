@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Ex2: Cookie Status Check</title>
+    </head>
+    <body style="font-family: sans-serif; padding: 20px">
+        <h2>Exercise 2: Cookie Status on Load</h2>
+        <p>Reload the page to trigger the load event.</p>
+
+        <script>
+            // Using window.onload as specified in the lab
+            window.addEventListener("load", () => {
+                if (navigator.cookieEnabled) {
+                    alert("Cookies are enabled");
+                } else {
+                    alert("Cookies are disabled");
+                }
+            });
+        </script>
+    </body>
+</html>

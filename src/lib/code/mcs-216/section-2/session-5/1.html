@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Ex1: Display Date</title>
+    </head>
+    <body style="font-family: sans-serif; padding: 20px">
+        <h2>Exercise 1: Display Date on Click</h2>
+        <button id="showDateBtn">Show Date</button>
+        <p id="dateOutput" style="margin-top: 10px; font-weight: bold"></p>
+
+        <script>
+            // Attach event listener using addEventListener (Session 5 concept)
+            document
+                .getElementById("showDateBtn")
+                .addEventListener("click", () => {
+                    const today = new Date().toLocaleDateString();
+                    document.getElementById("dateOutput").textContent =
+                        `Today's Date: ${today}`;
+                });
+        </script>
+    </body>
+</html>

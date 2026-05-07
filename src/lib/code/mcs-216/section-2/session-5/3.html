@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Ex3: Auto Uppercase</title>
+    </head>
+    <body style="font-family: sans-serif; padding: 20px">
+        <h2>Exercise 3: Auto Uppercase on Change</h2>
+        <input
+            type="text"
+            id="textInput"
+            placeholder="Type something (press Enter or click outside)"
+            style="padding: 8px; width: 300px"
+        />
+        <p id="result" style="margin-top: 10px; font-weight: bold"></p>
+
+        <script>
+            document
+                .getElementById("textInput")
+                .addEventListener("change", function () {
+                    // Convert to uppercase and update value
+                    this.value = this.value.toUpperCase();
+                    document.getElementById("result").textContent =
+                        `Converted: ${this.value}`;
+                });
+        </script>
+    </body>
+</html>
