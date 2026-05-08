@@ -167,7 +167,7 @@ lab is considered a failure.
 
 ### Code
 
-```html title="add-division.html" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-7/2.html
+```html title="grade-lab.html" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-7/2.html
 
 ```
 
@@ -198,7 +198,7 @@ message to be printed EVERY time the code runs
 
 ### Code
 
-```html title="add-division.html" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-7/3.html
+```html title="animals.html" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-7/3.html
 
 ```
 
@@ -226,7 +226,7 @@ Make sure you handle only the exceptions you are trying to handle.
 
 ### Code
 
-```html title="add-division.html" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-7/4.html
+```html title="primitive-multiplyn.html" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-7/4.html
 
 ```
 

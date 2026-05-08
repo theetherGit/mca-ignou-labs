@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Session 8 Ex2: Product Discount</title>
+        <style>
+            body {
+                font-family: sans-serif;
+                padding: 20px;
+                max-width: 500px;
+                margin: auto;
+            }
+            input,
+            button {
+                padding: 10px;
+                margin: 5px;
+                width: 100%;
+                box-sizing: border-box;
+            }
+            pre {
+                background: #f4f4f4;
+                padding: 15px;
+                border-radius: 5px;
+                white-space: pre-wrap;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>Product Discount Calculator</h2>
+        <input
+            id="discPercent"
+            type="number"
+            placeholder="Enter Discount % (e.g., 20)"
+        />
+        <button id="calcBtn">Calculate & Display Details</button>
+        <pre id="output">Waiting for input...</pre>
+
+        <script>
+            // Lab Requirement: Object with properties & methods
+            const product = {
+                id: "P1001",
+                name: "Wireless Mechanical Keyboard",
+                description: "RGB backlit, USB-C charging, Blue switches",
+                price: 149.99,
+
+                CalculateDisc: function (percentage) {
+                    return this.price - this.price * (percentage / 100);
+                },
+
+                displayProductDetails: function (percentage) {
+                    const discPrice = this.CalculateDisc(percentage);
+                    return `📦 Name: ${this.name}\n📝 Description: ${this.description}\n💰 Original Price: $${this.price}\n🏷️  Discounted Price: $${discPrice.toFixed(2)}`;
+                },
+            };
+
+            document.getElementById("calcBtn").addEventListener("click", () => {
+                const percent =
+                    parseFloat(document.getElementById("discPercent").value) ||
+                    0;
+                document.getElementById("output").textContent =
+                    product.displayProductDetails(percent);
+            });
+        </script>
+    </body>
+</html>
