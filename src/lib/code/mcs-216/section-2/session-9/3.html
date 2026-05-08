@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Ex3: Locate Scalpel</title>
+        <style>
+            body {
+                font-family: sans-serif;
+                padding: 20px;
+                max-width: 600px;
+                margin: auto;
+            }
+            pre {
+                background: #f4f4f4;
+                padding: 15px;
+                border-radius: 5px;
+                white-space: pre-wrap;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>🦅 Scalpel Tracker</h2>
+        <button id="findBtn">Find Scalpel</button>
+        <pre id="output">Waiting...</pre>
+
+        <script>
+            // Mock nest data (simulating distributed storage)
+            const nestData = {
+                CrowNestA: { scalpel: "CrowNestB" },
+                CrowNestB: { scalpel: "CrowNestC" },
+                CrowNestC: { scalpel: "CrowNestC" }, // Points to itself → found!
+            };
+
+            // Simulated async anyStorage function
+            function anyStorage(nest, name) {
+                return new Promise((resolve) => {
+                    setTimeout(
+                        () => resolve(nestData[nest]?.[name] || null),
+                        600,
+                    );
+                });
+            }
+
+            // Async locateScalpel implementation
+            async function locateScalpel(startNest) {
+                let current = startNest;
+                let trail = [current];
+
+                while (true) {
+                    const next = await anyStorage(current, "scalpel");
+                    if (next === current) break; // Found the self-referencing nest
+                    trail.push(next);
+                    current = next;
+                }
+                console.log({ foundAt: current, trail: trail.join(" → ") });
+                return { foundAt: current, trail: trail.join(" → ") };
+            }
+
+            document
+                .getElementById("findBtn")
+                .addEventListener("click", async () => {
+                    document.getElementById("output").textContent =
+                        "🔍 Tracing scalpel breadcrumbs...";
+                    const result = await locateScalpel("CrowNestA");
+                    document.getElementById("output").textContent =
+                        `Found at: ${result.foundAt}\n👣 Trail: ${result.trail}`;
+                });
+        </script>
+    </body>
+</html>

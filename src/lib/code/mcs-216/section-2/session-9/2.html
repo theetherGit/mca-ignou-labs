@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Ex2: XHR Loader</title>
+        <style>
+            body {
+                font-family: sans-serif;
+                padding: 20px;
+            }
+            #output {
+                border: 2px dashed #aaa;
+                padding: 20px;
+                margin-top: 15px;
+                background: #fafafa;
+                min-height: 50px;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>External Content Loader (onLoad Event)</h2>
+        <div id="output">Loading external.html...</div>
+
+        <script>
+            window.addEventListener("load", () => {
+                const xhr = new XMLHttpRequest();
+                // true = asynchronous
+                xhr.open("GET", "external.html", true);
+
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        document.getElementById("output").innerHTML =
+                            xhr.responseText;
+                    } else {
+                        document.getElementById("output").textContent =
+                            `❌ Failed to load (Status: ${xhr.status})`;
+                    }
+                };
+
+                xhr.onerror = () => {
+                    document.getElementById("output").textContent =
+                        "❌ Network error. Ensure server is running.";
+                };
+
+                xhr.send();
+            });
+        </script>
+    </body>
+</html>
