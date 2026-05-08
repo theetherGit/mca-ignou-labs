@@ -185,6 +185,10 @@ Create a `product` with properties: ID, Name, Description and Price. The create 
 
 ### Requirements
 
+- Create `product` object with: ID, Name, Description, Price
+- Method `displayProductDetails()` → shows name, description, discounted price
+- Method `CalculateDisc(percentage)` → computes discounted price
+- Discount percentage provided by user
 
 ### Demo
 
