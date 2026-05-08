@@ -2,25 +2,25 @@ import { defineNavigation } from "@ethercorps/kit";
 import ChalkboardTeacher from "phosphor-svelte/lib/ChalkboardTeacherIcon";
 import RocketLaunch from "phosphor-svelte/lib/RocketLaunchIcon";
 import Warning from "phosphor-svelte/lib/WarningIcon";
-import { getAllDocs } from "./utils.js";
+import { getAllDocs, getSectionItems } from "./utils.js";
 import type { Doc } from "$content/index";
 import { preCalculateNavigationNeighbors } from "$lib/navigation-neighbors";
 
-const allDocs = getAllDocs();
+// const allDocs = getAllDocs();
 
-export function getSectionDocs(section: Doc["section"], pathPrefix = "/docs/") {
-  return allDocs
-    .filter((doc) => doc.section === section)
-    .map((doc) => ({
-      title: doc.title,
-      href: `${pathPrefix}${doc.slug}`,
-      description: doc.description,
-    }));
-}
+// export function getSectionDocs(section: Doc["section"], pathPrefix = "/docs/") {
+//   return allDocs
+//     .filter((doc) => doc.section === section)
+//     .map((doc) => ({
+//       title: doc.title,
+//       href: `${pathPrefix}${doc.slug}`,
+//       description: doc.description,
+//     }));
+// }
 
-const mcs216Section1 = getSectionDocs("MCS-216 Section 1");
-const mcs216Section2 = getSectionDocs("MCS-216 Section 2");
-const mcs217 = getSectionDocs("MCS-217");
+const mcs216Section1 = getSectionItems("MCS-216 Section 1");
+const mcs216Section2 = getSectionItems("MCS-216 Section 2");
+const mcs217 = getSectionItems("MCS-217");
 
 export const navigation = defineNavigation({
   anchors: [
