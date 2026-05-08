@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Ex3: Color Cookie</title>
+        <style>
+            body {
+                font-family: sans-serif;
+                padding: 20px;
+                transition: background 0.3s;
+            }
+            select {
+                padding: 8px;
+                font-size: 16px;
+            }
+        </style>
+    </head>
+    <body>
+        <h3>Select Background Color (Persisted via Cookie)</h3>
+        <select id="colorSelect" onchange="applyColor(this.value)">
+            <option value="white">White</option>
+            <option value="#ffeb3b">Yellow</option>
+            <option value="#4caf50">Green</option>
+            <option value="#2196f3">Blue</option>
+            <option value="#9c27b0">Purple</option>
+        </select>
+
+        <script>
+            function setCookie(name, value, days) {
+                const d = new Date();
+                d.setTime(d.getTime() + days * 86400000);
+                document.cookie = `${name}=${value};expires=${d.toUTCString()};path=/`;
+            }
+            function applyColor(color) {
+                document.body.style.backgroundColor = color;
+                setCookie("bgColor", color, 365);
+            }
+            // Restore on load
+            window.onload = () => {
+                const match = document.cookie.match(/bgColor=([^;]+)/);
+                if (match) applyColor(match[1]);
+            };
+        </script>
+    </body>
+</html>

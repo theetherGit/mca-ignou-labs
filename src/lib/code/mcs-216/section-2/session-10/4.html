@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Ex4: Multi-Cookie Manager</title>
+        <style>
+            body {
+                font-family: sans-serif;
+                padding: 20px;
+                max-width: 500px;
+            }
+            input,
+            button {
+                padding: 8px;
+                margin: 4px;
+            }
+            .row {
+                display: flex;
+                gap: 5px;
+                margin-bottom: 10px;
+            }
+            pre {
+                background: #f4f4f4;
+                padding: 10px;
+                border-radius: 5px;
+                white-space: pre-wrap;
+            }
+        </style>
+    </head>
+    <body>
+        <h3>Cookie Manager (Cookie1 & Cookie2)</h3>
+        <div class="row">
+            <input id="val1" placeholder="Value for Cookie1" />
+            <button onclick="set('c1', 'val1')">Set C1</button>
+            <button onclick="get('c1')">Get C1</button>
+            <button onclick="del('c1')">Del C1</button>
+        </div>
+        <div class="row">
+            <input id="val2" placeholder="Value for Cookie2" />
+            <button onclick="set('c2', 'val2')">Set C2</button>
+            <button onclick="get('c2')">Get C2</button>
+            <button onclick="del('c2')">Del C2</button>
+        </div>
+        <button onclick="showAll()" style="margin-top: 10px; width: 100%">
+            Display All Cookies
+        </button>
+        <pre id="out">Ready...</pre>
+
+        <script>
+            function set(name, valId) {
+                if (!name || !valId) {
+                    document.getElementById("out").textContent =
+                        `Provide valid cookie${name[1]} value`;
+                    return;
+                }
+                const v = document.getElementById(valId).value;
+                document.cookie = `cookie${name[1]}=${v};expires=Fri, 31 Dec 2027 23:59:59 GMT;path=/`;
+                document.getElementById("out").textContent =
+                    `Set cookie${name[1]} = ${v}`;
+            }
+            function get(name) {
+                const match = document.cookie.match(
+                    new RegExp(`(^| )cookie${name[1]}=([^;]+)`),
+                );
+                document.getElementById("out").textContent = match
+                    ? `cookie${name[1]} = ${match[2]}`
+                    : `❌ cookie${name[1]} not found`;
+            }
+            function del(name) {
+                document.cookie = `cookie${name[1]}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`;
+                document.getElementById("out").textContent =
+                    `Deleted cookie${name[1]}`;
+            }
+            function showAll() {
+                document.getElementById("out").textContent =
+                    document.cookie || "No cookies stored";
+            }
+        </script>
+    </body>
+</html>

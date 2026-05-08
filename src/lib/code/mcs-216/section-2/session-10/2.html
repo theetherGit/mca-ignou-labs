@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Ex2: Parse Cookies</title>
+        <style>
+            body {
+                font-family: sans-serif;
+                padding: 20px;
+            }
+            ul {
+                list-style: none;
+                padding: 0;
+            }
+            li {
+                background: #f4f4f4;
+                margin: 5px;
+                padding: 10px;
+                border-left: 4px solid #333;
+            }
+        </style>
+    </head>
+    <body>
+        <h3>All Cookies (Name-Value Pairs)</h3>
+        <button id="parseBtn" style="padding: 8px 16px; margin-bottom: 15px">
+            Parse & Display Cookies
+        </button>
+        <ul id="cookieList">
+            <li>No cookies yet</li>
+        </ul>
+
+        <script>
+            document.getElementById("parseBtn").onclick = () => {
+                const raw = document.cookie;
+                const list = document.getElementById("cookieList");
+                list.innerHTML = "";
+                if (!raw) {
+                    list.innerHTML = "<li>No cookies found</li>";
+                    return;
+                }
+
+                raw.split(";").forEach((pair) => {
+                    const [name, value] = pair.split("=").map((s) => s.trim());
+                    if (name)
+                        list.innerHTML += `<li><strong>${name}:</strong> ${value}</li>`;
+                });
+            };
+        </script>
+    </body>
+</html>

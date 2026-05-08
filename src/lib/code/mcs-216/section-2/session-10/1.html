@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Ex1: Set & Get Cookie</title>
+        <style>
+            body {
+                font-family: sans-serif;
+                padding: 20px;
+                max-width: 400px;
+            }
+            input,
+            button {
+                padding: 8px;
+                margin: 5px;
+                width: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <h3>Set & Get Cookie</h3>
+        <input id="cookieVal" type="text" placeholder="Enter cookie value" />
+        <button id="setBtn">Set Cookie</button>
+        <button id="getBtn">Get Cookie</button>
+        <p id="display" style="margin-top: 10px; font-weight: bold"></p>
+
+        <script>
+            function setCookie(name, value, days) {
+                const d = new Date();
+                d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000);
+                document.cookie = `${name}=${value};expires=${d.toUTCString()};path=/`;
+            }
+            function getCookie(name) {
+                const nameEQ = name + "=";
+                const ca = document.cookie.split(";");
+                for (let i = 0; i < ca.length; i++) {
+                    let c = ca[i].trim();
+                    if (c.indexOf(nameEQ) === 0)
+                        return c.substring(nameEQ.length);
+                }
+                return null;
+            }
+
+            document.getElementById("setBtn").onclick = () =>
+                setCookie(
+                    "labCookie1",
+                    document.getElementById("cookieVal").value,
+                    30,
+                );
+            document.getElementById("getBtn").onclick = () =>
+                (document.getElementById("display").textContent =
+                    getCookie("labCookie1") || "❌ No cookie found");
+        </script>
+    </body>
+</html>
