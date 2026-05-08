@@ -203,7 +203,7 @@ Create a `product` with properties: ID, Name, Description and Price. The create 
   id="preview-2"
   title="demo-q-2"
   width="100%"
-  height="350px"
+  height="300px"
   class="mt-5 rounded-xl"
   src="/preview/mcs-216/section-2/session-8/2.html">
 </iframe>
