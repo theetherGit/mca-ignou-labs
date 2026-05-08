@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Ex3: Animal Lookup</title>
+        <style>
+            body {
+                font-family: sans-serif;
+                padding: 20px;
+            }
+            input,
+            button {
+                padding: 8px;
+                margin-right: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>Animal Lookup</h2>
+        <input id="idxInput" type="number" placeholder="Enter index (0-2)" />
+        <button id="lookupBtn">Find Animal</button>
+        <p id="animalRes" style="margin-top: 10px; font-weight: bold"></p>
+        <p id="finallyMsg" style="color: #555"></p>
+
+        <script>
+            const animals = [
+                { id: 0, name: "Lion" },
+                { id: 1, name: "Elephant" },
+                { id: 2, name: "Tiger" },
+            ];
+
+            document
+                .getElementById("lookupBtn")
+                .addEventListener("click", () => {
+                    const idx = parseInt(
+                        document.getElementById("idxInput").value,
+                    );
+                    let animalName = "";
+
+                    try {
+                        const animal = animals[idx];
+                        if (!animal)
+                            throw new TypeError(
+                                `Index ${idx} does not contain an animal.`,
+                            );
+                        animalName = animal.name;
+                        document.getElementById("animalRes").textContent =
+                            `🦁 Animal: ${animalName}`;
+                    } catch (err) {
+                        document.getElementById("animalRes").textContent =
+                            `❌ ${err.message}`;
+                    } finally {
+                        document.getElementById("finallyMsg").textContent =
+                            `📝 Checked index: ${idx} (Executed via finally)`;
+                    }
+                });
+        </script>
+    </body>
+</html>

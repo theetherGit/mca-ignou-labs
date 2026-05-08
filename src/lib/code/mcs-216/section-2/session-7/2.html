@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Ex2: Grade Labs</title>
+        <style>
+            body {
+                font-family: sans-serif;
+                padding: 20px;
+            }
+            pre {
+                background: #f4f4f4;
+                padding: 10px;
+                border-radius: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>Auto-Grader</h2>
+        <button id="gradeBtn">Run gradeLabs()</button>
+        <pre id="results"></pre>
+
+        <script>
+            const students = [
+                { name: "Alice", runLab: () => 2 + 2, expected: 4 },
+                {
+                    name: "Bob",
+                    runLab: () => {
+                        throw new ReferenceError("x is not defined");
+                    },
+                    expected: 5,
+                },
+                { name: "Charlie", runLab: () => 10 / 2, expected: 6 }, // Wrong result
+                { name: "Diana", runLab: () => "5" * 2, expected: 10 }, // Type coercion success
+            ];
+
+            function gradeLabs(students) {
+                let logs = [];
+                for (const s of students) {
+                    try {
+                        const actual = s.runLab();
+                        if (actual === s.expected)
+                            logs.push(`✅ ${s.name}: PASS`);
+                        else
+                            logs.push(
+                                `❌ ${s.name}: FAIL (Got ${actual}, Expected ${s.expected})`,
+                            );
+                    } catch (err) {
+                        logs.push(
+                            `⚠️ ${s.name}: EXCEPTION - ${err.name}: ${err.message}`,
+                        );
+                    }
+                }
+                return logs.join("\n");
+            }
+
+            document
+                .getElementById("gradeBtn")
+                .addEventListener("click", () => {
+                    document.getElementById("results").textContent =
+                        gradeLabs(students);
+                });
+        </script>
+    </body>
+</html>

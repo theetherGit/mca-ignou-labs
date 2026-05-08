@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Ex4: Retry Multiplication</title>
+        <style>
+            body {
+                font-family: sans-serif;
+                padding: 20px;
+            }
+            button {
+                padding: 10px 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>Reliable Multiply</h2>
+        <p>Input: <strong>6 × 7</strong></p>
+        <button id="multiplyBtn">Run Wrapper</button>
+        <p id="res" style="margin-top: 10px; font-weight: bold"></p>
+
+        <script>
+            class MultiplicatorUnitFailure extends Error {
+                constructor(msg) {
+                    super(msg);
+                    this.name = "MultiplicatorUnitFailure";
+                }
+            }
+
+            function primitiveMultiply(a, b) {
+                if (Math.random() < 0.2) return a * b;
+                else
+                    throw new MultiplicatorUnitFailure(
+                        "Random failure (80% chance)",
+                    );
+            }
+
+            function reliableMultiply(a, b) {
+                let attempts = 0;
+                while (true) {
+                    attempts++;
+                    try {
+                        return { result: primitiveMultiply(a, b), attempts };
+                    } catch (e) {
+                        if (!(e instanceof MultiplicatorUnitFailure)) throw e; // Re-throw unknown errors
+                    }
+                }
+            }
+
+            document
+                .getElementById("multiplyBtn")
+                .addEventListener("click", () => {
+                    const { result, attempts } = reliableMultiply(6, 7);
+                    document.getElementById("res").textContent =
+                        `✅ Result: ${result} (Took ${attempts} attempt${attempts > 1 ? "s" : ""})`;
+                });
+        </script>
+    </body>
+</html>

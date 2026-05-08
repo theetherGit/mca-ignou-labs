@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Ex1: Division Error Handling</title>
+        <style>
+            body {
+                font-family: sans-serif;
+                padding: 20px;
+                max-width: 400px;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>Divide a / b</h2>
+        <input
+            id="numA"
+            type="number"
+            placeholder="Number a"
+            style="width: 100%; margin-bottom: 8px; padding: 5px"
+        />
+        <input
+            id="numB"
+            type="number"
+            placeholder="Number b"
+            style="width: 100%; margin-bottom: 8px; padding: 5px"
+        />
+        <button id="calcBtn" style="padding: 8px 16px">Calculate</button>
+        <p id="output" style="margin-top: 10px; font-weight: bold"></p>
+
+        <script>
+            document.getElementById("calcBtn").addEventListener("click", () => {
+                try {
+                    const a = parseFloat(document.getElementById("numA").value);
+                    const b = parseFloat(document.getElementById("numB").value);
+
+                    if (isNaN(a) || isNaN(b))
+                        throw new TypeError(
+                            "Both fields must be valid numbers.",
+                        );
+                    if (b === 0)
+                        throw new RangeError("Division by zero is undefined.");
+
+                    document.getElementById("output").textContent =
+                        `Result: ${a / b}`;
+                } catch (err) {
+                    document.getElementById("output").textContent =
+                        `❌ Error (${err.name}): ${err.message}`;
+                }
+            });
+        </script>
+    </body>
+</html>
