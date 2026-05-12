@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     let a = $state(""),
         b = $state(""),
         output = $state("");
@@ -12,7 +12,8 @@
             if (numB === 0) throw new RangeError("Division by zero");
             output = `✅ Result: ${numA / numB}`;
         } catch (err) {
-            output = `❌ Error (${err.name}): ${err.message}`;
+            const error = err instanceof Error ? err : new Error(String(err));
+            output = `❌ Error (${error.name}): ${error.message}`;
         }
     }
 </script>

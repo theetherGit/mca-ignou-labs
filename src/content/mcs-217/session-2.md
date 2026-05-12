@@ -12,7 +12,7 @@ section: MCS-217
 
 ## Problem Statement
 
-Estimate the effort and cost required to build the above software ([session-1](https://syntax.theether.in/docs/mcs-217/section-1)). Use any estimation technique.
+Estimate the effort and cost required to build the above software ([session-1](https://syntax.theether.in/docs/mcs-217/session-1)). Use any estimation technique.
 
 ## Estimation of RRS
 

@@ -1,11 +1,29 @@
 <script lang="ts">
-    // OOP Classes (Lab Requirement)
-    let title, author, copyrightDate, ISBN, pages;
+    type BookStatus = {
+        discarded: boolean;
+    };
+
+    type ManualStatus = BookStatus & {
+        age: number;
+    };
+
+    type NovelStatus = BookStatus & {
+        count: number;
+    };
+
     class Book {
+        title: string;
+        author: string;
+        copyrightDate: number;
+        ISBN: string;
+        pages: number;
+        checkoutCount = 0;
+        discarded = false;
+
         constructor(
             title: string,
             author: string,
-            copyrightDate: Date,
+            copyrightDate: number,
             ISBN: string,
             pages: number,
         ) {
@@ -20,10 +38,7 @@
     }
 
     class Manual extends Book {
-        constructor(...args) {
-            super(...args);
-        }
-        checkAndDiscardByAge() {
+        checkAndDiscardByAge(): ManualStatus {
             const age = new Date().getFullYear() - this.copyrightDate;
             if (age > 5) this.discarded = true;
             return { age, discarded: this.discarded };
@@ -31,10 +46,7 @@
     }
 
     class Novel extends Book {
-        constructor(...args) {
-            super(...args);
-        }
-        updateCheckoutAndCheck() {
+        updateCheckoutAndCheck(): NovelStatus {
             this.checkoutCount++;
             if (this.checkoutCount > 100) this.discarded = true;
             return { count: this.checkoutCount, discarded: this.discarded };
@@ -42,8 +54,8 @@
     }
 
     // Reactive State
-    let manualStatus = $state(null);
-    let novelStatus = $state(null);
+    let manualStatus = $state<ManualStatus | null>(null);
+    let novelStatus = $state<NovelStatus | null>(null);
     let logs: string[] = $state([]);
 
     function runSimulation() {
@@ -69,10 +81,15 @@
             discarded: novel.discarded,
         };
 
-        logs = [
-            `Manual "${manual.title}" age: ${manualStatus.age} yrs → ${manualStatus.discarded ? "Discarded" : "Active"}`,
-            `Novel "${novel.title}" checkouts: ${novelStatus.count} → ${novelStatus.discarded ? "Discarded" : "Active"}`,
-        ];
+        const currentManualStatus = manualStatus;
+        const currentNovelStatus = novelStatus;
+
+        if (currentManualStatus && currentNovelStatus) {
+            logs = [
+                `Manual "${manual.title}" age: ${currentManualStatus.age} yrs → ${currentManualStatus.discarded ? "Discarded" : "Active"}`,
+                `Novel "${novel.title}" checkouts: ${currentNovelStatus.count} → ${currentNovelStatus.discarded ? "Discarded" : "Active"}`,
+            ];
+        }
     }
 </script>
 

@@ -40,17 +40,17 @@ The total time spent in jobs by the system is the sum of the finishing times of 
 ### Implementation
 
 ### Python
-```python title="task-scheduling.py" showLineNumbers file=../../../lib/code/mcs-216/session-3/1/1.py 
+```python title="task-scheduling.py" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-3/1/1.py 
 
 ```
 
 ### C Language
-```c title="task-scheduling.c" showLineNumbers file=../../../lib/code/mcs-216/session-3/1/1.c 
+```c title="task-scheduling.c" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-3/1/1.c 
 
 ```
 
 ### Rust
-```rust title="task-scheduling.rs" showLineNumbers file=../../../lib/code/mcs-216/session-3/1/1.rs
+```rust title="task-scheduling.rs" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-3/1/1.rs
 
 ```
 
@@ -82,17 +82,17 @@ The total time spent in the system can be calculated as follows:
 ### Implementation
 
 ### Python
-```python title="task-scheduling.py" showLineNumbers file=../../../lib/code/mcs-216/session-3/2/2.py 
+```python title="task-scheduling.py" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-3/2/2.py 
 
 ``` 
 
 ### C Language
-```c title="task-scheduling.c" showLineNumbers file=../../../lib/code/mcs-216/session-3/2/2.c 
+```c title="task-scheduling.c" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-3/2/2.c 
 
 ```
 
 ### Rust
-```rust title="task-scheduling.rs" showLineNumbers file=../../../lib/code/mcs-216/session-3/2/2.rs
+```rust title="task-scheduling.rs" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-3/2/2.rs
 
 ```
 
@@ -128,17 +128,17 @@ To maximize the total profits while scheduling jobs with deadlines, we can use a
 ### Implementation
 
 ### Python
-```python title="task-scheduling.py" showLineNumbers file=../../../lib/code/mcs-216/session-3/3/3.py 
+```python title="task-scheduling.py" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-3/3/3.py 
 
 ```
 
 ### C Language
-```c title="task-scheduling.c" showLineNumbers file=../../../lib/code/mcs-216/session-3/3/3.c 
+```c title="task-scheduling.c" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-3/3/3.c 
 
 ```
 
 ### Rust
-```rust title="task-scheduling.rs" showLineNumbers file=../../../lib/code/mcs-216/session-3/3/3.rs
+```rust title="task-scheduling.rs" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-3/3/3.rs
 
 ```
 

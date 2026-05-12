@@ -3,9 +3,11 @@
     import TimetablePage from "./timetable-page.svelte";
 
     // Svelte 5 rune for reactive state
-    let activeYear: number | null = $state(null);
+    type Year = 1 | 2 | 3 | 4;
 
-    function navigateTo(year: number) {
+    let activeYear: Year | null = $state(null);
+
+    function navigateTo(year: Year | null) {
         activeYear = year;
     }
 </script>

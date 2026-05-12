@@ -69,7 +69,7 @@ export async function getDoc(slug: string = "index") {
 export function getSectionItems(
   sectionName: Doc["section"],
   doSort = true,
-): Record<"title" | "href", string>[] {
+): Record<"title" | "href" | "description", string>[] {
   let items = getAllDocs().filter((doc) => doc.section === sectionName);
 
   if (doSort) {

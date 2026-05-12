@@ -66,17 +66,17 @@ Using your data: A(10), B(7), I(15), M(8), S(10), X(5), Z(2).
 ### Implementation
 
 ### Python
-```python title="huffman.py" showLineNumbers file=../../../lib/code/mcs-216/session-4/1/1.py 
+```python title="huffman.py" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-4/1/1.py 
 
 ```
 
 ### C Language
-```c title="huffman.c" showLineNumbers file=../../../lib/code/mcs-216/session-4/1/1.c 
+```c title="huffman.c" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-4/1/1.c 
 
 ```
 
 ### Rust
-```rust title="huffman.rs" showLineNumbers file=../../../lib/code/mcs-216/session-4/1/1.rs
+```rust title="huffman.rs" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-4/1/1.rs
 
 ```
 
@@ -107,7 +107,7 @@ Z          | 2          | 0110
 
 ### Problem Statement
 
-Implement Hiffman's coding algorithm and run the priblem instance of Q1
+Implement Huffman's coding algorithm and run it on the problem instance of Q1.
 
 ### Implementation
 
@@ -121,7 +121,7 @@ Implement Hiffman's coding algorithm and run the priblem instance of Q1
 
 ### Problem Statement
 
-What us an optimal binary tree and Huffman code for the following set of frequencies? Find out an average number of bits required per character. Show complete steps.
+What is an optimal binary tree and Huffman code for the following set of frequencies? Find out the average number of bits required per character. Show complete steps.
 
 A:15 B:25 C:5 D:7 E:10 F:13 G:9
 
@@ -190,17 +190,17 @@ Average Bits = Total Bits / Total Frequency
 ### Implementations
 
 ### Python
-```python title="huffman.py" showLineNumbers file=../../../lib/code/mcs-216/session-4/3/3.py 
+```python title="huffman.py" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-4/3/3.py 
 
 ```
 
 ### C Language
-```c title="huffman.c" showLineNumbers file=../../../lib/code/mcs-216/session-4/3/3.c 
+```c title="huffman.c" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-4/3/3.c 
 
 ```
 
 ### Rust
-```rust title="huffman.rs" showLineNumbers file=../../../lib/code/mcs-216/session-4/3/3.rs
+```rust title="huffman.rs" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-4/3/3.rs
 
 ```
 
@@ -331,17 +331,17 @@ Average Bits = Total Bits / Total Frequency
 ### Implementations
 
 ### Python
-```python title="huffman.py" showLineNumbers file=../../../lib/code/mcs-216/session-4/4/4.py 
+```python title="huffman.py" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-4/4/4.py 
 
 ```
 
 ### C Language
-```c title="huffman.c" showLineNumbers file=../../../lib/code/mcs-216/session-4/4/4.c 
+```c title="huffman.c" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-4/4/4.c 
 
 ```
 
 ### Rust
-```rust title="huffman.rs" showLineNumbers file=../../../lib/code/mcs-216/session-4/4/4.rs
+```rust title="huffman.rs" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-4/4/4.rs
 
 ```
 

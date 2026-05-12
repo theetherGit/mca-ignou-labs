@@ -1,15 +1,20 @@
 <script lang="ts">
+    type Year = 1 | 2 | 3 | 4;
+
     let {
         year,
         navigateTo,
-    }: { year: number; navigateTo: (year: number) => void } = $props();
+    }: { year: Year; navigateTo: (year: Year | null) => void } = $props();
 
     const days = ["Mon", "Tue", "Wed", "Thu", "Fri"];
     const getSuffix = (n: number) =>
         n === 1 ? "st" : n === 2 ? "nd" : n === 3 ? "rd" : "th";
 
     // Year-specific configuration (data + Tailwind header classes)
-    const yearConfig = {
+    const yearConfig: Record<
+        Year,
+        { header: string; slots: string[][] }
+    > = {
         1: {
             header: "bg-blue-600 text-white",
             slots: [

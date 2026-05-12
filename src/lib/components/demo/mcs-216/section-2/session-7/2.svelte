@@ -28,9 +28,11 @@
                     msg: `${s.name}: ${actual === s.expected ? "✅" : "❌"} (Got ${actual})`,
                 });
             } catch (err) {
+                const error =
+                    err instanceof Error ? err : new Error(String(err));
                 results.push({
                     status: "ERROR",
-                    msg: `${s.name}: ⚠️ ${err.name}`,
+                    msg: `${s.name}: ⚠️ ${error.name}`,
                 });
             }
         }

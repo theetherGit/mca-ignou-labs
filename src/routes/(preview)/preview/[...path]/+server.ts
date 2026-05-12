@@ -54,7 +54,7 @@ export const GET: RequestHandler = async ({ params }) => {
     const contentType = fileTypeToContentTypeMap[fileExt];
 
     if (imageTypes.includes(fileExt)) {
-      const module = await imageModules[targetPath]();
+      const module = (await imageModules[targetPath]()) as { default: string };
       const publicUrl = module.default as string;
       return new Response(null, {
         status: 302,
@@ -62,7 +62,7 @@ export const GET: RequestHandler = async ({ params }) => {
       });
     }
 
-    const module = await modules[targetPath]();
+    const module = (await modules[targetPath]()) as { default: string };
 
     return new Response(module.default, {
       headers: {

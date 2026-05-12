@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     let idxInput = $state("");
     let animalRes = $state("");
     let finallyMsg = $state("");
@@ -17,7 +17,8 @@
                 throw new TypeError(`Index ${idx} does not contain an animal.`);
             animalRes = `🦁 Animal: ${animal.name}`;
         } catch (err) {
-            animalRes = `❌ ${err.message}`;
+            const error = err instanceof Error ? err : new Error(String(err));
+            animalRes = `❌ ${error.message}`;
         } finally {
             finallyMsg = `📝 Checked index: ${idxInput} (Executed via finally)`;
         }

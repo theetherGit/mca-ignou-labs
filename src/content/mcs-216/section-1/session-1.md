@@ -11,7 +11,7 @@ section: MCS-216 Section 1
 
 <PrintButton />
 
-This session is to implement small problems such as Euclid's Algorithm for GCD, polynomial expression evaluation through Horner's method, algorithms for evaluation of exponentiation and simple sorting algorithms. Selection sort bengs by finding the least element in the arrat which is moved to first position. Then the second least element is searched for and moved to the second position in the array. This process continues until the entire array is sorted.
+This session is to implement small problems such as Euclid's Algorithm for GCD, polynomial expression evaluation through Horner's method, algorithms for evaluation of exponentiation and simple sorting algorithms. Selection sort begins by finding the least element in the array, which is moved to the first position. Then the second least element is searched for and moved to the second position in the array. This process continues until the entire array is sorted.
 
 ## Objective
 
@@ -23,7 +23,7 @@ This session is to implement small problems such as Euclid's Algorithm for GCD, 
 
 ## 1. Euclid's Algorithm
 
-Q1: Implement Euclid's Algorithm to find GCD(15265, 15) and calculate the number of times mod and assigment operations will be required.
+Q1: Implement Euclid's Algorithm to find GCD(15265, 15) and calculate the number of times mod and assignment operations will be required.
 
 ### What is Euclid's algorithm?
 
@@ -51,17 +51,17 @@ The algorithm follows a simple recursive process:
 The GCD is 6.
 
 ### Python Implementation
-```python title="Euclid.py" showLineNumbers file=../../../lib/code/mcs-216/session-1/1/1.py 
+```python title="Euclid.py" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-1/1/1.py 
 
 ```
 
 ### C Implementation
-```c title="Euclid.c" showLineNumbers file=../../../lib/code/mcs-216/session-1/1/1.c 
+```c title="Euclid.c" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-1/1/1.c 
 
 ```
 
 ### Rust Implementation
-```rust title="Euclid.rs" showLineNumbers file=../../../lib/code/mcs-216/session-1/1/1.rs
+```rust title="Euclid.rs" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-1/1/1.rs
 
 ```
 
@@ -120,23 +120,23 @@ P(3) = (((((6 * 3 + 5) * 3 + 4) * 3 - 3) * 3 + 2) * 3 + 8) * 3 - 7
 | 3 | (33×2)+(−7) | 59 |
 
 ### Python Implementation
-```python title="horners-method.py" showLineNumbers file=../../../lib/code/mcs-216/session-1/2/2-horner.py 
+```python title="horners-method.py" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-1/2/2-horner.py 
 
 ```
 
 ### C Implementation
-```c title="horners-method.c" showLineNumbers file=../../../lib/code/mcs-216/session-1/2/2-horner.c 
+```c title="horners-method.c" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-1/2/2-horner.c 
 
 ```
 
 ### Rust Implementation
-```rust title="horners-method.rs" showLineNumbers file=../../../lib/code/mcs-216/session-1/2/2-horner.rs
+```rust title="horners-method.rs" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-1/2/2-horner.rs
 
 ```
 
 ## 2. (ii) Brute Force Method
 
-Q2 (ii): Apply a brute force method to implement the above ploynomial expression from 2(i) and compare  it with horner's methodin terms of number of multiplication operations.
+Q2 (ii): Apply a brute force method to implement the above polynomial expression from 2(i) and compare it with Horner's method in terms of number of multiplication operations.
 
 ### What is Brute Force Method?
 
@@ -163,17 +163,17 @@ In Brute Force, for each term `a_k * x^k`, you calculate `x` multiplied by itsel
 Total Multiplications: `2 + 1 = 3`. (Horner would only use 2).
 
 ### Python Implementation
-```python title="horners-method.py" showLineNumbers file=../../../lib/code/mcs-216/session-1/2/2-brute.py 
+```python title="horners-method.py" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-1/2/2-brute.py 
 
 ```
 
 ### C Implementation
-```c title="horners-method.c" showLineNumbers file=../../../lib/code/mcs-216/session-1/2/2-brute.c 
+```c title="horners-method.c" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-1/2/2-brute.c 
 
 ```
 
 ### Rust Implementation
-```rust title="horners-method.rs" showLineNumbers file=../../../lib/code/mcs-216/session-1/2/2-brute.rs
+```rust title="horners-method.rs" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-1/2/2-brute.rs
 
 ```
 
@@ -201,7 +201,7 @@ Total Multiplications: `2 + 1 = 3`. (Horner would only use 2).
 
 ## 3. Matrix Multiplication
 
-Q3: Implement matrix multiplication of two matrices A[4,4] & B[4,4] abd calculate: <br />
+Q3: Implement matrix multiplication of two matrices A[4,4] & B[4,4] and calculate: <br />
 (i) how many times the inner-most and outer-most loops will run <br />
 (ii) total number of multiplications and additions in computing the multiplication
 
@@ -262,17 +262,17 @@ For `n=4`:
 
 
 ### Python Implementation
-```python title="matrix-multiplation.py" showLineNumbers file=../../../lib/code/mcs-216/session-1/3/3.py 
+```python title="matrix-multiplation.py" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-1/3/3.py 
 
 ```
 
 ### C Implementation
-```c title="matrix-multiplation.c" showLineNumbers file=../../../lib/code/mcs-216/session-1/3/3.c 
+```c title="matrix-multiplation.c" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-1/3/3.c 
 
 ```
 
 ### Rust Implementation
-```rust title="matrix-multiplation.rs" showLineNumbers file=../../../lib/code/mcs-216/session-1/3/3.rs
+```rust title="matrix-multiplation.rs" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-1/3/3.rs
 
 ```
 
@@ -296,15 +296,15 @@ The algorithm can be implemented in two ways: left-to-right and right-to-left.
 - For example, for `4^512`, the exponent `512` in binary is `1000000000`, which has 1 bit set to 1. For `3^31`, the exponent `31` in binary is `11111`, which has 5 bits set to 1.
 
 ### Python Implementation
-```python title="binary-exponentiation.py" showLineNumbers file=../../../lib/code/mcs-216/session-1/4/4.py 
+```python title="binary-exponentiation.py" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-1/4/4.py 
 
 ```
 ### C Implementation
-```c title="binary-exponentiation.c" showLineNumbers file=../../../lib/code/mcs-216/session-1/4/4.c 
+```c title="binary-exponentiation.c" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-1/4/4.c 
 
 ```
 ### Rust Implementation
-```rust title="binary-exponentiation.rs" showLineNumbers file=../../../lib/code/mcs-216/session-1/4/4.rs
+```rust title="binary-exponentiation.rs" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-1/4/4.rs
 ```
 
 ## 5. Bubble Sort
@@ -324,16 +324,16 @@ Bubble Sort is a simple sorting algorithm that repeatedly steps through the list
 - The number of exchanges depends on the initial order of the elements. In the worst case (when the list is in reverse order), the number of exchanges is also `n(n-1)/2`.
 
 ### Python Implementation
-```python title="bubble-sort.py" showLineNumbers file=../../../lib/code/mcs-216/session-1/5/5.py 
+```python title="bubble-sort.py" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-1/5/5.py 
 
 ```
 
 ### C Implementation
-```c title="bubble-sort.c" showLineNumbers file=../../../lib/code/mcs-216/session-1/5/5.c
+```c title="bubble-sort.c" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-1/5/5.c
 ```
 
 ### Rust Implementation
-```rust title="bubble-sort.rs" showLineNumbers file=../../../lib/code/mcs-216/session-1/5/5.rs
+```rust title="bubble-sort.rs" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-1/5/5.rs
 
 ```
 
@@ -351,17 +351,17 @@ Selection Sort is a simple comparison-based sorting algorithm. It divides the in
 - The number of exchanges is `n-1` in the worst case, as each element is moved at most once.
 
 ### Python Implementation
-```python title="selection-sort.py" showLineNumbers file=../../../lib/code/mcs-216/session-1/6/6.py 
+```python title="selection-sort.py" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-1/6/6.py 
 
 ```
 
 ### C Implementation
-```c title="selection-sort.c" showLineNumbers file=../../../lib/code/mcs-216/session-1/6/6.c
+```c title="selection-sort.c" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-1/6/6.c
 
 ```
 
 ### Rust Implementation
-```rust title="selection-sort.rs" showLineNumbers file=../../../lib/code/mcs-216/session-1/6/6.rs
+```rust title="selection-sort.rs" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-1/6/6.rs
 
 ```
 

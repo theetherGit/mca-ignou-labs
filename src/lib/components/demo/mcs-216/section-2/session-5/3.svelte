@@ -1,9 +1,10 @@
-<script>
+<script lang="ts">
     let inputVal = $state("");
     let displayVal = $state("");
 
-    function handleUpper(e) {
-        inputVal = e.target.value.toUpperCase();
+    function handleUpper(e: Event) {
+        const target = e.target as HTMLInputElement;
+        inputVal = target.value.toUpperCase();
         displayVal = inputVal;
     }
 </script>

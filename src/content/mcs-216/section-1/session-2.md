@@ -70,7 +70,7 @@ Maximum Knapsack Capacity = 18 <br />
 #### Question 2
 (P1, P2, P3, P4, P5) = (20, 30, 40, 32, 55) <br />
 (W1, W2, W3, W4, W5) = (5, 8, 10, 12, 15) <br />
-Maximum Knapsack Capacity = 50 <br />
+Maximum Knapsack Capacity = 20 <br />
 
 #### Question 3
 (P1, P2, P3, P4, P5, P6, P7) = (12, 10, 8, 11, 14, 7, 9) <br />
@@ -80,17 +80,17 @@ Maximum Knapsack Capacity = 15 <br />
 ## Implementation
 
 ### Python
-```python title="Knapsack.py" showLineNumbers file=../../../lib/code/mcs-216/session-2/knapsack.py 
+```python title="Knapsack.py" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-2/knapsack.py 
 
 ```
 
 ### C Language
-```c title="Knapsack.c" showLineNumbers file=../../../lib/code/mcs-216/session-2/knapsack.c 
+```c title="Knapsack.c" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-2/knapsack.c 
 
 ```
 
 ### Rust
-```rust title="Knapsack.rs" showLineNumbers file=../../../lib/code/mcs-216/session-2/knapsack.rs
+```rust title="Knapsack.rs" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-2/knapsack.rs
 
 ```
 

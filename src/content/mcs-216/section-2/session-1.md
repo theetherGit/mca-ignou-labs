@@ -14,7 +14,7 @@ section: MCS-216 Section 2
 
 Javascript is a high-level, interpreted programming language that is widely used for web development. It was created by Brendan Eich in 1995 and has since become one of the most popular programming languages in the world. JavaScript is primarily used for client-side scripting, allowing developers to create interactive and dynamic web pages. It can also be used on the server-side with environments like Node.js, Deno, Bun and Cloudflare Workers (don't mix with web workers).
 
-In this session, we will introduce the basic JavsScript constructs, conditional statements amd control flow statements. Lab manual inlcudes good examples and exercises to practice these concepts.
+In this session, we will introduce the basic JavaScript constructs, conditional statements and control flow statements. The lab manual includes good examples and exercises to practice these concepts.
 
 <Callout type="tip" icon={InfoIcon} title="Suggestion">
     <!--- space here --->
@@ -27,9 +27,9 @@ In this session, we will introduce the basic JavsScript constructs, conditional 
 
 The objectives of this session are to:
 - Understand the basic JavaScript constructs
-- Unserstand Conditional statements and control flow statements
+- Understand conditional statements and control flow statements
 
-## Arthimetic Operators
+## Arithmetic Operators
 
 ### Problem Statement
 

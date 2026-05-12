@@ -12,9 +12,9 @@
         Exercise 4: Image Mouse Events
     </h2>
 
-    <img
-        src={imgSrc}
-        alt="Interactive"
+    <button
+        type="button"
+        aria-label="Interactive image event target"
         onmouseover={() => {
             imgSrc = "https://placehold.co/200x200/3498db/fff?text=Mouse+Over";
             eventLog = "Event: mouseover";
@@ -37,8 +37,14 @@
         }}
         onblur={() => (imgSrc = defaultSrc)}
         onfocus={() => {}}
-        class="border-4 border-gray-300 rounded-xl cursor-pointer transition-transform duration-150 hover:scale-105"
-    />
+        class="rounded-xl transition-transform duration-150 hover:scale-105"
+    >
+        <img
+            src={imgSrc}
+            alt="Interactive"
+            class="border-4 border-gray-300 rounded-xl cursor-pointer"
+        />
+    </button>
 
     <p class="text-sm italic text-gray-500">{eventLog}</p>
 </div>
