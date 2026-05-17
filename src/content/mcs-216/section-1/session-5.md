@@ -67,6 +67,23 @@ binarySearch(0, 9)
 - Time complexity: `O(log n)`
 - Space complexity: `O(log n)` due to recursive call stack
 
+### Implementation
+
+### Python
+```python title="task-scheduling.py" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/1/1.py 
+
+```
+
+### C Language
+```c title="task-scheduling.c" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/1/1.c 
+
+```
+
+### Rust
+```rust title="task-scheduling.rs" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/1/1.rs
+
+```
+
 ## Question 2
 
 ### Problem Statement
@@ -77,7 +94,7 @@ Suppose we are required to search among 512 million items in a list using binary
 
 Binary search needs at most `ceil(log2 n)` comparisons.
 
-```text
+```js
 n = 512,000,000
 log2(512,000,000) is slightly less than 29
 Maximum searches = 29
@@ -124,6 +141,23 @@ Merge sort divides the list into two halves until each sublist has one element, 
       └─ [5]
 ```
 
+### Implementation
+
+### Python
+```python title="task-scheduling.py" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/3/3.py 
+
+```
+
+### C Language
+```c title="task-scheduling.c" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/3/3.c 
+
+```
+
+### Rust
+```rust title="task-scheduling.rs" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/3/3.rs
+
+```
+
 ### Final Merge Result
 
 ```text
@@ -144,11 +178,62 @@ Implement Quick Sort's algorithm to sort the following list and show step-by-ste
 
 Choose a pivot, partition the list so smaller elements move before the pivot and larger elements move after it, then recursively sort the two partitions.
 
-### Expected Sorted Output
+### Recursive Split Tree
+
+> Here, we are using array index for understanding how the loop will work for quicksort.
+
+```sh
+quickSort(0,9) pivot=15
+│
+├─ quickSort(0,3) pivot=6
+│  ├─ quickSort(0,-1) → base case
+│  └─ quickSort(1,3) pivot=12
+│     ├─ quickSort(1,2) pivot=10
+│     │  ├─ quickSort(1,1) → base case
+│     │  └─ quickSort(3,2) → base case
+│     └─ quickSort(4,3) → base case
+│
+└─ quickSort(5,9) pivot=25
+   ├─ quickSort(5,8) pivot=16
+   │  ├─ quickSort(5,4) → base case
+   │  └─ quickSort(6,8) pivot=18
+   │     ├─ quickSort(6,5) → base case
+   │     └─ quickSort(7,8) pivot=20
+   │        ├─ quickSort(7,6) → base case
+   │        └─ quickSort(8,7) → base case
+   └─ quickSort(10,9) → base case
+```
+
+### Python
+```python title="task-scheduling.py" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/4/4.py 
+
+```
+
+### C Language
+```c title="task-scheduling.c" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/4/4.c 
+
+```
+
+### Rust
+```rust title="task-scheduling.rs" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/4/4.rs
+
+```
+
+### Final Sorted Output
 
 ```text
 6 8 10 12 15 16 18 20 22 25
 ```
+
+### Complexity
+| Metric | Value | Explanation |
+|--------|-------|-------------|
+| Best Case Time | O(n log n) | Pivot divides array evenly every time |
+| Average Case Time | O(n log n) | Random/pivot selection yields balanced partitions |
+| Worst Case Time | O(n²) | Already sorted/reverse sorted + last/first pivot |
+| Space Complexity | O(log n) | Recursion stack depth (average) |
+| Stable Sort | No | Relative order of equal elements may change |
+| In-Place | Yes | Sorts within original array (no extra arrays) |
 
 ## Question 5
 
@@ -176,22 +261,77 @@ For `n = 10`, the worst-case comparison count is:
 10 * 9 / 2 = 45
 ```
 
+### Performance Summary
+
+| Metric | Count Formula/Explanation | 
+|--------|---------------------------|
+| Total Comparisons | 45 | Σ(k) for k=1 to 9 = 9+8+7+...+1 = n(n-1)/2 |
+| Meaningful Swaps (i≠j) | 0 | All elements ≤ pivot → no cross-partition swaps |
+| Self-Swaps (i=j) | 45 Each comparison where arr[j]≤pivot triggers swap with itself |
+| Final Pivot Placements | 9 | One per partition call (all self-swaps) |
+| Total Loop Iterations | 45 | Sum of j-loop iterations across all partitions |
+| Recursive Calls | 10 | n calls for sorted input (worst-case depth) |
+| Recursion Depth | 10 | Linear depth instead of log n |
+
+
+### Mathematical Verification
+
+```rs
+For n = 10, sorted array, Lomuto partition:
+
+Comparisons = (n-1) + (n-2) + ... + 1 + 0
+            = Σ(k) for k=0 to n-1
+            = n(n-1)/2
+            = 10×9/2 = 45 ✓
+
+Swaps (meaningful) = 0  (since array is already partitioned)
+
+Time Complexity = O(n²) ← Worst Case
+Space Complexity = O(n) ← Recursion stack depth
+```
+
 ## Question 6
 
 ### Problem Statement
 
 Implement Strassen's multiplication algorithm for two `n x n` matrices, where `n` is a power of 2, on different problem instances and compare all instances in terms of number of multiplications and additions required.
 
-### Concept
+### Strassen’s Algorithm
 
 Traditional matrix multiplication performs `8` multiplications for two `2 x 2` matrices. Strassen's method reduces this to `7` multiplications by using additional additions and subtractions.
 
-### Comparison
+```rs
+M1 = (A11 + A22) × (B11 + B22)
+M2 = (A21 + A22) × B11
+M3 = A11 × (B12 - B22)
+M4 = A22 × (B21 - B11)
+M5 = (A11 + A12) × B22
+M6 = (A21 - A11) × (B11 + B12)
+M7 = (A12 - A22) × (B21 + B22)
+```
+
+#### Comparison
 
 | Method | Multiplications | Additions/Subtractions | Time Complexity |
 | ------ | --------------- | ---------------------- | --------------- |
 | Classical multiplication | 8 subproblems | Fewer additions | `O(n^3)` |
 | Strassen multiplication | 7 subproblems | More additions/subtractions | `O(n^2.807)` |
+
+### Python
+```python title="task-scheduling.py" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/6/6.py 
+
+```
+
+### C Language
+```c title="task-scheduling.c" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/6/6.c 
+
+```
+
+### Rust
+```rust title="task-scheduling.rs" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/6/6.rs
+
+```
+
 
 ## Viva Questions
 
@@ -199,10 +339,3 @@ Traditional matrix multiplication performs `8` multiplications for two `2 x 2` m
 - Why is merge sort stable?
 - What causes Quick Sort's worst case?
 - Why does Strassen's method reduce multiplication count?
-
-## Common Mistakes
-
-- Applying binary search to an unsorted list.
-- Showing only final sorted output without recursive steps.
-- Ignoring the pivot strategy while analyzing Quick Sort.
-- Comparing Strassen only by multiplication count and ignoring extra additions.
