@@ -40,6 +40,14 @@ A single-source shortest path algorithm finds the minimum distance from one star
 2. Relax every edge `V - 1` times.
 3. Run one more relaxation pass to detect a negative cycle.
 
+## Common statement
+
+> It's for all three questions in this sessions.
+
+Implement Dijkstra’s algorithm to find the single source shortest path algorithm from different sources to the rest of nodes in the following graph and show allthe intermediate processes: 
+
+<img src="/216-sc1-ss6.png">
+
 ## Question 1
 
 ### Problem Statement
