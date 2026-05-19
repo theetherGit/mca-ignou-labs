@@ -317,6 +317,8 @@ M7 = (A12 - A22) × (B21 + B22)
 | Classical multiplication | 8 subproblems | Fewer additions | `O(n^3)` |
 | Strassen multiplication | 7 subproblems | More additions/subtractions | `O(n^2.807)` |
 
+### Implementation
+
 ### Python
 ```python title="task-scheduling.py" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/6/6.py 
 
