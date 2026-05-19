@@ -34,7 +34,9 @@ Kruskal's algorithm sorts all edges by weight and repeatedly picks the smallest 
 
 ### Problem Statement
 
-Implement Prim's algorithm to find a minimum cost spanning tree in the given graph. Show all the processes.
+Implement Prim's algorithm to find a minimum cost spanning tree(MCST) in the given graph. Show all the processes.
+
+<img src="/216-sc1-ss7-1.png" class="mt-5 rounded-xl">
 
 ### Explanation / Approach
 

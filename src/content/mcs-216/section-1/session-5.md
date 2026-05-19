@@ -70,17 +70,17 @@ binarySearch(0, 9)
 ### Implementation
 
 ### Python
-```python title="task-scheduling.py" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/1/1.py 
+```python title="binary-search.py" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/1/1.py 
 
 ```
 
 ### C Language
-```c title="task-scheduling.c" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/1/1.c 
+```c title="binary-search.c" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/1/1.c 
 
 ```
 
 ### Rust
-```rust title="task-scheduling.rs" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/1/1.rs
+```rust title="binary-search.rs" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/1/1.rs
 
 ```
 
@@ -144,17 +144,17 @@ Merge sort divides the list into two halves until each sublist has one element, 
 ### Implementation
 
 ### Python
-```python title="task-scheduling.py" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/3/3.py 
+```python title="merge-sort.py" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/3/3.py 
 
 ```
 
 ### C Language
-```c title="task-scheduling.c" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/3/3.c 
+```c title="merge-sort.c" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/3/3.c 
 
 ```
 
 ### Rust
-```rust title="task-scheduling.rs" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/3/3.rs
+```rust title="merge-sort.rs" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/3/3.rs
 
 ```
 
@@ -205,17 +205,17 @@ quickSort(0,9) pivot=15
 ```
 
 ### Python
-```python title="task-scheduling.py" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/4/4.py 
+```python title="quick-sort.py" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/4/4.py 
 
 ```
 
 ### C Language
-```c title="task-scheduling.c" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/4/4.c 
+```c title="quick-sort.c" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/4/4.c 
 
 ```
 
 ### Rust
-```rust title="task-scheduling.rs" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/4/4.rs
+```rust title="quick-sort.rs" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/4/4.rs
 
 ```
 
@@ -320,17 +320,17 @@ M7 = (A12 - A22) × (B21 + B22)
 ### Implementation
 
 ### Python
-```python title="task-scheduling.py" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/6/6.py 
+```python title="matrix-multiplication.py" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/6/6.py 
 
 ```
 
 ### C Language
-```c title="task-scheduling.c" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/6/6.c 
+```c title="matrix-multiplication.c" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/6/6.c 
 
 ```
 
 ### Rust
-```rust title="task-scheduling.rs" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/6/6.rs
+```rust title="matrix-multiplication.rs" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-5/6/6.rs
 
 ```
 

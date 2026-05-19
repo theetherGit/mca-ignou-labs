@@ -46,24 +46,24 @@ A single-source shortest path algorithm finds the minimum distance from one star
 
 Implement Dijkstra’s algorithm to find the single source shortest path algorithm from different sources to the rest of nodes in the following graph and show allthe intermediate processes: 
 
-<img src="/216-sc1-ss6.png">
+<img src="/216-sc1-ss6.png" class="mt-5 rounded-xl">
 
 ## Dijkstra's Algorithm Implementation
 
 > This code also includes solutions for all the three question as code and text part is explained standalone. This is done because of implementation requirement for code.
 
 ### Python
-```python title="task-scheduling.py" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-6/algorithm/d.py 
+```python title="dijkstra-algo.py" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-6/algorithm/d.py 
 
 ```
 
 ### C Language
-```c title="task-scheduling.c" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-6/algorithm/d.c 
+```c title="dijkstra-algo.c" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-6/algorithm/d.c 
 
 ```
 
 ### Rust
-```rust title="task-scheduling.rs" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-6/algorithm/d.rs
+```rust title="dijkstra-algo.rs" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-6/algorithm/d.rs
 
 ```
 
