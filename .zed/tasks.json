@@ -1,7 +1,8 @@
 [
   {
     "label": "Compile and Run C",
-    "command": "if [[ $ZED_FILE == *.c ]]; then mkdir -p ./output && time gcc \"$ZED_FILE\" -o \"./output/$ZED_STEM\" && \"./output/$ZED_STEM\"; else echo 'Not a C file'; fi",
+    "command": "mkdir -p ./output && time gcc \"$ZED_FILE\" -o \"./output/$ZED_STEM\" && \"./output/$ZED_STEM\"",
+    "tags": ["c"],
     "use_new_terminal": false,
     "allow_concurrent_runs": false,
     "reveal": "always",
@@ -9,8 +10,9 @@
     "reveal_target": "center",
   },
   {
-    "label": "Run python",
-    "command": "if [[ $ZED_FILE == *.py ]]; then mkdir -p ./output && python3 \"$ZED_FILE\"; else echo 'Not a Python file'; fi",
+    "label": "Run Python",
+    "command": "mkdir -p ./output && python3 \"$ZED_FILE\"",
+    "tags": ["python"],
     "use_new_terminal": true,
     "allow_concurrent_runs": false,
     "reveal": "always",
@@ -18,8 +20,9 @@
     "show_command": false,
   },
   {
-    "label": "Run rust",
-    "command": "if [[ $ZED_FILE == *.rs ]]; then mkdir -p ./output && rustc \"$ZED_FILE\" -o \"./output/$ZED_STEM\" && \"./output/$ZED_STEM\"; else echo 'Not a Rust file'; fi",
+    "label": "Compile and Run Rust",
+    "command": "mkdir -p ./output && rustc \"$ZED_FILE\" -o \"./output/$ZED_STEM\" && \"./output/$ZED_STEM\"",
+    "tags": ["rust"],
     "use_new_terminal": true,
     "allow_concurrent_runs": false,
     "reveal": "always",

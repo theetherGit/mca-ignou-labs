@@ -72,15 +72,62 @@ Pascal's Identity states that:
 - If $k = n$, there is exactly $1$ way to choose all $n$ items: $\binom{n}{n} = 1$
 - If $k > n$, it's impossible to choose more items than available: $\binom{n}{k} = 0$
 
+By using this recurrence relation, we divide the problem of computing $\binom{n}{k}$ into two smaller subproblems: computing $\binom{n-1}{k-1}$ and $\binom{n-1}{k}$, and then conquer them by adding their results.
+
+### Implementation
+
+### Python
+```python title="binomial-d-c-algo.py" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-8/1/1.py 
+
+```
+
+### C Language
+```c title="binomial-d-c-algo.c" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-8/1/1.c 
+
+```
+
+### Rust
+```rust title="binomial-d-c-algo.rs" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-8/1/1.rs
+
+```
+
 ## Question 2
 
 ### Problem Statement
 
 Implement a binomial coefficient problem using dynamic programming technique.
 
-### Explanation / Approach
+### Explanation
 
-Build a table where each cell stores one binomial coefficient. This avoids recalculating the same values again and again.
+To optimize the computation of the binomial coefficient $\binom{n}{k}$, we transition from the Divide and Conquer approach to Dynamic Programming (DP).As noted previously, the recursive formula $\binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k}$ generates heavily overlapping subproblems. Dynamic programming solves each subproblem exactly once and stores the result in a table, completely eliminating redundant calculations.
+
+### The DP Strategy
+
+We can implement this using a Bottom-Up (Tabulation) approach. We construct a 2D table dp of size $(n+1) \times (k+1)$, where the entry dp[i][j] will store the value of $\binom{i}{j}$.
+
+#### Mathematical Dependencies:
+
+- **Base Cases**: For any row $i$, `dp[i][0] = 1` (choosing 0 items) and `dp[i][i] = 1` (choosing all items).
+- **Transitions**: For all other entries, `dp[i][j] = dp[i-1][j-1] + dp[i-1][j]`.
+
+This structure directly mirrors how Pascal's Triangle is constructed row by row.
+
+### Implementation
+
+### Python
+```python title="binomial-d-p-algo.py" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-8/2/2.py 
+
+```
+
+### C Language
+```c title="binomial-d-p-algo.c" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-8/2/2.c 
+
+```
+
+### Rust
+```rust title="binomial-d-p-algo.rs" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-8/2/2.rs
+
+```
 
 ## Question 3
 
@@ -88,19 +135,39 @@ Build a table where each cell stores one binomial coefficient. This avoids recal
 
 Study the performance of both implementations using five problem instances in terms of efficiency for large and small values of `n` and `k`.
 
-## Suggested Problem Instances
+### Answer
 
-| Instance | n | k |
-| -------- | - | - |
-| 1 | 5 | 2 |
-| 2 | 10 | 5 |
-| 3 | 20 | 10 |
-| 4 | 30 | 15 |
-| 5 | 50 | 25 |
+To evaluate the empirical efficiency of the Divide and Conquer (Recursive) and Dynamic Programming (Tabulation) implementations, we analyze their performance metrics across five distinct problem instances. These instances are systematically chosen to reflect combinations of small and large values for $n$ and $k$.
 
-## Submission Checklist
+#### Experimental Setup & Test Cases
 
-- Include both implementations.
-- Show output for five instances.
-- Compare runtime growth.
-- Explain why DP is more efficient.
+We evaluate the algorithms using the following five instances:
+
+- Instance 1 (Small $n$, Small $k$): $\binom{5}{2}$ — Baseline verification.
+- Instance 2 (Medium $n$, Small $k$): $\binom{25}{3}$ — Evaluates performance when $k$ remains small but $n$ grows.
+- Instance 3 (Medium $n$, Balanced $k$): $\binom{26}{13}$ — Represents the worst-case scenario for a given $n$ because the binomial coefficient peaks at $k = \lfloor n/2 \rfloor$.
+- Instance 4 (Large $n$, Boundary $k$): $\binom{100}{1}$ — Evaluates behavior near the edge boundaries.
+- Instance 5 (Large $n$, Large $k$): $\binom{100}{50}$ — The absolute worst-case threshold for evaluating large scaling structures.
+
+#### Performance Breakdown by Scenario
+
+##### Scenario A: Small $n$ and Small $k$ (Instance 1)
+- **Divide & Conquer**: Performs acceptably well. With a tiny search space, the recursion tree is shallow ($n=5$), and the redundant overlapping calculations are negligible to modern CPUs.
+- **Dynamic Programming**: Allocates a small tracking grid and fills it linearly. Both implementations execute in microseconds.
+
+##### Scenario B: Medium $n$ and Balanced $k$ (Instance 3)
+- Divide & Conquer: Performance degrades exponentially. For $\binom{26}{13}$, the recursion tree branches out into over 20 million function calls to compute a final answer of just 10.4 million. The CPU wastes immense time re-evaluating the same sub-problems over and over.
+- Dynamic Programming: Highly Efficient. The DP loop fills a small, predictable table. It computes the solution in exactly 260 additions, bypassing millions of redundant operations completely.
+
+##### Scenario C: Large $n$ and Boundary $k$ (Instance 4)
+- Divide & Conquer: Performs efficiently only because of the early exit condition ($k=1$). The execution paths short-circuit quickly back up the call stack, limiting the total recursive operations to 199.
+- Dynamic Programming: Keeps pace uniformly at 101 table updates.
+
+##### Scenario D: Large $n$ and Large $k$ (Instance 5)
+- Divide & Conquer: Total System Failure. The total operation count reaches $\approx 2 \times 10^{29}$. If a modern computer could process one trillion operations per second, it would still take over 6 billion years to complete this single computation. The program will crash due to a stack overflow or freeze indefinitely.
+- Dynamic Programming: Flawless. Even with an extremely massive resulting number, the tabulation method completes the task in exactly 3,825 matrix step updates, rendering an instantaneous output.
+
+### Conclusion
+
+- **Divide and Conquer Evaluation**: This approach is structurally unsuited for large entries. Its time complexity is fundamentally tied to the size of the final output ($2 \times \binom{n}{k} - 1$). As the solution value grows exponentially, the execution time mirrors that explosive growth. It is only practical for academic visualization or instances where $n \le 20$.
+- **Dynamic Programming Evaluation**: This approach remains completely immune to structural variations in the output value size. Its time complexity scales strictly based on the matrix area bounds ($\mathcal{O}(n \times k)$). DP converts an unmanageable exponential time problem into a predictable, highly efficient polynomial time calculation.
