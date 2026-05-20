@@ -6,14 +6,15 @@ import {
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import codeImport from "remark-code-import";
-import rehypeMermaid from "rehype-mermaid";
+import remarkMath from "remark-math";
+import rehypeMathML from "@daiji256/rehype-mathml";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 
 export default defineConfig({
-  remarkPlugins: [...baseRemarkPlugins, codeImport],
+  remarkPlugins: [...baseRemarkPlugins, codeImport, remarkMath],
   // @ts-expect-error shh
-  rehypePlugins: [...baseRehypePlugins, rehypeMermaid],
+  rehypePlugins: [...baseRehypePlugins, rehypeMathML],
   blueprints: {
     default: {
       path: resolve(__dirname, "./src/lib/components/blueprint.svelte"),

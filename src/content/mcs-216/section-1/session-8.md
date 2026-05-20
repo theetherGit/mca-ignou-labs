@@ -22,10 +22,6 @@ This session compares two ways of computing binomial coefficients. The divide-an
 
 The binomial coefficient `C(n, k)` counts the number of ways to choose `k` items from `n` items.
 
-```text
-C(n, k) = n! / (k! * (n-k)!)
-```
-
 It also follows Pascal's recurrence:
 
 ```text
@@ -57,9 +53,24 @@ The DP approach stores intermediate values in a table and avoids repeated comput
 
 Implement a binomial coefficient problem using divide and conquer technique.
 
-### Explanation / Approach
+### Explanation
 
-Use the recurrence `C(n, k) = C(n-1, k-1) + C(n-1, k)` with base cases `C(n, 0) = 1` and `C(n, n) = 1`.
+The binomial coefficient, denoted as $\binom{n}{k}$ or $C(n, k)$, represents the number of ways to choose $k$ elements from a set of $n$ elements without regard to order.To implement this using the Divide and Conquer technique, we break the larger problem into smaller subproblems using Pascal's Identity.
+
+To implement this using the Divide and Conquer technique, we break the larger problem into smaller subproblems using Pascal's Identity.
+
+### Mathematical Formulation
+
+Pascal's Identity states that:
+
+```math
+\binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k}
+```
+
+#### Base Cases:
+- If $k = 0$, there is exactly $1$ way to choose $0$ items: $\binom{n}{0} = 1$
+- If $k = n$, there is exactly $1$ way to choose all $n$ items: $\binom{n}{n} = 1$
+- If $k > n$, it's impossible to choose more items than available: $\binom{n}{k} = 0$
 
 ## Question 2
 

@@ -13,6 +13,7 @@
     "check:watch": "pnpm build:content && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
   },
   "devDependencies": {
+    "@daiji256/rehype-mathml": "^1.2.2",
     "@ethercorps/kit": "latest",
     "@sveltejs/adapter-cloudflare": "^7.2.8",
     "@sveltejs/kit": "^2.59.0",
@@ -22,6 +23,7 @@
     "mdsx": "^0.0.6",
     "phosphor-svelte": "^3.1.0",
     "remark-code-import": "^1.2.0",
+    "remark-math": "^6.0.0",
     "svelte": "^5.55.5",
     "svelte-check": "^4.4.7",
     "tailwindcss": "^4.2.4",
@@ -29,9 +31,5 @@
     "velite": "^0.2.4",
     "vite": "^7.3.2",
     "wrangler": "^4.87.0"
-  },
-  "dependencies": {
-    "playwright": "^1.58.2",
-    "rehype-mermaid": "^3.0.0"
   }
 }
