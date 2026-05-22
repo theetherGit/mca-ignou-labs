@@ -154,7 +154,7 @@ Implement chained matrix multiplication and print the optimal parentheses. Study
 ```
 
 #### Practical Limits
-- Zero-cost abstractions make it ~2-5× faster than Python. For extreme n, replace Vec<Vec<>> with vec![0u64; n*n] and compute index i*n + j.
+- Zero-cost abstractions make it ~2-5× faster than Python. For extreme n, replace `Vec<Vec<>>` with vec![0u64; n*n] and compute index i*n + j.
 
 #### Sample Output
 
