@@ -143,7 +143,7 @@ To efficiently check for cycles, the Disjoint-Set Data Structure is utilized.
 ### Sample Output 
 
 ```sh
-Edges in the constructed MCST (Python Implementation):
+Edges in the constructed MCST:
 V4 -- V8 == 5
 V3 -- V7 == 8
 V8 -- V9 == 8
