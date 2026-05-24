@@ -349,21 +349,22 @@ Average Bits = Total Bits / Total Frequency
 
 ```sh
 Huffman Codes:
-   ' ' (freq= 764): 00
-   ',' (freq= 764): 111
-   '0' (freq= 454): 010
-   '5' (freq= 360): 1100
-   '8' (freq= 312): 1011
-   '7' (freq= 310): 1001
-   '1' (freq= 310): 1010
-   '4' (freq= 264): 1000
-   '6' (freq= 252): 0111
-   '2' (freq= 226): 0110
-  '\n' (freq= 156): 11010
-   ':' (freq= 120): 110111
-   '3' (freq=  74): 110110
+' ' (freq= 500): 00
+',' (freq= 500): 111
+0 (freq= 300): 010
+5 (freq= 240): 1100
+8 (freq= 202): 1011
+1 (freq= 200): 1001
+7 (freq= 200): 1010
+4 (freq= 180): 1000
+6 (freq= 170): 0111
+2 (freq= 150): 0110
+'\n' (freq= 110): 11010
+':' (freq=  80): 110111
+3 (freq=  60): 110110
+   
 
 Average bits per character: 3.512448132780083
 Total frequency: 2892
-Total bits for encoded file: 10158
+Total bits for encoded file: 10,158
 ```
