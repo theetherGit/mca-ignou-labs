@@ -289,7 +289,9 @@ Implement the optimal binary search tree algorithm on your system and study the 
 While manual DP tables work for small n, studying algorithm performance across instances requires:
 
 **Automated Execution**: Running the exact same DP logic on both problem instances without manual transcription errors.
+
 **Quantitative Metrics**: Measuring execution time, counting primitive operations (inner-loop iterations), and tracking memory footprint.
+
 **Empirical Validation**: Demonstrating how the $O(n^3)$ time complexity scales even between small instances (n=5 vs n=7).
 
 ### Performance Metrics Definition
