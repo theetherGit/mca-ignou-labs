@@ -1,6 +1,5 @@
-import sys
 import time
-
+import sys
 
 def optimal_bst(p, q, name="Instance"):
     """
@@ -27,7 +26,7 @@ def optimal_bst(p, q, name="Instance"):
     for l in range(1, n + 1):
         for i in range(1, n - l + 2):
             j = i + l - 1
-            e[i][j] = float("inf")
+            e[i][j] = float('inf')
             # Weight recurrence: O(1) per cell
             w[i][j] = w[i][j - 1] + p[j] + q[j]
 
@@ -44,7 +43,6 @@ def optimal_bst(p, q, name="Instance"):
 
     print(f"[{name}] Optimal Cost: {e[1][n]:.4f} | Time: {elapsed:.2f} µs | Ops: {ops}")
     return e[1][n], ops, elapsed
-
 
 if __name__ == "__main__":
     print("🔬 OBST Performance Study (Python)\n")
