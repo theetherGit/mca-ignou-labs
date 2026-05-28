@@ -5,7 +5,7 @@ section: MCS-216 Section 2
 ---
 
 <script>
-  import { Callout } from "@ethercorps/kit";
+  import { Callout, Button } from "@ethercorps/kit";
   import PrintButton from "$lib/components/print-button.svelte"
   import InfoIcon from "phosphor-svelte/lib/InfoIcon"
 </script>
@@ -91,4 +91,35 @@ The goal is to create a visual pattern where each number `n` repeats itself `n` 
 
 ## Portfolio Exercise
 
-Q3: Discuss first with the group
+Q3: Design a web page that describes you. Your page must include following details
+(extra details and creativity are welcome):
+
+- Your personal details, i.e. name, gender etc.
+- 2-3 lines describing yourself as About Me. Make the most important word
+bold to emphasize them
+- Details of classes in tabular form you are taking right now (as per your time
+table).
+- Details of your favourite movies, books, or TV shows, in reverse order(using
+CSS), list atleast 3 from each. You can use images, hyperlinks, colourful text
+to make this section attractive.
+- Include a section showing your interest and also not of your interest jobs. In
+this section also you can use images, showing you're happy in doing your
+interest jobs and the other to represent you when you're sad.
+- In this section show something interesting about one or more people of your
+neighbours.
+
+#### HTML View
+
+<Button target="_blank" class="mt-5 w-full" href="/preview/mcs-216/section-2/session-1/portfolio.html">Live Preview </Button>
+
+<Callout title="Make it you">
+    <!-- Space here -->
+    In code change config in `script` tag as per your name and personal information.
+    <!-- Space here -->
+</Callout>
+
+### Code
+
+```html title="time.html" showLineNumbers file=../../../lib/code/mcs-216/section-2/session-1/portfolio.html
+
+```
