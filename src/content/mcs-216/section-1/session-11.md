@@ -330,3 +330,20 @@ All implementations allocate three $(n+2)×(n+2)$ tables.
 - Space remains trivial for n ≤ 500, but grows quadratically. For production n > 1000, consider:
 - Rolling array optimization (reduces w and e to O(n) space)
 - Knuth's $O(n^2)$ root-restriction optimization
+
+### Implementation
+
+### Python
+```python title="binary-search.py" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-11/3/3.py 
+
+```
+
+### C Language
+```c title="binary-search.c" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-11/3/3.c 
+
+```
+
+### Rust
+```rust title="binary-search.rs" showLineNumbers file=../../../lib/code/mcs-216/section-1/session-11/3/3.rs
+
+```
