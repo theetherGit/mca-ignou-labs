@@ -1,0 +1,45 @@
+% employee.arff - 30 employees, written by hand for MCSL-223 Session 1
+% Class attribute: promoted (yes/no)
+@relation employee
+
+@attribute eid numeric
+@attribute age numeric
+@attribute gender {M, F}
+@attribute dept {HR, IT, Sales, Finance}
+@attribute experience numeric
+@attribute education {UG, PG, PhD}
+@attribute salary numeric
+@attribute performance {poor, average, good}
+@attribute promoted {yes, no}
+
+@data
+1,28,M,IT,4,PG,45000,good,yes
+2,35,F,HR,10,PG,52000,average,no
+3,42,M,Sales,18,UG,60000,good,yes
+4,25,F,IT,2,UG,32000,average,no
+5,31,M,Finance,7,PG,48000,good,yes
+6,45,F,HR,20,PhD,70000,good,yes
+7,29,M,Sales,5,UG,35000,poor,no
+8,38,F,IT,13,PG,65000,good,yes
+9,50,M,Finance,25,PG,80000,average,no
+10,27,F,Sales,3,UG,30000,average,no
+11,33,M,IT,9,PG,55000,good,yes
+12,40,F,Finance,15,PhD,72000,good,yes
+13,24,M,HR,1,UG,28000,poor,no
+14,36,F,Sales,12,PG,50000,average,no
+15,48,M,IT,22,PhD,90000,good,yes
+16,30,F,Finance,6,UG,40000,average,no
+17,39,M,HR,14,PG,58000,good,yes
+18,26,F,IT,3,UG,33000,poor,no
+19,44,M,Sales,19,PG,62000,average,no
+20,32,F,Finance,8,PG,47000,good,yes
+21,37,M,IT,11,PG,60000,good,yes
+22,23,F,Sales,1,UG,26000,poor,no
+23,41,M,HR,16,PhD,68000,average,no
+24,34,F,IT,10,PG,54000,good,yes
+25,46,M,Finance,21,PG,75000,good,yes
+26,28,F,Sales,4,UG,31000,average,no
+27,52,M,HR,27,PhD,85000,average,no
+28,35,F,Finance,9,UG,44000,good,yes
+29,30,M,IT,6,PG,46000,poor,no
+30,43,F,Sales,17,PG,59000,good,yes

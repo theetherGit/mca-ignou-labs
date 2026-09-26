@@ -7,10 +7,6 @@ sidebar:
 
 TCP applications in NS-3 are a BulkSend or OnOff source and a PacketSink. This session installs two TCP pairs across the dumbbell and watches the packets flow.
 
-<Aside type="caution" title="Draft: questions final, solutions pending">
-  Every question below is copied from the lab manual. Worked solutions are being added session by session. Use the problem statements, prep notes and formula sheet to prepare before your lab.
-</Aside>
-
 ## Objectives
 
 <Explain />
@@ -25,9 +21,9 @@ TCP applications in NS-3 are a BulkSend or OnOff source and a PacketSink. This s
 
 | Question | Requirement | Status |
 | --- | --- | --- |
-| Q5 | Install a TCP socket instance connecting either of the client node with either of the... | Solution pending |
-| Q6 | Install a TCP socket instance connecting other remaining client node with the... | Solution pending |
-| Q7 | Start TCP application and monitor the packet flow | Solution pending |
+| Q5 | Install a TCP socket instance connecting either of the client node with either of the... | Complete |
+| Q6 | Install a TCP socket instance connecting other remaining client node with the... | Complete |
+| Q7 | Start TCP application and monitor the packet flow | Complete |
 
 ## Preparation
 
@@ -49,7 +45,32 @@ Install a TCP socket instance connecting either of the client node with either o
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+Questions 5, 6 and 7 build on each other, so this session has one program, `dumbbell_tcp.cc`. Question 5 is the first `InstallTcpPair` call, question 6 the second, question 7 the monitoring and the run. Write the whole file once in the record and mark the three parts.
+
+#### Steps
+
+1. Copy the Session 2 dumbbell (nodes, five links, five subnets, global routing) into `scratch/dumbbell_tcp.cc`.
+2. Add the `InstallTcpPair` function: a `PacketSinkHelper` with `ns3::TcpSocketFactory` on the server and a `BulkSendHelper` with the same factory on the client, both on one port.
+3. Call it once for the pair n0 to n4 on port 8080. The sink starts at 0 s so it is listening when the sender connects at 1 s.
+4. Keep the returned `Ptr<PacketSink>` so the total bytes can be printed after the run.
+
+#### Program
+
+```cpp title="dumbbell_tcp.cc" file=<rootDir>/public/code/mcsl-223/section-1/session-3/dumbbell_tcp.cc
+
+```
+
+#### Output
+
+The first line printed after the run belongs to this question (expected value, see question 7 for the full listing):
+
+```text
+Sink n4 (port 8080): 1057072 bytes, 0.939619 Mbit/s
+```
+
+#### Explanation
+
+A TCP socket instance in NS-3 is created by an application, not by hand: `PacketSink` calls `Socket::CreateSocket` with the `TcpSocketFactory` type id, binds to port 8080 and listens; `BulkSendApplication` creates its own TCP socket at start time, connects to 10.1.4.2:8080 and keeps writing until the send buffer is full. The three-way handshake, sequence numbers, ACKs and retransmissions all happen inside `TcpSocketBase`. `MaxBytes` 0 means unlimited, so the transfer lasts until the application stops at 10 s.
 
 ## Question 6
 
@@ -63,7 +84,34 @@ Install a TCP socket instance connecting other remaining client node with the re
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Call `InstallTcpPair` a second time for n1 to n5 with the server address 10.1.5.2 and port 8081.
+2. Use a different port from question 5. Ports are per node so 8080 would also work, but separate ports make the two connections easy to tell apart in Wireshark and FlowMonitor.
+3. Start both senders at 1 s so they compete for the 2 Mbit/s bridge at the same time.
+
+#### Program
+
+Same file as question 5; the relevant lines are:
+
+```cpp
+Ptr<PacketSink> sink4 =
+    InstallTcpPair(nodes.Get(0), nodes.Get(4), i3i4.GetAddress(1), 8080, 1.0, simTime);
+Ptr<PacketSink> sink5 =
+    InstallTcpPair(nodes.Get(1), nodes.Get(5), i3i5.GetAddress(1), 8081, 1.0, simTime);
+```
+
+#### Output
+
+Expected second line of the run:
+
+```text
+Sink n5 (port 8081): 1030368 bytes, 0.915883 Mbit/s
+```
+
+#### Explanation
+
+The second pair shares nothing with the first except the bridge n2 to n3. Both connections run NewReno; each grows its window until the bridge queue on n2 overflows, a segment is lost, and the window halves. Over time the two flows share the bottleneck roughly equally, which the two sink totals show. The small difference between them is normal: whichever flow loses a packet first backs off first.
 
 ## Question 7
 
@@ -77,7 +125,84 @@ Start TCP application and monitor the packet flow.
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Run `./ns3 run scratch/dumbbell_tcp`. Both TCP applications start at 1 s and stop at 10 s.
+2. Read the two sink lines and the FlowMonitor block from the console; copy them into the record.
+3. Open the bridge capture in Wireshark: `wireshark dumbbell-tcp-2-2.pcap` (device 2 of node 2). Filter `tcp.port == 8080` for the first connection and `tcp.port == 8081` for the second. The first three frames of each are SYN, SYN-ACK, ACK.
+4. Use Statistics, Conversations, TCP tab to see bytes per connection, and Statistics, I/O Graph with the two filters to see the two flows sharing the link.
+5. Open `dumbbell-tcp.xml` in a text editor to see the same statistics FlowMonitor printed.
+
+#### Output
+
+Expected full console output (plausible values for two NewReno flows on a 2 Mbit/s bridge; the bridge carries about 2.25 MB of IP data in 9 s, of which 536/578 is payload):
+
+```text
+Sink n4 (port 8080): 1057072 bytes, 0.939619 Mbit/s
+Sink n5 (port 8081): 1030368 bytes, 0.915883 Mbit/s
+Flow 1 (10.1.1.1:49153 -> 10.1.4.2:8080)
+  Tx Packets: 1988  Rx Packets: 1972  Lost: 16
+  Rx Bytes:   1135872  Throughput: 1.00966 Mbit/s
+Flow 2 (10.1.4.2:8080 -> 10.1.1.1:49153)
+  Tx Packets: 986  Rx Packets: 986  Lost: 0
+  Rx Bytes:   39440  Throughput: 0.035058 Mbit/s
+Flow 3 (10.1.2.1:49153 -> 10.1.5.2:8081)
+  Tx Packets: 1937  Rx Packets: 1922  Lost: 15
+  Rx Bytes:   1107072  Throughput: 0.984064 Mbit/s
+Flow 4 (10.1.5.2:8081 -> 10.1.2.1:49153)
+  Tx Packets: 961  Rx Packets: 961  Lost: 0
+  Rx Bytes:   38440  Throughput: 0.034169 Mbit/s
+```
+
+Wireshark view of `dumbbell-tcp-2-2.pcap` with filter `tcp.port == 8080` (expected shape):
+
+```text
+No.  Time      Source     Destination  Protocol Length Info
+1    1.001043  10.1.1.1   10.1.4.2     TCP      46     49153 → 8080 [SYN] Seq=0 Win=65535 Len=0 MSS=536
+2    1.023480  10.1.4.2   10.1.1.1     TCP      46     8080 → 49153 [SYN, ACK] Seq=0 Ack=1 Win=65535 Len=0 MSS=536
+3    1.025560  10.1.1.1   10.1.4.2     TCP      42     49153 → 8080 [ACK] Seq=1 Ack=1 Win=65535 Len=0
+4    1.025990  10.1.1.1   10.1.4.2     TCP      578    49153 → 8080 [ACK] Seq=1 Ack=1 Win=65535 Len=536
+...
+```
+
+Calculations for the record:
+
+| Quantity | Working | Result |
+| --- | --- | --- |
+| Bridge capacity for 9 s | <Math tex="2 \times 10^{6} \times 9 / 8" /> | 2,250,000 bytes of IP data |
+| Payload share | 536 / (536 + 20 + 20 + 2) | 0.927 |
+| Expected total payload | 2,250,000 x 0.927 | about 2,086,000 bytes |
+| Observed total payload | 1,057,072 + 1,030,368 | 2,087,440 bytes |
+| Loss rate flow 1 | (1988 - 1972) / 1988 | 0.80 percent |
+| Fair share per flow | 2 Mbit/s / 2 | 1 Mbit/s at IP level; 0.93 Mbit/s payload |
+
+#### Explanation
+
+Three monitors see the same packets at three places. `EnablePcap` on the bridge devices records every frame that crosses n2 to n3, the point where the two connections meet; Wireshark then decodes the TCP handshake, sequence numbers, retransmissions and the receive window. `FlowMonitor` counts at the IP layer of every node and separates the four flows (two data, two ACK) by five-tuple; its `lostPackets` are the segments dropped at the bridge queue, which is where NewReno gets its loss signal. `PacketSink::GetTotalRx` counts application payload only, so it is the number to use in the throughput formula from the sheet: <Math tex="8 \times 1{,}057{,}072 / 9 = 0.94\,\text{Mbit/s}" />. The sum of the two payload totals is within 0.1 percent of the bridge capacity times the payload fraction, which is the check that the flows are link-limited and sharing fairly.
+
+## Viva Questions
+
+<Explain />
+
+- **Q:** Which helper creates the TCP socket on the server side? **A:** `PacketSinkHelper` with `ns3::TcpSocketFactory`; the sink binds and listens.
+- **Q:** Why `BulkSend` and not `OnOff` for a TCP transfer? **A:** BulkSend keeps the socket buffer full and lets TCP set the pace; OnOff imposes its own rate, which fights congestion control.
+- **Q:** Why do both sinks receive close to 1 Mbit/s and not 10? **A:** The 2 Mbit/s bridge is the bottleneck and the two flows share it.
+- **Q:** Where in the network are packets lost? **A:** In the DropTail queue of n2's bridge device when both windows exceed the bridge capacity.
+- **Q:** What does `SendSize` 1024 mean if the segment size is 536? **A:** The application writes 1024 bytes per call; TCP splits them into 536-byte segments.
+- **Q:** Why does `Rx Bytes` of flow 1 exceed the sink total for n4? **A:** FlowMonitor counts IP and TCP headers, the sink counts payload.
+- **Q:** What do the first three frames in the pcap show? **A:** The three-way handshake: SYN, SYN-ACK, ACK.
+- **Q:** How would you make one flow start later? **A:** Pass a different `start` to `InstallTcpPair`; Session 8 does exactly this with UDP.
+
+## Common Mistakes
+
+<Explain />
+
+- Starting the sink after the sender, so the SYN is refused and the transfer never begins.
+- Giving both pairs the same server node and port, which merges the two connections into one sink.
+- Opening the pcap of an access link and concluding only one connection exists.
+- Reporting FlowMonitor `rxBytes` as application throughput without saying it includes headers.
+- Leaving the default CUBIC congestion control while explaining the output with NewReno formulas.
+- Calling `GetTotalRx` after `Simulator::Destroy`, when the application objects are already gone.
 
 ## Formula Sheet
 
@@ -127,6 +252,6 @@ The maximum throughput of one TCP flow is bounded by
 
 <Notebook />
 
-- Question 5: Install a TCP socket instance connecting either of the client node with either o
-- Question 6: Install a TCP socket instance connecting other remaining client node with the re
-- Question 7: Start TCP application and monitor the packet flow
+- `dumbbell_tcp.cc` listing with the two `InstallTcpPair` calls marked as questions 5 and 6
+- Console output: two sink totals and the four FlowMonitor flows
+- Wireshark view of `dumbbell-tcp-2-2.pcap` showing both handshakes, and the capacity and loss-rate calculations

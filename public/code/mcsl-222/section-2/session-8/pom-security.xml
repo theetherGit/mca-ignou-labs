@@ -1,0 +1,5 @@
+<!-- Session 8, Q36: add inside <dependencies> of pom.xml, then Maven > Update Project -->
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-security</artifactId>
+</dependency>

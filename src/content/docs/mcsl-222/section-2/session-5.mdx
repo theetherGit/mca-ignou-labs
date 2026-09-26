@@ -7,9 +7,7 @@ sidebar:
 
 Validation happens twice: in the browser for fast feedback and on the server because the browser cannot be trusted. Bootstrap then gives the forms a consistent look without hand-written CSS for every element.
 
-<Aside type="caution" title="Draft: questions final, solutions pending">
-  Every question below is copied from the lab manual. Worked solutions are being added session by session. Use the problem statements, prep notes and formula sheet to prepare before your lab.
-</Aside>
+All four questions change the Session 4 admission form inside the `student-admission` project. The listings below are the end-of-session files; each question's explanation points at the lines that answer it.
 
 ## Objectives
 
@@ -25,10 +23,10 @@ Validation happens twice: in the browser for fast feedback and on the server bec
 
 | Question | Requirement | Status |
 | --- | --- | --- |
-| Q21 | Apply the client validation in the form created in the above exercise 4 of session 4,... | Solution pending |
-| Q22 | Write a programme to bind form objects with entity bean in Spring MVC | Solution pending |
-| Q23 | Configure Bootstrap in Spring MVC and use default styling classes in the form and view... | Solution pending |
-| Q24 | Apply custom Styling to your pages in Spring MVC | Solution pending |
+| Q21 | Apply the client validation in the form created in the above exercise 4 of session 4,... | Complete |
+| Q22 | Write a programme to bind form objects with entity bean in Spring MVC | Complete |
+| Q23 | Configure Bootstrap in Spring MVC and use default styling classes in the form and view... | Complete |
+| Q24 | Apply custom Styling to your pages in Spring MVC | Complete |
 
 ## Preparation
 
@@ -50,7 +48,51 @@ Apply the client validation in the form created in the above exercise 4 of sessi
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Add the `hibernate-validator` dependency from the fragment to `pom.xml`; Maven → Update Project.
+2. Replace `AdmissionForm.java` with the annotated version. Every rule is an annotation on the field.
+3. Replace `admission-form.jsp`. Client rules are HTML attributes on the inputs (`required`, `minlength`, `pattern`, `max`); server messages appear through `form:errors`.
+4. Client test: rebuild, open `/admission`, leave the name empty and press Submit. The browser refuses to send the form and points at the field.
+5. Server test: in the browser's developer tools add `novalidate` to the `form` element (or run `document.querySelector('form').noValidate = true` in the console), submit the empty form. The page comes back with red messages under each field.
+
+#### Program
+
+```xml title="pom.xml (Q21 addition)" file=<rootDir>/public/code/mcsl-222/section-2/session-5/pom-validation-fragment.xml
+
+```
+
+```java title="web/AdmissionForm.java" file=<rootDir>/public/code/mcsl-222/section-2/session-5/AdmissionForm.java
+
+```
+
+```html title="WEB-INF/views/admission-form.jsp" file=<rootDir>/public/code/mcsl-222/section-2/session-5/admission-form.jsp
+
+```
+
+#### Output
+
+Expected, checked by reading, not executed. Client side: Chrome's bubble "Please fill in this field" on the name box, and "Please match the requested format" with the title text on a mobile number like `12345`. Server side (with `novalidate`), the form returns with these messages under the fields:
+
+```text
+Full name        must not be blank
+Email            must not be blank
+Mobile           must not be blank
+Date of birth    must not be null
+Programme        must not be blank
+Address          must not be blank
+Hostel required? choose Yes or No
+Courses          pick at least one course
+```
+
+A name of two letters with the browser check bypassed returns `size must be between 3 and 80`; a date of birth in the future returns `must be a past date`.
+
+#### Explanation
+
+- Client validation is the HTML5 attributes: `required` on every field, `minlength="3" maxlength="80"` on the name, `type="email"`, `pattern="[6-9][0-9]{9}"` on the mobile, `type="date" max="${today}"` so the picker cannot choose a future date, `required` on the select and on the first radio (it applies to the whole radio group). Checkboxes have no "at least one" attribute; only the server enforces that rule.
+- Server validation is Bean Validation: `@NotBlank`, `@Size`, `@Email`, `@Pattern`, `@Past`, `@NotNull`, `@NotEmpty` on `AdmissionForm`. Hibernate Validator is the provider; Spring MVC finds it on the classpath and runs it whenever a handler parameter carries `@Valid` (see the controller in Q22).
+- The rules match on both sides (same regex, same length limits) so a user with JavaScript on and a user posting with `curl` get the same answer.
+- `cssErrorClass` swaps the input's class to `form-control is-invalid` when that field has an error; `form:errors` prints the message in a `span` with class `invalid-feedback`, which Bootstrap shows only next to an invalid control.
 
 ## Question 22
 
@@ -64,7 +106,50 @@ Write a programme to bind form objects with entity bean in Spring MVC.
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Replace `AdmissionController.java`: the POST handler takes `@Valid AdmissionForm` and a `BindingResult`, and on success converts the form to a `Student` entity and saves it.
+2. Add `save()` to `StudentRepository.java`.
+3. Replace `admission-result.jsp`; it now shows the saved entity, including the generated database id.
+4. Rebuild, submit a valid application, then check MySQL: `SELECT id, name, programme, courses FROM ignou.student;`.
+
+#### Program
+
+```java title="web/AdmissionController.java" file=<rootDir>/public/code/mcsl-222/section-2/session-5/AdmissionController.java
+
+```
+
+```java title="repo/StudentRepository.java" file=<rootDir>/public/code/mcsl-222/section-2/session-5/StudentRepository.java
+
+```
+
+```html title="WEB-INF/views/admission-result.jsp" file=<rootDir>/public/code/mcsl-222/section-2/session-5/admission-result.jsp
+
+```
+
+#### Output
+
+Expected, checked by reading, not executed. Tomcat's console shows the INSERT Hibernate issued:
+
+```text
+Hibernate:
+    insert
+    into
+        student
+        (address, courses, dob, email, enrolment_no, hostel_required, mobile, name, programme)
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+```
+
+The result page reads `Application saved. Database id: 3` followed by the table of values and `Enrolment no: pending approval`. The MySQL query returns the new row with `id = 3`.
+
+#### Explanation
+
+- Two objects, two jobs. `AdmissionForm` is shaped like the screen (a `List` of ticked courses, a `Boolean` that may be null before validation). `Student` is shaped like the table (one comma-separated `courses` column, an `id`). `toStudent()` is the binding between them: one setter per field, plus `String.join` for the list.
+- Spring binds the request to the form object first (data binding), validates it (`@Valid`), and only then does the code bind the form to the entity. A bad request never reaches the entity or the database.
+- `BindingResult` must be the parameter immediately after the `@Valid` one. If it is missing, Spring throws `MethodArgumentNotValidException` instead of letting the controller re-render the form.
+- `repo.save()` runs inside a transaction (`@Transactional` on the class). `em.persist` schedules the INSERT; commit at method exit executes it and MySQL's auto-increment value is copied into `student.getId()`.
+- The manual's Thymeleaf example binds the form straight to the entity class. That works when the two shapes coincide; the separate form object is the pattern that survives Session 6, where `Student` gains relations.
 
 ## Question 23
 
@@ -78,7 +163,33 @@ Configure Bootstrap in Spring MVC and use default styling classes in the form an
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Create `WEB-INF/views/head.jspf` with the Bootstrap 5.3 CDN link (copy the `link` tag from [getbootstrap.com](https://getbootstrap.com/docs/5.3/getting-started/introduction/); the `integrity` attribute is optional and can be pasted from there).
+2. In every JSP replace the `meta` lines inside `head` with `<%@ include file="head.jspf" %>`. `admission-form.jsp` and `admission-result.jsp` from Q21 and Q22 already do this; replace `home.jsp` with the version below.
+3. Rebuild and reload. The form is centred in a card, inputs have rounded borders, the submit button is blue. A missing link (typo in the URL) shows the unstyled Session 4 look, which is the quickest way to confirm the CDN line is loading.
+4. The WebJar alternative from the manual: add `org.webjars:bootstrap:5.3.3` and `org.webjars:webjars-locator-core` to the pom and link `/webjars/bootstrap/css/bootstrap.min.css`; the CDN needs no Maven change so it is used here.
+
+#### Program
+
+```html title="WEB-INF/views/head.jspf" file=<rootDir>/public/code/mcsl-222/section-2/session-5/head.jspf
+
+```
+
+```html title="WEB-INF/views/home.jsp" file=<rootDir>/public/code/mcsl-222/section-2/session-5/home.jsp
+
+```
+
+#### Output
+
+Expected, checked by reading, not executed: a dark navigation bar with "IGNOU Student Admission", below it a white card 760 px wide holding the form in two columns (email beside mobile, date beside programme), inline Yes/No radios, stacked course checkboxes, and a right-aligned Cancel / Submit pair. Invalid fields get a red border and red text underneath. The result page shows a green "Application saved" alert and a striped table.
+
+#### Explanation
+
+- Bootstrap is only a stylesheet. Configuring it in Spring MVC means one `link` tag reaches every page; the `jspf` include keeps that tag in one file, so a version bump is one edit.
+- Classes used, all Bootstrap defaults: layout `container`, `row g-3`, `col-12`, `col-md-6`; form controls `form-label`, `form-control`, `form-select`, `form-check`, `form-check-inline`, `form-check-input`; validation `is-invalid`, `invalid-feedback`; components `card`, `card-body`, `navbar`, `alert alert-success`, `table table-striped`, `btn btn-primary`, `btn-outline-secondary`.
+- Spring form tags take `cssClass` instead of `class` (and `cssErrorClass` for the error state); plain HTML elements in the same page use `class` as usual.
+- No Bootstrap JavaScript is included because nothing on these pages needs it; add the bundle script tag when a dropdown menu or modal appears.
 
 ## Question 24
 
@@ -92,13 +203,61 @@ Apply custom Styling to your pages in Spring MVC.
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Create `src/main/webapp/css/admission.css` (outside `WEB-INF`, so the browser can fetch it).
+2. Replace `WebConfig.java` with the version that adds a resource handler for `/css/**`. Without it the `DispatcherServlet`, mapped on `/`, tries to find a controller for `/css/admission.css` and returns 404.
+3. `head.jspf` already links `/css/admission.css` after Bootstrap, so the custom rules win over Bootstrap's on equal specificity.
+4. Rebuild, hard-reload (Ctrl+Shift+R) and open `http://localhost:8080/student-admission/css/admission.css` directly to confirm it is served.
+
+#### Program
+
+```css title="webapp/css/admission.css" file=<rootDir>/public/code/mcsl-222/section-2/session-5/admission.css
+
+```
+
+```java title="WebConfig.java" file=<rootDir>/public/code/mcsl-222/section-2/session-5/WebConfig.java
+
+```
+
+#### Output
+
+Expected, checked by reading, not executed: sand-coloured page background, maroon navigation bar and maroon primary buttons instead of Bootstrap blue, card title underlined in maroon, a red asterisk after each mandatory label, and in print preview (Ctrl+P) the navigation bar and buttons disappear while the form data stays.
+
+#### Explanation
+
+- `addResourceHandlers` maps a URL pattern to a location inside the WAR; Spring serves the file with caching headers and never involves a controller.
+- Custom CSS overrides by cascade order: same selector specificity, loaded later, wins. `.btn-primary` and `.navbar` redefine Bootstrap's colours; the `:root` variables keep the brand colour in one place.
+- `label.required::after` adds the asterisk from CSS, so the JSP only sets a class; the mandatory marker cannot drift from the `required` attribute if both come from the same template line.
+- The `@media print` block exists because the lab record is printed; hiding navigation is the difference between a page and a form.
+
+## Viva Questions
+
+<Explain />
+
+- **Q:** Why validate on both client and server? **A:** Client checks give instant feedback; the server check is the only one that cannot be bypassed (disable JavaScript, use curl, edit the DOM).
+- **Q:** What does `@Valid` do? **A:** Tells Spring to run Bean Validation on the bound object before calling the handler and to record violations in the following `BindingResult`.
+- **Q:** What happens if `BindingResult` is not the next parameter? **A:** Spring throws the validation exception and the user sees an error page instead of the form with messages.
+- **Q:** Difference between `@NotNull`, `@NotEmpty` and `@NotBlank`? **A:** `@NotNull` rejects null; `@NotEmpty` also rejects empty strings or collections; `@NotBlank` also rejects whitespace-only strings.
+- **Q:** Why a separate form object instead of binding to the entity? **A:** The screen and the table have different shapes; the form object carries validation rules and screen-only fields without polluting the entity.
+- **Q:** Why does the CSS file live outside `WEB-INF`? **A:** Anything under `WEB-INF` is never served directly; a stylesheet must be fetched by the browser.
+- **Q:** CDN or WebJar for Bootstrap? **A:** CDN: no build change, browser may already have it cached, needs internet. WebJar: version pinned in the pom, works offline.
+
+## Common Mistakes
+
+<Explain />
+
+- Adding validation annotations and forgetting `@Valid` on the parameter; every submission passes.
+- Testing only in the browser and concluding the server rules work. Bypass the browser once (`novalidate`) to see them.
+- Writing `class="form-control"` on a `form:input` tag; the attribute is `cssClass`.
+- Mapping `/css/**` but putting the folder under `WEB-INF`; the resource handler cannot serve it.
+- Loading the custom stylesheet before Bootstrap, so Bootstrap overrides the custom colours.
 
 ## Session Summary
 
 <Notebook />
 
-- Question 21: Apply the client validation in the form created in the above exercise 4 of sessi
-- Question 22: Write a programme to bind form objects with entity bean in Spring MVC
-- Question 23: Configure Bootstrap in Spring MVC and use default styling classes in the form an
-- Question 24: Apply custom Styling to your pages in Spring MVC
+- Question 21: HTML5 attributes on the form plus Bean Validation on `AdmissionForm`, messages rendered with `form:errors`
+- Question 22: `@Valid` and `BindingResult` in `AdmissionController`, `toStudent()` binding the form to the `Student` entity, `StudentRepository.save()` inserting the row
+- Question 23: Bootstrap 5.3 from the CDN through `head.jspf`, default classes on the form, result and home pages
+- Question 24: `admission.css` served through a resource handler, brand colours, required-field marker and print rules

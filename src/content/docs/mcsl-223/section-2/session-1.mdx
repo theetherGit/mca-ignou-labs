@@ -7,10 +7,6 @@ sidebar:
 
 The first session is about knowing your data: what WEKA is, how its Explorer is organised, what an ARFF file looks like, and how to describe a dataset before mining it.
 
-<Aside type="caution" title="Draft: questions final, solutions pending">
-  Every question below is copied from the lab manual. Worked solutions are being added session by session. Use the problem statements, prep notes and formula sheet to prepare before your lab.
-</Aside>
-
 ## Objectives
 
 <Explain />
@@ -25,10 +21,10 @@ The first session is about knowing your data: what WEKA is, how its Explorer is 
 
 | Question | Requirement | Status |
 | --- | --- | --- |
-| Q1 | Download and install WEKA. Navigate the various options available in WEKA. Explore the... | Solution pending |
-| Q2 | Create your own EXCEL file. Convert the EXCEL file to .csv format and prepare it as... | Solution pending |
-| Q3 | Try to create your own datasets | Solution pending |
-| Q4 | Preprocess and classify Customer, Agriculture, Weather, Whole-sale Customers or the... | Solution pending |
+| Q1 | Download and install WEKA. Navigate the various options available in WEKA. Explore the... | Complete |
+| Q2 | Create your own EXCEL file. Convert the EXCEL file to .csv format and prepare it as... | Complete |
+| Q3 | Try to create your own datasets | Complete |
+| Q4 | Preprocess and classify Customer, Agriculture, Weather, Whole-sale Customers or the... | Complete |
 
 ## Preparation
 
@@ -57,7 +53,63 @@ Download and install WEKA. Navigate the various options available in WEKA. Explo
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Download the stable release from the [WEKA download page](https://waikato.github.io/weka-wiki/downloading_weka/). On Windows take the installer that bundles the Azul Zulu JDK (`weka-3-8-6-azul-zulu-windows.exe`, about 125 MB) so no separate Java install is needed. On Linux unzip `weka-3-8-6-azul-zulu-linux.zip` and run `./weka.sh` inside the `weka-3-8-6` folder.
+2. Run the installer: Next, I Agree on the GPL licence, keep Full installation, keep the destination `C:\Program Files\Weka-3-8-6`, Install, Finish. The WEKA GUI Chooser opens.
+3. Tour the GUI Chooser. It has five buttons and the sample data lives in the `data` sub-folder of the install directory.
+
+| Button | What it is for |
+| --- | --- |
+| Explorer | Load one dataset, preprocess it, then run Classify, Cluster, Associate, Select attributes and Visualize tabs on it |
+| Experimenter | Run several algorithms on several datasets with repeated cross-validation and compare them with a statistical test |
+| KnowledgeFlow | Drag-and-drop flow of Datasources, Filters, Classifiers, Evaluation and Visualization components |
+| Workbench | All of the above in one window with tabs |
+| Simple CLI | A shell where `help` lists commands and any class can be run, for example `java weka.associations.Apriori -t data/contact-lenses.arff` |
+
+4. Click Explorer. In the Preprocess tab click Open file..., go to `C:\Program Files\Weka-3-8-6\data` and open `weather.nominal.arff`.
+5. Read the panel. Current relation shows Relation, Instances and Attributes. The Attributes list on the left gives every attribute name with a checkbox. Click a name: the Selected attribute box on the right shows Name, Type, Missing, Distinct and Unique, then a table of labels and counts for a nominal attribute or Minimum, Maximum, Mean and StdDev for a numeric one.
+6. The class attribute is the one selected in the dropdown above the histogram (WEKA defaults to the last attribute). The counts of that attribute are the number of records per class.
+7. Histogram: the bar chart under the dropdown is the histogram of the selected attribute, with the bars split by class colour. Click Visualize All to see every attribute at once.
+8. Click the Visualize tab for the scatter-plot matrix. Click any cell to open it full size, change the X and Y dropdowns to any pair of attributes, move the Jitter slider to separate overlapping nominal points, and use Select Instance to read a point.
+9. Repeat Open file for the other datasets and fill the table below. Attribute types are read from the Type field, counts from the label table.
+
+#### Output
+
+What the Preprocess panel prints for `weather.nominal.arff` after clicking `outlook`:
+
+```text
+Current relation                       Selected attribute
+Relation: weather.symbolic             Name: outlook      Type: Nominal
+Instances: 14   Attributes: 5          Missing: 0 (0%)   Distinct: 3   Unique: 0 (0%)
+Attributes                             No.  Label     Count  Weight
+ 1  outlook                             1   sunny     5      5
+ 2  temperature                         2   overcast  4      4
+ 3  humidity                            3   rainy     5      5
+ 4  windy
+ 5  play                               Class: play (Nom)      [Visualize All]
+```
+
+The built-in datasets, read the same way:
+
+| Dataset | Instances | Attributes | Attribute types | Class attribute | Records per class |
+| --- | --- | --- | --- | --- | --- |
+| weather.nominal | 14 | 5 | outlook, temperature, humidity, windy, play: all nominal | play | yes 9, no 5 |
+| weather.numeric | 14 | 5 | outlook, windy, play nominal; temperature, humidity numeric | play | yes 9, no 5 |
+| iris | 150 | 5 | sepallength, sepalwidth, petallength, petalwidth numeric; class nominal | class | Iris-setosa 50, Iris-versicolor 50, Iris-virginica 50 |
+| glass | 214 | 10 | RI, Na, Mg, Al, Si, K, Ca, Ba, Fe numeric; Type nominal (7 labels) | Type | build wind float 70, build wind non-float 76, vehic wind float 17, vehic wind non-float 0, containers 13, tableware 9, headlamps 29 |
+| contact-lenses | 24 | 5 | age, spectacle-prescrip, astigmatism, tear-prod-rate, contact-lenses: all nominal | contact-lenses | soft 5, hard 4, none 15 |
+| labor | 57 | 17 | 8 numeric (duration, the three wage-increase attributes, working-hours, standby-pay, shift-differential, statutory-holidays); 9 nominal including class; many missing values | class | bad 20, good 37 |
+| zoo | 101 | 18 | animal nominal (one label per animal); 15 boolean nominal (hair ... catsize); legs numeric; type nominal | type | mammal 41, bird 20, reptile 5, fish 13, amphibian 4, insect 8, invertebrate 10 |
+| diabetes | 768 | 9 | preg, plas, pres, skin, insu, mass, pedi, age numeric; class nominal | class | tested_negative 500, tested_positive 268 |
+| credit-g | 1000 | 21 | 7 numeric (duration, credit_amount, installment_commitment, residence_since, age, existing_credits, num_dependents); 14 nominal including class | class | good 700, bad 300 |
+| soybean | 683 | 36 | all 35 input attributes nominal; class nominal with 19 labels | class | brown-spot 92, alternarialeaf-spot 91, frog-eye-leaf-spot 91, phytophthora-rot 88, brown-stem-rot 44, anthracnose 44, nine diseases with 20 each, 2-4-d-injury 16, diaporthe-pod-and-stem-blight 15, cyst-nematode 14, herbicide-injury 8 |
+
+Visualisation notes to record: on iris, the Visualize cell petallength against petalwidth separates the three classes almost perfectly, while sepalwidth against sepallength mixes versicolor and virginica. On glass, most Ba and Fe values are 0, so their histograms are one tall bar. On labor, the grey part of a histogram bar is the missing count.
+
+#### Explanation
+
+WEKA reads the attribute types from the ARFF header, not from the data, so the Type field is exactly what the `@attribute` line says. The class attribute is a choice, not a property of the file: WEKA guesses the last attribute and every classifier uses whatever the dropdown says. The label table under the histogram is the class distribution when the class attribute is selected, which is why the records-per-class column above comes straight from it. The Visualize tab plots two attributes at a time; picking the pair that separates the class colours best is the first hint of which attributes a classifier will use.
 
 ## Question 2
 
@@ -71,7 +123,57 @@ Create your own EXCEL file. Convert the EXCEL file to .csv format and prepare it
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. In Excel put the attribute names in row 1 (`sid`, `age`, `gender`, `stream`, `attendance`, `internal`, `sem_marks`, `hours_study`, `result`) and one student per row below it. Leave a cell blank where the value is unknown. Do not merge cells, do not add totals, do not put units in the numbers.
+2. File, Save As, choose file type CSV (Comma delimited) (*.csv), name it `student.csv`, click Yes when Excel warns about losing workbook features. The result is the file below.
+3. Open the CSV in WEKA: Explorer, Open file..., set Files of type to CSV data files (*.csv), select `student.csv`, Open. WEKA's `CSVLoader` reads row 1 as attribute names, makes a column numeric when every cell parses as a number, and nominal otherwise. A blank cell becomes a missing value.
+4. Check the guessed types in the Attributes list. `sid` is numeric here, which is fine for an identifier you will remove later; if a numeric code should be nominal, apply Filter, unsupervised, attribute, `NumericToNominal` on that index.
+5. Save as ARFF: click Save..., set Files of type to Arff data files (*.arff), name it `student.arff`. Open it in Notepad to see the header WEKA wrote.
+6. Command-line alternative in Simple CLI: `java weka.core.converters.CSVLoader student.csv > student.arff`.
+
+#### Program
+
+The CSV as Excel writes it (row 9 has an empty `internal` cell, row 18 an empty `attendance` cell):
+
+```text title="student.csv" file=<rootDir>/public/code/mcsl-223/section-2/session-1/student.csv
+
+```
+
+The ARFF that WEKA produces, tidied by hand with comments and a blank line between sections:
+
+```text title="student.arff" file=<rootDir>/public/code/mcsl-223/section-2/session-1/student.arff
+
+```
+
+#### Output
+
+Header that `CSVLoader` generates (nominal labels appear in the order they are first met in the file, missing cells become `?`):
+
+```text
+@relation student
+
+@attribute sid numeric
+@attribute age numeric
+@attribute gender {M,F}
+@attribute stream {science,commerce,arts}
+@attribute attendance numeric
+@attribute internal numeric
+@attribute sem_marks numeric
+@attribute hours_study numeric
+@attribute result {pass,fail}
+
+@data
+1,20,M,science,85,24,58,3.5,pass
+...
+9,19,M,commerce,65,?,38,2,fail
+```
+
+Preprocess panel after loading: Instances 30, Attributes 9, `attendance` Missing 1 (3%), `internal` Missing 1 (3%), class `result` pass 18, fail 12.
+
+#### Explanation
+
+CSV only carries names and values, so the loader has to guess types; ARFF carries the types explicitly, which is why WEKA prefers it. The nominal value list in the header is a contract: a row containing a label not in the list is rejected when the file is loaded. The `?` token is the only way to say missing in ARFF, so the blank Excel cell must become `?`, which `CSVLoader` does for you.
 
 ## Question 3
 
@@ -85,7 +187,41 @@ Try to create your own datasets.
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Decide the relation, the attributes with their types, and which attribute is the class. Here: 30 employees, class `promoted`.
+2. Type the header: `@relation employee`, one `@attribute name type` line per column. Numeric columns get `numeric`; categorical columns get the label list in braces. Lines starting with `%` are comments.
+3. Type `@data` and one comma-separated row per employee, values in the same order as the attributes, no spaces needed.
+4. Save as `employee.arff` (plain text, UTF-8, `.arff` extension) and open it in Explorer. If the file has a typo (a label not in the list, a missing comma) WEKA reports the line number in the error dialog.
+5. Also check the file with Tools, ArffViewer in the GUI Chooser, which shows it as a grid and lets you edit cells.
+
+#### Program
+
+```text title="employee.arff" file=<rootDir>/public/code/mcsl-223/section-2/session-1/employee.arff
+
+```
+
+#### Output
+
+Preprocess panel values for `employee.arff` (mean and standard deviation computed with `preprocess.py` from Session 2, which uses the same sample standard deviation as WEKA):
+
+```text
+Instances: 30   Attributes: 9
+
+eid          Numeric  Missing: 0 (0%)  Distinct: 30  Min: 1  Max: 30  Mean: 15.5  StdDev: 8.803
+age          Numeric  Missing: 0 (0%)  Distinct: 27  Min: 23  Max: 52  Mean: 35.7  StdDev: 8.091
+gender       Nominal  Missing: 0 (0%)  M: 15  F: 15
+dept         Nominal  Missing: 0 (0%)  HR: 6  IT: 9  Sales: 8  Finance: 7
+experience   Numeric  Missing: 0 (0%)  Distinct: 24  Min: 1  Max: 27  Mean: 11.267  StdDev: 7.39
+education    Nominal  Missing: 0 (0%)  UG: 10  PG: 15  PhD: 5
+salary       Numeric  Missing: 0 (0%)  Distinct: 29  Min: 26000  Max: 90000  Mean: 53333.333  StdDev: 17452.069
+performance  Nominal  Missing: 0 (0%)  poor: 5  average: 10  good: 15
+promoted     Nominal  Missing: 0 (0%)  yes: 15  no: 15
+```
+
+#### Explanation
+
+The dataset was designed so that later sessions can learn something from it: `promoted` is `yes` exactly when `performance` is `good`, and `salary` grows with `experience`. A classifier in Session 7 should find the first rule with 100 percent accuracy, and a regression in Session 6 should find a positive slope of salary on experience. Both `student.arff` and `employee.arff` are the files the manual asks for in Sessions 7 and 8.
 
 ## Question 4
 
@@ -99,7 +235,129 @@ Preprocess and classify Customer, Agriculture, Weather, Whole-sale Customers or 
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+Two datasets: the 14-row weather data (in the brief, so every number can be checked by hand) and iris, which WEKA ships and UCI hosts.
+
+#### Steps
+
+1. Preprocess weather: Open file `weather.nominal.arff`. Every attribute is nominal with no missing values, so no filter is needed. Confirm class `play` with 9 yes and 5 no.
+2. Classify tab, Choose, trees, J48. Keep the defaults (`confidenceFactor` 0.25, `minNumObj` 2). Under Test options pick Use training set, click Start. Then pick Cross-validation, Folds 10, Start again.
+3. Right-click the entry in the Result list and choose Visualize tree to see the decision tree.
+4. Preprocess iris: Open file `iris.arff`. Four numeric attributes, no missing values. Apply Filter, unsupervised, attribute, `Normalize` if you also plan to run IBk (k-nearest neighbour); J48 does not need it because it compares one attribute with a threshold at a time.
+5. Classify iris with J48, Cross-validation 10 folds, Start. Record Correctly Classified Instances, Kappa and the confusion matrix.
+
+#### Output
+
+Information gain of each weather attribute at the root, from the formula sheet with <Math tex="H(S) = -\frac{9}{14}\log_2\frac{9}{14} - \frac{5}{14}\log_2\frac{5}{14} = 0.940" />:
+
+| Attribute | Gain |
+| --- | --- |
+| outlook | 0.247 |
+| humidity | 0.152 |
+| windy | 0.048 |
+| temperature | 0.029 |
+
+So J48 splits on outlook first, and WEKA prints:
+
+```text
+=== Classifier model (full training set) ===
+
+J48 pruned tree
+------------------
+
+outlook = sunny
+|   humidity = high: no (3.0)
+|   humidity = normal: yes (2.0)
+outlook = overcast: yes (4.0)
+outlook = rainy
+|   windy = TRUE: no (2.0)
+|   windy = FALSE: yes (3.0)
+
+Number of Leaves  : 	5
+Size of the tree : 	8
+
+=== Evaluation on training set ===
+Correctly Classified Instances          14              100      %
+Incorrectly Classified Instances         0                0      %
+Kappa statistic                          1
+
+=== Confusion Matrix ===
+ a b   <-- classified as
+ 9 0 | a = yes
+ 0 5 | b = no
+```
+
+The number in brackets at each leaf is the count of training rows reaching it (3 + 2 + 4 + 2 + 3 = 14). With 10-fold cross-validation on 14 rows the accuracy drops to about 50 percent: the folds are tiny and the tree changes from fold to fold.
+
+Iris, J48, 10-fold cross-validation (expected from WEKA, not run here):
+
+```text
+J48 pruned tree
+------------------
+petalwidth <= 0.6: Iris-setosa (50.0)
+petalwidth > 0.6
+|   petalwidth <= 1.7
+|   |   petallength <= 4.9: Iris-versicolor (48.0/1.0)
+|   |   petallength > 4.9
+|   |   |   petalwidth <= 1.5: Iris-virginica (3.0)
+|   |   |   petalwidth > 1.5: Iris-versicolor (3.0/1.0)
+|   petalwidth > 1.7: Iris-virginica (46.0/1.0)
+
+Number of Leaves  : 	5
+Size of the tree : 	9
+
+=== Stratified cross-validation ===
+Correctly Classified Instances         144               96      %
+Incorrectly Classified Instances         6                4      %
+Kappa statistic                          0.94
+
+=== Confusion Matrix ===
+  a  b  c   <-- classified as
+ 49  1  0 |  a = Iris-setosa
+  0 47  3 |  b = Iris-versicolor
+  0  2 48 |  c = Iris-virginica
+```
+
+#### Explanation
+
+Preprocessing here is inspection: types, missing values, class balance. Classification is J48 (C4.5) picking the attribute with the highest gain ratio at every node and pruning leaves that do not help. The weather tree reproduces the textbook ID3 tree because the gain ordering above is the same at every level. On iris the tree uses only the petal measurements, which agrees with the Visualize tab in Question 1: petal length and width separate the classes, sepal width does not. Accuracy is <Math tex="\frac{144}{150} = 0.96" /> and Kappa 0.94 means the agreement is far above the 0.33 expected by chance for three equal classes.
+
+## Viva Questions
+
+<Explain />
+
+**Q:** What does ARFF stand for and what are its three sections?
+**A:** Attribute-Relation File Format: `@relation`, the `@attribute` declarations, and `@data`.
+
+**Q:** How does WEKA decide which attribute is the class?
+**A:** By the dropdown above the histogram in Preprocess; it defaults to the last attribute. Classifiers use that choice.
+
+**Q:** What is the difference between Explorer and Experimenter?
+**A:** Explorer works on one dataset interactively. Experimenter runs many algorithm and dataset combinations with repeated cross-validation and compares the results statistically.
+
+**Q:** What does Distinct mean in the Selected attribute box, and what does Unique mean?
+**A:** Distinct is the number of different values present. Unique is the number of values that occur exactly once.
+
+**Q:** How is a missing value written in ARFF and what does a blank CSV cell become?
+**A:** `?` in both cases; `CSVLoader` converts the blank cell for you.
+
+**Q:** Why is weather.numeric different from weather.nominal for Apriori?
+**A:** Apriori needs nominal attributes; temperature and humidity are numeric in weather.numeric and must be discretised first.
+
+**Q:** Why did J48 choose outlook at the root of the weather tree?
+**A:** Its information gain 0.247 is the largest of the four attributes.
+
+**Q:** Where are the sample datasets on disk?
+**A:** In the `data` folder under the WEKA install directory, for example `C:\Program Files\Weka-3-8-6\data`.
+
+## Common Mistakes
+
+<Explain />
+
+- Saving the Excel sheet as `.xlsx` and trying to open it in WEKA; only CSV or ARFF are loaded by Open file.
+- Writing a nominal label in the data that is not in the `@attribute` list, or using spaces inside labels without quotes; WEKA refuses the file with a line number.
+- Leaving the identifier column (`sid`, `eid`) in the data before classification; a tree can memorise it and the accuracy on the training set becomes meaningless.
+- Reading the histogram counts with the wrong class selected in the dropdown and reporting them as the class distribution.
+- Reporting training-set accuracy as the model's accuracy; use cross-validation for the figure you write in the record.
 
 ## Formula Sheet
 
@@ -163,7 +421,7 @@ DBSCAN calls a point a core point when at least <Math tex="\text{minPts}" /> poi
 
 <Notebook />
 
-- Question 1: Download and install WEKA. Navigate the various options available in WEKA. Explo
-- Question 2: Create your own EXCEL file. Convert the EXCEL file to .csv format and prepare it
-- Question 3: Try to create your own datasets
-- Question 4: Preprocess and classify Customer, Agriculture, Weather, Whole-sale Customers or 
+- Question 1: WEKA 3.8 installed, GUI Chooser tour, and a table of ten built-in datasets with attribute types, instance counts, class attribute and class counts read from the Preprocess panel
+- Question 2: `student.csv` saved from Excel, loaded with CSVLoader, saved as `student.arff`, header checked
+- Question 3: `employee.arff` written by hand (30 rows, 9 attributes) and its Preprocess panel statistics recorded
+- Question 4: weather.nominal and iris preprocessed and classified with J48; information gains, trees, accuracy and confusion matrices recorded

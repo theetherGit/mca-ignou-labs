@@ -7,10 +7,6 @@ sidebar:
 
 Associations carry the interesting decisions: which side holds the reference, whether both sides do, and how an association class is represented. This session implements two small but complete examples.
 
-<Aside type="caution" title="Draft: questions final, solutions pending">
-  Every question below is copied from the lab manual. Worked solutions are being added session by session. Use the problem statements, prep notes and formula sheet to prepare before your lab.
-</Aside>
-
 ## Objectives
 
 <Explain />
@@ -25,8 +21,8 @@ Associations carry the interesting decisions: which side holds the reference, wh
 
 | Question | Requirement | Status |
 | --- | --- | --- |
-| Q21 | Implement the following Associations using C++/Java | Solution pending |
-| Q22 | Implement the following Associations using C++/Java | Solution pending |
+| Q21 | Implement the following Associations using C++/Java | Complete |
+| Q22 | Implement the following Associations using C++/Java | Complete |
 
 ## Preparation
 
@@ -52,7 +48,89 @@ Figure 1.16: Train-Journey Association
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Assumptions
+
+A railway keeps a list of trains and a list of journeys. A train has a number, a type such as Rajdhani or Shatabdi, and a maximum speed. A journey has a source station, a destination station and a journey time in hours, and records the number of the train that runs it. One train can be assigned to any number of journeys, including none, and a journey is assigned to at most one train at a time. Both ends of the link have role names in the figure, `assignedTrain` on the train side and `assignedJourny` on the journey side, and the line has no arrowhead, so the link must be navigable in both directions: from a journey you reach its train, and from a train you list its journeys. The program must let the operator assign a journey to a train, move a journey to another train, take a journey off its train, set and read the stations and the train type, and query a journey time or a train speed by train number. Whatever the sequence of operations, the two ends must never disagree.
+
+- Two-way association: `TrainJourney::assignedTrain` is a pointer (`0..1`) and `Train::assignedJourny` is a `std::vector` of pointers (`0..*`).
+- Both ends change only inside two free functions, `assign` and `unassign`. `main` never touches the pointers or the vector directly.
+- `assign` first calls `unassign`, so a journey can never appear under two trains.
+- The figure gives `Train_No` as an attribute of TrainJourney and also as a parameter of the getters. `assign` copies the train's number into the journey, and the getters answer only when the number passed matches; otherwise they return a marker (`(not this train)` or `-1`).
+- Attribute and operation names keep the figure's spelling, including `Journy_Time` and `Set_Dastination_St`.
+
+#### Diagram elements
+
+| Class | Attributes | Operations |
+| --- | --- | --- |
+| TrainJourney | Train_No: int, Source_St: String, Destination_St: String, Journy_Time: float | Set_Source_St(source: String), Set_Dastination_St(destination: String), Get_Source_St(Train_No: int): String, Get_Journy_Time(Train_No: int): float |
+| Train | Train_No: int, Train_Type: String, Max_Speed: float | Get_Train_No(): int, Set_Train_Type(trtype: String), Get_Train_Speed(Train_No: int): float |
+
+Association: TrainJourney `0..*` (role `assignedJourny`) to Train `0..1` (role `assignedTrain`), no arrowhead, so two-way.
+
+How the objects point at each other after the first three `assign` calls in `main` (each arrow is a pointer stored in the object at its tail):
+
+```text
+ rajdhani (Train 12951)                shatabdi (Train 12009)
+ assignedJourny: [ j1, j2 ]            assignedJourny: [ j3 ]
+     |      |                              |
+     v      v                              v
+    j1     j2                             j3
+ assignedTrain ---> rajdhani           assignedTrain ---> shatabdi
+ assignedTrain ---> rajdhani
+```
+
+Every journey in a train's vector points back at that train, and no journey is in two vectors. `assign` and `unassign` are the only code that may change this picture.
+
+#### Steps
+
+1. Save the listing below as `train_journey.cpp` in a `session-9` folder.
+2. Compile: `clang++ -std=c++17 -Wall -Wextra -o train_journey train_journey.cpp`.
+3. Run `./train_journey` and paste the output.
+
+#### Program
+
+```cpp title="train_journey.cpp" file=<rootDir>/public/code/mcsl-222/section-1/session-9/train_journey.cpp
+
+```
+
+#### Output
+
+Compiled with zero warnings and run here; this is the real output.
+
+```text
+--- after assignment ---
+Train 12951 (Rajdhani, 130 km/h) runs 2 journey(s)
+  Mumbai -> Delhi, 15.5 h, Train_No stored in journey = 12951
+  Delhi -> Mumbai, 15.75 h, Train_No stored in journey = 12951
+Train 12009 (Shatabdi, 150 km/h) runs 1 journey(s)
+  Mumbai -> Ahmedabad, 6.25 h, Train_No stored in journey = 12009
+--- operations from the figure ---
+j3.Get_Source_St(12009) = Mumbai Central
+j3.Get_Source_St(12951) = (not this train)
+j3.Get_Journy_Time(12009) = 6.25
+shatabdi.Get_Train_Speed(12009) = 150
+j1.assignedTrain->Train_Type = Rajdhani
+--- move j2 to the Shatabdi (0..1 keeps only one train) ---
+Train 12951 (Rajdhani, 130 km/h) runs 1 journey(s)
+  Mumbai -> Delhi, 15.5 h, Train_No stored in journey = 12951
+Train 12009 (Shatabdi Express, 150 km/h) runs 2 journey(s)
+  Mumbai Central -> Ahmedabad Jn, 6.25 h, Train_No stored in journey = 12009
+  Delhi -> Mumbai, 15.75 h, Train_No stored in journey = 12009
+--- unassign j3 ---
+j3.assignedTrain is nullptr, shatabdi lists 1 journey(s)
+```
+
+#### Explanation
+
+| Diagram element | Where it is in the code |
+| --- | --- |
+| Role assignedTrain, `0..1` | `Train* assignedTrain = nullptr` in `TrainJourney`. A pointer that may be null is exactly `0..1`. |
+| Role assignedJourny, `0..*` | `std::vector<TrainJourney*> assignedJourny` in `Train`. |
+| Two-way navigability | Both members exist. `j1.assignedTrain->Train_Type` walks journey to train; `printTrain` walks train to journeys. |
+| Consistency | `assign` sets the pointer, copies `Train_No` and pushes into the vector in one place. `unassign` erases from the vector and clears the pointer. Nothing else writes the two ends. |
+| `0..1` upper bound | `assign` starts with `unassign(j)`, so moving `j2` to the Shatabdi removes it from the Rajdhani, as the output after the move shows: Rajdhani 1 journey, Shatabdi 2. |
+| Getters with a Train_No parameter | `Get_Source_St(12951)` on a Shatabdi journey returns `(not this train)`; with the matching number it returns the station. |
+| Setters | `Set_Source_St`, `Set_Dastination_St` and `Set_Train_Type` assign the string; the change shows in the second print of the Shatabdi. |
 
 ## Question 22
 
@@ -70,12 +148,110 @@ Figure 1.17: Person and Bank Account
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Assumptions
+
+A bank keeps, for each customer, the accounts that customer holds. A person has an ID and a name. A bank account has an account number and a balance, and supports a credit that increases the balance and a withdrawal that decreases it. One person can hold any number of accounts and every account belongs to exactly one person. The figure gives Person an operation `addAccount(BankAccount a)` and gives BankAccount no operation or attribute that refers to a person, so the link is navigable from person to account only. From a person you can reach and total all their accounts; from an account you cannot ask who owns it. The program must create a person and two accounts, attach the accounts, credit and withdraw amounts, refuse a withdrawal that exceeds the balance and a credit that is not positive, and print the accounts with a total.
+
+- One-way association: `Person::accounts` is a `std::vector` of pointers (`*`). `BankAccount` has no member that refers to `Person`.
+- `Credit` rejects an amount of zero or less. `Withdraw` rejects an amount of zero or less and any amount above the balance; the account never goes negative.
+- The `1` at the Person end (every account has exactly one owner) cannot be checked from the account side in a one-way design. The program trusts `main` to add each account to one person only. Making the link two-way is the fix if that check is required; Q21 shows how.
+- `totalBalance` is an extra helper for printing; the figure's attributes and operations are otherwise unchanged.
+
+#### Diagram elements
+
+| Class | Attributes | Operations |
+| --- | --- | --- |
+| Person | Person_ID: String, Name: String | addAccount(BankAccount a) |
+| BankAccount | Acc_No: String, Acc_Balance: double | Credit(double amount), Withdraw(double amount) |
+
+Association: Person `1` has BankAccount `*`, navigable from Person only.
+
+Pointers after the two `addAccount` calls in `main`:
+
+```text
+ asha (Person P001)
+ accounts: [ savings, current ]
+     |         |
+     v         v
+  savings    current          (no arrow back to asha:
+  SB-1001    CA-2001           BankAccount has no Person member)
+```
+
+#### Steps
+
+1. Save the listing below as `person_account.cpp` in the `session-9` folder.
+2. Compile: `clang++ -std=c++17 -Wall -Wextra -o person_account person_account.cpp`.
+3. Run `./person_account` and paste the output.
+
+#### Program
+
+```cpp title="person_account.cpp" file=<rootDir>/public/code/mcsl-222/section-1/session-9/person_account.cpp
+
+```
+
+#### Output
+
+Compiled with zero warnings and run here; this is the real output.
+
+```text
+--- after addAccount ---
+Asha (P001) holds 2 account(s)
+  SB-1001  balance 5000.00
+  CA-2001  balance 12000.00
+  total 17000.00
+--- Credit and Withdraw ---
+  refused: cannot withdraw 9000.00 from SB-1001 (balance 6500.00)
+  refused: credit amount must be positive
+Asha (P001) holds 2 account(s)
+  SB-1001  balance 6500.00
+  CA-2001  balance 10000.00
+  total 16500.00
+```
+
+Check by hand: `5000 + 1500 = 6500` on the savings account, `12000 - 2000 = 10000` on the current account, total `16500`.
+
+#### Explanation
+
+| Diagram element | Where it is in the code |
+| --- | --- |
+| Person `1` has `*` BankAccount | `std::vector<BankAccount*> accounts` in `Person`; `addAccount(BankAccount& a)` pushes a pointer. |
+| One-way navigability | `BankAccount` has no `Person*` member. The commented line at the end of `main`, `savings.owner->Name`, would not compile, which is the point. |
+| Credit(double amount) | Adds to `Acc_Balance` after the positive check. |
+| Withdraw(double amount) | Subtracts after checking `amount` is positive and not above `Acc_Balance`; the refusal for `9000` on a balance of `6500` is the first refused line of the output. |
+| Printing | `printPerson` walks the vector from the Person side, which is the only direction available. |
+
+## Viva Questions
+
+<Explain />
+
+**Q:** What decides whether an association is one-way or two-way in code? **A:** Navigability. An arrowhead, or an operation on one side only, means only that class stores the link. Role names on both ends with no arrowhead, as in figure 1.16, mean both classes store it.
+
+**Q:** Why does the train program change both ends inside `assign` and never in `main`? **A:** A two-way link is two members that must agree. If any code can set one without the other, they drift apart. One function that always updates both is the only way to guarantee consistency.
+
+**Q:** What does `0..1` become in C++? **A:** A pointer that may be `nullptr`. `1` is a pointer that must not be null; `*` and `0..*` are a `std::vector`.
+
+**Q:** What is lost with one-way navigation in figure 1.17? **A:** The `1` at Person cannot be enforced or even checked from the account, and you cannot find an account's owner without scanning every person.
+
+**Q:** What would change to make Person and BankAccount two-way? **A:** Add `Person* owner` to `BankAccount`, set it in `addAccount`, and refuse `addAccount` when `owner` is already set.
+
+**Q:** Why keep the misspelt names such as `Journy_Time`? **A:** The lab record is checked against the figure. Matching names show the mapping is exact; fixing spellings is a separate remark, not a silent change.
+
+**Q:** Why does `assign` call `unassign` first? **A:** The `0..1` on the train end means a journey has at most one train. Removing the old link before adding the new one keeps that bound.
+
+## Common Mistakes
+
+<Explain />
+
+- Setting `assignedTrain` on the journey and forgetting to push into `assignedJourny`, or the reverse; the printed lists then disagree with the pointers.
+- Erasing from a vector inside a range-for loop over the same vector. Use the erase-remove idiom on a copy of the pointer, as `unassign` does.
+- Adding an owner pointer to `BankAccount` when the figure shows a one-way link, then claiming it matches the figure.
+- Letting `Withdraw` drive the balance negative because the check compares the wrong way round.
+- Comparing floats printed with different precision and thinking the values changed; set the precision once.
 
 ## Session Summary
 
 <Notebook />
 
-- Question 21: Implement the following Associations using C++/Java
-- Question 22: Implement the following Associations using C++/Java
-- Problem description (300 to 500 words) and assumptions for every diagram
+- Question 21: `train_journey.cpp`, two-way TrainJourney to Train association with `assign` and `unassign` keeping both ends in step, run output attached
+- Question 22: `person_account.cpp`, one-way Person to BankAccount association with guarded `Credit` and `Withdraw`, run output attached
+- Problem description and assumptions for both figures, plus a diagram-element table for each

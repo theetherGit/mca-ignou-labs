@@ -7,10 +7,6 @@ sidebar:
 
 This session sends UDP traffic across the wireless network from Session 4 and records what arrives, both as a plot of bytes over time and as a pcap trace of the receiver's Wi-Fi interface.
 
-<Aside type="caution" title="Draft: questions final, solutions pending">
-  Every question below is copied from the lab manual. Worked solutions are being added session by session. Use the problem statements, prep notes and formula sheet to prepare before your lab.
-</Aside>
-
 ## Objectives
 
 <Explain />
@@ -25,9 +21,9 @@ This session sends UDP traffic across the wireless network from Session 4 and re
 
 | Question | Requirement | Status |
 | --- | --- | --- |
-| Q10 | Create a UDP client on a node n1 and a UDP server on a node n2 | Solution pending |
-| Q11 | Send packets to node n2 from node n1 and plot the number of bytes received with... | Solution pending |
-| Q12 | Show the pcap traces at node n2's Wi-Fi interface | Solution pending |
+| Q10 | Create a UDP client on a node n1 and a UDP server on a node n2 | Complete |
+| Q11 | Send packets to node n2 from node n1 and plot the number of bytes received with... | Complete |
+| Q12 | Show the pcap traces at node n2's Wi-Fi interface | Complete |
 
 ## Preparation
 
@@ -49,7 +45,38 @@ Create a UDP client on a node n1 and a UDP server on a node n2.
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+Questions 10, 11 and 12 share one program, `wifi_udp_trace.cc`: question 10 is the network and the two applications, question 11 the `Rx` trace and the plot, question 12 the pcap. The code indices 0 and 1 are the manual's n1 and n2. Positions are fixed 50 m apart so the plot is repeatable; the OLSR routing from Session 4 stays in place.
+
+#### Steps
+
+1. Save the program as `scratch/wifi_udp_trace.cc` and run `./ns3 run scratch/wifi_udp_trace`.
+2. Check the last two console lines: 900 packets received, 0 lost, 921600 bytes.
+3. Rate check with the formula sheet: 1024 bytes every 10 ms is <Math tex="R = 8L/\Delta t = 8192 / 0.01 = 819.2\,\text{kbit/s}" />, well under the 11 Mbit/s channel.
+4. Try `--interval=1` (1 ms, 8.19 Mbit/s) and watch `lost` become non-zero as the channel saturates.
+
+#### Program
+
+```cpp title="wifi_udp_trace.cc" file=<rootDir>/public/code/mcsl-223/section-1/session-5/wifi_udp_trace.cc
+
+```
+
+#### Output
+
+Expected console output. `UdpServer` logs one line per packet; the delay per packet is the Wi-Fi hop delay computed in Session 4 (about 1.3 ms for a 1024-byte frame), so time stamps are illustrative.
+
+```text
+TraceDelay: RX 1024 bytes from 10.1.1.1 Sequence Number: 0 Uid: 6 TXtime: +1s RXtime: +1.00134s Delay: +0.00134s
+TraceDelay: RX 1024 bytes from 10.1.1.1 Sequence Number: 1 Uid: 8 TXtime: +1.01s RXtime: +1.01134s Delay: +0.00134s
+TraceDelay: RX 1024 bytes from 10.1.1.1 Sequence Number: 2 Uid: 10 TXtime: +1.02s RXtime: +1.02134s Delay: +0.00134s
+...
+TraceDelay: RX 1024 bytes from 10.1.1.1 Sequence Number: 899 Uid: 1804 TXtime: +9.99s RXtime: +9.99134s Delay: +0.00134s
+Packets received at n2: 900, lost: 0
+Bytes received at n2  : 921600 in 9 s = 819.2 kbit/s
+```
+
+#### Explanation
+
+`UdpServerHelper(9)` installs a `UdpServer` that binds UDP port 9, counts packets by the sequence number `UdpClient` puts in a 12-byte `SeqTsHeader`, and reports lost ones from gaps in the sequence. `UdpClientHelper` on n1 sends `PacketSize` bytes every `Interval`; `MaxPackets` is set to the maximum so the `Stop` time ends the flow. Unlike the echo pair of Session 1 this is one-way traffic, which is what the plot in question 11 needs. The two nodes are one hop apart, so OLSR only fills in the direct route.
 
 ## Question 11
 
@@ -63,7 +90,69 @@ Send packets to node n2 from node n1 and plot the number of bytes received with 
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. In the program, `RxTrace` is connected to the server's `Rx` trace source with `TraceConnectWithoutContext`; it adds each packet size to a counter.
+2. `SampleRx` runs every 0.5 s and appends `time  bytes` to `rx-bytes.dat`.
+3. After the run, plot with `gnuplot rx_bytes.plt`; it writes `rx-bytes.png`.
+4. Paste the plot in the record with the axis labels and the two numbers it must agree with: 0 bytes until 1 s, 921600 bytes at 10 s.
+
+#### Program
+
+The trace part of `wifi_udp_trace.cc`:
+
+```cpp
+static void RxTrace(Ptr<const Packet> packet) { g_rxBytes += packet->GetSize(); }
+
+static void SampleRx(double interval)
+{
+    g_traceFile << Simulator::Now().GetSeconds() << "\t" << g_rxBytes << std::endl;
+    Simulator::Schedule(Seconds(interval), &SampleRx, interval);
+}
+
+Ptr<UdpServer> udpServer = DynamicCast<UdpServer>(serverApp.Get(0));
+udpServer->TraceConnectWithoutContext("Rx", MakeCallback(&RxTrace));
+```
+
+The gnuplot script:
+
+```text title="rx_bytes.plt" file=<rootDir>/public/code/mcsl-223/section-1/session-5/rx_bytes.plt
+
+```
+
+#### Output
+
+Expected `rx-bytes.dat` (every packet arrives 1.34 ms after it is sent, so the sample at each half second counts 50 packets more than the previous one; the sample at 10 s is not written because the simulator stops first):
+
+```text
+# time(s)	bytes_received_at_n2
+0	0
+0.5	0
+1	0
+1.5	51200
+2	102400
+2.5	153600
+3	204800
+3.5	256000
+4	307200
+4.5	358400
+5	409600
+5.5	460800
+6	512000
+6.5	563200
+7	614400
+7.5	665600
+8	716800
+8.5	768000
+9	819200
+9.5	870400
+```
+
+The plot is a straight line from (1 s, 0) to (10 s, 921600) with slope <Math tex="921600 / 9 = 102400\,\text{bytes/s} = 819.2\,\text{kbit/s}" />, the offered rate. A flat section would mean the channel was busy or the nodes moved out of range.
+
+#### Explanation
+
+NS-3 tracing separates the event source from the consumer. `UdpServer` fires its `Rx` trace source for every packet it receives; the script attaches a plain C++ function to it with `TraceConnectWithoutContext` (the same mechanism `Config::ConnectWithoutContext` uses with a path string, as in Session 8 for the congestion window). Sampling on a timer instead of writing per packet keeps the file small and gives evenly spaced points, which gnuplot draws directly with `using 1:2`. The throughput formula from the sheet is the slope of this line: bytes received divided by elapsed time, times 8.
 
 ## Question 12
 
@@ -77,7 +166,56 @@ Show the pcap traces at node n2's Wi-Fi interface.
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. The program calls `phy.EnablePcap("wifi-udp", devices.Get(1))`, which captures only n2's Wi-Fi device and writes `wifi-udp-1-0.pcap` (node 1, device 0).
+2. `SetPcapDataLinkType(WifiPhyHelper::DLT_IEEE802_11_RADIO)` adds a radiotap header so Wireshark shows the data rate and signal strength of every frame.
+3. Open it: `wireshark wifi-udp-1-0.pcap`.
+4. Apply the filter `udp.dstport == 9` to see only the client's datagrams; `wlan.fc.type_subtype == 0x1d` shows the 802.11 ACKs n2 sent back; `olsr` shows the routing traffic.
+5. Statistics, I/O Graph with the filter `udp.dstport == 9` and Y axis set to Bytes reproduces the plot from question 11 straight from the capture.
+
+#### Output
+
+Expected Wireshark packet list for `wifi-udp-1-0.pcap` with filter `udp.dstport == 9` (900 frames displayed):
+
+```text
+No.   Time      Source     Destination  Protocol Length Info
+12    1.001340  10.1.1.1   10.1.1.2     UDP      1112   49153 → 9 Len=1024
+14    1.011340  10.1.1.1   10.1.1.2     UDP      1112   49153 → 9 Len=1024
+16    1.021340  10.1.1.1   10.1.1.2     UDP      1112   49153 → 9 Len=1024
+...
+1810  9.991340  10.1.1.1   10.1.1.2     UDP      1112   49153 → 9 Len=1024
+```
+
+Frame length 1112 is 1024 payload + 8 UDP + 20 IP + 8 LLC/SNAP + 24 802.11 header + 4 FCS = 1088 bytes on air, plus the radiotap header NS-3 writes (24 bytes here; the exact size varies by version). Without the filter the list also contains OLSR HELLO messages every 2 s from both nodes and the 802.11 ACK n2 returns after each data frame. Wireshark's Statistics, Capture File Properties shows about 921600 bytes of UDP payload and an average of 100 packets per second.
+
+#### Explanation
+
+`YansWifiPhyHelper::EnablePcap` hooks the phy's `MonitorSnifferRx` and `MonitorSnifferTx` trace sources on the given device only, so the file holds every frame n2's radio sent or received, including frames that were not for it. That is the wireless equivalent of a network tap and is why the manual asks for the trace at n2 rather than n1: it shows what arrived, not what was sent. The radiotap link type is worth enabling because the plain 802.11 format drops the rate and signal fields. The three views from this session agree with each other: the server's packet count, the trace file's slope and the pcap byte total are the same 921600 bytes measured at the application, the trace and the radio.
+
+## Viva Questions
+
+<Explain />
+
+- **Q:** What is the difference between `UdpClient` and `UdpEchoClient`? **A:** UdpClient sends one way with a sequence and time stamp header; UdpEchoClient expects a reply.
+- **Q:** How does `UdpServer` know a packet was lost? **A:** From a gap in the sequence numbers carried in the `SeqTsHeader`.
+- **Q:** What is a trace source and a trace sink? **A:** The source is the event NS-3 fires, the sink is the function you attach with `TraceConnect`.
+- **Q:** Why sample every 0.5 s instead of logging each packet? **A:** Fewer, evenly spaced points; the plot is the same line.
+- **Q:** What does the slope of the bytes-versus-time line mean? **A:** Throughput in bytes per second; times 8 gives bit/s.
+- **Q:** Why does the pcap file name contain 1-0? **A:** Node index 1 (n2), device index 0 on that node.
+- **Q:** What does the radiotap header add? **A:** Per-frame data rate, channel and signal strength for Wireshark to display.
+- **Q:** Why do OLSR packets appear in the trace when only UDP data was sent? **A:** OLSR broadcasts HELLO and TC messages periodically regardless of data traffic.
+
+## Common Mistakes
+
+<Explain />
+
+- Connecting the `Rx` trace before the server application exists, or with a wrong `Config` path, so the counter stays at zero.
+- Passing a fraction to `MilliSeconds`; it truncates to an integer, so 0.5 becomes 0 ms and the client floods the channel. Use `MicroSeconds`.
+- Leaving `MaxPackets` at its default of 100, so the flow stops after one second and the plot goes flat.
+- Calling `EnablePcap` on `devices` (all nodes) and then opening n1's file to show n2's interface.
+- Forgetting the `#` header line in the data file and getting a parse error from gnuplot on the label row.
+- Reporting the pcap byte count (with headers) as the received bytes instead of the application count.
 
 ## Formula Sheet
 
@@ -127,6 +265,6 @@ The maximum throughput of one TCP flow is bounded by
 
 <Notebook />
 
-- Question 10: Create a UDP client on a node n1 and a UDP server on a node n2
-- Question 11: Send packets to node n2 from node n1 and plot the number of bytes received with 
-- Question 12: Show the pcap traces at node n2's Wi-Fi interface
+- `wifi_udp_trace.cc` listing, the `UdpServer` log and the final packet and byte counts
+- `rx-bytes.dat`, `rx_bytes.plt` and the bytes-versus-time plot with its slope
+- Wireshark view of `wifi-udp-1-0.pcap` filtered on `udp.dstport == 9` and the I/O Graph

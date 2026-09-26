@@ -7,10 +7,6 @@ sidebar:
 
 Placing nodes at exact 3D coordinates lets you study how distance affects a wireless link. A constant bit rate source then gives a steady, predictable load to measure.
 
-<Aside type="caution" title="Draft: questions final, solutions pending">
-  Every question below is copied from the lab manual. Worked solutions are being added session by session. Use the problem statements, prep notes and formula sheet to prepare before your lab.
-</Aside>
-
 ## Objectives
 
 <Explain />
@@ -25,9 +21,9 @@ Placing nodes at exact 3D coordinates lets you study how distance affects a wire
 
 | Question | Requirement | Status |
 | --- | --- | --- |
-| Q13 | Use 2 nodes to setup a wireless ad-hoc network where nodes are placed at a fixed... | Solution pending |
-| Q14 | Install UDP server and Client at these two nodes | Solution pending |
-| Q15 | Setup a CBR transmission between these nodes | Solution pending |
+| Q13 | Use 2 nodes to setup a wireless ad-hoc network where nodes are placed at a fixed... | Complete |
+| Q14 | Install UDP server and Client at these two nodes | Complete |
+| Q15 | Setup a CBR transmission between these nodes | Complete |
 
 ## Preparation
 
@@ -49,7 +45,56 @@ Use 2 nodes to setup a wireless ad-hoc network where nodes are placed at a fixed
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+One script, `adhoc-cbr.cc`, answers questions 13 to 15. Question 13 is the topology and position part; 14 and 15 add the applications. The whole listing is given here once and referred to from the next two questions.
+
+#### Steps
+
+1. Copy the listing below into `scratch/adhoc-cbr.cc` inside your ns-3 directory (`cp adhoc-cbr.cc scratch/`).
+2. Positions: a `ListPositionAllocator` receives one `Vector(x, y, z)` per node, node 0 at (0, 0, 1.5) m and node 1 at (distance, 0, 1.5) m. The z value is the antenna height, so both nodes have full 3D coordinates.
+3. `MobilityHelper` takes that allocator, sets `ns3::ConstantPositionMobilityModel` (the nodes never move) and is installed on the `NodeContainer`.
+4. Wi-Fi: `WifiHelper` with standard 802.11a and `ConstantRateWifiManager` fixed at `OfdmRate6Mbps`; `YansWifiChannelHelper::Default()` gives the log-distance loss model; `WifiMacHelper` type `ns3::AdhocWifiMac` makes it an ad-hoc network with no access point.
+5. `InternetStackHelper` and `Ipv4AddressHelper` (10.1.1.0/24) give the two interfaces addresses 10.1.1.1 and 10.1.1.2.
+6. Build and run: `./ns3 run "scratch/adhoc-cbr --distance=50"`. The first line printed comes from the mobility models and confirms the positions and the distance.
+
+#### Program
+
+```cpp title="adhoc-cbr.cc" file=<rootDir>/public/code/mcsl-223/section-1/session-6/adhoc-cbr.cc
+
+```
+
+#### Diagram
+
+```text
+      z = 1.5 m                                     z = 1.5 m
+   n0 (0, 0, 1.5)  ~~~~ 802.11a ad-hoc, 6 Mbit/s ~~~~  n1 (d, 0, 1.5)
+   10.1.1.1                                          10.1.1.2
+   UdpClient  ---- port 9  ---->  UdpServer
+   OnOff CBR  ---- port 10 ---->  PacketSink
+```
+
+#### Output
+
+Expected output for the default run (ns-3 is not installed here; the listing was checked by reading against the ns-3.36 helper API):
+
+```text
+$ ./ns3 run "scratch/adhoc-cbr --distance=50"
+Node 0 at (0, 0, 1.5) m, node 1 at (50, 0, 1.5) m, distance 50 m
+UdpClient : sent 900 packets of 1024 bytes
+UdpServer : received 900 packets, lost 0
+CBR sink  : received 562500 bytes in 9 s = 500 kbit/s
+```
+
+The file `adhoc-cbr-1-0.pcap` (node 1, device 0) is also written and opens in Wireshark.
+
+#### Explanation
+
+`GetDistanceFrom` computes the straight-line distance between the two position vectors:
+
+<Math display tex="d = \sqrt{(x_1 - x_0)^2 + (y_1 - y_0)^2 + (z_1 - z_0)^2}" />
+
+With node 0 at (0, 0, 1.5) and node 1 at (50, 0, 1.5) the y and z terms cancel and d is 50 m. If you set the nodes at different heights the z term counts too, which is why the manual says "3D plane".
+
+Ad-hoc mode means both stations talk directly; there is no association with an access point and no routing protocol is needed because both nodes are on the same subnet. Fixing the rate at 6 Mbit/s removes rate adaptation from the experiment, so the only thing that changes with distance is whether a frame is decoded or not.
 
 ## Question 14
 
@@ -63,7 +108,37 @@ Install UDP server and Client at these two nodes.
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. In the same script, `UdpServerHelper server(9)` installed on node 1 runs from 0 s to 10 s. `UdpServer` counts packets and, because the client adds a `SeqTsHeader`, also counts lost packets from gaps in the sequence numbers.
+2. `UdpClientHelper client(10.1.1.2, 9)` installed on node 0 with attributes `MaxPackets` 900, `Interval` 10 ms and `PacketSize` 1024 bytes; it runs from 1 s to 10 s, so exactly 900 packets are offered.
+3. Run with `--verbose` to see the per-packet log lines from both applications: `./ns3 run "scratch/adhoc-cbr --distance=50 --verbose=1"`.
+4. Read `GetReceived()` and `GetLost()` on the `UdpServer` after `Simulator::Run()` and write both in the record.
+
+#### Output
+
+Expected log lines with `--verbose=1` (two of 900 shown; ns-3 prints times in nanoseconds):
+
+```text
+TraceDelay TX 1024 bytes to 10.1.1.2 Uid: 4 Time: +1s
+TraceDelay: RX 1024 bytes from 10.1.1.1 Sequence Number: 0 Uid: 4 TXtime: +1e+09ns RXtime: +1.00163e+09ns Delay: +1.63e+06ns
+TraceDelay TX 1024 bytes to 10.1.1.2 Uid: 6 Time: +1.01s
+TraceDelay: RX 1024 bytes from 10.1.1.1 Sequence Number: 1 Uid: 6 TXtime: +1.01e+09ns RXtime: +1.01163e+09ns Delay: +1.63e+06ns
+...
+UdpServer : received 900 packets, lost 0
+```
+
+#### Explanation
+
+The client offers 1024 bytes every 10 ms, which is
+
+<Math display tex="R = \frac{8 \times 1024}{0.010} = 819{,}200\ \text{bit/s}" />
+
+well under the 6 Mbit/s link, so at 50 m nothing is lost. The 1.63 ms delay is almost all transmission time: 1024 bytes of payload plus 8 bytes UDP, 20 bytes IP, 8 bytes LLC/SNAP and 34 bytes MAC header and FCS is 1094 bytes, and
+
+<Math display tex="t_{\text{trans}} = \frac{1094 \times 8}{6 \times 10^{6}} = 1.46\ \text{ms}" />
+
+plus the OFDM preamble (20 microseconds), DIFS and one backoff slot. Propagation over 50 m is 0.17 microseconds and does not show at this precision. `UdpServer` and `UdpClient` are the right pair here (rather than the echo pair from Session 1) because the server keeps the received and lost counters that the record needs.
 
 ## Question 15
 
@@ -77,7 +152,54 @@ Setup a CBR transmission between these nodes.
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. `OnOffHelper onoff("ns3::UdpSocketFactory", InetSocketAddress(10.1.1.2, 10))` on node 0. `SetConstantRate(DataRate("500kb/s"), 500)` sets `OnTime` to a constant 1, `OffTime` to a constant 0, `DataRate` 500 kb/s and `PacketSize` 500 bytes, which is exactly a constant bit rate source.
+2. `PacketSinkHelper` on node 1 at port 10 receives it; `GetTotalRx()` gives the bytes delivered.
+3. Both run from 1 s to 10 s. Run the script three times, at 50 m, 100 m and 150 m, and fill the table below.
+4. Optional: `--cbrRate=1Mb/s` to see the effect of a heavier load.
+
+#### Output
+
+Expected values at the three distances (rows 2 and 3 depend on the random error model and will vary a little between runs; label them "approximate" in the record):
+
+| Distance | UdpServer received / sent | UdpServer lost | CBR bytes received | CBR throughput |
+| --- | --- | --- | --- | --- |
+| 50 m | 900 / 900 | 0 | 562500 | 500 kbit/s |
+| 100 m | about 610 / 900 | about 290 | about 380000 | about 338 kbit/s |
+| 150 m | 0 / 900 | 900 | 0 | 0 |
+
+```text
+$ ./ns3 run "scratch/adhoc-cbr --distance=150"
+Node 0 at (0, 0, 1.5) m, node 1 at (150, 0, 1.5) m, distance 150 m
+UdpClient : sent 900 packets of 1024 bytes
+UdpServer : received 0 packets, lost 0
+CBR sink  : received 0 bytes in 9 s = 0 kbit/s
+```
+
+At 150 m `UdpServer` reports lost 0 because it never saw a single sequence number; the loss is the 900 packets that never arrived, which you compute yourself.
+
+#### Explanation
+
+Packet interval from the formula sheet:
+
+<Math display tex="\Delta t = \frac{8L}{R} = \frac{8 \times 500}{500{,}000} = 8\ \text{ms}" />
+
+so in 9 s the source sends 1125 packets of 500 bytes, which is 562500 bytes, and the sink throughput is 8 times that over 9 s, exactly 500 kbit/s when nothing is lost.
+
+Why distance matters: the default channel uses the log-distance propagation loss model with exponent 3 and a reference loss of 46.7 dB at 1 m, and the PHY transmits at 16 dBm. The received power is
+
+<Math display tex="P_r = P_t - L_0 - 10 n \log_{10} d = 16.0 - 46.7 - 30 \log_{10} d\ \text{dBm}" />
+
+The noise floor of a 20 MHz 802.11a receiver with the default 7 dB noise figure is about -94 dBm, so the signal-to-noise ratio is
+
+| Distance | Received power | SNR | Result at 6 Mbit/s BPSK |
+| --- | --- | --- | --- |
+| 50 m | -81.7 dBm | 12.3 dB | every frame decoded |
+| 100 m | -90.7 dBm | 3.3 dB | frame error rate large; part of the traffic lost |
+| 150 m | -96.0 dBm | below 0 dB | nothing decoded |
+
+Every 10 dB more path loss needs 2.15 times the distance with exponent 3, so the link goes from perfect to dead in a narrow band around 100 m. Put these three rows in the record next to the measured table.
 
 ## Formula Sheet
 
@@ -123,10 +245,37 @@ The maximum throughput of one TCP flow is bounded by
 
 <Math display tex="\text{Loss rate} = \frac{\text{packets sent} - \text{packets received}}{\text{packets sent}}" />
 
+## Viva Questions
+
+<Explain />
+
+- **Q:** Why `ConstantPositionMobilityModel` when nothing moves? **A:** Every Wi-Fi node needs a `MobilityModel` object so the channel can ask for its position; the constant model is the one that stores a fixed position and never updates it.
+- **Q:** What does `ListPositionAllocator` do that `SetPositionAllocator` with a grid does not? **A:** It lets you give an explicit `Vector(x, y, z)` for each node in install order, so you control the exact 3D coordinates.
+- **Q:** What makes the network ad-hoc? **A:** `WifiMacHelper::SetType("ns3::AdhocWifiMac")`. There is no access point and no association; frames go station to station.
+- **Q:** Why fix the rate with `ConstantRateWifiManager`? **A:** So the PHY rate does not adapt with distance. The measured loss then comes only from the propagation model, which is what the question studies.
+- **Q:** How does an `OnOffHelper` become CBR? **A:** `SetConstantRate` sets `OnTime` to a constant 1 and `OffTime` to a constant 0, so the source is always on and sends one packet every 8L/R seconds.
+- **Q:** Why does `UdpServer` report lost 0 at 150 m when nothing arrived? **A:** It counts gaps in the sequence numbers it sees; with no packets seen there are no gaps. The real loss is sent minus received.
+- **Q:** Which model decides that 150 m is out of range? **A:** `LogDistancePropagationLossModel` with exponent 3; at 150 m the received power falls below the noise floor and the error-rate model rejects every frame.
+- **Q:** Why is the delay about 1.6 ms for a 1024-byte packet? **A:** Transmission time at 6 Mbit/s for the 1094-byte frame (1.46 ms) plus preamble, DIFS and backoff; propagation over 50 m is negligible.
+
+## Common Mistakes
+
+<Explain />
+
+- Leaving the default Wi-Fi standard (802.11ax in ns-3.36 and later) and asking for `OfdmRate6Mbps`; the run aborts because that mode does not exist for the standard. Call `SetStandard(WIFI_STANDARD_80211a)` first.
+- Installing the mobility model after the Wi-Fi devices are used, or not at all; the channel then cannot compute a distance and the simulation asserts.
+- Calling `GetReceived()` on the `ApplicationContainer` entry without `DynamicCast<UdpServer>`; the base `Application` class has no such method.
+- Reading the CBR figure as packets per second instead of bytes; `GetTotalRx()` returns bytes, so multiply by 8 and divide by the active time to get bit/s.
+- Running only one distance. The question is about the effect of distance; the record needs at least three rows.
+- Forgetting that the client starts at 1 s while the server starts at 0 s, then dividing by 10 s instead of 9 s in the throughput.
+
 ## Session Summary
 
 <Notebook />
 
-- Question 13: Use 2 nodes to setup a wireless ad-hoc network where nodes are placed at a fixed
-- Question 14: Install UDP server and Client at these two nodes
-- Question 15: Setup a CBR transmission between these nodes
+- Source listing of `adhoc-cbr.cc` with the header comment and the ASCII topology diagram (two nodes with their 3D coordinates)
+- The distance formula with the two position vectors substituted
+- Run output at 50 m with the `UdpServer` received and lost counts and the CBR bytes
+- Two log lines from `--verbose=1` showing the UDP client TX and server RX with the delay
+- The three-distance table (50, 100, 150 m) with received bytes, throughput and the received-power and SNR columns
+- The 8 ms packet interval calculation and the 562500-byte check

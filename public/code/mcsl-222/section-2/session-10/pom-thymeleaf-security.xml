@@ -1,0 +1,5 @@
+<!-- Session 10, Q46: sec:authorize / sec:authentication in Thymeleaf. Add inside <dependencies>. -->
+<dependency>
+  <groupId>org.thymeleaf.extras</groupId>
+  <artifactId>thymeleaf-extras-springsecurity6</artifactId>
+</dependency>

@@ -1,0 +1,28 @@
+% credit-card-promotion.arff - the 15-row credit card promotion database
+% (Roiger and Geatz, Data Mining: A Tutorial-Based Primer, Table 2.3)
+@relation credit-card-promotion
+
+@attribute income-range {20-30K, 30-40K, 40-50K, 50-60K}
+@attribute magazine-promotion {yes, no}
+@attribute watch-promotion {yes, no}
+@attribute life-insurance-promotion {yes, no}
+@attribute credit-card-insurance {yes, no}
+@attribute sex {male, female}
+@attribute age numeric
+
+@data
+40-50K,yes,no,no,no,male,45
+30-40K,yes,yes,yes,no,female,40
+40-50K,no,no,no,no,male,42
+30-40K,yes,yes,yes,yes,male,43
+50-60K,yes,no,yes,no,female,38
+20-30K,no,no,no,no,female,55
+30-40K,yes,no,yes,yes,male,35
+20-30K,no,yes,no,no,male,27
+30-40K,yes,no,no,no,male,43
+30-40K,yes,yes,yes,no,female,41
+40-50K,no,yes,yes,no,female,43
+20-30K,no,yes,yes,no,male,29
+50-60K,yes,yes,yes,no,female,39
+40-50K,no,yes,no,no,male,55
+20-30K,no,no,yes,yes,female,19

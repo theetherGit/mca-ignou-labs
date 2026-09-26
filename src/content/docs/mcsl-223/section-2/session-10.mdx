@@ -7,10 +7,6 @@ sidebar:
 
 Hierarchical clustering produces a tree of merges that does not need k in advance; DBSCAN finds clusters of arbitrary shape and marks noise. Both are run on the datasets you built in Session 1.
 
-<Aside type="caution" title="Draft: questions final, solutions pending">
-  Every question below is copied from the lab manual. Worked solutions are being added session by session. Use the problem statements, prep notes and formula sheet to prepare before your lab.
-</Aside>
-
 ## Objectives
 
 <Explain />
@@ -25,8 +21,8 @@ Hierarchical clustering produces a tree of merges that does not need k in advanc
 
 | Question | Requirement | Status |
 | --- | --- | --- |
-| Q22 | Implement Hierarchical Clustering Algorithm to demonstrate the clustering rule process... | Solution pending |
-| Q23 | Implement Density based Clustering Algorithm to demonstrate the clustering rule... | Solution pending |
+| Q22 | Implement Hierarchical Clustering Algorithm to demonstrate the clustering rule process... | Complete |
+| Q23 | Implement Density based Clustering Algorithm to demonstrate the clustering rule... | Complete |
 
 ## Preparation
 
@@ -51,7 +47,79 @@ Implement Hierarchical Clustering Algorithm to demonstrate the clustering rule p
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. **Open file...**, `employee.arff` (Session 7). **Cluster** tab, **Ignore attributes**, select `department` and `promoted` so the three numeric attributes `age`, `experience` and `salary` are used (WEKA normalises them to 0 to 1 inside EuclideanDistance).
+2. **Choose**, `HierarchicalClusterer`. Click the name: `numClusters` 2, `linkType` SINGLE, `distanceFunction` EuclideanDistance, `printNewick` true. **Start**.
+3. Read the output: the Newick string describing the tree with merge heights, then Clustered Instances. Right-click the result, **Visualize tree** for the dendrogram.
+4. Change `linkType` to COMPLETE, **Start**; then AVERAGE, **Start**. Then repeat all three with `numClusters` 3.
+5. Repeat steps 1 to 4 for `student.arff` with `stream` and `result` ignored.
+6. `hierarchical.py` does the same agglomeration and prints every merge with its distance (which is the dendrogram written as a list) and the clusters at the cut. Run `python3 hierarchical.py employee.arff average 3` and the other linkages.
+
+#### Program
+
+```python title="hierarchical.py" file=<rootDir>/public/code/mcsl-223/section-2/session-10/hierarchical.py
+
+```
+
+#### Output
+
+Employee, average linkage, cut at k = 3 (run for real; only the last merges and the clusters are shown, the script prints all 29 steps):
+
+```text
+employee.arff: 30 instances on ['age', 'experience', 'salary'], average linkage
+
+merge order (instance numbers start at 1; distance is on normalised attributes):
+step  1  d = 0.0281  {1} + {22}
+step  2  d = 0.0291  {5} + {24}
+...
+step 26  d = 0.2442  {1,2,3,4,21,22,23,30} + {5,6,7,8,9,10,11,24,25,26,27}
+step 27  d = 0.2975  {12,13,14,15,16,17,28} + {18,19,20}
+step 28  d = 0.4740  {1,2,3,4,5,6,7,8,9,10,11,21,22,23,24,25,26,27,30} + {12,13,14,15,16,17,18,19,20,28}
+step 29  d = 1.3367  {29} + {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,30}
+
+clusters when cut at k = 3:
+cluster 0: 1 instances [29]
+           mean age = 58.0, experience = 35.0, salary = 250.0
+cluster 1: 19 instances [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 21, 22, 23, 24, 25, 26, 27, 30]
+           mean age = 28.4, experience = 4.5, salary = 41.0
+cluster 2: 10 instances [12, 13, 14, 15, 16, 17, 18, 19, 20, 28]
+           mean age = 39.3, experience = 15.3, salary = 85.3
+```
+
+Summary of all six employee runs and all six student runs (the height is the distance of the last merge that the cut undoes):
+
+| Data set | Linkage | k = 2 clusters (sizes) | k = 3 clusters (sizes) | Height of top merge |
+| --- | --- | --- | --- | --- |
+| employee | single | outlier 29 alone; all 29 others | 29; 20; the other 28 | 0.745 |
+| employee | complete | 29 alone; others | 29; junior 19; senior 10 | 1.732 |
+| employee | average | 29 alone; others | 29; junior 19; senior 10 | 1.337 |
+| student | single | outlier 29 alone; others | 29; five top students (2, 5, 10, 14, 18); the other 24 | 0.344 |
+| student | complete | 9 weak (rows 20 to 27, 30); 21 others | same 9; 5 top students (2, 5, 10, 14, 18); 16 middle | 1.732 |
+| student | average | 9 strong (rows 1, 2, 5, 7, 10, 12, 14, 16, 18); 21 others | 6 weak; 9 strong; 15 middle | 0.836 |
+
+Dendrogram, employee with average linkage, drawn from the merge list (heights not to scale):
+
+```text
+height
+1.34 |----------------------------------------------------------+
+     |                                                          |
+0.47 |------------------------------+                           |
+     |                              |                           |
+0.24 |-------------+                |          0.30 |-----+     |
+     |             |                |               |     |     |
+     juniors     juniors          seniors         seniors  29 (58 yrs, 35 yrs exp,
+     1-4,21-23,30  5-11,24-27     12-17,28        18-20      salary 250)
+```
+
+Newick form as WEKA prints it for the same tree, abbreviated: `(((1:0.03,22:0.03):0.2,...):0.47,(...):0.47):1.34,29:1.34)`. Every pair of numbers after a colon is a branch length; equal lengths on both children of a node mean the node is a merge at that height.
+
+#### Explanation
+
+- **Agglomeration.** Every row starts as its own cluster; at each step the two closest clusters merge; after 29 merges one cluster remains. The sequence of merge distances is the dendrogram, and "cut at k" means undoing the last k minus 1 merges. Nothing is recomputed to change k, which is the advantage over k-means.
+- **Linkage decides what "closest" means.** Single linkage uses the nearest pair of rows, so a chain of rows each close to the next is merged early: on both files the whole population chains together and the only thing left at the top is the isolated outlier (row 29 on employee, the noisy row 29 on student). That is the chaining effect. Complete linkage uses the farthest pair, so it refuses to merge two spread-out groups and produces compact, balanced clusters: on student it isolates the nine weak students first. Average linkage lies between: it still separates the outlier on employee but gives the sensible junior/senior split at k = 3, and on student the nine strongest students form the first group.
+- **Reading the heights.** The top merge on employee is at 1.34 for average linkage against 0.47 for the merge below it; a gap that large says "two natural groups plus an outlier". On student with complete linkage the top merge (1.73, the maximum possible in three normalised dimensions) joins the weak nine to everyone else, so the strongest structure in the data is weak versus the rest.
+- **Meaning for the business or the college.** Employee: a junior cluster (mean 28 years, 4.5 years of experience, salary 41) and a senior cluster (39 years, 15 years, salary 85), with one executive who is unlike anyone else. Student: a group of nine consistent high performers, a group of six to nine at risk, and a middle group where attendance decides the outcome.
 
 ## Question 23
 
@@ -65,7 +133,77 @@ Implement Density based Clustering Algorithm to demonstrate the clustering rule 
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Install the `optics_dbScan` package (GUI Chooser, **Tools**, **Package manager**), restart WEKA, load `employee.arff`, **Cluster** tab, **Ignore attributes** `department` and `promoted`.
+2. **Choose**, `DBSCAN`. Click the name: `epsilon` 0.15, `minPoints` 3, `database_distanceType` EuclideanDataObject (attributes are normalised to 0 to 1). Cluster mode **Use training set**, **Start**.
+3. Read "Number of generated clusters", the Clustered Instances block and "Unclustered instances" (the noise count). Right-click the result, **Visualize cluster assignments**, X `experience`, Y `salary`; noise rows have no cluster colour.
+4. Vary `epsilon` over 0.05, 0.10, 0.15, 0.20 and 0.30 and `minPoints` over 2, 3 and 5, recording clusters and noise for each pair. `dbscan.py` prints the whole grid in one run: `python3 dbscan.py employee.arff 0.15 3`.
+
+#### Program
+
+```python title="dbscan.py" file=<rootDir>/public/code/mcsl-223/section-2/session-10/dbscan.py
+
+```
+
+#### Output
+
+`python3 dbscan.py employee.arff 0.15 3` (run for real):
+
+```text
+employee.arff: 30 instances
+
+ epsilon minPoints clusters noise  cluster sizes
+    0.05         2        5     8  [13, 2, 3, 2, 2]
+    0.05         3        2    14  [13, 3]
+    0.05         5        1    25  [5]
+    0.10         2        1     4  [26]
+    0.10         3        1     4  [26]
+    0.10         5        1     4  [26]
+    0.15         2        1     2  [28]
+    0.15         3        1     2  [28]
+    0.15         5        1     3  [27]
+    0.20         2        1     1  [29]
+    0.20         3        1     1  [29]
+    0.20         5        1     1  [29]
+    0.30         2        1     1  [29]
+    0.30         3        1     1  [29]
+    0.30         5        1     1  [29]
+
+=== epsilon = 0.15, minPoints = 3 ===
+cluster 0: instances [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25, 26, 27, 28, 30]
+noise (unclustered): instances [20, 29]
+```
+
+WEKA's block for the chosen setting:
+
+```text
+DBSCAN clustering results
+========================================================================================
+
+Clustered DataObjects: 30
+Number of attributes: 3
+Epsilon: 0.15; minPoints: 3
+Index: weka.clusterers.forOPTICSAndDBScan.Databases.SequentialDatabase
+Distance-type: weka.clusterers.forOPTICSAndDBScan.DataObjects.EuclideanDataObject
+Number of generated clusters: 1
+Elapsed time: .01
+
+Clustered Instances
+
+0      28 (100%)
+
+Unclustered instances : 2
+```
+
+Noise rows by setting: at epsilon 0.10 the four noise rows are 18, 19, 20 and 29 (the three most senior staff and the executive); at 0.15 only 20 and 29; at 0.20 only 29; row 29 (age 58, 35 years, salary 250) is noise until epsilon reaches about 0.75 on the normalised scale, because that is its distance to the nearest other row.
+
+#### Explanation
+
+- **Reading the grid.** A small epsilon (0.05) fragments the data: with minPoints 2 there are five tiny clusters and eight noise rows, and with minPoints 5 only five closely packed employees (rows 5, 6, 7, 24, 25) qualify as a cluster and 25 rows are noise. From epsilon 0.10 upwards the employees are one connected dense region and only the far end of the seniority scale is left out; from 0.20 upwards everyone but the executive is inside. So the clusters are stable across a wide band of epsilon and the noise set shrinks monotonically, which is the behaviour to look for when choosing the parameters.
+- **Choosing epsilon and minPoints.** The rule of thumb is minPoints at least the number of attributes plus one (here 4, and 3 or 5 give the same answer), and epsilon at the knee of the sorted k-distance plot: for each row compute the distance to its minPoints-th neighbour, sort, and pick the value where the curve turns upward. On employee that knee is near 0.15, the setting used above.
+- **Why DBSCAN and not k-means here.** k-means with k = 2 places the executive in a cluster of its own or shifts the senior centroid towards salary 250; hierarchical single linkage isolates the same row but only after chaining everyone else. DBSCAN reports it as noise directly, with no k, and would have found a second dense region of any shape had one existed.
+- **What the clusters mean.** One cluster: the ordinary career ladder from junior to senior is a continuous band in age, experience and salary; the two noise rows are the people outside that band, who deserve a separate look rather than a place in a cluster average.
 
 ## Formula Sheet
 
@@ -125,9 +263,40 @@ Hierarchical (agglomerative) clustering merges the two closest clusters each ste
 
 DBSCAN calls a point a core point when at least <Math tex="\text{minPts}" /> points lie within radius <Math tex="\varepsilon" />; clusters grow from core points, and points reachable from none are noise.
 
+## Viva Questions
+
+<Explain />
+
+**Q:** What is the difference between agglomerative and divisive hierarchical clustering? **A:** Agglomerative starts from one cluster per row and merges; divisive starts from one cluster and splits. WEKA's HierarchicalClusterer is agglomerative.
+
+**Q:** Define single, complete and average linkage. **A:** Distance between clusters is the minimum, maximum or mean of the pairwise row distances respectively.
+
+**Q:** What is the chaining effect? **A:** With single linkage a sequence of rows each close to the next merges into one long cluster even if its ends are far apart.
+
+**Q:** What is a dendrogram? **A:** The tree of merges with the merge distance as height; cutting it horizontally at a height gives a clustering.
+
+**Q:** How do you get k clusters from a dendrogram? **A:** Undo the last k minus 1 merges, or set `numClusters` in WEKA.
+
+**Q:** Define core, border and noise points in DBSCAN. **A:** A core point has at least minPoints rows within epsilon; a border point is within epsilon of a core point but is not one; noise is neither.
+
+**Q:** Why does DBSCAN not need k? **A:** Clusters are connected components of core points, and their number is whatever the density structure gives.
+
+**Q:** What happens to DBSCAN when clusters have different densities? **A:** One epsilon cannot suit both; the sparse cluster becomes noise or the dense ones merge. OPTICS addresses this.
+
+## Common Mistakes
+
+<Explain />
+
+- Running HierarchicalClusterer with the nominal attributes included and getting merges driven by department mismatches.
+- Reporting the k = 2 cut of single linkage as "two groups" when one group is a single outlier row.
+- Setting epsilon in the original units (say, 5 years) while the distance is computed on normalised 0 to 1 attributes.
+- Choosing epsilon so large that everything is one cluster and concluding the data has no structure.
+- Treating noise rows as errors of the algorithm rather than as a result to report.
+- Forgetting to install the `optics_dbScan` package and looking for DBSCAN under the built-in clusterers.
+
 ## Session Summary
 
 <Notebook />
 
-- Question 22: Implement Hierarchical Clustering Algorithm to demonstrate the clustering rule p
-- Question 23: Implement Density based Clustering Algorithm to demonstrate the clustering rule 
+- Question 22: HierarchicalClusterer with single, complete and average linkage on employee and student at k = 2 and 3; merge lists from `hierarchical.py`, dendrogram sketched, chaining of single linkage and the junior/senior and weak/strong splits recorded.
+- Question 23: DBSCAN on employee with epsilon 0.05 to 0.30 and minPoints 2, 3, 5; grid from `dbscan.py`, chosen setting epsilon 0.15 and minPoints 3 giving one cluster of 28 with rows 20 and 29 as noise.

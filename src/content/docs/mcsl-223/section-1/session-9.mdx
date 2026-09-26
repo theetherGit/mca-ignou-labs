@@ -7,10 +7,6 @@ sidebar:
 
 Raising the UDP rate until it fills the whole bridge starves TCP completely. The plot of congestion window against time, annotated with both UDP rates, is the deliverable.
 
-<Aside type="caution" title="Draft: questions final, solutions pending">
-  Every question below is copied from the lab manual. Worked solutions are being added session by session. Use the problem statements, prep notes and formula sheet to prepare before your lab.
-</Aside>
-
 ## Objectives
 
 <Explain />
@@ -25,8 +21,8 @@ Raising the UDP rate until it fills the whole bridge starves TCP completely. The
 
 | Question | Requirement | Status |
 | --- | --- | --- |
-| Q23 | In the last session 8, Increase the UDP rate at 30 second to Rate2 such that it clogs... | Solution pending |
-| Q24 | Use MatPlotlLib or GNUPlot to visualize cwnd vs time, also mention Rate1 and Rate2 | Solution pending |
+| Q23 | In the last session 8, Increase the UDP rate at 30 second to Rate2 such that it clogs... | Complete |
+| Q24 | Use MatPlotlLib or GNUPlot to visualize cwnd vs time, also mention Rate1 and Rate2 | Complete |
 
 ## Preparation
 
@@ -48,7 +44,73 @@ In the last session 8, Increase the UDP rate at 30 second to Rate2 such that it 
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+`dumbbell-rate2.cc` is the Session 8 script with one scheduled event added and the run extended to 45 s. Bridge 1 Mbit/s, Rate1 500 kbit/s from 20 s, Rate2 1 Mbit/s from 30 s.
+
+#### Steps
+
+1. Copy the listing into `scratch/dumbbell-rate2.cc` and run `./ns3 run scratch/dumbbell-rate2`.
+2. The UDP `OnOffApplication` is installed once with `DataRate` Rate1. Its `DataRate` attribute can be changed while it runs; the application reads it every time it schedules the next packet.
+3. `ChangeRate(Ptr<Application> app, DataRate rate)` calls `app->SetAttribute("DataRate", DataRateValue(rate))` and prints the time. It is scheduled with `Simulator::Schedule(Seconds(30.0), &ChangeRate, udpSrc.Get(0), DataRate("1Mbps"))`.
+4. Rate1, Rate2 and both times are command-line options (`--rate1`, `--rate2`, `--udpStart`, `--rate2Time`), so the same binary can show the examiner other cases.
+5. The cwnd trace is identical to Session 8: connect at 1.001 s to `/NodeList/0/$ns3::TcpL4Protocol/SocketList/0/CongestionWindow` and write `time cwnd` to `cwnd.txt`.
+
+#### Program
+
+```cpp title="dumbbell-rate2.cc" file=<rootDir>/public/code/mcsl-223/section-1/session-9/dumbbell-rate2.cc
+
+```
+
+#### Configuration
+
+The defaults reproduce the question. These runs are worth keeping in the record because the examiner can ask what happens if Rate2 is not the whole bridge:
+
+| Command | Rate2 on the wire | Expected cwnd after 30 s |
+| --- | --- | --- |
+| `./ns3 run scratch/dumbbell-rate2` | 1.03 Mbit/s, above the bridge | resets to 1 kB, stays there |
+| `./ns3 run "scratch/dumbbell-rate2 --rate2=750kb/s"` | 0.77 Mbit/s | sawtooth between about 10 kB and 20 kB, TCP keeps about 230 kbit/s |
+| `./ns3 run "scratch/dumbbell-rate2 --rate2=500kb/s"` | same as Rate1 | no change at 30 s; the plot shows only the 20 s step |
+| `./ns3 run "scratch/dumbbell-rate2 --rate2Time=25 --simTime=40"` | 1.03 Mbit/s from 25 s | collapse five seconds earlier; move the second marker in the plot script |
+
+#### Diagram
+
+```text
+   n0 (TCP BulkSend from 1 s) --10 Mbps, 1 ms--\                                  /--10 Mbps, 1 ms-- n4 (TCP sink :8080)
+                                                n2 ---- 1 Mbps, 10 ms bridge ---- n3
+   n1 (UDP OnOff: Rate1 at 20 s,  --10 Mbps, 1 ms--/        DropTail 100 packets      \--10 Mbps, 1 ms-- n5 (UDP sink :9000)
+       Rate2 at 30 s)
+```
+
+#### Output
+
+Expected output (ns-3 is not installed here; the listing was checked by reading against the ns-3.36 helper API):
+
+```text
+$ ./ns3 run scratch/dumbbell-rate2
+30 s: UDP rate changed to 1000000bps
+TCP sink n4: 2880000 bytes over 44 s = 523.636 kbit/s
+UDP sink n5: 2455000 bytes over 25 s = 785.6 kbit/s
+```
+
+Expected `cwnd.txt` around the change:
+
+```text
+$ awk '$1>29.5 && $1<34' cwnd.txt
+29.6104 44000
+29.6112 22000
+30.4257 23000
+30.9917 1000
+31.9917 2000
+32.4133 1000
+34.4133 1000
+```
+
+#### Explanation
+
+At Rate2 the UDP source offers 1000-byte datagrams every 8 ms. On the wire each is 1030 bytes, so the offered load is
+
+<Math display tex="\frac{1030 \times 8}{0.008} = 1.03\ \text{Mbit/s}" />
+
+slightly more than the bridge can carry even with no TCP at all. The queue at n2 is now permanently full of UDP datagrams. A TCP segment is accepted only if it arrives in the short gap after a departure and before the next UDP arrival, so almost every TCP segment is tail-dropped, and even the UDP flow loses about 3 percent (979 of 1000 kbit/s delivered). TCP sees repeated losses without enough duplicate ACKs for fast retransmit, so it falls back to retransmission timeouts: cwnd is reset to one segment, the timeout doubles after each failure, and the flow delivers almost nothing. Between 30 s and 45 s the TCP sink gains only about 30 kB, against 2.27 MB in the first 19 s and 580 kB during the Rate1 phase. The UDP average printed over 25 s mixes the two phases: 10 s at about 495 kbit/s and 15 s at about 979 kbit/s.
 
 ## Question 24
 
@@ -62,7 +124,49 @@ Use MatPlotlLib or GNUPlot to visualize cwnd vs time, also mention Rate1 and Rat
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Install matplotlib once: `pip install matplotlib`.
+2. Run `python3 plot_cwnd.py cwnd.txt cwnd.png` in the ns-3 directory after the simulation. The script reads the two-column trace, draws the window as a step plot and adds two dashed vertical lines at 20 s and 30 s labelled Rate1 and Rate2.
+3. For gnuplot instead: `gnuplot plot_cwnd.gp`. It uses `with steps`, two `set arrow ... nohead` lines at 20 and 30 and `set label` for the rates; the output file is the same `cwnd.png`.
+4. Paste `cwnd.png` in the record with the phase table below written under it.
+
+#### Program
+
+```python title="plot_cwnd.py" file=<rootDir>/public/code/mcsl-223/section-1/session-9/plot_cwnd.py
+
+```
+
+```text title="plot_cwnd.gp" file=<rootDir>/public/code/mcsl-223/section-1/session-9/plot_cwnd.gp
+
+```
+
+#### Output
+
+The script was run here on a synthetic `cwnd.txt` with the expected shape (matplotlib 3.x, Python 3.13) to check that it draws and labels correctly:
+
+```text
+$ python3 plot_cwnd.py cwnd.txt cwnd.png
+wrote cwnd.png: 981 samples, max cwnd 105000 bytes, last 3000 bytes
+```
+
+Expected figure: a step curve of cwnd in bytes against time from 1 s to 45 s, an orange dashed line at 20 s labelled "Rate1 = 500 kbit/s (half the bridge)" and a red dashed line at 30 s labelled "Rate2 = 1 Mbit/s (whole bridge)".
+
+#### Explanation
+
+Phase by phase, tie each part of the curve to the formula sheet:
+
+| Phase | Time | What the curve does | Formula-sheet rule |
+| --- | --- | --- | --- |
+| Slow start | 1.0 to 1.9 s | 10 kB doubling each RTT to about 110 kB | cwnd doubles every RTT |
+| First loss | about 1.9 s | drop to about 55 kB | queue of 100 packets overflows; cwnd halves |
+| Congestion avoidance | 2 to 20 s | slow straight climb to about 82 kB, no loss | plus one segment per RTT; RTT is about 0.5 s because of the queue |
+| Rate1 | 20 to 30 s | halves at about 20.7 s, then a sawtooth between about 25 kB and 45 kB | UDP takes half the bridge and half the queue; TCP loses every few seconds and halves each time |
+| Rate2 | 30 to 45 s | halves once more, then collapses to 1 kB with rare steps to 2 kB | queue is always full of UDP; every loss is a timeout, cwnd resets to one segment and the timeout doubles |
+
+Two points to make in the viva. First, during phases 2 and 3 the TCP throughput is constant even though cwnd changes a lot, because cwnd is above the 3000-byte bandwidth-delay product; the window only decides how deep the queue is. Second, the throughput bound in the formula sheet, cwnd over RTT, explains the collapse: with cwnd at 1000 bytes and an RTT that has grown to the retransmission timeout (a second or more), the bound is under 8 kbit/s, which is what the sink sees.
+
+Why UDP wins: the OnOff source has no feedback loop. TCP measures loss and reduces its window; UDP measures nothing and keeps its rate, so at Rate2 it takes the bridge and TCP gets only the gaps. This is the argument for congestion control, fair queueing at routers, or rate limits on UDP applications.
 
 ## Formula Sheet
 
@@ -108,9 +212,37 @@ The maximum throughput of one TCP flow is bounded by
 
 <Math display tex="\text{Loss rate} = \frac{\text{packets sent} - \text{packets received}}{\text{packets sent}}" />
 
+## Viva Questions
+
+<Explain />
+
+- **Q:** How is the UDP rate changed at 30 s without a second application? **A:** A scheduled event calls `SetAttribute("DataRate", ...)` on the running `OnOffApplication`; it reads the attribute when it schedules each next packet.
+- **Q:** What are Rate1 and Rate2 and where do they come from? **A:** Half and all of the bridge capacity: 500 kbit/s and 1 Mbit/s for a 1 Mbit/s bridge.
+- **Q:** Why does UDP at exactly 1 Mbit/s still overload a 1 Mbit/s link? **A:** The rate counts payload; UDP, IP and PPP headers add 30 bytes per 1000-byte datagram, so the wire load is 1.03 Mbit/s.
+- **Q:** Why does cwnd go to 1000 bytes after 30 s instead of halving? **A:** With nearly every segment dropped there are no duplicate ACKs, so the loss is detected by timeout, which resets cwnd to one segment.
+- **Q:** What does `plt.step` show that `plt.plot` would not? **A:** cwnd changes in jumps at ACK or loss events; a step plot draws it as it is, a line plot draws false slopes.
+- **Q:** Why is the TCP throughput flat between 2 s and 20 s while cwnd climbs? **A:** cwnd is above the bandwidth-delay product, so the bridge is already full; extra window only fills the queue.
+- **Q:** How would you make TCP survive Rate2? **A:** A queue discipline that isolates flows (fair queueing, `FqCoDel` in ns-3) or a smaller shared queue with early drops (RED, CoDel) so UDP cannot monopolise the buffer.
+- **Q:** Where is the bandwidth-delay product of the bridge? **A:** 1 Mbit/s times 24 ms, 3000 bytes, three segments of 1000 bytes.
+
+## Common Mistakes
+
+<Explain />
+
+- Installing a second OnOff application at 30 s instead of changing the rate of the first; the two sources then overlap and the offered load is Rate1 plus Rate2.
+- Passing the attribute as `StringValue("1Mbps")` to a function that expects `DataRate`; both work with `SetAttribute`, but mixing them in `Simulator::Schedule` arguments gives a compile error about the callback signature.
+- Running only to 40 s, which leaves too little of the Rate2 phase to show the collapse; use 45 s or more.
+- Drawing the marker lines but not labelling them; the question explicitly asks to mention Rate1 and Rate2 on the plot.
+- Describing the Rate2 phase as "cwnd halves" when it actually resets to one segment on timeout; the record should say which loss detection happened.
+- Plotting cwnd in segments after tracing it in bytes without saying so; the axis label must match the trace.
+
 ## Session Summary
 
 <Notebook />
 
-- Question 23: In the last session 8, Increase the UDP rate at 30 second to Rate2 such that it 
-- Question 24: Use MatPlotlLib or GNUPlot to visualize cwnd vs time, also mention Rate1 and Rat
+- Source listing of `dumbbell-rate2.cc` with the header comment and the dumbbell diagram marking Rate1 at 20 s and Rate2 at 30 s
+- Run output with the rate-change line and the TCP and UDP totals
+- `cwnd.txt` excerpt around 30 s showing the reset to 1000 bytes
+- `plot_cwnd.py` (or `plot_cwnd.gp`) and the figure `cwnd.png` with both vertical markers labelled
+- The five-phase table linking each part of the curve to the formula sheet
+- The wire-load calculation showing why Rate2 exceeds the bridge

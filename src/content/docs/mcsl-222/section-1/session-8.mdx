@@ -7,10 +7,6 @@ sidebar:
 
 Sessions 8 to 10 turn diagrams into code and tables. The mapping is mechanical once you know the rules: a class becomes a class, an attribute a field, an operation a method, and each association end a reference or a collection.
 
-<Aside type="caution" title="Draft: questions final, solutions pending">
-  Every question below is copied from the lab manual. Worked solutions are being added session by session. Use the problem statements, prep notes and formula sheet to prepare before your lab.
-</Aside>
-
 ## Objectives
 
 <Explain />
@@ -25,8 +21,8 @@ Sessions 8 to 10 turn diagrams into code and tables. The mapping is mechanical o
 
 | Question | Requirement | Status |
 | --- | --- | --- |
-| Q19 | Implement the following Class Diagram in C++/Java | Solution pending |
-| Q20 | Implement the Class Diagram of figure 1.18, in C++ or Java | Solution pending |
+| Q19 | Implement the following Class Diagram in C++/Java | Complete |
+| Q20 | Implement the Class Diagram of figure 1.18, in C++ or Java | Complete |
 
 ## Preparation
 
@@ -53,7 +49,92 @@ Figure 1.15: Class Diagram for Student Registration
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Assumptions
+
+The system keeps the academic structure of one university. A university has a name, an address and a phone number and is made up of one or more schools. Each school is named and is responsible for a set of faculty members and a set of programmes. A faculty member has an ID, a name and the name of the school that employs them; at most one other faculty member is their head of department. Faculty members teach courses. A programme has an ID and a name, and a course has a code and a name. Students register with the university; each student has a roll number, a name and an address and enrols in a programme. The program must let an administrator add and remove schools and students at university level, add and remove faculty and programmes at school level, keep a searchable catalogue of courses, and look up a school by name, a student by roll number and a course by name or code. Every relationship in the figure must be navigable from the code in the direction the figure shows.
+
+- Language is C++17, compiled with `clang++ -std=c++17 -Wall -Wextra`.
+- Objects are created in `main` and linked with pointers; no object owns another, so there is no `new` or `delete`.
+- A `1` or `0..1` end is a pointer; a `*` or `1..*` end is a `std::vector` of pointers.
+- The four operations shown inside `Course` (`addCourse`, `removeCourse`, `getCoursebyName`, `getCoursebyCode`) manage the list of all courses, so they are `static` and work on one shared catalogue.
+- The aggregation between Course and Programme is implemented exactly as drawn: the diamond is on Course with multiplicity `1`, and `*` is on Programme, so `Course` holds the vector of programmes.
+- The `Teaches` arrow points from Faculty to Course, so only `Faculty` holds the link. The `enrol` arrow points from Student to Programme, so only `Student` holds the link.
+- The constraint `one student per programme` on the registration link is read as: one registration binds a student to exactly one programme. `Student::enrol` refuses a second programme.
+- `getAllSchool` returns the vector of schools; `getSchool` and `getStudent` return `nullptr` when nothing matches.
+
+#### Diagram elements
+
+| Class | Attributes | Operations | Association ends |
+| --- | --- | --- | --- |
+| University | name: String, address: String, phone: integer | addSchool, removeSchool, addStudent, removeStudent, getSchool, getAllSchool, getStudent | has 1 to 1..* School (aggregation); registration 1 to * Student (aggregation, constraint one student per programme) |
+| School | name: String | addFaculty, removeFaculty, addProgramme, removeProgramme | AssignTo 1 to 1..* Faculty (aggregation); 1..* to 1..* Programme |
+| Faculty | facultyID: String, facultyName: String, schoolName: String | none | HOD 0..1 to Faculty (reflexive); Teaches 1..* Faculty to Course (arrow to Course) |
+| Programme | programID, ProgramName | none | * Programme to 1 Course (diamond on Course) |
+| Course | courseCode, courseName | addCourse, removeCourse, getCoursebyName, getCoursebyCode | see Programme and Faculty |
+| Student | stuID: integer, name: String, address: String | none | enrol Student to Programme (arrow to Programme) |
+
+#### Steps
+
+1. Create the folder `session-8` and save the listing below as `student_registration.cpp`.
+2. Compile: `clang++ -std=c++17 -Wall -Wextra -o student_registration student_registration.cpp`. The build must print nothing.
+3. Run `./student_registration` and paste the output into the record.
+
+#### Program
+
+```cpp title="student_registration.cpp" file=<rootDir>/public/code/mcsl-222/section-1/session-8/student_registration.cpp
+
+```
+
+#### Output
+
+Compiled with zero warnings and run here; this is the real output.
+
+```text
+--- after setup ---
+IGNOU, Maidan Garhi, New Delhi, phone 29572514
+  School: SOCIS
+    Faculty F01 Dr. Sharma (school SOCIS) teaches MCS-217
+    Faculty F02 Dr. Verma (school SOCIS), HOD Dr. Sharma teaches MCSL-222
+    Programme MCA Master of Computer Applications
+  School: SOMS
+    Faculty F03 Dr. Iyer (school SOMS) teaches MMPC-001
+    Programme MBA Master of Business Administration
+  Student 2401 Asha, Jaipur -> Master of Computer Applications
+  Student 2402 Ravi, Pune -> Master of Business Administration
+--- constraint check ---
+  refused: Asha is already enrolled in Master of Computer Applications (one student per programme)
+--- lookups ---
+getSchool("SOMS") -> SOMS
+getSchool("SOL") -> nullptr
+getStudent(2402) -> Ravi
+getCoursebyCode("MCSL-222") -> OOAD and Web Technologies Lab
+getCoursebyName("Management Concepts") -> MMPC-001
+catalogue size: 3
+--- removals ---
+catalogue size: 2, f2.schoolName is "", mba.schools.size() = 0
+IGNOU, Maidan Garhi, New Delhi, phone 29572514
+  School: SOCIS
+    Faculty F01 Dr. Sharma (school SOCIS) teaches MCS-217
+    Programme MCA Master of Computer Applications
+  Student 2401 Asha, Jaipur -> Master of Computer Applications
+```
+
+#### Explanation
+
+| Diagram element | Where it is in the code |
+| --- | --- |
+| Six classes | Six `class` definitions in the same order as the figure's dependencies: Course, Programme, Faculty, School, Student, University. Forward declarations at the top let each class name the others before they are defined. |
+| Attributes | Public data members with the exact names of the figure, for example `std::string facultyID` and `int phone`. |
+| University has 1..* School | `std::vector<School*> schools` in `University`; `addSchool` and `removeSchool` change it. |
+| University registration * Student | `std::vector<Student*> students`; `addStudent`, `removeStudent`, `getStudent`. |
+| Constraint one student per programme | `Student::programme` is a single pointer and `enrol` returns `false` with a message when it is already set. The output line under `constraint check` shows the refusal. |
+| School AssignTo 1..* Faculty | `std::vector<Faculty*> faculties`; `addFaculty` also fills `Faculty::schoolName`, and `removeFaculty` clears it, so the attribute in the figure always agrees with the link. |
+| School 1..* to 1..* Programme | Both ends are collections: `School::programmes` and `Programme::schools`. `addProgramme` and `removeProgramme` update both, which is why `mba.schools.size()` is 0 after removal. |
+| Faculty HOD 0..1 | `Faculty* hod = nullptr` inside `Faculty` itself: a reflexive association is a pointer to the same class. |
+| Faculty Teaches Course | `std::vector<Course*> courses` and `teaches()` in `Faculty` only; the arrow is one-way. |
+| Course 1 to * Programme | `std::vector<Programme*> programmes` in `Course`, filled in `main` with `push_back`. |
+| Course operations | `inline static std::vector<Course*> catalogue` plus four `static` functions. `getCoursebyName` and `getCoursebyCode` scan the catalogue and return `nullptr` on a miss. |
+| Remove operations | All call one helper, `unlink`, which is `std::remove` followed by `erase`. |
 
 ## Question 20
 
@@ -71,12 +152,103 @@ Figure 1.18: Customer Order Association Class
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Assumptions
+
+A stationery shop records what its customers buy. A customer is identified by name, phone, address, PIN code and e-mail. Each customer places any number of orders, and every order belongs to exactly one customer. An order records the date, who sold it and the total cost. An order contains one or more products; a product has a name, a manufacturer, a product ID, a unit price and the units in stock. The same product can appear in many orders and at a different price each time, and the quantity bought is specific to that order and that product. Those two values, quantity and unit sale price, belong to neither the order nor the product but to the pair, so the figure attaches them to the association as the class OrderLine. The program must create products and a customer, let the customer place orders, add products to an order with a quantity and sale price, reduce stock, refuse a line that asks for more than the stock, and print each order with its lines and total.
+
+- Types are not shown in the figure. `Product_ID` and `Units_in_Stock` are `int`, prices are `double`, all other attributes are `std::string`. `OrderDate` is a string in `YYYY-MM-DD` form.
+- `OrderLine` is its own class with a pointer to its `Order`, a pointer to its `Product`, and the two attributes of the figure.
+- `places` is two-way in the code: `Customer::orders` holds the `0..*` end and `Order::customer` the `1..1` end. `Customer::places` sets both.
+- `contains` is navigable towards Product, so `Order` holds its `OrderLine` objects by value in a `std::vector` and `Product` holds no back link.
+- `ProductOrderCost` is derived: `contains` adds `quantity times sale price` to it. The figure names the attribute, so it is stored rather than recomputed.
+- The `1..*` at Product cannot be checked by the compiler; an order starts empty and the program relies on `main` adding at least one line.
+
+#### Diagram elements
+
+| Class | Attributes | Association ends |
+| --- | --- | --- |
+| Customer | C_Name, C_Phone, C_Address, C_Pin, C_Email | places: Customer 1..1 to 0..* Order (arrow to Order) |
+| Order | OrderDate, ProductSoldBy, ProductOrderCost | contains: Order 0..* to 1..* Product (arrow to Product) |
+| Product | P_Name, P_Manufacturer, Product_ID, UnitPrice, Units_in_Stock | none |
+| OrderLine (association class) | Quantity, UnitSalePrice | attached to contains by a dashed line |
+
+#### Steps
+
+1. Save the listing below as `customer_order.cpp` in the same `session-8` folder.
+2. Compile: `clang++ -std=c++17 -Wall -Wextra -o customer_order customer_order.cpp`.
+3. Run `./customer_order` and paste the output.
+
+#### Program
+
+```cpp title="customer_order.cpp" file=<rootDir>/public/code/mcsl-222/section-1/session-8/customer_order.cpp
+
+```
+
+#### Output
+
+Compiled with zero warnings and run here; this is the real output.
+
+```text
+  refused: only 1 x Stapler in stock, asked for 2
+Order dated 2026-09-01 sold by Store counter for Asha
+  Pen          20 x      9.50 =    190.00
+  Notebook      5 x     45.00 =    225.00
+  ProductOrderCost = 415.00
+Order dated 2026-09-15 sold by Online for Asha
+  Stapler       2 x    115.00 =    230.00
+  ProductOrderCost = 230.00
+Stock left: pen 480, notebook 35, stapler 1
+Asha has placed 2 orders
+```
+
+Check by hand: `20 x 9.50 + 5 x 45.00 = 415.00`; stock of pens `500 - 20 = 480`; the second stapler line asks for 2 when only `3 - 2 = 1` is left, so it is refused.
+
+#### Explanation
+
+| Diagram element | Where it is in the code |
+| --- | --- |
+| Product | `class Product` with the five attributes and a constructor; it has no link back to orders because the `contains` arrow points at it. |
+| OrderLine association class | `class OrderLine` with `Order* order`, `Product* product`, `int Quantity`, `double UnitSalePrice`. One object exists per (order, product) pair. `lineTotal()` is the only extra. |
+| Order contains 1..* Product | `std::vector<OrderLine> lines` in `Order`. `Order::contains(Product&, qty, price)` creates the line, reduces `Units_in_Stock` and adds to `ProductOrderCost`. |
+| Customer places 0..* Order | `std::vector<Order*> orders` in `Customer` and `Order::customer` for the `1..1` end. `Customer::places` sets both, which is why `printOrder` can print the customer's name from the order. |
+| Stock guard | The `if` at the top of `contains` refuses `qty` below 1 or above stock, which produced the first line of the output. |
+| Printing | `printOrder` walks `lines`; `std::setw` and `std::setprecision(2)` line up the money columns. |
+
+## Viva Questions
+
+<Explain />
+
+**Q:** How does a multiplicity of `*` differ from `1` in the code? **A:** A `1` or `0..1` end becomes a single pointer (`Faculty* hod`); a `*` or `1..*` end becomes a `std::vector` of pointers (`std::vector<School*> schools`).
+
+**Q:** Why is an association class a separate class and not extra attributes on Order? **A:** Quantity and UnitSalePrice belong to one (order, product) pair. Putting them on Order would allow only one product per order; putting them on Product would give every order the same quantity. A separate `OrderLine` holds one pair.
+
+**Q:** Where does aggregation show up in the code? **A:** Nowhere special: an aggregation is implemented the same way as a plain association, a pointer or vector in the whole. The diamond documents a whole-part meaning; the compiler does not enforce it.
+
+**Q:** How is the reflexive HOD association implemented? **A:** As a pointer to the same class, `Faculty* hod`, set to `nullptr` for a faculty member with no head.
+
+**Q:** Why are `addCourse` and the other Course operations static? **A:** The figure puts them inside Course, but they act on the set of all courses, not on one course. A static function on a shared catalogue matches that meaning.
+
+**Q:** How is the constraint one student per programme enforced? **A:** `Student::programme` is one pointer, and `enrol` refuses when it is already set. The program prints the refusal so the evaluator can see it.
+
+**Q:** Why are there no `new` or `delete` calls? **A:** All objects are locals in `main`; associations store non-owning pointers. That mirrors the diagram, where a link is a reference, not ownership.
+
+**Q:** What does a one-way arrow change in the code? **A:** Only the class at the tail keeps a member for the link. Faculty holds `courses`; Course has no `faculties` vector.
+
+## Common Mistakes
+
+<Explain />
+
+- Storing a `*` end as a fixed array or a single pointer; the multiplicity says the number is open, so use `std::vector`.
+- Updating only one end of a two-way association (for example pushing to `School::programmes` and forgetting `Programme::schools`), so removals leave dangling links.
+- Flattening `OrderLine` into extra fields on `Order`, which silently limits an order to one product.
+- Renaming the attributes and operations (for example `getCourseByCode` instead of the figure's `getCoursebyCode`); the evaluator compares against the figure.
+- Submitting code that compiles with warnings. Fix every `-Wall -Wextra` message, especially unused parameters.
+- Leaving `main` empty. The manual wants a program that runs, so exercise every operation and paste the output.
 
 ## Session Summary
 
 <Notebook />
 
-- Question 19: Implement the following Class Diagram in C++/Java
-- Question 20: Implement the Class Diagram of figure 1.18, in C++ or Java
-- Problem description (300 to 500 words) and assumptions for every diagram
+- Question 19: `student_registration.cpp`, six classes of figure 1.15 with every attribute, operation and association end, the enrol constraint enforced, run output attached
+- Question 20: `customer_order.cpp`, Customer, Order, Product and the `OrderLine` association class of figure 1.18, run output attached
+- Problem description and assumptions for both figures, plus a diagram-element table for each

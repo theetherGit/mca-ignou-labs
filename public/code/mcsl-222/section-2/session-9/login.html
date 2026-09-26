@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<!-- src/main/resources/templates/login.html   (Session 9, Q38) -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Admission Portal - Login</title>
+</head>
+<body>
+  <h2>Student Admission Portal</h2>
+
+  <p th:if="${param.error}" style="color:red">Invalid username or password.</p>
+  <p th:if="${param.logout}" style="color:green">You have been logged out.</p>
+
+  <!-- th:action posts to /login, the URL Spring Security listens on, and adds the CSRF token -->
+  <form th:action="@{/login}" method="post">
+    <p>
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" required autofocus>
+    </p>
+    <p>
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required>
+    </p>
+    <button type="submit">Sign in</button>
+  </form>
+
+  <p>New student? <a th:href="@{/register}">Register here</a></p>
+</body>
+</html>

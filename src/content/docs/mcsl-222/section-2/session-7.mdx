@@ -7,10 +7,6 @@ sidebar:
 
 Spring Boot removes most configuration: an embedded server, auto-configured data source and one property file. REST controllers return JSON instead of views, which is how modern front ends consume the same student data.
 
-<Aside type="caution" title="Draft: questions final, solutions pending">
-  Every question below is copied from the lab manual. Worked solutions are being added session by session. Use the problem statements, prep notes and formula sheet to prepare before your lab.
-</Aside>
-
 ## Objectives
 
 <Explain />
@@ -25,10 +21,10 @@ Spring Boot removes most configuration: an embedded server, auto-configured data
 
 | Question | Requirement | Status |
 | --- | --- | --- |
-| Q29 | Create a Spring Boot application using Spring Initializer. Add the following... | Solution pending |
-| Q30 | Configure Database settings through the property file in Spring Boot | Solution pending |
-| Q31 | Create JPA Repositories for all entities used in the Student Admission lifecycle | Solution pending |
-| Q32 | Create Rest Controller to fetch Student Information using JPA Repository; the response... | Solution pending |
+| Q29 | Create a Spring Boot application using Spring Initializer. Add the following... | Complete |
+| Q30 | Configure Database settings through the property file in Spring Boot | Complete |
+| Q31 | Create JPA Repositories for all entities used in the Student Admission lifecycle | Complete |
+| Q32 | Create Rest Controller to fetch Student Information using JPA Repository; the response... | Complete |
 
 ## Preparation
 
@@ -37,6 +33,8 @@ Spring Boot removes most configuration: an embedded server, auto-configured data
 - Use Spring Initializr with the listed dependencies; the exact starter names are spring-boot-starter-web, spring-boot-starter-data-jpa, spring-boot-starter-thymeleaf, spring-boot-devtools, spring-boot-starter-actuator and the database driver.
 - Database settings go in `application.properties`: url, username, password, `spring.jpa.hibernate.ddl-auto`.
 - A `JpaRepository<Student, Long>` interface needs no implementation; Spring generates it.
+
+Sessions 7 to 10 build one project, `admission-api`. Each session adds files to it or replaces files from the session before. Every listing carries its path inside the project as a first-line comment. Nothing in these four sessions was executed here (no JDK, Maven or MySQL on this machine); every listing was checked by reading against the Spring Boot 3.3 and Spring Security 6 APIs.
 
 ## Question 29
 
@@ -58,7 +56,54 @@ Create a Spring Boot application using Spring Initializer. Add the following dep
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Open [start.spring.io](https://start.spring.io/) in a browser.
+2. Fill the left panel: Project `Maven`, Language `Java`, Spring Boot `3.3.4`, Group `in.ignou`, Artifact `admission-api`, Name `admission-api`, Package name `in.ignou.admission`, Packaging `Jar`, Java `17`.
+3. Click `Add dependencies` and pick, one by one: `Spring Web`, `Spring Data JPA`, `Thymeleaf`, `Spring Boot DevTools`, `Spring Boot Actuator`, `MySQL Driver`.
+4. Click `Generate`; unzip `admission-api.zip` into your workspace.
+5. Eclipse: File, Open Projects from File System, Directory, select the `admission-api` folder, Finish. Wait until Maven finishes downloading (bottom-right progress bar).
+6. Open `pom.xml` and compare with the listing below. If a dependency is missing, paste its block inside `<dependencies>`, save, then right-click the project, Maven, Update Project.
+7. Run once: right-click the project, Run As, Spring Boot App (or `./mvnw spring-boot:run` in a terminal).
+
+#### Program
+
+```xml title="pom.xml" file=<rootDir>/public/code/mcsl-222/section-2/session-7/pom.xml
+
+```
+
+```java title="AdmissionApiApplication.java" file=<rootDir>/public/code/mcsl-222/section-2/session-7/AdmissionApiApplication.java
+
+```
+
+#### Output
+
+Checked by reading, not executed. The first run stops before Tomcat starts because the data source is not configured yet; that is Question 30:
+
+```text
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Failed to configure a DataSource: 'url' attribute is not specified and no embedded datasource could be configured.
+
+Reason: Failed to determine a suitable driver class
+```
+
+After Question 30 the same run ends with lines of this shape:
+
+```text
+Tomcat initialized with port 8080 (http)
+HikariPool-1 - Start completed.
+Tomcat started on port 8080 (http) with context path '/'
+Started AdmissionApiApplication in 4.1 seconds (process running for 4.6)
+```
+
+#### Explanation
+
+The seven items in the question map to six Maven artifacts. Spring MVC is `spring-boot-starter-web` (it also brings embedded Tomcat and Jackson). Hibernate and JPA arrive together in `spring-boot-starter-data-jpa`; Hibernate is the JPA implementation, so there is no separate starter. Thymeleaf, DevTools and Actuator are their own starters. The driver is `mysql-connector-j` with `runtime` scope because our code never imports a MySQL class; only JDBC needs it at run time. `spring-boot-starter-parent` fixes every version, so no `<version>` tag appears under the dependencies. `@SpringBootApplication` turns on auto-configuration and scans `in.ignou.admission` and its sub-packages for `@Entity`, `@Repository`, `@Service` and `@Controller` classes.
 
 ## Question 30
 
@@ -72,7 +117,52 @@ Configure Database settings through the property file in Spring Boot.
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Start MySQL and create the schema: `mysql -u root -p` then `CREATE DATABASE admission_db;`. (The `createDatabaseIfNotExist=true` flag in the URL does the same job if the account may create schemas.)
+2. Open `src/main/resources/application.properties` (empty after Initializr) and paste the listing.
+3. Change `spring.datasource.username` and `password` to your MySQL account.
+4. Run the application; watch the console for `HikariPool-1 - Start completed`.
+
+#### Configuration
+
+```properties title="application.properties" file=<rootDir>/public/code/mcsl-222/section-2/session-7/application.properties
+
+```
+
+#### Output
+
+Checked by reading. Expected console lines on a successful start:
+
+```text
+HikariPool-1 - Starting...
+HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5c3b1f2a
+HikariPool-1 - Start completed.
+HHH000412: Hibernate ORM core version 6.5.3.Final
+HHH10001005: Database info:
+    Database JDBC URL [jdbc:mysql://localhost:3306/admission_db]
+    Database driver: com.mysql.cj.jdbc.Driver
+    Database version: 8.0.36
+```
+
+A wrong password fails at the pool, not at the query:
+
+```text
+HikariPool-1 - Exception during pool initialization.
+java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)
+```
+
+#### Explanation
+
+| Property | Effect |
+| --- | --- |
+| `spring.datasource.url` | JDBC URL; host, port, schema and flags. `serverTimezone` stops the "server time zone value is unrecognized" error. |
+| `spring.datasource.username`, `password` | MySQL account. Boot creates a HikariCP pool from these. |
+| `spring.datasource.driver-class-name` | Optional; Boot infers it from the URL. Kept so the driver name is visible in the record. |
+| `spring.jpa.hibernate.ddl-auto=update` | Hibernate compares entities with tables at start and issues `CREATE TABLE` or `ALTER TABLE ADD` as needed. It never drops columns. Use `validate` in production. |
+| `spring.jpa.show-sql=true` | Prints every SQL statement; useful evidence for the lab record. |
+| `spring.jpa.defer-datasource-initialization=true` | Runs `data.sql` after Hibernate has created the tables. Without it the inserts run first and fail. |
+| `spring.sql.init.mode=always` | Boot runs `data.sql` only for embedded databases by default; `always` enables it for MySQL. |
 
 ## Question 31
 
@@ -86,7 +176,112 @@ Create JPA Repositories for all entities used in the Student Admission lifecycle
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Create the package `in.ignou.admission.entity` and add `Student`, `Programme`, `Course`, `Admission` and the enum `AdmissionStatus`.
+2. Create the package `in.ignou.admission.repository` and add one interface per entity extending `JpaRepository<Entity, Long>`.
+3. Run the application. With `ddl-auto=update` and `show-sql=true` the console prints the `create table` statements the first time.
+4. Check in MySQL: `USE admission_db; SHOW TABLES;` lists `admission`, `course`, `programme`, `student`.
+
+#### Program
+
+The life cycle has four entities. A Student applies to a Programme; the application is an Admission whose status moves APPLIED, VERIFIED, APPROVED or REJECTED; a Programme owns Courses.
+
+```java title="Student.java" file=<rootDir>/public/code/mcsl-222/section-2/session-7/Student.java
+
+```
+
+```java title="Programme.java" file=<rootDir>/public/code/mcsl-222/section-2/session-7/Programme.java
+
+```
+
+```java title="Course.java" file=<rootDir>/public/code/mcsl-222/section-2/session-7/Course.java
+
+```
+
+```java title="AdmissionStatus.java" file=<rootDir>/public/code/mcsl-222/section-2/session-7/AdmissionStatus.java
+
+```
+
+```java title="Admission.java" file=<rootDir>/public/code/mcsl-222/section-2/session-7/Admission.java
+
+```
+
+One repository per entity:
+
+```java title="StudentRepository.java" file=<rootDir>/public/code/mcsl-222/section-2/session-7/StudentRepository.java
+
+```
+
+```java title="ProgrammeRepository.java" file=<rootDir>/public/code/mcsl-222/section-2/session-7/ProgrammeRepository.java
+
+```
+
+```java title="CourseRepository.java" file=<rootDir>/public/code/mcsl-222/section-2/session-7/CourseRepository.java
+
+```
+
+```java title="AdmissionRepository.java" file=<rootDir>/public/code/mcsl-222/section-2/session-7/AdmissionRepository.java
+
+```
+
+#### Output
+
+Checked by reading. Hibernate 6.5 with the MySQL dialect generates DDL of this shape on the first start (order may differ):
+
+```sql
+create table programme (
+    duration_years integer not null,
+    id bigint not null auto_increment,
+    code varchar(10) not null,
+    name varchar(100) not null,
+    primary key (id)
+) engine=InnoDB;
+alter table programme add constraint UK_programme_code unique (code);
+
+create table student (
+    date_of_birth date,
+    id bigint not null auto_increment,
+    phone varchar(15),
+    city varchar(60),
+    name varchar(80) not null,
+    email varchar(120) not null,
+    primary key (id)
+) engine=InnoDB;
+alter table student add constraint UK_student_email unique (email);
+
+create table course (
+    credits integer not null,
+    id bigint not null auto_increment,
+    programme_id bigint not null,
+    code varchar(10) not null,
+    title varchar(120) not null,
+    primary key (id)
+) engine=InnoDB;
+alter table course add constraint FK_course_programme foreign key (programme_id) references programme (id);
+
+create table admission (
+    applied_on date,
+    id bigint not null auto_increment,
+    programme_id bigint not null,
+    student_id bigint not null,
+    status enum ('APPLIED','VERIFIED','APPROVED','REJECTED') not null,
+    primary key (id)
+) engine=InnoDB;
+```
+
+And the start-up log names the repositories it built:
+
+```text
+Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+Finished Spring Data repository scanning in 41 ms. Found 4 JPA repository interfaces.
+```
+
+#### Explanation
+
+`JpaRepository<T, ID>` already declares `save`, `findById`, `findAll`, `existsById`, `count`, `deleteById` and paging variants. Spring Data creates a proxy class for each interface at start-up, so no implementation is written. Extra methods are derived from their names: `findByCityIgnoreCase(String)` becomes `select s from Student s where upper(s.city) = upper(?1)`; `findByProgrammeCode(String)` walks the `programme` association and compares `programme.code`. A misspelt property name fails at start-up with `No property 'citty' found for type 'Student'`, which is the check that the name is right.
+
+Hibernate default naming converts `dateOfBirth` to `date_of_birth` and the class name `Student` to table `student`. The `@ManyToOne` fields become foreign-key columns named by `@JoinColumn`. `@Enumerated(EnumType.STRING)` stores `APPROVED` as text; without it Hibernate stores the ordinal 2, which breaks the moment someone reorders the enum.
 
 ## Question 32
 
@@ -100,13 +295,101 @@ Create Rest Controller to fetch Student Information using JPA Repository; the re
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Create the package `in.ignou.admission.web` and add `StudentRestController`.
+2. Add `data.sql` under `src/main/resources` so the table has rows to fetch (the properties from Question 30 already enable it).
+3. Restart the application. Handler mappings are logged only at DEBUG level, so the request test below is the real check.
+4. Run the curl commands in a terminal, or open `http://localhost:8080/api/students` in a browser.
+
+#### Program
+
+```java title="StudentRestController.java" file=<rootDir>/public/code/mcsl-222/section-2/session-7/StudentRestController.java
+
+```
+
+```sql title="data.sql" file=<rootDir>/public/code/mcsl-222/section-2/session-7/data.sql
+
+```
+
+#### Output
+
+Checked by reading. Every endpoint with its curl command and expected response:
+
+```bash
+curl -s http://localhost:8080/api/students
+```
+
+```text
+[{"id":1,"name":"Asha Verma","email":"asha@example.com","phone":"9876543210","city":"Jaipur","dateOfBirth":"2002-03-14"},
+ {"id":2,"name":"Ravi Kumar","email":"ravi@example.com","phone":"9123456780","city":"Patna","dateOfBirth":"2001-11-02"}]
+```
+
+```bash
+curl -s http://localhost:8080/api/students/1
+```
+
+```text
+{"id":1,"name":"Asha Verma","email":"asha@example.com","phone":"9876543210","city":"Jaipur","dateOfBirth":"2002-03-14"}
+```
+
+```bash
+curl -s "http://localhost:8080/api/students?city=patna"
+```
+
+```text
+[{"id":2,"name":"Ravi Kumar","email":"ravi@example.com","phone":"9123456780","city":"Patna","dateOfBirth":"2001-11-02"}]
+```
+
+```bash
+curl -i http://localhost:8080/api/students/99
+```
+
+```text
+HTTP/1.1 404
+Content-Length: 0
+```
+
+The console shows the SQL Hibernate ran for the first call:
+
+```text
+Hibernate: select s1_0.id,s1_0.city,s1_0.date_of_birth,s1_0.email,s1_0.name,s1_0.phone from student s1_0
+```
+
+#### Explanation
+
+`@RestController` is `@Controller` plus `@ResponseBody`: the returned `List<Student>` is not a view name, it is handed to Jackson, which walks the getters and writes JSON with `Content-Type: application/json`. `LocalDate` is written as `2002-03-14` because Boot registers the `JavaTimeModule` and turns off timestamp output. The constructor takes `StudentRepository`; with one constructor Spring injects it without `@Autowired`. `ResponseEntity` is used only where the status code varies: `findById` returns an `Optional`, `map(ResponseEntity::ok)` gives 200 with a body, `orElse(notFound())` gives 404 with none. `@RequestParam(required = false)` lets the same method serve the full list and the filtered list.
+
+## Viva Questions
+
+<Explain />
+
+- **Q:** What does `@SpringBootApplication` combine? **A:** `@Configuration`, `@EnableAutoConfiguration` and `@ComponentScan` on the package of the class.
+- **Q:** Why is there no `<version>` under each dependency? **A:** `spring-boot-starter-parent` manages versions through its dependencyManagement section, so all starters agree.
+- **Q:** What does `ddl-auto=update` do and why not use it in production? **A:** It adds missing tables and columns from the entities at start-up. It never drops or renames, so the schema drifts; production uses `validate` with migration scripts.
+- **Q:** How does Spring Data implement `findByCityIgnoreCase` without code? **A:** It parses the method name into a JPQL query at start-up and generates a proxy that runs it.
+- **Q:** What is the difference between `@Controller` and `@RestController`? **A:** `@RestController` adds `@ResponseBody`, so return values are written to the response as JSON instead of resolved as view names.
+- **Q:** Why does `data.sql` need `defer-datasource-initialization`? **A:** Boot runs SQL scripts before JPA starts by default; deferring runs them after Hibernate created the tables.
+- **Q:** Why is `mysql-connector-j` scoped `runtime`? **A:** Our code compiles against JDBC interfaces only; the driver is needed only when the application runs.
+- **Q:** What does `Optional.map(ResponseEntity::ok).orElse(notFound().build())` return for a missing id? **A:** A `ResponseEntity` with status 404 and an empty body.
+
+## Common Mistakes
+
+<Explain />
+
+- Choosing Spring Boot 2.x on Initializr and then writing `jakarta.persistence` imports; 2.x uses `javax.persistence` and nothing compiles.
+- Placing entity or controller packages outside `in.ignou.admission`; component scan never finds them and the endpoint returns 404 with no error in the log.
+- Forgetting `spring.sql.init.mode=always`, so `data.sql` is silently skipped on MySQL and every GET returns `[]`.
+- Using `@Enumerated` without `EnumType.STRING`, storing ordinals that break when the enum changes.
+- Adding a getter-less field to an entity and wondering why it is missing from the JSON; Jackson serialises getters.
+- Running before MySQL is up. The pool fails with `Communications link failure`, which students misread as a code error.
 
 ## Session Summary
 
 <Notebook />
 
-- Question 29: Create a Spring Boot application using Spring Initializer. Add the following dep
-- Question 30: Configure Database settings through the property file in Spring Boot
-- Question 31: Create JPA Repositories for all entities used in the Student Admission lifecycle
-- Question 32: Create Rest Controller to fetch Student Information using JPA Repository; the re
+- Initializr settings and the `pom.xml` with the six starters plus the MySQL driver
+- `application.properties` with the datasource, `ddl-auto=update`, `show-sql` and the `data.sql` switches
+- Entity classes `Student`, `Programme`, `Course`, `Admission` and the `AdmissionStatus` enum, with the generated `CREATE TABLE` statements
+- The four `JpaRepository` interfaces with their derived query methods
+- `StudentRestController` with the four curl calls and their JSON responses, including the 404 case

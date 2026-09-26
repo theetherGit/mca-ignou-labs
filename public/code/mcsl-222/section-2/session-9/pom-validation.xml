@@ -1,0 +1,5 @@
+<!-- Session 9, Q40: Bean Validation (@NotBlank, @Size, @Email). Add inside <dependencies>. -->
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-validation</artifactId>
+</dependency>

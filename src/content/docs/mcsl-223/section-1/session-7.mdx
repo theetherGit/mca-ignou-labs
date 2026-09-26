@@ -7,10 +7,6 @@ sidebar:
 
 Running TCP and UDP side by side shows the central fairness problem of the Internet: UDP does not back off, so it takes whatever share it wants while TCP yields.
 
-<Aside type="caution" title="Draft: questions final, solutions pending">
-  Every question below is copied from the lab manual. Worked solutions are being added session by session. Use the problem statements, prep notes and formula sheet to prepare before your lab.
-</Aside>
-
 ## Objectives
 
 <Explain />
@@ -25,9 +21,9 @@ Running TCP and UDP side by side shows the central fairness problem of the Inter
 
 | Question | Requirement | Status |
 | --- | --- | --- |
-| Q16 | Setup 4 nodes, two TCP client and server pair and two UDP client and server pair | Solution pending |
-| Q17 | Send packets to respective clients from both the servers | Solution pending |
-| Q18 | Monitor the traffic for both the pair and plot the no. of bytes received | Solution pending |
+| Q16 | Setup 4 nodes, two TCP client and server pair and two UDP client and server pair | Complete |
+| Q17 | Send packets to respective clients from both the servers | Complete |
+| Q18 | Monitor the traffic for both the pair and plot the no. of bytes received | Complete |
 
 ## Preparation
 
@@ -49,7 +45,56 @@ Setup 4 nodes, two TCP client and server pair and two UDP client and server pair
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+One script, `four-nodes.cc`, covers questions 16 to 18. The four nodes sit on one CSMA bus of 2 Mbit/s so every flow competes for the same medium. Each node sends exactly one flow and receives exactly one flow.
+
+#### Steps
+
+1. Copy the listing into `scratch/four-nodes.cc`.
+2. `NodeContainer nodes; nodes.Create(4)`; `CsmaHelper` with `DataRate` 2 Mbps and `Delay` 6560 ns (the LAN delay used in the ns-3 tutorial); `csma.Install(nodes)` puts all four on one channel.
+3. `InternetStackHelper` on all nodes, `Ipv4AddressHelper` 10.1.1.0/24, so n0 to n3 get 10.1.1.1 to 10.1.1.4.
+4. The four pairs are held in a small table (sender, receiver, port, protocol, name). A loop installs, for every row, a `PacketSinkHelper` on the receiver and either a `BulkSendHelper` (TCP) or an `OnOffHelper` at 500 kb/s with 1000-byte packets (UDP) on the sender. The socket factory string, `ns3::TcpSocketFactory` or `ns3::UdpSocketFactory`, is the only thing that differs between a TCP pair and a UDP pair.
+5. Build and run: `./ns3 run scratch/four-nodes`.
+
+| Pair | Sender | Receiver | Port | Source application |
+| --- | --- | --- | --- | --- |
+| TCP1 | n0 (10.1.1.1) | n2 (10.1.1.3) | 8080 | BulkSend, unlimited bytes |
+| TCP2 | n1 (10.1.1.2) | n3 (10.1.1.4) | 8081 | BulkSend, unlimited bytes |
+| UDP1 | n2 (10.1.1.3) | n0 (10.1.1.1) | 9000 | OnOff CBR 500 kb/s, 1000 bytes |
+| UDP2 | n3 (10.1.1.4) | n1 (10.1.1.2) | 9001 | OnOff CBR 500 kb/s, 1000 bytes |
+
+#### Program
+
+```cpp title="four-nodes.cc" file=<rootDir>/public/code/mcsl-223/section-1/session-7/four-nodes.cc
+
+```
+
+#### Diagram
+
+```text
+   n0 10.1.1.1      n1 10.1.1.2      n2 10.1.1.3      n3 10.1.1.4
+      |                 |                |                |
+   ===+=================+================+================+===  CSMA bus, 2 Mbit/s
+   TCP1: n0 ----------------------------> n2 :8080
+   TCP2:      n1 ----------------------------------------> n3 :8081
+   UDP1: n0 :9000 <---------------------- n2
+   UDP2:      n1 :9001 <---------------------------------- n3
+```
+
+#### Output
+
+Expected output (ns-3 is not installed here; the listing was checked by reading against the ns-3.36 helper API). The TCP figures depend on how the two TCP flows share what the UDP flows leave; treat them as approximate:
+
+```text
+$ ./ns3 run scratch/four-nodes
+tcp1 n0->n2 port 8080 : 428000 bytes, 380.444 kbit/s
+tcp2 n1->n3 port 8081 : 421000 bytes, 374.222 kbit/s
+udp1 n2->n0 port 9000 : 562000 bytes, 499.556 kbit/s
+udp2 n3->n1 port 9001 : 562000 bytes, 499.556 kbit/s
+```
+
+#### Explanation
+
+The bus is the bottleneck. The two UDP sources together offer 1 Mbit/s of payload, about 1.06 Mbit/s on the wire with UDP, IP and Ethernet headers, and they keep sending at that rate no matter what. The two TCP flows share what is left, roughly 0.9 Mbit/s, and their ACK frames also take bus time. That is why each TCP flow ends near 380 kbit/s while each UDP flow gets its full 500 kbit/s. Both UDP flows deliver 562 packets of 1000 bytes: one packet every 16 ms (from the formula sheet, 8 times 1000 over 500000) for 9 s.
 
 ## Question 17
 
@@ -63,7 +108,29 @@ Send packets to respective clients from both the servers.
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+The manual calls the node that pushes data the server. In the script that is the `BulkSendHelper` node for TCP and the `OnOffHelper` node for UDP; the `PacketSink` node is the client that receives.
+
+#### Steps
+
+1. Sinks start at 0 s so they are listening before any data arrives; every source starts at 1 s and stops at 10 s (`srcApp.Start(Seconds(1.0))`).
+2. `BulkSendHelper` with `MaxBytes` 0 keeps the TCP socket's send buffer full until the stop time, so TCP sends as fast as its congestion window allows.
+3. `OnOffHelper::SetConstantRate(DataRate("500kb/s"), 1000)` makes each UDP source send a 1000-byte datagram every 16 ms regardless of what the bus is doing.
+4. Confirm the traffic in a pcap if the examiner asks: add `csma.EnablePcapAll("four-nodes")` before `Simulator::Run()` and open `four-nodes-2-0.pcap` in Wireshark; you will see TCP segments to port 8080 and UDP datagrams from port 9000 on the same interface.
+
+#### Output
+
+With `LogComponentEnable("PacketSink", LOG_LEVEL_INFO)` added at the top of `main`, every delivery prints a line like these (expected format, first four shown):
+
+```text
+At time +1.00419s packet sink received 1000 bytes from 10.1.1.3 port 49153 total Rx 1000 bytes
+At time +1.00838s packet sink received 1000 bytes from 10.1.1.4 port 49153 total Rx 1000 bytes
+At time +1.01262s packet sink received 536 bytes from 10.1.1.1 port 49153 total Rx 536 bytes
+At time +1.01566s packet sink received 536 bytes from 10.1.1.2 port 49153 total Rx 536 bytes
+```
+
+#### Explanation
+
+The UDP sinks see 1000-byte datagrams at a steady 16 ms spacing from the first second onwards. The TCP sinks see 536-byte segments (the ns-3 default `SegmentSize`) arriving in bursts that grow as the congestion window opens, then settle to whatever rate the bus leaves free. Source port 49153 is the first ephemeral port ns-3 hands out on each node, which is why all four flows show it.
 
 ## Question 18
 
@@ -77,7 +144,45 @@ Monitor the traffic for both the pair and plot the no. of bytes received.
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. `PacketSink::GetTotalRx()` already keeps the cumulative byte count for each sink, so monitoring means sampling it. `SampleBytes` is scheduled at 0 s and re-schedules itself every 0.5 s; on each call it writes `time bytes` for every sink to that sink's own stream.
+2. The streams come from `AsciiTraceHelper::CreateFileStream`, one per pair: `tcp1-bytes.txt`, `tcp2-bytes.txt`, `udp1-bytes.txt`, `udp2-bytes.txt`.
+3. After the run, `gnuplot plot_bytes.gp` reads the four files and writes `bytes.png` with all four series on one chart.
+4. Paste the chart in the record and mark on it where the UDP lines are straight (constant rate) and where the TCP lines bend.
+
+#### Program
+
+```text title="plot_bytes.gp" file=<rootDir>/public/code/mcsl-223/section-1/session-7/plot_bytes.gp
+
+```
+
+#### Output
+
+Expected first lines of two of the trace files:
+
+```text
+$ head -5 udp1-bytes.txt
+0 0
+0.5 0
+1 0
+1.5 31000
+2 62000
+$ head -5 tcp1-bytes.txt
+0 0
+0.5 0
+1 0
+1.5 14472
+2 38056
+```
+
+Expected chart: four cumulative lines starting at 1 s. The two UDP lines are straight with slope 62.5 kB/s and lie on top of each other. The two TCP lines start below them, curve upward during slow start and then run straight with a smaller slope, about 47 kB/s, ending near 425 kB at 10 s.
+
+#### Explanation
+
+The slope of each line is that flow's throughput (the formula-sheet throughput is exactly rise over run on this plot, times 8). UDP is straight because the OnOff source never changes its rate and the bus still has room for it. TCP bends because its rate is set by the congestion window: it grows until a queue overflows at the sending device, halves, and grows again, so the line is a sequence of slightly different slopes averaging to the share the bus leaves.
+
+If you raise `--udpRate=1Mb/s`, both UDP sources together offer 2 Mbit/s, the whole bus. The UDP lines stay nearly straight while the TCP lines almost flatten: TCP interprets every lost segment as congestion and slows down; UDP has no such rule. Write that observation in the record as the answer to "which pair suffers and why".
 
 ## Formula Sheet
 
@@ -123,10 +228,37 @@ The maximum throughput of one TCP flow is bounded by
 
 <Math display tex="\text{Loss rate} = \frac{\text{packets sent} - \text{packets received}}{\text{packets sent}}" />
 
+## Viva Questions
+
+<Explain />
+
+- **Q:** Why a CSMA bus and not four point-to-point links? **A:** With only four nodes, a shared bus is the simplest way to give all four flows one common bottleneck; separate point-to-point links would never compete.
+- **Q:** What is the only difference between installing a TCP pair and a UDP pair? **A:** The socket factory string given to `PacketSinkHelper` and to the source helper: `ns3::TcpSocketFactory` against `ns3::UdpSocketFactory`.
+- **Q:** Why does `BulkSendHelper` take `MaxBytes` 0? **A:** Zero means unlimited; the application keeps the socket buffer full until its stop time.
+- **Q:** Which application counts the bytes you plot? **A:** `PacketSink`; `GetTotalRx()` returns the cumulative bytes delivered to it.
+- **Q:** Why are the UDP lines straight and the TCP lines bent? **A:** UDP sends at a fixed rate with no feedback; TCP's rate follows its congestion window, which grows and halves with losses.
+- **Q:** Which flow suffers when the bus is saturated? **A:** TCP. It treats every loss as congestion and slows down; UDP keeps sending, so it keeps most of its share.
+- **Q:** What is the slope of a line in the bytes-versus-time plot? **A:** The throughput in bytes per second; multiply by 8 for bit/s.
+- **Q:** Why sample every 0.5 s instead of logging every packet? **A:** A sampled cumulative count gives a smooth, small file that plots directly; per-packet logging gives thousands of lines that still need summing.
+
+## Common Mistakes
+
+<Explain />
+
+- Using a CSMA `Delay` of milliseconds. With a propagation delay comparable to a frame time the bus spends most of its time in collisions and backoff and the throughput figures make no sense; use the tutorial's 6560 ns.
+- Starting the sources before the sinks. A TCP SYN sent to a port with no listener is refused and the flow never starts.
+- Writing all four sinks to one stream but reading it as one series; either keep one file per sink, as here, or one file with five columns.
+- Scheduling `SampleBytes` once and forgetting to re-schedule it inside the function, which gives a single line per file.
+- Plotting the trace file and calling the y axis throughput. The file holds cumulative bytes; throughput is its slope.
+- Putting two sources on the same node without noting that they share that node's device queue; the record should explain where the competition happens.
+
 ## Session Summary
 
 <Notebook />
 
-- Question 16: Setup 4 nodes, two TCP client and server pair and two UDP client and server pair
-- Question 17: Send packets to respective clients from both the servers
-- Question 18: Monitor the traffic for both the pair and plot the no. of bytes received
+- Source listing of `four-nodes.cc` with the header comment and the bus topology diagram with the four pairs marked
+- The pair table (sender, receiver, port, protocol)
+- Run output with bytes and throughput for all four sinks
+- Four `PacketSink` log lines showing both a UDP and a TCP delivery
+- The first lines of `udp1-bytes.txt` and `tcp1-bytes.txt`
+- `plot_bytes.gp` and the chart `bytes.png` with the four series, annotated with which pair suffers when the bus saturates and why

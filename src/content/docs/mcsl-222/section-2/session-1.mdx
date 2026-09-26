@@ -7,10 +7,6 @@ sidebar:
 
 A servlet is a Java class that answers HTTP requests inside a container such as Tomcat. This session covers the request and response objects, HTML forms, client information, session tracking and a first database-backed CRUD application.
 
-<Aside type="caution" title="Draft: questions final, solutions pending">
-  Every question below is copied from the lab manual. Worked solutions are being added session by session. Use the problem statements, prep notes and formula sheet to prepare before your lab.
-</Aside>
-
 ## Objectives
 
 <Explain />
@@ -25,11 +21,11 @@ A servlet is a Java class that answers HTTP requests inside a container such as 
 
 | Question | Requirement | Status |
 | --- | --- | --- |
-| Q1 | Write a Servlet Programme to print the current date and time along with the timestamp | Solution pending |
-| Q2 | Create an HTML form with the input of student information using HTTP Protocol and... | Solution pending |
-| Q3 | Write a servlet program to capture client IPs and display it | Solution pending |
-| Q4 | Write a servlet program for session management using HTTP Session along with tracking... | Solution pending |
-| Q5 | Write a CRUD (Create/Save, Read, Edit/Update, Delete) application using servlet.... | Solution pending |
+| Q1 | Write a Servlet Programme to print the current date and time along with the timestamp | Complete |
+| Q2 | Create an HTML form with the input of student information using HTTP Protocol and... | Complete |
+| Q3 | Write a servlet program to capture client IPs and display it | Complete |
+| Q4 | Write a servlet program for session management using HTTP Session along with tracking... | Complete |
+| Q5 | Write a CRUD (Create/Save, Read, Edit/Update, Delete) application using servlet.... | Complete |
 
 ## Preparation
 
@@ -38,6 +34,27 @@ A servlet is a Java class that answers HTTP requests inside a container such as 
 - Create a Dynamic Web Project (Eclipse) or Java Web application (NetBeans) targeting Tomcat 10; note that Tomcat 10 uses the `jakarta.servlet` package, not `javax.servlet`.
 - Design the IGNOU database and the Student table on paper first: enrolment number, name, date of birth, email, mobile, address, programme, courses. Question 5 and most later sessions reuse it.
 - Add the MySQL Connector/J jar to the project's library path.
+- One Maven web project called `ServletLab` holds all five answers. Every servlet is mapped with `@WebServlet`, so `web.xml` only carries the welcome file and the session timeout. All Java files live in `src/main/java/ignou/`, static pages in `src/main/webapp/`.
+
+## Project Setup
+
+<Explain />
+
+Do this once; every question below drops files into the same project.
+
+1. NetBeans: File, New Project, Java with Maven, Web Application, Next. Project Name `ServletLab`, Next. Server: Apache Tomcat 10.1 (click Add if it is not listed and browse to the extracted Tomcat folder, as in manual figure 2.24), Java EE Version: Jakarta EE 10 Web, Finish.
+2. Eclipse: File, New, Dynamic Web Project, name `ServletLab`, Target runtime: Apache Tomcat v10.1, Dynamic web module version 6.0, Finish. Then right-click the project, Configure, Convert to Maven Project.
+3. Replace the generated `pom.xml` dependencies with the fragment below and save; the IDE downloads the jars.
+4. Put `web.xml` in `src/main/webapp/WEB-INF/`.
+5. Run: right-click the project, Run (NetBeans) or Run As, Run on Server (Eclipse). The base URL is `http://localhost:8080/ServletLab/`.
+
+```xml title="pom.xml" file=<rootDir>/public/code/mcsl-222/section-2/session-1/pom.xml
+
+```
+
+```xml title="web.xml" file=<rootDir>/public/code/mcsl-222/section-2/session-1/web.xml
+
+```
 
 ## Question 1
 
@@ -51,7 +68,38 @@ Write a Servlet Programme to print the current date and time along with the time
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Right-click `Source Packages`, New, Servlet (NetBeans) or New, Servlet (Eclipse). Class name `DateTimeServlet`, package `ignou`. Untick "Add information to deployment descriptor" so the annotation does the mapping.
+2. Replace the generated body with the listing.
+3. Run the project and open `http://localhost:8080/ServletLab/datetime`.
+4. Press F5 a few times: time and timestamp change, the date does not.
+
+#### Program
+
+```java title="DateTimeServlet.java" file=<rootDir>/public/code/mcsl-222/section-2/session-1/DateTimeServlet.java
+
+```
+
+#### Output
+
+Expected browser page (values for the moment of the request; checked by reading the listing, not executed, since no Tomcat is available here):
+
+```text
+Current Date and Time
+Date: 26-09-2026
+Time: 10:42:07
+Full (java.util.Date): Sat Sep 26 10:42:07 IST 2026
+Timestamp (milliseconds since 1 Jan 1970 UTC): 1790397127342
+SQL Timestamp: 2026-09-26 10:42:07.342
+```
+
+#### Explanation
+
+- `@WebServlet("/datetime")` registers the servlet with the container; no `servlet` and `servlet-mapping` entries are needed in `web.xml`. The manual's examples use `web.xml`; both work on Tomcat 10.
+- `doGet` runs once per GET request. `response.setContentType` must come before `getWriter()` or the charset is ignored.
+- `System.currentTimeMillis()` is the timestamp: milliseconds since the Unix epoch. `LocalDateTime` and `DateTimeFormatter` (java.time) format the same instant as a readable date and time; `java.sql.Timestamp` is the form a database column would store.
+- The `try` with resources closes the `PrintWriter`, which flushes the buffer to the client.
 
 ## Question 2
 
@@ -65,7 +113,49 @@ Create an HTML form with the input of student information using HTTP Protocol an
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Add `student-form.html` under `src/main/webapp/` (NetBeans: right-click Web Pages, New, HTML File).
+2. Add servlet `StudentInfoServlet` in package `ignou`.
+3. Run and open `http://localhost:8080/ServletLab/student-form.html` (it is also the welcome file, so the bare context URL works).
+4. Fill the form and press Submit. Then change `method="post"` to `method="get"` in the HTML, redeploy, submit again and compare the address bar.
+
+#### Program
+
+```html title="student-form.html" file=<rootDir>/public/code/mcsl-222/section-2/session-1/student-form.html
+
+```
+
+```java title="StudentInfoServlet.java" file=<rootDir>/public/code/mcsl-222/section-2/session-1/StudentInfoServlet.java
+
+```
+
+#### Output
+
+Checked by reading, not executed. With POST the address bar shows `/ServletLab/studentInfo` and the page reads:
+
+```text
+Submitted Student Information
+HTTP method: POST, protocol: HTTP/1.1, content type: application/x-www-form-urlencoded
+Enrolment No   2451001234
+Name           Asha Verma
+Date of Birth  2001-03-14
+Email          asha.verma@example.com
+Mobile         9876543210
+Programme      MCA
+Courses        MCS-218, MCS-220
+Back to form
+```
+
+With GET the first line becomes `HTTP method: GET, protocol: HTTP/1.1, content type: null` and the address bar carries every field: `studentInfo?enrolmentNo=2451001234&name=Asha+Verma&...`.
+
+#### Explanation
+
+- The form `action="studentInfo"` is relative, so the browser resolves it against `/ServletLab/`; the servlet is mapped to `/studentInfo`.
+- `request.getParameter(name)` returns one value; `getParameterValues("courses")` returns all ticked checkboxes as an array, or `null` when none is ticked.
+- `request.getMethod()` and `getProtocol()` show the HTTP method and version, which is what the question means by "HTTP Protocol and method". GET puts the fields in the query string (visible, bookmarkable, length-limited); POST puts them in the body, so passwords and long text belong in POST.
+- `esc()` HTML-escapes the values before they are written back. Without it a name like `<script>` would run in the browser.
+- `setCharacterEncoding("UTF-8")` before the first `getParameter` call makes Hindi or other non-ASCII names decode correctly.
 
 ## Question 3
 
@@ -79,7 +169,40 @@ Write a servlet program to capture client IPs and display it.
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Add servlet `ClientIpServlet` in package `ignou`.
+2. Run and open `http://localhost:8080/ServletLab/clientIp` from the same machine, then `http://127.0.0.1:8080/ServletLab/clientIp`, then from a phone on the same Wi-Fi using the PC's LAN address (find it with `ipconfig` or `ip addr`).
+
+#### Program
+
+```java title="ClientIpServlet.java" file=<rootDir>/public/code/mcsl-222/section-2/session-1/ClientIpServlet.java
+
+```
+
+#### Output
+
+Checked by reading. From the same PC using `localhost`:
+
+```text
+Client Information
+Client IP address: 0:0:0:0:0:0:0:1
+request.getRemoteAddr(): 0:0:0:0:0:0:0:1
+request.getRemoteHost(): 0:0:0:0:0:0:0:1
+request.getRemotePort(): 53412
+X-Forwarded-For header: null
+Server name and port: localhost:8080
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) ... Chrome/129.0
+```
+
+Using `127.0.0.1` in the URL the first two lines show `127.0.0.1`; from a phone they show something like `192.168.1.7`.
+
+#### Explanation
+
+- `getRemoteAddr()` is the address of the TCP peer that connected to Tomcat. On localhost that is the IPv6 loopback `0:0:0:0:0:0:0:1` on most Windows builds, because the browser prefers IPv6 for `localhost`.
+- When a reverse proxy or load balancer sits in front of Tomcat, the peer is the proxy, and the original client is in the `X-Forwarded-For` header (a comma list, first entry is the client). The servlet prefers that header when present. Trust it only when you control the proxy; anyone can send that header.
+- `getRemoteHost()` returns a host name only if Tomcat's `enableLookups` is on; by default it just repeats the IP.
+- `getRemotePort()` is the client's ephemeral port, different for every connection.
 
 ## Question 4
 
@@ -93,7 +216,47 @@ Write a servlet program for session management using HTTP Session along with tra
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Add servlet `SessionTrackingServlet` in package `ignou`.
+2. Run and open `http://localhost:8080/ServletLab/session`. Reload three times and watch "Visits in this session" count up.
+3. Type a name, click "Remember me". The name appears in the heading and in the `visitorName` row.
+4. Open the browser dev tools, Application, Cookies: you see `JSESSIONID` (session cookie, no expiry) and `visitorName` (expires in 7 days).
+5. Click Logout: the visit count restarts at 1, the name is gone, and the Session ID is new.
+6. Block cookies for `localhost` in the browser and reload twice: "Session id came from cookie?" turns false, and the "Reload" link now contains `;jsessionid=...` because `encodeURL` switched to URL rewriting.
+
+#### Program
+
+```java title="SessionTrackingServlet.java" file=<rootDir>/public/code/mcsl-222/section-2/session-1/SessionTrackingServlet.java
+
+```
+
+#### Output
+
+Checked by reading. After two reloads and "Remember me" with the name Asha:
+
+```text
+Welcome Asha
+Session ID                         5F3A0C1E9B7D4E2A8C6F1B0D9E8A7C5B
+New session?                       false
+Created                            Sat Sep 26 10:50:02 IST 2026
+Last accessed                      Sat Sep 26 10:50:41 IST 2026
+Timeout (s)                        1800
+Visits in this session             3
+Session id came from cookie?       true
+Session id came from URL?          false
+visitorName cookie                 Asha
+Your name: [        ] [Remember me (cookie, 7 days)]
+Reload (URL rewriting aware) | Logout
+```
+
+#### Explanation
+
+- HTTP is stateless. `request.getSession()` makes Tomcat create an `HttpSession` object on the server and send its id to the browser in the `JSESSIONID` cookie; every later request carries the cookie, so Tomcat finds the same object. The `visits` attribute lives in that object, not in the browser.
+- The session cookie has no expiry, so it dies when the browser closes; the session itself dies after 30 minutes of inactivity (`session-timeout` in `web.xml`, shown as 1800 seconds).
+- The `visitorName` cookie is the second tracking mechanism: it is stored by the browser with `setMaxAge(7 days)`, so it survives browser restarts and even `session.invalidate()`. Logout deletes it by sending the same cookie with max age 0.
+- `response.encodeURL()` is the fallback when cookies are refused: it appends `;jsessionid=` to links so the id travels in the URL. `isRequestedSessionIdFromCookie()` and `isRequestedSessionIdFromURL()` show which route was used.
+- Cookie values may not contain spaces or semicolons, so the name is URL-encoded before storing and decoded when read. `setHttpOnly(true)` keeps JavaScript from reading it.
 
 ## Question 5
 
@@ -107,14 +270,96 @@ Write a CRUD (Create/Save, Read, Edit/Update, Delete) application using servlet.
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Assumptions
+
+- Enrolment number is the primary key (IGNOU issues a unique 9 to 12 digit number).
+- Courses are stored in one column as a comma-separated list of course codes. A student registers for a handful of courses, so a separate Course table and join table would add two more screens without teaching anything new for this session. Session 6 (Hibernate) is the place to normalise it.
+- One application login `ignou` / `ignou123` with only SELECT, INSERT, UPDATE and DELETE rights on the IGNOU database.
+- MySQL 8 runs on `localhost:3306`.
+
+#### Steps
+
+1. Start MySQL and run `schema.sql` in MySQL Workbench (File, Open SQL Script, then the lightning-bolt Execute button) or with `mysql -u root -p` then `source schema.sql`. Check with `SELECT * FROM Student;` that three rows exist.
+2. Add `Student.java`, `StudentDao.java` and `StudentServlet.java` to package `ignou`. The `mysql-connector-j` dependency is already in `pom.xml`.
+3. Run and open `http://localhost:8080/ServletLab/students`.
+4. Read: the list shows the three seeded rows. Create: click "Add new student", fill the form, Save. Update: click Edit on a row, change the mobile, Save. Delete: click Delete, confirm.
+5. Verify each step in Workbench with `SELECT enrolment_no, name, mobile FROM Student;`.
+
+#### Program
+
+```sql title="schema.sql" file=<rootDir>/public/code/mcsl-222/section-2/session-1/schema.sql
+
+```
+
+```java title="Student.java" file=<rootDir>/public/code/mcsl-222/section-2/session-1/Student.java
+
+```
+
+```java title="StudentDao.java" file=<rootDir>/public/code/mcsl-222/section-2/session-1/StudentDao.java
+
+```
+
+```java title="StudentServlet.java" file=<rootDir>/public/code/mcsl-222/section-2/session-1/StudentServlet.java
+
+```
+
+#### Output
+
+Checked by reading; the SQL was checked against MySQL 8 syntax. After adding a fourth student the list page reads:
+
+```text
+IGNOU Students (4)
+Student added
+Add new student
+Enrolment    Name         DOB         Email                     Mobile      Programme  Sem  Courses                          Actions
+2451001234   Asha Verma   2001-03-14  asha.verma@example.com    9876543210  MCA        2    MCS-218,MCS-219,MCS-220,MCS-221  Edit [Delete]
+2451001235   Rahul Singh  2000-11-02  rahul.singh@example.com   9123456780  MCA        2    MCS-218,MCS-220,MCS-221          Edit [Delete]
+2451001236   Meera Nair   2002-07-25  meera.nair@example.com    9988776655  MCA        1    MCS-211,MCS-212,MCS-213          Edit [Delete]
+2451001237   Vikram Rao   2001-08-30  vikram.rao@example.com    9012345678  MCA        2    MCS-218,MCSL-222                 Edit [Delete]
+```
+
+Submitting the add form a second time with the same enrolment number shows, in green text at the top of the list, `Database error: Duplicate entry '2451001237' for key 'student.PRIMARY'`. After Delete the count drops to 3 and the message reads `Student deleted`.
+
+#### Explanation
+
+- Three layers: `Student` (data), `StudentDao` (SQL), `StudentServlet` (HTTP and HTML). The servlet never builds SQL; the DAO never touches the request. That is the split every later session (Spring, Hibernate) formalises.
+- `PreparedStatement` sends the SQL text with `?` placeholders first and the values separately, so a name containing a quote cannot change the statement (SQL injection). `setString`, `setInt` also handle quoting and type conversion.
+- Every DAO method opens and closes its own connection through `try` with resources. That is fine for a lab; a real application uses a connection pool (Tomcat's JNDI `DataSource`).
+- The servlet is a front controller: the `action` parameter selects list, new, edit, insert, update or delete. Reads are GET; writes are POST, and every POST ends in `sendRedirect` back to the list (Post-Redirect-Get), so pressing F5 on the list page never re-inserts a row.
+- Delete is a tiny POST form rather than a link, because browsers and crawlers prefetch links; a GET that deletes data is a classic bug.
+- The `CHECK` constraints in `schema.sql` catch bad mobile numbers and semesters even if someone bypasses the HTML `pattern` attributes; the database is the last line of validation.
+
+## Viva Questions
+
+<Explain />
+
+- **Q:** What is the servlet life cycle? **A:** The container loads the class, calls `init()` once, calls `service()` (which dispatches to `doGet`, `doPost`) for every request on a pooled thread, and calls `destroy()` once at undeploy.
+- **Q:** Why `jakarta.servlet` and not `javax.servlet`? **A:** Tomcat 10 implements Jakarta EE 9+, where every package was renamed from `javax.*` to `jakarta.*`. Code with `javax.servlet` imports compiles but Tomcat 10 never calls it.
+- **Q:** Difference between `@WebServlet` and `web.xml` mapping? **A:** Same effect; the annotation keeps the mapping next to the code, `web.xml` lets you change it without recompiling and is needed for container-wide settings like session timeout and error pages.
+- **Q:** GET versus POST? **A:** GET carries parameters in the URL, is idempotent and cacheable; POST carries them in the body and is used for anything that changes state.
+- **Q:** How does Tomcat know which session belongs to which browser? **A:** By the `JSESSIONID` cookie, or by `;jsessionid=` in the URL when cookies are off.
+- **Q:** Where is session data stored, browser or server? **A:** On the server, in the `HttpSession` object; the browser only holds the id.
+- **Q:** Why `PreparedStatement` instead of `Statement`? **A:** Parameters are bound, not concatenated, so user input cannot alter the SQL; the driver can also cache the compiled statement.
+- **Q:** What does Post-Redirect-Get solve? **A:** A browser refresh after a POST re-sends the form; redirecting to a GET page after the write prevents duplicate inserts.
+
+## Common Mistakes
+
+<Explain />
+
+- Importing `javax.servlet.*`: the project compiles against an old jar but Tomcat 10 returns 404 for the servlet.
+- Calling `getWriter()` before `setContentType()`: the charset header is ignored and non-ASCII text appears garbled.
+- Forgetting `mysql-connector-j` in `WEB-INF/lib` (or `pom.xml`): `No suitable driver found for jdbc:mysql://...` at run time.
+- Leaving the MySQL server stopped or the `IGNOU` schema uncreated: `Communications link failure` or `Unknown database 'ignou'`.
+- Deleting through a GET link, or forgetting to redirect after POST, so a refresh repeats the write.
+- Writing user input straight into HTML without escaping, which lets a `<script>` in the name field run in every viewer's browser.
 
 ## Session Summary
 
 <Notebook />
 
-- Question 1: Write a Servlet Programme to print the current date and time along with the time
-- Question 2: Create an HTML form with the input of student information using HTTP Protocol an
-- Question 3: Write a servlet program to capture client IPs and display it
-- Question 4: Write a servlet program for session management using HTTP Session along with tra
-- Question 5: Write a CRUD (Create/Save, Read, Edit/Update, Delete) application using servlet.
+- Project `ServletLab` on Tomcat 10.1 with `pom.xml` (jakarta.servlet-api, JSTL, mysql-connector-j) and `web.xml`
+- Question 1: `DateTimeServlet` at `/datetime` printing date, time and millisecond timestamp
+- Question 2: `student-form.html` posting to `StudentInfoServlet` at `/studentInfo`, showing method and protocol
+- Question 3: `ClientIpServlet` at `/clientIp` with `getRemoteAddr` and `X-Forwarded-For`
+- Question 4: `SessionTrackingServlet` at `/session` with `HttpSession` visit counter, `visitorName` cookie, logout and URL rewriting
+- Question 5: `schema.sql` (IGNOU database, Student table), `Student`, `StudentDao` with `PreparedStatement`, `StudentServlet` CRUD at `/students`

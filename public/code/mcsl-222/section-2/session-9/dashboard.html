@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<!-- src/main/resources/templates/dashboard.html   (Session 9, Q38 landing page + Q39 logout button) -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Admission Portal - Dashboard</title>
+</head>
+<body>
+  <h2>Dashboard</h2>
+  <p>Welcome, <span th:text="${#authentication.name}">user</span>.</p>
+
+  <ul>
+    <li><a th:href="@{/api/students}">Students (JSON)</a></li>
+    <li><a th:href="@{/actuator/health}">Health</a></li>
+  </ul>
+
+  <!-- Q39: logout must be a POST (CSRF-protected); a plain GET link would be rejected -->
+  <form th:action="@{/logout}" method="post">
+    <button type="submit">Logout</button>
+  </form>
+</body>
+</html>

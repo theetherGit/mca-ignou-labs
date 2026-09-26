@@ -7,10 +7,6 @@ sidebar:
 
 Actuator exposes health and metrics endpoints for operations. The session builds full CRUD REST APIs twice, once with annotations and once with XML configuration, then puts Spring Security's default login in front of them.
 
-<Aside type="caution" title="Draft: questions final, solutions pending">
-  Every question below is copied from the lab manual. Worked solutions are being added session by session. Use the problem statements, prep notes and formula sheet to prepare before your lab.
-</Aside>
-
 ## Objectives
 
 <Explain />
@@ -25,10 +21,10 @@ Actuator exposes health and metrics endpoints for operations. The session builds
 
 | Question | Requirement | Status |
 | --- | --- | --- |
-| Q33 | Add actuator dependency in Spring boot and Test Actuator (all available Endpoints) | Solution pending |
-| Q34 | Create REST API for CRUD operation using Spring Boot and Hibernate/JPA using annotation | Solution pending |
-| Q35 | Create a REST API for CRUD operation using Spring Boot and Hibernate/JPA using XML... | Solution pending |
-| Q36 | Add Spring Security dependency in the existing spring boot application created in... | Solution pending |
+| Q33 | Add actuator dependency in Spring boot and Test Actuator (all available Endpoints) | Complete |
+| Q34 | Create REST API for CRUD operation using Spring Boot and Hibernate/JPA using annotation | Complete |
+| Q35 | Create a REST API for CRUD operation using Spring Boot and Hibernate/JPA using XML... | Complete |
+| Q36 | Add Spring Security dependency in the existing spring boot application created in... | Complete |
 
 ## Preparation
 
@@ -37,6 +33,8 @@ Actuator exposes health and metrics endpoints for operations. The session builds
 - Actuator endpoints: `/actuator/health`, `/actuator/info`, `/actuator/metrics`; expose them with `management.endpoints.web.exposure.include=*` for the lab.
 - REST CRUD maps HTTP verbs: POST create, GET read, PUT update, DELETE delete. Test each with curl or Postman and keep the request and response in the record.
 - Adding spring-boot-starter-security alone protects every URL with a generated password printed in the console.
+
+This session continues the `admission-api` project from Session 7. Listings marked "replaces" overwrite the Session 7 file of the same name. Nothing was executed here; every listing and every expected response was checked by reading against Spring Boot 3.3.
 
 ## Question 33
 
@@ -50,7 +48,107 @@ Add actuator dependency in Spring boot and Test Actuator (all available Endpoint
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Confirm `spring-boot-starter-actuator` is in `pom.xml` (added in Question 29). If not, paste the block below inside `<dependencies>` and run Maven, Update Project.
+2. Replace `application.properties` with the listing: it keeps the Session 7 settings and adds the `management.*` and `info.*` keys.
+3. Restart. Open `http://localhost:8080/actuator` in a browser; the JSON lists every exposed endpoint with its URL.
+4. Call each endpoint with curl and paste the responses into the record.
+
+#### Configuration
+
+The dependency block, for reference:
+
+```xml
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+```
+
+```properties title="application.properties (replaces)" file=<rootDir>/public/code/mcsl-222/section-2/session-8/application.properties
+
+```
+
+#### Output
+
+Checked by reading. The discovery page lists the endpoints this project exposes (Boot 3.3, no Prometheus, no Flyway, no `logging.file`):
+
+```bash
+curl -s http://localhost:8080/actuator
+```
+
+```text
+{"_links":{"self":{"href":"http://localhost:8080/actuator","templated":false},
+"beans":{"href":"http://localhost:8080/actuator/beans","templated":false},
+"health":{"href":"http://localhost:8080/actuator/health","templated":false},
+"health-path":{"href":"http://localhost:8080/actuator/health/{*path}","templated":true},
+"info":{"href":"http://localhost:8080/actuator/info","templated":false},
+"conditions":{"href":"http://localhost:8080/actuator/conditions","templated":false},
+"configprops":{"href":"http://localhost:8080/actuator/configprops","templated":false},
+"env":{"href":"http://localhost:8080/actuator/env","templated":false},
+"loggers":{"href":"http://localhost:8080/actuator/loggers","templated":false},
+"heapdump":{"href":"http://localhost:8080/actuator/heapdump","templated":false},
+"threaddump":{"href":"http://localhost:8080/actuator/threaddump","templated":false},
+"metrics":{"href":"http://localhost:8080/actuator/metrics","templated":false},
+"sbom":{"href":"http://localhost:8080/actuator/sbom","templated":false},
+"scheduledtasks":{"href":"http://localhost:8080/actuator/scheduledtasks","templated":false},
+"mappings":{"href":"http://localhost:8080/actuator/mappings","templated":false},
+"shutdown":{"href":"http://localhost:8080/actuator/shutdown","templated":false}}}
+```
+
+Each endpoint, what it returns, and the command used:
+
+| Endpoint | Command | Expected response (shortened) |
+| --- | --- | --- |
+| health | `curl -s localhost:8080/actuator/health` | `"status":"UP"` with `db` (MySQL, `isValid()`), `diskSpace` (total, free, threshold) and `ping` components |
+| info | `curl -s localhost:8080/actuator/info` | `"app":` with name, course and version from the `info.*` properties |
+| metrics | `curl -s localhost:8080/actuator/metrics` | `"names":[...]` about 60 metric names: `jvm.memory.used`, `http.server.requests`, `hikaricp.connections.active`, `system.cpu.usage`, ... |
+| metrics by name | `curl -s localhost:8080/actuator/metrics/jvm.memory.used` | `"measurements":[` with `"statistic":"VALUE","value":1.2e8` and `availableTags` for `area` and `id` |
+| env | `curl -s localhost:8080/actuator/env/server.port` | `"property":` with `"value":"8080"` and source `Config resource 'class path resource [application.properties]'` |
+| beans | `curl -s localhost:8080/actuator/beans` | Every bean in the context with its scope, type and dependencies, including `studentRestController` and `studentRepository` |
+| mappings | `curl -s localhost:8080/actuator/mappings` | `dispatcherServlets` with a handler entry per method, for example `GET /api/students/[id]` |
+| loggers | `curl -s localhost:8080/actuator/loggers/in.ignou` | `"configuredLevel":null,"effectiveLevel":"INFO"` |
+| configprops | `curl -s localhost:8080/actuator/configprops` | Bound `@ConfigurationProperties` such as `spring.datasource` (password masked as `******`) |
+| conditions | `curl -s localhost:8080/actuator/conditions` | `positiveMatches` and `negativeMatches` of every auto-configuration |
+| threaddump | `curl -s localhost:8080/actuator/threaddump` | Array of threads with name, state and stack |
+| heapdump | `curl -o heap.hprof localhost:8080/actuator/heapdump` | Binary `.hprof` file |
+| scheduledtasks, sbom | `curl -s localhost:8080/actuator/scheduledtasks` | Empty lists (nothing scheduled; no SBOM file in the jar). `caches` is absent because no `CacheManager` bean exists |
+| shutdown | `curl -s -X POST localhost:8080/actuator/shutdown` | `"message":"Shutting down, bye..."` and the process exits |
+
+Two full responses worth copying:
+
+```bash
+curl -s http://localhost:8080/actuator/health
+```
+
+```text
+{"status":"UP","components":{
+ "db":{"status":"UP","details":{"database":"MySQL","validationQuery":"isValid()"}},
+ "diskSpace":{"status":"UP","details":{"total":499963174912,"free":201524125696,"threshold":10485760,"path":"/home/mca/admission-api/.","exists":true}},
+ "ping":{"status":"UP"}}}
+```
+
+```bash
+curl -s http://localhost:8080/actuator/info
+```
+
+```text
+{"app":{"name":"admission-api","course":"MCSL-222 Web Technologies Lab","version":"0.0.1"}}
+```
+
+Change a log level without restarting:
+
+```bash
+curl -s -X POST -H "Content-Type: application/json" -d '{"configuredLevel":"DEBUG"}' \
+  http://localhost:8080/actuator/loggers/in.ignou.admission
+```
+
+Response: `HTTP 204`, then the console starts printing DEBUG lines from the project package.
+
+#### Explanation
+
+Actuator registers each endpoint as a bean; the `management.endpoints.web.exposure.include=*` line maps all of them under `/actuator`. Without that line only `health` is reachable over HTTP, which is the safe default because `env`, `beans` and `heapdump` leak configuration and memory. `show-details=always` makes `health` include the `db` component, which runs `Connection.isValid()` on a pooled connection; that is the check operations teams poll. `info` is empty in Boot 3 until `management.info.env.enabled=true` and some `info.*` keys exist. `shutdown` is the only endpoint disabled by default; it needs `management.endpoint.shutdown.enabled=true` and a POST. After Session 9 the whole `/actuator` tree sits behind login except `/actuator/health`.
 
 ## Question 34
 
@@ -64,7 +162,78 @@ Create REST API for CRUD operation using Spring Boot and Hibernate/JPA using ann
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Replace `StudentRestController.java` from Session 7 with the listing below; it keeps the two GET methods and adds POST, PUT and DELETE.
+2. Restart with DevTools (saving the file is enough).
+3. Run the five curl calls in order; the ids in the later calls come from the POST response.
+4. Verify in MySQL after each step: `SELECT * FROM student;`.
+
+#### Program
+
+```java title="StudentRestController.java (replaces)" file=<rootDir>/public/code/mcsl-222/section-2/session-8/StudentRestController.java
+
+```
+
+#### Output
+
+Checked by reading. Create:
+
+```bash
+curl -i -X POST http://localhost:8080/api/students \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Meera Nair","email":"meera@example.com","phone":"9000011111","city":"Kochi","dateOfBirth":"2003-01-25"}'
+```
+
+```text
+HTTP/1.1 201
+Content-Type: application/json
+
+{"id":3,"name":"Meera Nair","email":"meera@example.com","phone":"9000011111","city":"Kochi","dateOfBirth":"2003-01-25"}
+```
+
+Read all and read one:
+
+```bash
+curl -s http://localhost:8080/api/students
+curl -s http://localhost:8080/api/students/3
+```
+
+```text
+[{"id":1,"name":"Asha Verma",...},{"id":2,"name":"Ravi Kumar",...},{"id":3,"name":"Meera Nair",...}]
+{"id":3,"name":"Meera Nair","email":"meera@example.com","phone":"9000011111","city":"Kochi","dateOfBirth":"2003-01-25"}
+```
+
+Update (full replacement of the editable fields):
+
+```bash
+curl -s -X PUT http://localhost:8080/api/students/3 \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Meera Nair","email":"meera.nair@example.com","phone":"9000011111","city":"Thrissur","dateOfBirth":"2003-01-25"}'
+```
+
+```text
+{"id":3,"name":"Meera Nair","email":"meera.nair@example.com","phone":"9000011111","city":"Thrissur","dateOfBirth":"2003-01-25"}
+```
+
+Delete, then read again:
+
+```bash
+curl -i -X DELETE http://localhost:8080/api/students/3
+curl -i http://localhost:8080/api/students/3
+```
+
+```text
+HTTP/1.1 204
+
+HTTP/1.1 404
+```
+
+Error cases: a duplicate email on POST violates the unique key and returns `HTTP 500` with `DataIntegrityViolationException` in the console; a body that is not JSON returns `HTTP 400` (`HttpMessageNotReadableException`).
+
+#### Explanation
+
+Each HTTP verb has its own annotation, all shortcuts for `@RequestMapping(method = ...)`. `@RequestBody` asks Jackson to build a `Student` from the request JSON; `student.setId(null)` guarantees an INSERT even if the client sent an id. `@ResponseStatus(CREATED)` sets 201 for the create path where the body is always present. PUT loads the managed entity, copies the fields, and calls `save`; because the entity has an id, Hibernate issues an UPDATE. DELETE checks `existsById` first so a missing id is 404 rather than a silent 204. Every method goes through the same `JpaRepository`, so the controller has no SQL and no session handling of its own; Boot's `OpenEntityManagerInViewInterceptor` and the repository's `@Transactional` methods do that.
 
 ## Question 35
 
@@ -78,7 +247,86 @@ Create a REST API for CRUD operation using Spring Boot and Hibernate/JPA using X
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Create a new package `in.ignou.xmlapi` beside (not inside) `in.ignou.admission`. Component scanning does not reach it, so nothing in it becomes a bean unless XML says so.
+2. Add `CourseService` (a plain class) and `CourseRestController` to that package.
+3. Create `src/main/resources/beans.xml` with the two `<bean>` definitions.
+4. Replace `AdmissionApiApplication.java` with the version that carries `@ImportResource("classpath:beans.xml")`.
+5. Restart and test `/xml/courses` with the curl commands.
+6. Prove the wiring is XML: comment out the `courseRestController` bean in `beans.xml`, restart, and `GET /xml/courses` returns 404.
+
+#### Program
+
+```java title="CourseService.java" file=<rootDir>/public/code/mcsl-222/section-2/session-8/CourseService.java
+
+```
+
+```java title="CourseRestController.java" file=<rootDir>/public/code/mcsl-222/section-2/session-8/CourseRestController.java
+
+```
+
+```xml title="beans.xml" file=<rootDir>/public/code/mcsl-222/section-2/session-8/beans.xml
+
+```
+
+```java title="AdmissionApiApplication.java (replaces)" file=<rootDir>/public/code/mcsl-222/section-2/session-8/AdmissionApiApplication.java
+
+```
+
+#### Output
+
+Checked by reading. A course carries its programme, so the JSON nests it:
+
+```bash
+curl -s http://localhost:8080/xml/courses
+```
+
+```text
+[{"id":1,"code":"MCS-221","title":"Data Warehousing and Data Mining","credits":4,"programme":{"id":1,"code":"MCA","name":"Master of Computer Applications","durationYears":2}},
+ {"id":2,"code":"MCSL-222","title":"Web Technologies Lab","credits":2,"programme":{"id":1,"code":"MCA","name":"Master of Computer Applications","durationYears":2}},
+ {"id":3,"code":"BCS-011","title":"Computer Basics and PC Software","credits":3,"programme":{"id":2,"code":"BCA","name":"Bachelor of Computer Applications","durationYears":3}}]
+```
+
+Create (only the programme id is needed; Hibernate resolves the reference):
+
+```bash
+curl -i -X POST http://localhost:8080/xml/courses -H "Content-Type: application/json" \
+  -d '{"code":"MCS-224","title":"Artificial Intelligence and Machine Learning","credits":4,"programme":{"id":1}}'
+```
+
+```text
+HTTP/1.1 201
+
+{"id":4,"code":"MCS-224","title":"Artificial Intelligence and Machine Learning","credits":4,"programme":{"id":1,"code":null,"name":null,"durationYears":0}}
+```
+
+The nested programme shows nulls in the POST response because the request only carried the id; `GET /xml/courses/4` right after returns the full programme.
+
+Read one, update, delete:
+
+```bash
+curl -s http://localhost:8080/xml/courses/4
+curl -s -X PUT http://localhost:8080/xml/courses/4 -H "Content-Type: application/json" \
+  -d '{"code":"MCS-224","title":"AI and Machine Learning","credits":4,"programme":{"id":1}}'
+curl -i -X DELETE http://localhost:8080/xml/courses/4
+```
+
+```text
+{"id":4,"code":"MCS-224","title":"Artificial Intelligence and Machine Learning","credits":4,"programme":{"id":1,"code":"MCA","name":"Master of Computer Applications","durationYears":2}}
+{"id":4,"code":"MCS-224","title":"AI and Machine Learning","credits":4,"programme":{"id":1,"code":null,"name":null,"durationYears":0}}
+HTTP/1.1 204
+```
+
+Start-up evidence that the XML was read:
+
+```text
+Loading XML bean definitions from class path resource [beans.xml]
+```
+
+#### Explanation
+
+Annotation configuration and XML configuration produce the same thing, bean definitions in one `ApplicationContext`. `@ImportResource` reads `beans.xml` into the Boot context, so an XML bean can reference `courseRepository`, which Spring Data registered from the interface. Constructor injection in XML is `<constructor-arg ref="..."/>`; the classes have no `@Service`, `@Component` or `@Autowired`. The controller keeps `@RestController` and `@GetMapping` for one reason: since Spring 6, `RequestMappingHandlerMapping` accepts a bean as a handler only when its class is annotated with `@Controller`, and the URL-to-method table can only be declared with mapping annotations. What XML controls is the bean's existence and its dependencies, which is exactly why step 6 makes the endpoint disappear. Putting the classes in `in.ignou.xmlapi` avoids a `BeanDefinitionOverrideException`: if they sat under `in.ignou.admission`, scanning and XML would both try to register `courseRestController`.
 
 ## Question 36
 
@@ -92,13 +340,98 @@ Add Spring Security dependency in the existing spring boot application created i
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Paste the dependency below into `pom.xml` and run Maven, Update Project.
+2. Restart. Copy the generated password from the console line `Using generated security password:`.
+3. Open `http://localhost:8080/api/students` in the browser. Spring redirects to `/login`, its built-in page with Username, Password and a Sign in button.
+4. Log in as `user` with the generated password; the browser is redirected back to `/api/students` and the JSON appears.
+5. Test from curl with HTTP Basic (`-u user:password`).
+6. Optional: pin the credentials in `application.properties` so they survive restarts (`spring.security.user.name=admin`, `spring.security.user.password=admin123`).
+
+#### Configuration
+
+```xml title="pom.xml fragment" file=<rootDir>/public/code/mcsl-222/section-2/session-8/pom-security.xml
+
+```
+
+#### Output
+
+Checked by reading. Console at start-up (the UUID changes every run):
+
+```text
+Using generated security password: 6a1b7f5c-9d2e-4c3a-8b0f-1e2d3c4b5a69
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+```
+
+Browser: any URL now shows Spring's default login page, a centred form titled "Please sign in" with Username, Password and a blue "Sign in" button. A wrong password shows "Bad credentials" above the form. After login, the original URL loads.
+
+curl without credentials, then with:
+
+```bash
+curl -i http://localhost:8080/api/students
+```
+
+```text
+HTTP/1.1 401
+WWW-Authenticate: Basic realm="Realm"
+Set-Cookie: JSESSIONID=...; Path=/; HttpOnly
+```
+
+```bash
+curl -s -u user:6a1b7f5c-9d2e-4c3a-8b0f-1e2d3c4b5a69 http://localhost:8080/api/students
+```
+
+```text
+[{"id":1,"name":"Asha Verma",...},{"id":2,"name":"Ravi Kumar",...}]
+```
+
+Writes are blocked even with the right password, because the default chain also turns on CSRF:
+
+```bash
+curl -i -u user:6a1b7f5c-9d2e-4c3a-8b0f-1e2d3c4b5a69 -X DELETE http://localhost:8080/api/students/2
+```
+
+```text
+HTTP/1.1 403
+```
+
+Session 9 fixes that by excluding `/api/**` from CSRF in the custom `SecurityFilterChain`.
+
+#### Explanation
+
+Adding the starter triggers `SecurityAutoConfiguration`. With no `SecurityFilterChain` bean of our own, Boot installs its default: every request must be authenticated, form login at `/login` and HTTP Basic are both enabled, CSRF protection is on, and an `InMemoryUserDetailsManager` holds one user named `user` with a random UUID password printed once. Actuator endpoints are covered too, which is why `/actuator/health` also asks for a login now. The `WWW-Authenticate: Basic` header on the 401 is what lets curl's `-u` work; browsers get a 302 to `/login` instead because Spring detects the `Accept: text/html` header. The point of the exercise is to see the whole surface locked down with zero code; Session 9 replaces each default with a database-backed one.
+
+## Viva Questions
+
+<Explain />
+
+- **Q:** Which Actuator endpoint is exposed over HTTP by default and why only that one? **A:** `health`; the others (`env`, `beans`, `heapdump`) reveal configuration and memory, so they are opt-in.
+- **Q:** What does `management.endpoint.health.show-details=always` change? **A:** The response includes the `db`, `diskSpace` and `ping` components instead of a bare status.
+- **Q:** Which HTTP status should POST, DELETE and a missing id return? **A:** 201 Created, 204 No Content, 404 Not Found.
+- **Q:** How does `save` decide between INSERT and UPDATE? **A:** If the entity id is null it persists (INSERT); otherwise it merges (UPDATE).
+- **Q:** Why does the XML-configured controller still carry `@RestController`? **A:** Spring MVC 6 only treats `@Controller`-annotated beans as handlers; XML supplies the bean and its dependencies, not the URL mappings.
+- **Q:** What would happen if `CourseService` were also annotated `@Service` inside the scanned package? **A:** Two definitions of the same bean name; Boot refuses to start with `BeanDefinitionOverrideException`.
+- **Q:** Where does the generated security password come from? **A:** `UserDetailsServiceAutoConfiguration` creates an in-memory user `user` with a random UUID when no `UserDetailsService` bean exists.
+- **Q:** Why does curl get 401 but the browser gets a redirect to `/login`? **A:** The default chain enables both HTTP Basic and form login and picks the response by the request's `Accept` header.
+
+## Common Mistakes
+
+<Explain />
+
+- Testing `/actuator/metrics` without the exposure property and reporting "Actuator is broken" when the 404 only means the endpoint is not exposed.
+- Sending JSON without `Content-Type: application/json`; Spring answers 415 Unsupported Media Type.
+- Treating PUT as a partial update; a body with a missing field overwrites that column with null.
+- Placing the XML-wired classes inside `in.ignou.admission` and getting duplicate-bean errors, or forgetting `@ImportResource` and getting 404 on `/xml/courses`.
+- Copying the generated password from an old console; it changes on every restart.
+- Expecting `DELETE` through curl to work right after adding the security starter; CSRF blocks it until the chain is customised.
 
 ## Session Summary
 
 <Notebook />
 
-- Question 33: Add actuator dependency in Spring boot and Test Actuator (all available Endpoint
-- Question 34: Create REST API for CRUD operation using Spring Boot and Hibernate/JPA using ann
-- Question 35: Create a REST API for CRUD operation using Spring Boot and Hibernate/JPA using X
-- Question 36: Add Spring Security dependency in the existing spring boot application created i
+- `application.properties` with Actuator exposure, health details and `info.*` keys, plus the `/actuator` discovery JSON and the endpoint table with one curl per endpoint
+- `StudentRestController` with POST, GET, PUT and DELETE and the five curl transcripts (201, 200, 200, 204, 404)
+- `CourseService`, `CourseRestController`, `beans.xml` and the `@ImportResource` application class, with the `/xml/courses` transcripts
+- The security dependency, the generated-password console line, the default login page description and the 401/403 curl results

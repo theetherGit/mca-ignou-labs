@@ -7,10 +7,6 @@ sidebar:
 
 The first session builds the smallest possible network in NS-3, two nodes on a point-to-point link, and runs a UDP client and server over it. Every later topology is this pattern repeated.
 
-<Aside type="caution" title="Draft: questions final, solutions pending">
-  Every question below is copied from the lab manual. Worked solutions are being added session by session. Use the problem statements, prep notes and formula sheet to prepare before your lab.
-</Aside>
-
 ## Objectives
 
 <Explain />
@@ -25,8 +21,8 @@ The first session builds the smallest possible network in NS-3, two nodes on a p
 
 | Question | Requirement | Status |
 | --- | --- | --- |
-| Q1 | Create a simple point to point network topology using two nodes | Solution pending |
-| Q2 | Create a UdpClient and UdpServer nodes and communicate at a fixed data rate | Solution pending |
+| Q1 | Create a simple point to point network topology using two nodes | Complete |
+| Q2 | Create a UdpClient and UdpServer nodes and communicate at a fixed data rate | Complete |
 
 ## Preparation
 
@@ -48,7 +44,58 @@ Create a simple point to point network topology using two nodes.
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Install ns-3 (3.36 or later) and build it once: `./ns3 configure --enable-examples && ./ns3 build`.
+2. Save the program below as `scratch/p2p_two_nodes.cc`. Anything in `scratch/` is compiled automatically.
+3. Run `./ns3 run scratch/p2p_two_nodes`. The first run compiles the file; later runs start at once.
+4. Draw the topology in the record: two boxes, one line, the link parameters and the two addresses.
+5. List the pcap files with `ls session1-*.pcap`. They are empty here (no traffic) and fill up in question 2.
+
+#### Program
+
+The five helper calls are the skeleton of every NS-3 script: nodes, channel plus devices, protocol stack, addresses, then run.
+
+```cpp title="p2p_two_nodes.cc" file=<rootDir>/public/code/mcsl-223/section-1/session-1/p2p_two_nodes.cc
+
+```
+
+#### Output
+
+Topology drawn for the record:
+
+```text
+        5 Mbit/s, 2 ms
+  n0 ------------------- n1
+  10.1.1.1           10.1.1.2
+  (10.1.1.0/24, one point-to-point channel)
+```
+
+Expected console output (NS-3 is not installed on the machine that wrote this page, so values come from the parameters, not from a run):
+
+```text
+Nodes created      : 2
+Link               : 5Mbps, delay 2ms
+n0 address        : 10.1.1.1
+n1 address        : 10.1.1.2
+Simulation finished at 10 s
+```
+
+Change the link from the command line without editing the file: `./ns3 run "scratch/p2p_two_nodes --dataRate=10Mbps --delay=5ms"`.
+
+#### Explanation
+
+What each helper call creates, for the viva:
+
+| Call | Objects created | Key attributes |
+| --- | --- | --- |
+| `NodeContainer::Create(2)` | two `Node` objects, ids 0 and 1 | none |
+| `PointToPointHelper::Install` | two `PointToPointNetDevice`, one `PointToPointChannel`, two `DropTailQueue` | `DataRate` (device), `Delay` (channel), `MaxSize` (queue, 100 packets) |
+| `InternetStackHelper::Install` | `Ipv4L3Protocol`, `ArpL3Protocol`, `UdpL4Protocol`, `TcpL4Protocol`, loopback device, list routing | `IpForward` true |
+| `Ipv4AddressHelper::Assign` | one `Ipv4Interface` per device with an address and mask | base 10.1.1.0, mask /24 |
+| `EnablePcapAll` | one pcap file per device | prefix `session1` |
+
+`NodeContainer::Create(2)` makes two empty nodes. `PointToPointHelper::Install` creates one `PointToPointNetDevice` on each node and a `PointToPointChannel` between them; `DataRate` lives on the device (it decides how long a packet takes to serialise) and `Delay` on the channel (propagation time). `InternetStackHelper` adds IPv4, ARP, UDP and TCP to both nodes. `Ipv4AddressHelper::Assign` hands out 10.1.1.1 and 10.1.1.2 in device order. Nothing is scheduled, so `Simulator::Run` returns as soon as the stop event at 10 s fires. From the formula sheet, one 1024-byte packet on this link takes <Math tex="t_{\text{trans}} = 8 \times 1054 / 5 \times 10^{6} = 1.686\,\text{ms}" /> to serialise (1024 bytes payload plus 8 UDP, 20 IP and 2 PPP header bytes) and <Math tex="t_{\text{prop}} = 2\,\text{ms}" /> to propagate, so <Math tex="t_{\text{total}} = 3.686\,\text{ms}" />; question 2 shows exactly that number in the log.
 
 ## Question 2
 
@@ -62,7 +109,96 @@ Create a UdpClient and UdpServer nodes and communicate at a fixed data rate.
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Pick the fixed rate: packet size $L$ = 1024 bytes and rate $R$ = 1 Mbit/s. From the formula sheet the client interval is <Math tex="\Delta t = 8L/R = 8192 / 10^{6} = 8.192\,\text{ms}" />.
+2. Save the program as `scratch/udp_echo_fixed_rate.cc` and run `./ns3 run scratch/udp_echo_fixed_rate`.
+3. Read the client and server log lines; NS-3 prints them because the script enables `LOG_LEVEL_INFO` on both applications.
+4. Open `session1-echo-1-0.pcap` in Wireshark (n1's device) and confirm 10 UDP packets in each direction with the filter `udp.port == 9`.
+5. Try another rate: `./ns3 run "scratch/udp_echo_fixed_rate --rate=2000000 --maxPackets=20"` halves the interval to 4.096 ms.
+
+Intervals for other fixed rates with a 1024-byte packet, from the same formula:
+
+| Rate $R$ | Interval <Math tex="8L/R" /> | Command line |
+| --- | --- | --- |
+| 500 kbit/s | 16.384 ms | `--rate=500000` |
+| 1 Mbit/s | 8.192 ms | default |
+| 2 Mbit/s | 4.096 ms | `--rate=2000000` |
+| 4 Mbit/s | 2.048 ms | `--rate=4000000` (80 percent of the 5 Mbit/s link) |
+
+#### Program
+
+```cpp title="udp_echo_fixed_rate.cc" file=<rootDir>/public/code/mcsl-223/section-1/session-1/udp_echo_fixed_rate.cc
+
+```
+
+#### Output
+
+Expected output (first three and last exchanges shown; the remaining lines follow the same 8.192 ms spacing). Time stamps are computed from the link parameters: one-way delay is 1.686 ms serialisation plus 2 ms propagation, 3.686 ms.
+
+```text
+Client rate 1 Mbit/s, packet 1024 B, interval 8.192 ms, packets 10
+At time +2s client sent 1024 bytes to 10.1.1.2 port 9
+At time +2.00369s server received 1024 bytes from 10.1.1.1 port 49153
+At time +2.00369s server sent 1024 bytes to 10.1.1.1 port 49153
+At time +2.00737s client received 1024 bytes from 10.1.1.2 port 9
+At time +2.00819s client sent 1024 bytes to 10.1.1.2 port 9
+At time +2.01188s server received 1024 bytes from 10.1.1.1 port 49153
+At time +2.01188s server sent 1024 bytes to 10.1.1.1 port 49153
+At time +2.01556s client received 1024 bytes from 10.1.1.2 port 9
+At time +2.01638s client sent 1024 bytes to 10.1.1.2 port 9
+At time +2.02007s server received 1024 bytes from 10.1.1.1 port 49153
+At time +2.02007s server sent 1024 bytes to 10.1.1.1 port 49153
+At time +2.02376s client received 1024 bytes from 10.1.1.2 port 9
+...
+At time +2.07373s client sent 1024 bytes to 10.1.1.2 port 9
+At time +2.07741s server received 1024 bytes from 10.1.1.1 port 49153
+At time +2.07741s server sent 1024 bytes to 10.1.1.1 port 49153
+At time +2.0811s client received 1024 bytes from 10.1.1.2 port 9
+```
+
+Calculation to show in the record:
+
+| Quantity | Value |
+| --- | --- |
+| Packet size $L$ | 1024 bytes = 8192 bits |
+| Fixed rate $R$ | 1 Mbit/s |
+| Interval <Math tex="\Delta t = 8L/R" /> | 8.192 ms |
+| One-way delay per packet | 1.686 ms + 2 ms = 3.686 ms |
+| Round trip seen by the client | 7.37 ms |
+| Bytes received at server | 10 x 1024 = 10240 |
+| Server receive window | 2.00369 s to 2.07741 s = 73.7 ms |
+| Measured throughput <Math tex="8 \times 10240 / 0.0737" /> | 1.11 Mbit/s |
+
+The measured value is 10/9 of the nominal 1 Mbit/s because ten packets span only nine intervals; with 1000 packets the ratio drops to 1.001.
+
+#### Explanation
+
+`UdpEchoServerHelper(9)` binds a UDP socket on port 9 of n1 and echoes every datagram back. `UdpEchoClientHelper` on n0 has three attributes that set the rate: `PacketSize` (bytes per datagram), `Interval` (time between datagrams) and `MaxPackets` (how many). Holding the size fixed and choosing the interval as <Math tex="8L/R" /> gives a constant bit rate of exactly $R$; that is the same idea `OnOffHelper` uses internally in later sessions. The server starts at 1 s and the client at 2 s so the socket is listening before the first datagram arrives. Every log line carries the simulator time, which is why the record can show the transmission and propagation delay from the formula sheet appearing in the output.
+
+## Viva Questions
+
+<Explain />
+
+- **Q:** What is the difference between a Node, a NetDevice and a Channel? **A:** A Node is the computer, a NetDevice is its network card plus driver, a Channel is the wire between two devices.
+- **Q:** Where is DataRate set and where is Delay set, and why? **A:** DataRate on the device because serialisation happens in the card; Delay on the channel because propagation happens on the wire.
+- **Q:** Why does the server receive the first packet at 2.00369 s and not at 2.002 s? **A:** 2 ms is propagation only; 1054 bytes at 5 Mbit/s add 1.686 ms of serialisation.
+- **Q:** How do you send at a fixed rate with UdpEchoClient? **A:** Fix PacketSize and set Interval to 8L/R seconds.
+- **Q:** What does `Ipv4AddressHelper::Assign` return? **A:** An `Ipv4InterfaceContainer`; `GetAddress(i)` gives the address of the i-th device in the container.
+- **Q:** Why start the server before the client? **A:** A datagram that arrives before the server socket is bound is dropped.
+- **Q:** What is in `session1-echo-0-0.pcap`? **A:** Every frame that entered or left device 0 of node 0, in libpcap format readable by Wireshark.
+- **Q:** Why does the client use port 49153? **A:** It is the first ephemeral port NS-3 allocates when a socket is bound without a port.
+
+## Common Mistakes
+
+<Explain />
+
+- Passing 8.192 to `MilliSeconds()`; it takes an integer and silently rounds to 8 ms. Use `MicroSeconds(8192)`.
+- Starting the client before or at the same time as the server, so the first datagram is lost.
+- Forgetting `LogComponentEnable`, then reporting that "nothing happens" because the run prints nothing.
+- Reading the pcap of the wrong node; the file name is prefix-nodeId-deviceId.
+- Editing files under `examples/` instead of `scratch/`; only `scratch/` picks up new files without touching the build files.
+- Omitting the topology diagram from the record; the manual requires it with every program.
 
 ## Formula Sheet
 
@@ -112,5 +248,6 @@ The maximum throughput of one TCP flow is bounded by
 
 <Notebook />
 
-- Question 1: Create a simple point to point network topology using two nodes
-- Question 2: Create a UdpClient and UdpServer nodes and communicate at a fixed data rate
+- `p2p_two_nodes.cc` listing with the header comment, the topology diagram and the address printout
+- `udp_echo_fixed_rate.cc` listing, the 40 echo log lines and the rate table (interval 8.192 ms for 1 Mbit/s, throughput 1.11 Mbit/s)
+- Wireshark screenshot of `session1-echo-1-0.pcap` filtered on `udp.port == 9`

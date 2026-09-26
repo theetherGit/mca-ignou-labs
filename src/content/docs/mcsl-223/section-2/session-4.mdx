@@ -7,10 +7,6 @@ sidebar:
 
 FP-Growth finds the same frequent itemsets as Apriori without generating candidates. The session compares the two and then runs Apriori with the exact parameter ranges the manual specifies.
 
-<Aside type="caution" title="Draft: questions final, solutions pending">
-  Every question below is copied from the lab manual. Worked solutions are being added session by session. Use the problem statements, prep notes and formula sheet to prepare before your lab.
-</Aside>
-
 ## Objectives
 
 <Explain />
@@ -25,9 +21,9 @@ FP-Growth finds the same frequent itemsets as Apriori without generating candida
 
 | Question | Requirement | Status |
 | --- | --- | --- |
-| Q9 | Find the frequent patterns using FP-Growth algorithm on contactlenses.arff and... | Solution pending |
-| Q10 | Generate association rules using Apriori algorithm with Bank.arff relation | Solution pending |
-| Q11 | Generate association rule for the credit card promotion dataset using Apriori... | Solution pending |
+| Q9 | Find the frequent patterns using FP-Growth algorithm on contactlenses.arff and... | Complete |
+| Q10 | Generate association rules using Apriori algorithm with Bank.arff relation | Complete |
+| Q11 | Generate association rule for the credit card promotion dataset using Apriori... | Complete |
 
 ## Preparation
 
@@ -49,7 +45,201 @@ Find the frequent patterns using FP-Growth algorithm on contactlenses.arff and t
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Open file `contact-lenses.arff`. Filter, Choose, unsupervised, attribute, `NominalToBinary`; click the name and set `transformAllValues` True and `binaryAttributesNominal` True, OK, Apply. The 5 attributes become 12 binary ones named `age=young`, `age=pre-presbyopic`, ..., `contact-lenses=none`, each with values 0 and 1. (FP-Growth also accepts the raw nominal file, but then for a two-valued attribute only its second value, `positiveIndex` 2, is an item, so `tear-prod-rate=reduced` would never appear in a rule.)
+2. Associate, Choose, `weka.associations.FPGrowth`. Options: `positiveIndex` 2, `numRulesToFind` 10, `metricType` Confidence, `minMetric` 0.9, `delta` 0.05, `lowerBoundMinSupport` 0.1, `upperBoundMinSupport` 1.0, `findAllRulesForSupportLevel` False. Start.
+3. `test.arff` is not a WEKA file; it is the 10-transaction market basket below, one binary attribute per item. Open file `test.arff` (already binary with values 0 and 1, so no filter). Same FPGrowth, `lowerBoundMinSupport` 0.3, `minMetric` 0.7, Start.
+4. Compare with Apriori: on the same working relation choose Apriori with the same support and confidence and Start. The rules are the same; only the algorithm and the output format differ.
+5. Run `fpgrowth.py` on both files to see the header table, the FP-tree and the full list of frequent patterns, which WEKA's FPGrowth does not print.
+
+#### Program
+
+```python title="fpgrowth.py" file=<rootDir>/public/code/mcsl-223/section-2/session-4/fpgrowth.py
+
+```
+
+```text title="test.arff" file=<rootDir>/public/code/mcsl-223/section-2/session-4/test.arff
+
+```
+
+#### Output
+
+`python3 fpgrowth.py contact-lenses.arff -M 0.2 -C 0.9` (computed):
+
+```text
+Relation: contact-lenses   Instances: 24   Minimum support: 0.2 (5 instances)
+
+Header table (frequency-ordered items):
+  contact-lenses=none 15  (1 node(s))
+  astigmatism=no 12  (2 node(s))
+  astigmatism=yes 12  (2 node(s))
+  spectacle-prescrip=hypermetrope 12  (4 node(s))
+  spectacle-prescrip=myope 12  (4 node(s))
+  tear-prod-rate=normal 12  (6 node(s))
+  tear-prod-rate=reduced 12  (4 node(s))
+  age=pre-presbyopic 8  (8 node(s))
+  age=presbyopic 8  (8 node(s))
+  age=young 8  (8 node(s))
+  contact-lenses=soft 5  (5 node(s))
+
+FP-tree (item:count, indented by depth):
+contact-lenses=none:15
+  astigmatism=no:7
+    spectacle-prescrip=myope:4
+      tear-prod-rate=reduced:3
+        age=young:1
+        age=pre-presbyopic:1
+        age=presbyopic:1
+      tear-prod-rate=normal:1
+        age=presbyopic:1
+    spectacle-prescrip=hypermetrope:3
+      tear-prod-rate=reduced:3
+        age=young:1
+        age=pre-presbyopic:1
+        age=presbyopic:1
+  astigmatism=yes:8
+    spectacle-prescrip=myope:3
+      tear-prod-rate=reduced:3
+        age=young:1
+        age=pre-presbyopic:1
+        age=presbyopic:1
+    spectacle-prescrip=hypermetrope:5
+      tear-prod-rate=reduced:3
+        age=young:1
+        age=pre-presbyopic:1
+        age=presbyopic:1
+      tear-prod-rate=normal:2
+        age=pre-presbyopic:1
+        age=presbyopic:1
+astigmatism=no:5
+  spectacle-prescrip=myope:2
+    tear-prod-rate=normal:2
+      age=young:1
+        contact-lenses=soft:1
+      age=pre-presbyopic:1
+        contact-lenses=soft:1
+  spectacle-prescrip=hypermetrope:3
+    tear-prod-rate=normal:3
+      age=young:1
+        contact-lenses=soft:1
+      age=pre-presbyopic:1
+        contact-lenses=soft:1
+      age=presbyopic:1
+        contact-lenses=soft:1
+astigmatism=yes:4
+  spectacle-prescrip=myope:3
+    tear-prod-rate=normal:3
+      age=young:1
+      age=pre-presbyopic:1
+      age=presbyopic:1
+  spectacle-prescrip=hypermetrope:1
+    tear-prod-rate=normal:1
+      age=young:1
+
+Frequent itemsets by size: {1: 11, 2: 21, 3: 6}
+(itemset listing omitted here; identical to the L(1), L(2), L(3) lists in Session 5)
+
+FPGrowth found 10 rules (displaying top 10)
+
+ 1. [tear-prod-rate=reduced]: 12 ==> [contact-lenses=none]: 12   <conf:(1)> lift:(1.6) lev:(0.19) conv:(4.5)
+ 2. [spectacle-prescrip=myope, tear-prod-rate=reduced]: 6 ==> [contact-lenses=none]: 6   <conf:(1)> lift:(1.6) lev:(0.09) conv:(2.25)
+ 3. [spectacle-prescrip=hypermetrope, tear-prod-rate=reduced]: 6 ==> [contact-lenses=none]: 6   <conf:(1)> lift:(1.6) lev:(0.09) conv:(2.25)
+ 4. [astigmatism=yes, tear-prod-rate=reduced]: 6 ==> [contact-lenses=none]: 6   <conf:(1)> lift:(1.6) lev:(0.09) conv:(2.25)
+ 5. [astigmatism=no, tear-prod-rate=reduced]: 6 ==> [contact-lenses=none]: 6   <conf:(1)> lift:(1.6) lev:(0.09) conv:(2.25)
+ 6. [contact-lenses=soft]: 5 ==> [tear-prod-rate=normal]: 5   <conf:(1)> lift:(2) lev:(0.1) conv:(2.5)
+ 7. [contact-lenses=soft, tear-prod-rate=normal]: 5 ==> [astigmatism=no]: 5   <conf:(1)> lift:(2) lev:(0.1) conv:(2.5)
+ 8. [astigmatism=no, contact-lenses=soft]: 5 ==> [tear-prod-rate=normal]: 5   <conf:(1)> lift:(2) lev:(0.1) conv:(2.5)
+ 9. [contact-lenses=soft]: 5 ==> [astigmatism=no, tear-prod-rate=normal]: 5   <conf:(1)> lift:(4) lev:(0.16) conv:(3.75)
+10. [contact-lenses=soft]: 5 ==> [astigmatism=no]: 5   <conf:(1)> lift:(2) lev:(0.1) conv:(2.5)
+```
+
+`python3 fpgrowth.py test.arff -M 0.3 -C 0.7` (computed):
+
+```text
+Relation: test   Instances: 10   Minimum support: 0.3 (3 instances)
+
+Header table (frequency-ordered items):
+  bread=1 8  (1 node(s))
+  milk=1 8  (2 node(s))
+  butter=1 6  (2 node(s))
+  eggs=1 4  (3 node(s))
+  jam=1 3  (2 node(s))
+
+FP-tree (item:count, indented by depth):
+bread=1:8
+  milk=1:6
+    butter=1:4
+      eggs=1:1
+      jam=1:1
+    eggs=1:2
+  butter=1:2
+    jam=1:2
+milk=1:2
+  eggs=1:1
+
+Frequent itemsets by size: {1: 5, 2: 7, 3: 3}
+L(1):
+  bread=1 8
+  butter=1 6
+  eggs=1 4
+  jam=1 3
+  milk=1 8
+L(2):
+  bread=1 butter=1 6
+  bread=1 eggs=1 3
+  bread=1 jam=1 3
+  bread=1 milk=1 6
+  butter=1 jam=1 3
+  butter=1 milk=1 4
+  eggs=1 milk=1 4
+L(3):
+  bread=1 butter=1 jam=1 3
+  bread=1 butter=1 milk=1 4
+  bread=1 eggs=1 milk=1 3
+
+FPGrowth found 15 rules (displaying top 10)
+
+ 1. [butter=1]: 6 ==> [bread=1]: 6   <conf:(1)> lift:(1.25) lev:(0.12) conv:(1.2)
+ 2. [eggs=1]: 4 ==> [milk=1]: 4   <conf:(1)> lift:(1.25) lev:(0.08) conv:(0.8)
+ 3. [butter=1, milk=1]: 4 ==> [bread=1]: 4   <conf:(1)> lift:(1.25) lev:(0.08) conv:(0.8)
+ 4. [jam=1]: 3 ==> [butter=1]: 3   <conf:(1)> lift:(1.67) lev:(0.12) conv:(1.2)
+ 5. [butter=1, jam=1]: 3 ==> [bread=1]: 3   <conf:(1)> lift:(1.25) lev:(0.06) conv:(0.6)
+ 6. [bread=1, jam=1]: 3 ==> [butter=1]: 3   <conf:(1)> lift:(1.67) lev:(0.12) conv:(1.2)
+ 7. [jam=1]: 3 ==> [bread=1, butter=1]: 3   <conf:(1)> lift:(1.67) lev:(0.12) conv:(1.2)
+ 8. [jam=1]: 3 ==> [bread=1]: 3   <conf:(1)> lift:(1.25) lev:(0.06) conv:(0.6)
+ 9. [bread=1, eggs=1]: 3 ==> [milk=1]: 3   <conf:(1)> lift:(1.25) lev:(0.06) conv:(0.6)
+10. [bread=1]: 8 ==> [butter=1]: 6   <conf:(0.75)> lift:(1.25) lev:(0.12) conv:(1.07)
+```
+
+What WEKA prints for contact-lenses after NominalToBinary (item names carry the binary value, otherwise the same ten rules as above):
+
+```text
+Scheme:       weka.associations.FPGrowth -P 2 -I -1 -N 10 -T 0 -C 0.9 -D 0.05 -U 1.0 -M 0.1
+Relation:     contact-lenses-weka.filters.unsupervised.attribute.NominalToBinary-N-A-Rfirst-last
+Instances:    24    Attributes:   12
+
+FPGrowth found 10 rules (displaying top 10)
+
+ 1. [tear-prod-rate=reduced=1]: 12 ==> [contact-lenses=none=1]: 12   <conf:(1)> lift:(1.6) lev:(0.19) conv:(4.5)
+ 2. [spectacle-prescrip=myope=1, tear-prod-rate=reduced=1]: 6 ==> [contact-lenses=none=1]: 6   <conf:(1)> lift:(1.6) lev:(0.09) conv:(2.25)
+ ...
+10. [contact-lenses=soft=1]: 5 ==> [astigmatism=no=1, tear-prod-rate=normal=1]: 5   <conf:(1)> lift:(4) lev:(0.16) conv:(3.75)
+```
+
+FP-Growth against Apriori on contact-lenses at support 0.2:
+
+| | Apriori (Session 3) | FP-Growth |
+| --- | --- | --- |
+| Frequent itemsets | L1 11, L2 21, L3 6 | 11, 21, 6 (same sets) |
+| Rules at confidence 0.9 | 10 | 10, same rules |
+| Passes over the data | one per level: 3, plus one per support step in WEKA's loop | 2: one to count items, one to build the tree |
+| Candidates counted | 210 possible pairs joined, pruned to the ones with large subsets | none; patterns grow from conditional trees |
+| Memory | candidate lists | the tree: 52 nodes for 24 rows here |
+
+#### Explanation
+
+FP-Growth compresses the transactions into a prefix tree. Items are sorted by frequency (`contact-lenses=none` 15 first, `contact-lenses=soft` 5 last; ties broken alphabetically here, WEKA's tie order may differ) so that frequent items share tree prefixes: all 15 `none` rows hang under one node. The header table links every node of an item. Mining starts from the least frequent item: its conditional pattern base is the set of prefix paths above its nodes, a small conditional tree is built from them, and the recursion continues. No candidate is ever generated, so the 210 candidate pairs Apriori has to test on this file are never formed. Both algorithms find the identical frequent itemsets because the definition of frequent does not depend on the search; that is why the rule lists agree line for line. On `test.arff` the tree shows the pattern immediately: `bread` and `milk` head almost every path, `jam` only appears under `butter`, which gives the rule `jam ==> butter` with lift 1.67.
 
 ## Question 10
 
@@ -66,7 +256,63 @@ Generate association rules using Apriori algorithm with Bank.arff relation
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+Use `bank-nominal.arff` from Session 2 (bank-data with `id` removed, `age` and `income` in 3 bins, `children` nominal). Apriori refuses the raw file because `age`, `income` and `children` are numeric.
+
+#### Steps
+
+1. Open file `bank-nominal.arff`; confirm 600 instances, 11 attributes, all Nominal.
+2. Associate, Choose Apriori, click the name and set, for part (a):
+
+| Manual wording | WEKA parameter | Value |
+| --- | --- | --- |
+| minimum support range 20% to 100% | `lowerBoundMinSupport` and `upperBoundMinSupport` | 0.2 and 1.0 |
+| incremental decrease factor 5% | `delta` | 0.05 |
+| confidence factor 80% | `metricType` Confidence, `minMetric` | 0.8 |
+| generate 5 rules | `numRules` | 5 |
+
+3. OK, Start. The Scheme line must read `weka.associations.Apriori -N 5 -T 0 -C 0.8 -D 0.05 -U 1.0 -M 0.2 -S -1.0 -c -1`.
+4. For part (b) set:
+
+| Manual wording | WEKA parameter | Value |
+| --- | --- | --- |
+| minimum support 10% | `lowerBoundMinSupport` | 0.1 |
+| delta 5% | `delta` | 0.05 |
+| minimum lift 150% | `metricType` Lift, `minMetric` | 1.5 |
+| generate 4 rules | `numRules` | 4 |
+
+5. OK, Start. Scheme line: `weka.associations.Apriori -N 4 -T 1 -C 1.5 -D 0.05 -U 1.0 -M 0.1 -S -1.0 -c -1`.
+6. Tick `outputItemSets` and Start once more if you need the large itemset counts for the record.
+
+#### Output
+
+Expected shape (WEKA was not run here; bank-data is 600 rows and the counts depend on your bins, so copy the numbers from your own screen):
+
+```text
+=== Run information ===
+
+Scheme:       weka.associations.Apriori -N 5 -T 0 -C 0.8 -D 0.05 -U 1.0 -M 0.2 -S -1.0 -c -1
+Relation:     bank-nominal
+Instances:    600
+Attributes:   11
+=== Associator model (full training set) ===
+
+Minimum support: 0.2 (120 instances)      <- or the first level at which 5 rules pass
+Minimum metric <confidence>: 0.8
+Number of cycles performed: 16
+
+Best rules found:
+
+ 1. children=0 save_act=YES 190 ==> current_act=YES 158    <conf:(0.83)> lift:(1.1) ...
+ 2. ...
+```
+
+Part (b) prints `Minimum metric <lift>: 1.5` and rules whose lift column is in angle brackets, for example `income='(43758.136667-inf)' 120 ==> save_act=YES 110 conf:(0.92) <lift:(1.33)> ...` would be rejected at 1.5 while a rule between `mortgage=YES` and `pep=YES` with lift above 1.5 would be kept.
+
+Rules that this dataset is known to produce at high confidence involve `current_act=YES` (76 percent of customers) as a consequent, and at high lift involve `income` bins with `save_act` and `children=0` with `pep`.
+
+#### Explanation
+
+Part (a) is a confidence search bounded by support: WEKA starts at support 0.95, lowers it by 0.05 a cycle, and stops at the first level where at least 5 rules have confidence 0.8 or better, or at 0.2. Because `current_act=YES` holds for three quarters of the rows, almost any premise predicts it with confidence above 0.8, so the top confidence rules are trivial. Part (b) fixes that by ranking on lift: <Math tex="\text{lift} = \frac{\text{confidence}}{\text{support}(Y)} " /> divides by how common the consequent is, so a rule predicting `current_act=YES` with confidence 0.83 gets lift 1.1 and fails the 1.5 threshold, while a rule that raises the chance of a rare consequent by half or more passes. The lower support bound of 0.1 (60 rows) lets rarer but stronger patterns through.
 
 ## Question 11
 
@@ -80,7 +326,107 @@ Generate association rule for the credit card promotion dataset using Apriori al
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+The credit card promotion database is the 15-row table from Roiger and Geatz: `income-range`, `magazine-promotion`, `watch-promotion`, `life-insurance-promotion`, `credit-card-insurance`, `sex` (all nominal) and `age` (numeric). It is small enough to compute for real.
+
+#### Steps
+
+1. Type the file below as `credit-card-promotion.arff` and Open file it.
+2. Remove `age` (attribute 7): tick it and click Remove, because Apriori cannot use a numeric attribute. (Discretize would also work but the question does not ask for age rules.)
+3. Associate, Choose Apriori, set `lowerBoundMinSupport` 0.4, `upperBoundMinSupport` 1.0, `delta` 0.05, `metricType` Confidence, `minMetric` 0.1, `numRules` 6, `outputItemSets` True. OK, Start.
+4. Check the Scheme line: `weka.associations.Apriori -N 6 -T 0 -C 0.1 -D 0.05 -U 1.0 -M 0.4 -S -1.0 -c -1`.
+5. Reproduce with `python3 apriori.py credit-card-promotion.arff -R 7 -M 0.4 -C 0.1 -N 6 -I`.
+
+#### Program
+
+```text title="credit-card-promotion.arff" file=<rootDir>/public/code/mcsl-223/section-2/session-4/credit-card-promotion.arff
+
+```
+
+#### Output
+
+Computed with `apriori.py` (same format as WEKA's Associate output; the Run information lists 15 instances and the 6 remaining attributes):
+
+```text
+Minimum support: 0.4 (6 instances)
+Minimum metric <confidence>: 0.1
+Number of cycles performed: 12
+
+Generated sets of large itemsets:
+
+Size of set of large itemsets L(1): 9
+
+Large Itemsets L(1):
+magazine-promotion=yes 8
+magazine-promotion=no 7
+watch-promotion=yes 8
+watch-promotion=no 7
+life-insurance-promotion=yes 9
+life-insurance-promotion=no 6
+credit-card-insurance=no 12
+sex=male 8
+sex=female 7
+
+Size of set of large itemsets L(2): 10
+
+Large Itemsets L(2):
+magazine-promotion=yes life-insurance-promotion=yes 6
+magazine-promotion=yes credit-card-insurance=no 6
+magazine-promotion=no credit-card-insurance=no 6
+watch-promotion=yes life-insurance-promotion=yes 6
+watch-promotion=yes credit-card-insurance=no 7
+life-insurance-promotion=yes credit-card-insurance=no 6
+life-insurance-promotion=yes sex=female 6
+life-insurance-promotion=no credit-card-insurance=no 6
+credit-card-insurance=no sex=male 6
+credit-card-insurance=no sex=female 6
+
+Best rules found:
+
+ 1. life-insurance-promotion=no 6 ==> credit-card-insurance=no 6    <conf:(1)> lift:(1.25) lev:(0.08) [1] conv:(1.2)
+ 2. watch-promotion=yes 8 ==> credit-card-insurance=no 7    <conf:(0.88)> lift:(1.09) lev:(0.04) [0] conv:(0.8)
+ 3. magazine-promotion=no 7 ==> credit-card-insurance=no 6    <conf:(0.86)> lift:(1.07) lev:(0.03) [0] conv:(0.7)
+ 4. sex=female 7 ==> life-insurance-promotion=yes 6    <conf:(0.86)> lift:(1.43) lev:(0.12) [1] conv:(1.4)
+ 5. sex=female 7 ==> credit-card-insurance=no 6    <conf:(0.86)> lift:(1.07) lev:(0.03) [0] conv:(0.7)
+ 6. magazine-promotion=yes 8 ==> life-insurance-promotion=yes 6    <conf:(0.75)> lift:(1.25) lev:(0.08) [1] conv:(1.07)
+```
+
+#### Explanation
+
+With `minMetric` 0.1 the confidence filter is almost switched off, so the search is governed by support alone: WEKA lowers support from 0.95 until 6 rules exist, which happens at 0.4 (6 of 15 rows) after 12 cycles. At that level 9 single items and 10 pairs are large and no triple is, so every rule has one item on each side. The top rule, `life-insurance-promotion=no ==> credit-card-insurance=no`, has confidence <Math tex="\frac{6}{6} = 1" /> but lift only <Math tex="\frac{1}{12/15} = 1.25" />, because 12 of 15 customers have no credit card insurance anyway. The more useful rule is `sex=female ==> life-insurance-promotion=yes` (6 of 7, confidence 0.86, lift 1.43): women in this table took the life insurance promotion far more often than the base rate of 9 in 15. The exercise shows why a low confidence threshold is harmless when support is high, but the rules must be read with lift.
+
+## Viva Questions
+
+<Explain />
+
+**Q:** What does FP-Growth avoid that Apriori must do?
+**A:** Candidate generation and repeated scans; it builds a compressed tree in two scans and mines it recursively.
+
+**Q:** What is a conditional pattern base?
+**A:** The set of prefix paths (with their counts) that lead to the nodes of one item in the FP-tree.
+
+**Q:** Why sort items by frequency before inserting a transaction?
+**A:** So that common items sit near the root and many transactions share the same prefix, which keeps the tree small.
+
+**Q:** In WEKA's FPGrowth what does `positiveIndex` 2 mean?
+**A:** For a binary attribute, only its second value is treated as the item being present.
+
+**Q:** Why did part (a) of the Bank question give trivial rules?
+**A:** Confidence rewards common consequents; `current_act=YES` is true for most rows so nearly any premise predicts it.
+
+**Q:** How is "minimum lift 150%" entered in WEKA?
+**A:** `metricType` Lift and `minMetric` 1.5.
+
+**Q:** In the credit card run, why did the support stop at 0.4 and not lower?
+**A:** `lowerBoundMinSupport` was 0.4 and six rules already passed there, so the loop ended.
+
+## Common Mistakes
+
+<Explain />
+
+- Running FPGrowth on a nominal file without `NominalToBinary` and then reporting that the first value of every two-valued attribute never appears in a rule.
+- Entering 80 instead of 0.8 for `minMetric`, or 20 instead of 0.2 for the support bound; WEKA wants fractions.
+- Leaving `metricType` on Confidence for the lift question and reading the `lift:` column by eye instead of letting WEKA rank by it.
+- Forgetting to remove or discretise `age` in the credit card file, so Start stays disabled.
 
 ## Formula Sheet
 
@@ -140,10 +486,11 @@ Hierarchical (agglomerative) clustering merges the two closest clusters each ste
 
 DBSCAN calls a point a core point when at least <Math tex="\text{minPts}" /> points lie within radius <Math tex="\varepsilon" />; clusters grow from core points, and points reachable from none are noise.
 
+
 ## Session Summary
 
 <Notebook />
 
-- Question 9: Find the frequent patterns using FP-Growth algorithm on contactlenses.arff and t
-- Question 10: Generate association rules using Apriori algorithm with Bank.arff relation
-- Question 11: Generate association rule for the credit card promotion dataset using Apriori al
+- Question 9: `fpgrowth.py` written; FP-tree, header table and frequent patterns produced for contact-lenses.arff (11, 21, 6 itemsets, same 10 rules as Apriori) and for the hand-written `test.arff`; WEKA FPGrowth steps with NominalToBinary recorded
+- Question 10: Bank.arff parameter table mapped to `lowerBoundMinSupport`, `upperBoundMinSupport`, `delta`, `metricType`, `minMetric`, `numRules` for both runs; Scheme lines and expected output shape recorded
+- Question 11: `credit-card-promotion.arff` typed (15 rows), age removed, Apriori at support 0.4 to 1.0, delta 0.05, confidence 0.1, 6 rules computed and interpreted with lift

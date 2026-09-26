@@ -7,10 +7,6 @@ sidebar:
 
 Apriori needs nominal attributes, so discretisation comes first. This session runs Apriori across several datasets with different support and confidence settings and studies the rules produced.
 
-<Aside type="caution" title="Draft: questions final, solutions pending">
-  Every question below is copied from the lab manual. Worked solutions are being added session by session. Use the problem statements, prep notes and formula sheet to prepare before your lab.
-</Aside>
-
 ## Objectives
 
 <Explain />
@@ -25,8 +21,8 @@ Apriori needs nominal attributes, so discretisation comes first. This session ru
 
 | Question | Requirement | Status |
 | --- | --- | --- |
-| Q7 | Perform the following | Solution pending |
-| Q8 | Implement the Apriori Algorithm to find the association rules in contactlenses.arff... | Solution pending |
+| Q7 | Perform the following | Complete |
+| Q8 | Implement the Apriori Algorithm to find the association rules in contactlenses.arff... | Complete |
 
 ## Preparation
 
@@ -54,7 +50,173 @@ Perform the following:
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+Unsupervised filters live under Filter, Choose, `weka.filters.unsupervised`. The ones used in this session:
+
+| Filter | Menu path | Options that matter |
+| --- | --- | --- |
+| Discretize | attribute, Discretize | `attributeIndices` (default first-last, numeric only), `bins` (10), `useEqualFrequency` (False), `findNumBins` (False), `makeBinary` (False) |
+| Resample | instance, Resample | `sampleSizePercent` (100), `noReplacement` (False), `randomSeed` (1) |
+| Normalize | attribute, Normalize | `scale` 1.0, `translation` 0.0 |
+| Standardize | attribute, Standardize | none; gives mean 0, standard deviation 1 |
+| NominalToBinary | attribute, NominalToBinary | `transformAllValues`, `attributeIndices` |
+| RemoveUseless | attribute, RemoveUseless | `maximumVariancePercentageAllowed` 99; drops constant attributes and identifiers |
+| Randomize | instance, Randomize | `randomSeed`; shuffles row order |
+
+Apriori is at Associate tab, Choose, `weka.associations.Apriori`. Click the name to open the options:
+
+| Parameter | Default | Meaning |
+| --- | --- | --- |
+| upperBoundMinSupport | 1.0 | support at which the search starts |
+| delta | 0.05 | support is lowered by this each cycle |
+| lowerBoundMinSupport | 0.1 | search stops here |
+| metricType | Confidence | Confidence, Lift, Leverage or Conviction |
+| minMetric | 0.9 | rules below this are dropped |
+| numRules | 10 | stop lowering support once this many rules pass |
+| outputItemSets | False | also print the large itemsets |
+| car | False | mine class association rules only |
+
+1. weather.nominal, run 1: Open file `weather.nominal.arff`, Associate, Choose Apriori, keep defaults, Start.
+2. weather.nominal, run 2: click the Apriori name, set `lowerBoundMinSupport` 0.3 and `minMetric` 0.7, OK, Start.
+3. iris: Open file `iris.arff`, Preprocess, Discretize with `bins` 3 on first-last (the class is nominal and is skipped), Apply. Associate, Apriori defaults, Start. Then `minMetric` 0.7, `numRules` 8, Start.
+4. iris again with the default 10 bins: Undo, Discretize with `bins` 10, Apply, Apriori defaults, Start. Compare with step 3.
+5. glass: Open file `glass.arff`, Discretize `bins` 3, Apply, Apriori defaults, Start; then `lowerBoundMinSupport` 0.5, `minMetric` 0.95, Start.
+6. Every output below that says computed was produced with `apriori.py` (Question 8) on the same data; the Python and WEKA output formats are the same, so compare line by line.
+
+#### Output
+
+weather.nominal, defaults (computed; identical to the block on page 57 of the manual):
+
+```text
+Minimum support: 0.15 (2 instances)
+Minimum metric <confidence>: 0.9
+Number of cycles performed: 17
+
+Generated sets of large itemsets:
+
+Size of set of large itemsets L(1): 12
+
+Size of set of large itemsets L(2): 47
+
+Size of set of large itemsets L(3): 39
+
+Size of set of large itemsets L(4): 6
+
+Best rules found:
+
+ 1. outlook=overcast 4 ==> play=yes 4    <conf:(1)> lift:(1.56) lev:(0.1) [1] conv:(1.43)
+ 2. temperature=cool 4 ==> humidity=normal 4    <conf:(1)> lift:(2) lev:(0.14) [2] conv:(2)
+ 3. humidity=normal windy=FALSE 4 ==> play=yes 4    <conf:(1)> lift:(1.56) lev:(0.1) [1] conv:(1.43)
+ 4. outlook=sunny play=no 3 ==> humidity=high 3    <conf:(1)> lift:(2) lev:(0.11) [1] conv:(1.5)
+ 5. outlook=sunny humidity=high 3 ==> play=no 3    <conf:(1)> lift:(2.8) lev:(0.14) [1] conv:(1.93)
+ 6. outlook=rainy play=yes 3 ==> windy=FALSE 3    <conf:(1)> lift:(1.75) lev:(0.09) [1] conv:(1.29)
+ 7. outlook=rainy windy=FALSE 3 ==> play=yes 3    <conf:(1)> lift:(1.56) lev:(0.08) [1] conv:(1.07)
+ 8. temperature=cool play=yes 3 ==> humidity=normal 3    <conf:(1)> lift:(2) lev:(0.11) [1] conv:(1.5)
+ 9. outlook=sunny temperature=hot 2 ==> humidity=high 2    <conf:(1)> lift:(2) lev:(0.07) [1] conv:(1)
+10. temperature=hot play=no 2 ==> outlook=sunny 2    <conf:(1)> lift:(2.8) lev:(0.09) [1] conv:(1.29)
+```
+
+weather.nominal, `lowerBoundMinSupport` 0.3 and `minMetric` 0.7 (computed):
+
+```text
+Minimum support: 0.3 (4 instances)
+Minimum metric <confidence>: 0.7
+Number of cycles performed: 14
+
+Generated sets of large itemsets:
+
+Size of set of large itemsets L(1): 12
+
+Size of set of large itemsets L(2): 9
+
+Size of set of large itemsets L(3): 1
+
+Best rules found:
+
+ 1. outlook=overcast 4 ==> play=yes 4    <conf:(1)> lift:(1.56) lev:(0.1) [1] conv:(1.43)
+ 2. temperature=cool 4 ==> humidity=normal 4    <conf:(1)> lift:(2) lev:(0.14) [2] conv:(2)
+ 3. humidity=normal windy=FALSE 4 ==> play=yes 4    <conf:(1)> lift:(1.56) lev:(0.1) [1] conv:(1.43)
+ 4. humidity=normal 7 ==> play=yes 6    <conf:(0.86)> lift:(1.33) lev:(0.11) [1] conv:(1.25)
+ 5. play=no 5 ==> humidity=high 4    <conf:(0.8)> lift:(1.6) lev:(0.11) [1] conv:(1.25)
+ 6. windy=FALSE 8 ==> play=yes 6    <conf:(0.75)> lift:(1.17) lev:(0.06) [0] conv:(0.95)
+```
+
+Only 6 rules pass: at support 0.3 (4 instances) there are just 9 large 2-itemsets and one 3-itemset, and support cannot drop further because the lower bound was reached.
+
+iris discretised into 3 equal-width bins, Apriori defaults. Computed on `iris-sample.arff`, the first 10 rows of each class (30 of the 150 rows), so the counts are 10 where WEKA prints 50 on the full file:
+
+```text
+Minimum support: 0.3 (9 instances)
+Minimum metric <confidence>: 0.9
+Number of cycles performed: 14
+
+Generated sets of large itemsets:
+
+Size of set of large itemsets L(1): 12
+
+Size of set of large itemsets L(2): 12
+
+Size of set of large itemsets L(3): 6
+
+Size of set of large itemsets L(4): 1
+
+Best rules found:
+
+ 1. petallength='(-inf-3.066667]' 10 ==> sepallength='(-inf-5.466667]' 10    <conf:(1)> lift:(2.31) lev:(0.19) [5] conv:(5.67)
+ 2. petalwidth='(-inf-0.9]' 10 ==> sepallength='(-inf-5.466667]' 10    <conf:(1)> lift:(2.31) lev:(0.19) [5] conv:(5.67)
+ 3. class=Iris-setosa 10 ==> sepallength='(-inf-5.466667]' 10    <conf:(1)> lift:(2.31) lev:(0.19) [5] conv:(5.67)
+ 4. petalwidth='(-inf-0.9]' 10 ==> petallength='(-inf-3.066667]' 10    <conf:(1)> lift:(3) lev:(0.22) [6] conv:(6.67)
+ 5. petallength='(-inf-3.066667]' 10 ==> petalwidth='(-inf-0.9]' 10    <conf:(1)> lift:(3) lev:(0.22) [6] conv:(6.67)
+ 6. class=Iris-setosa 10 ==> petallength='(-inf-3.066667]' 10    <conf:(1)> lift:(3) lev:(0.22) [6] conv:(6.67)
+ 7. petallength='(-inf-3.066667]' 10 ==> class=Iris-setosa 10    <conf:(1)> lift:(3) lev:(0.22) [6] conv:(6.67)
+ 8. petallength='(3.066667-4.833333]' 10 ==> petalwidth='(0.9-1.7]' 10    <conf:(1)> lift:(2.73) lev:(0.21) [6] conv:(6.33)
+ 9. class=Iris-setosa 10 ==> petalwidth='(-inf-0.9]' 10    <conf:(1)> lift:(3) lev:(0.22) [6] conv:(6.67)
+10. petalwidth='(-inf-0.9]' 10 ==> class=Iris-setosa 10    <conf:(1)> lift:(3) lev:(0.22) [6] conv:(6.67)
+```
+
+With `minMetric` 0.7 and `numRules` 8 the same 8 rules come out first, because there are already more than 8 rules at confidence 1 and lowering the threshold only adds rules further down the list.
+
+On the full 150-row file the bin labels are '(-inf-2.966667]' for petallength and '(-inf-0.9]' for petalwidth, and the top rules are the same pairs with count 50: `petalwidth='(-inf-0.9]' 50 ==> class=Iris-setosa 50 conf:(1)`, `petallength='(-inf-2.966667]' 50 ==> class=Iris-setosa 50 conf:(1)`, and both directions between the two petal bins. Every setosa has petal width at most 0.6, so the lowest bin is exactly the setosa class.
+
+iris sample with the default 10 bins (computed):
+
+```text
+Minimum support: 0.3 (9 instances)
+Minimum metric <confidence>: 0.9
+Number of cycles performed: 14
+
+Generated sets of large itemsets:
+
+Size of set of large itemsets L(1): 5
+
+Size of set of large itemsets L(2): 3
+
+Size of set of large itemsets L(3): 1
+
+Best rules found:
+
+ 1. class=Iris-setosa 10 ==> petallength='(-inf-1.83]' 10    <conf:(1)> lift:(3) lev:(0.22) [6] conv:(6.67)
+ 2. petallength='(-inf-1.83]' 10 ==> class=Iris-setosa 10    <conf:(1)> lift:(3) lev:(0.22) [6] conv:(6.67)
+ 3. petalwidth='(-inf-0.34]' 9 ==> petallength='(-inf-1.83]' 9    <conf:(1)> lift:(3) lev:(0.2) [6] conv:(6)
+ 4. petalwidth='(-inf-0.34]' 9 ==> class=Iris-setosa 9    <conf:(1)> lift:(3) lev:(0.2) [6] conv:(6)
+ 5. petalwidth='(-inf-0.34]' class=Iris-setosa 9 ==> petallength='(-inf-1.83]' 9    <conf:(1)> lift:(3) lev:(0.2) [6] conv:(6)
+ 6. petallength='(-inf-1.83]' petalwidth='(-inf-0.34]' 9 ==> class=Iris-setosa 9    <conf:(1)> lift:(3) lev:(0.2) [6] conv:(6)
+ 7. petalwidth='(-inf-0.34]' 9 ==> petallength='(-inf-1.83]' class=Iris-setosa 9    <conf:(1)> lift:(3) lev:(0.2) [6] conv:(6)
+ 8. petallength='(-inf-1.83]' 10 ==> petalwidth='(-inf-0.34]' 9    <conf:(0.9)> lift:(3) lev:(0.2) [6] conv:(3.5)
+ 9. class=Iris-setosa 10 ==> petalwidth='(-inf-0.34]' 9    <conf:(0.9)> lift:(3) lev:(0.2) [6] conv:(3.5)
+10. petallength='(-inf-1.83]' class=Iris-setosa 10 ==> petalwidth='(-inf-0.34]' 9    <conf:(0.9)> lift:(3) lev:(0.2) [6] conv:(3.5)
+```
+
+glass (214 rows, 9 numeric attributes, Discretize `bins` 3, Apriori defaults; expected shape, not run here): Ba is 0 in 176 rows and Fe is 0 in 144 rows, so the lowest Ba and Fe bins are the most frequent items and the top rules connect them, for example `Fe='(-inf-0.17]' ==> Ba='(-inf-1.05]'` with confidence near 1 and support above 0.6. With `lowerBoundMinSupport` 0.5 and `minMetric` 0.95 only rules among Ba, Fe and K bins remain, and no rule mentions `Type`, because the largest class (build wind non-float, 76 rows) is only 36 percent of the data.
+
+#### Explanation
+
+Support and confidence pull in opposite directions. Lowering `minMetric` from 0.9 to 0.7 admits weaker rules such as `windy=FALSE ==> play=yes` (conf 0.75), whose lift 1.17 says it is barely better than guessing `play=yes` outright (9 of 14). Raising `lowerBoundMinSupport` to 0.3 removes every rule about `temperature=hot` or `outlook=sunny` with `play=no`, because those itemsets cover only 2 or 3 rows.
+
+Discretisation decides what the rules can say. With 3 bins, the iris sample gives 12 large single items and 12 pairs, and the rules read as class descriptions (`petallength` small and `petalwidth` small mean setosa). With 10 bins each bin holds fewer rows, so only 5 items reach the 30 percent support and the rules describe the same setosa cluster with narrower intervals (`(-inf-1.83]`, `(-inf-0.34]`) and lower confidence for the reverse direction (0.9 instead of 1). Finer bins give more precise but rarer items; coarser bins give frequent but vaguer items. Equal-frequency bins (`useEqualFrequency` True) make every item about equally frequent, which removes the tall-bin effect seen on glass.
+
+Interesting rules are the ones with confidence near 1 and lift well above 1: `temperature=cool ==> humidity=normal` (lift 2) is a real dependency in the weather data; `outlook=overcast ==> play=yes` (lift 1.56) is the rule a decision tree also finds.
 
 ## Question 8
 
@@ -68,7 +230,135 @@ Implement the Apriori Algorithm to find the association rules in contactlenses.a
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Read the ARFF: the header gives the attribute names and the value list, each data row becomes a transaction whose items are the (attribute, value) pairs.
+2. Level 1: count every item; keep those with count at least the minimum support count. For support 0.2 on 24 rows the count is <Math tex="\lfloor 0.2 \times 24 + 0.5 \rfloor = 5" /> (WEKA rounds 4.8 to 5).
+3. Level k: join two large (k-1)-itemsets that differ in one item, keep the candidate only if all its (k-1)-subsets are large (the Apriori pruning), then scan the transactions to count it.
+4. Stop when a level is empty.
+5. Rules: from every large itemset of size 2 or more, try each non-empty proper subset as the consequent; confidence is the itemset count divided by the premise count; keep the rule when confidence is at least 0.9.
+6. Rank by confidence, then by support, print the top 10 in WEKA's format.
+7. Run: `python3 apriori.py contact-lenses.arff -M 0.2 -U 0.2` fixes the support at 0.2 for one pass. `python3 apriori.py contact-lenses.arff` repeats WEKA's default search from 1.0 downwards.
+
+#### Program
+
+```python title="apriori.py" file=<rootDir>/public/code/mcsl-223/section-2/session-3/apriori.py
+
+```
+
+```text title="contact-lenses.arff" file=<rootDir>/public/code/mcsl-223/section-2/session-3/contact-lenses.arff
+
+```
+
+#### Output
+
+`python3 apriori.py contact-lenses.arff -M 0.2 -U 0.2` (support 0.2, confidence 0.9, one pass):
+
+```text
+Minimum support: 0.2 (5 instances)
+Minimum metric <confidence>: 0.9
+Number of cycles performed: 1
+
+Generated sets of large itemsets:
+
+Size of set of large itemsets L(1): 11
+
+Size of set of large itemsets L(2): 21
+
+Size of set of large itemsets L(3): 6
+
+Best rules found:
+
+ 1. tear-prod-rate=reduced 12 ==> contact-lenses=none 12    <conf:(1)> lift:(1.6) lev:(0.19) [4] conv:(4.5)
+ 2. spectacle-prescrip=myope tear-prod-rate=reduced 6 ==> contact-lenses=none 6    <conf:(1)> lift:(1.6) lev:(0.09) [2] conv:(2.25)
+ 3. spectacle-prescrip=hypermetrope tear-prod-rate=reduced 6 ==> contact-lenses=none 6    <conf:(1)> lift:(1.6) lev:(0.09) [2] conv:(2.25)
+ 4. astigmatism=no tear-prod-rate=reduced 6 ==> contact-lenses=none 6    <conf:(1)> lift:(1.6) lev:(0.09) [2] conv:(2.25)
+ 5. astigmatism=yes tear-prod-rate=reduced 6 ==> contact-lenses=none 6    <conf:(1)> lift:(1.6) lev:(0.09) [2] conv:(2.25)
+ 6. contact-lenses=soft 5 ==> astigmatism=no 5    <conf:(1)> lift:(2) lev:(0.1) [2] conv:(2.5)
+ 7. contact-lenses=soft 5 ==> tear-prod-rate=normal 5    <conf:(1)> lift:(2) lev:(0.1) [2] conv:(2.5)
+ 8. tear-prod-rate=normal contact-lenses=soft 5 ==> astigmatism=no 5    <conf:(1)> lift:(2) lev:(0.1) [2] conv:(2.5)
+ 9. astigmatism=no contact-lenses=soft 5 ==> tear-prod-rate=normal 5    <conf:(1)> lift:(2) lev:(0.1) [2] conv:(2.5)
+10. contact-lenses=soft 5 ==> astigmatism=no tear-prod-rate=normal 5    <conf:(1)> lift:(4) lev:(0.16) [3] conv:(3.75)
+```
+
+Cross-check against WEKA. Explorer, Open file `contact-lenses.arff`, Associate, Apriori with defaults, Start prints:
+
+```text
+Minimum support: 0.2 (5 instances)
+Minimum metric <confidence>: 0.9
+Number of cycles performed: 16
+
+Generated sets of large itemsets:
+
+Size of set of large itemsets L(1): 11
+
+Size of set of large itemsets L(2): 21
+
+Size of set of large itemsets L(3): 6
+
+Best rules found:
+
+ 1. tear-prod-rate=reduced 12 ==> contact-lenses=none 12    <conf:(1)> lift:(1.6) lev:(0.19) [4] conv:(4.5)
+ 2. spectacle-prescrip=myope tear-prod-rate=reduced 6 ==> contact-lenses=none 6    <conf:(1)> lift:(1.6) lev:(0.09) [2] conv:(2.25)
+ 3. spectacle-prescrip=hypermetrope tear-prod-rate=reduced 6 ==> contact-lenses=none 6    <conf:(1)> lift:(1.6) lev:(0.09) [2] conv:(2.25)
+ 4. astigmatism=no tear-prod-rate=reduced 6 ==> contact-lenses=none 6    <conf:(1)> lift:(1.6) lev:(0.09) [2] conv:(2.25)
+ 5. astigmatism=yes tear-prod-rate=reduced 6 ==> contact-lenses=none 6    <conf:(1)> lift:(1.6) lev:(0.09) [2] conv:(2.25)
+ 6. contact-lenses=soft 5 ==> astigmatism=no 5    <conf:(1)> lift:(2) lev:(0.1) [2] conv:(2.5)
+ 7. contact-lenses=soft 5 ==> tear-prod-rate=normal 5    <conf:(1)> lift:(2) lev:(0.1) [2] conv:(2.5)
+ 8. tear-prod-rate=normal contact-lenses=soft 5 ==> astigmatism=no 5    <conf:(1)> lift:(2) lev:(0.1) [2] conv:(2.5)
+ 9. astigmatism=no contact-lenses=soft 5 ==> tear-prod-rate=normal 5    <conf:(1)> lift:(2) lev:(0.1) [2] conv:(2.5)
+10. contact-lenses=soft 5 ==> astigmatism=no tear-prod-rate=normal 5    <conf:(1)> lift:(4) lev:(0.16) [3] conv:(3.75)
+```
+
+| Check | Python, one pass at 0.2 | WEKA defaults |
+| --- | --- | --- |
+| Minimum support | 0.2 (5 instances) | 0.2 (5 instances), reached after 16 cycles from 1.0 |
+| L(1), L(2), L(3) | 11, 21, 6 | 11, 21, 6 |
+| Rules with confidence at least 0.9 | 10 | 10 |
+| Rule 1 | tear-prod-rate=reduced 12 ==> contact-lenses=none 12 | same |
+| Rules 2 to 5 | the four 2-item premises containing reduced, support 6 | same four; WEKA may print them in a different order among themselves |
+| Rules 6 to 10 | the five soft rules with support 5 | same |
+
+The only difference WEKA can show is the order of rules that tie on both confidence and support; the sets are identical.
+
+#### Explanation
+
+The program is the textbook algorithm. `large_itemsets` is the level-wise pass: `Counter` gives L1, `itertools.combinations` over the previous level joins pairs, the `all(... in prev ...)` test is the pruning step that throws away a candidate whose subset is not large, and one scan of the transactions counts what is left. Pruning matters even here: from 21 large pairs there are 210 possible joins, but only candidates whose three pairs are all large get counted, and only 6 survive. `rules_from` walks every large itemset and every consequent, and the confidence test <Math tex="\text{conf}(X \Rightarrow Y) = \frac{|X \cup Y|}{|X|}" /> is one division. The support-lowering loop in `main` reproduces WEKA's search: start at `upperBoundMinSupport` minus `delta`, mine, and lower the support until `numRules` rules pass or `lowerBoundMinSupport` is hit; 16 steps of 0.05 from 0.95 land on 0.2, which is why WEKA prints 16 cycles.
+
+## Viva Questions
+
+<Explain />
+
+**Q:** Why does WEKA report Minimum support 0.2 when the lower bound was 0.1?
+**A:** It starts at 1.0 and lowers by delta 0.05 each cycle; at 0.2 it already had 10 rules, so it stopped.
+
+**Q:** What is the Apriori property?
+**A:** Every subset of a frequent itemset is frequent, so a candidate with an infrequent subset can be dropped without counting it.
+
+**Q:** Why must numeric attributes be discretised before Apriori?
+**A:** An item is an attribute-value pair; a continuous value would be its own item with support 1 of N.
+
+**Q:** What does the number after the arrow mean in `tear-prod-rate=reduced 12 ==> contact-lenses=none 12`?
+**A:** Twelve rows contain both sides; the 12 before the arrow is the premise count; confidence is 12 divided by 12.
+
+**Q:** What does lift 4 on rule 10 tell you?
+**A:** The consequent (astigmatism=no and tear-prod-rate=normal) occurs in 6 of 24 rows, 25 percent; among soft-lens rows it occurs 100 percent, four times as often.
+
+**Q:** How does the number of bins change the rules?
+**A:** More bins mean rarer, more precise items; fewer rules pass the support threshold and their intervals are narrower.
+
+**Q:** Why does the equal-width Discretize label read '(-inf-0.9]' and not '[0.1-0.9]'?
+**A:** WEKA makes the first and last bins open so that unseen values outside the training range still fall into a bin.
+
+## Common Mistakes
+
+<Explain />
+
+- Running Apriori on iris or glass without Discretize; WEKA greys out Start because Apriori cannot handle numeric attributes.
+- Setting `lowerBoundMinSupport` above `upperBoundMinSupport`, which gives no cycles and no rules.
+- Reading conf:(1) as proof of a strong pattern when the support is 2 rows out of 14.
+- Confusing the item count in the rule (rows matched) with the support fraction; divide by the number of instances.
+- Forgetting that Discretize on `first-last` leaves the nominal class alone, then reporting that the class was not binned as an error.
 
 ## Formula Sheet
 
@@ -128,9 +418,10 @@ Hierarchical (agglomerative) clustering merges the two closest clusters each ste
 
 DBSCAN calls a point a core point when at least <Math tex="\text{minPts}" /> points lie within radius <Math tex="\varepsilon" />; clusters grow from core points, and points reachable from none are noise.
 
+
 ## Session Summary
 
 <Notebook />
 
-- Question 7: Perform the following:
-- Question 8: Implement the Apriori Algorithm to find the association rules in contactlenses.a
+- Question 7: unsupervised filters catalogued with menu paths; Apriori run on weather.nominal (defaults and 0.3 with 0.7), on iris with 3 and 10 bins and on glass; rules interpreted and the effect of bin count recorded
+- Question 8: `apriori.py` written and run on contact-lenses.arff at support 0.2 and confidence 0.9; L1, L2, L3 = 11, 21, 6 and all 10 rules match WEKA's default output

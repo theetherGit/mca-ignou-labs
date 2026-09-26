@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<!-- src/main/resources/templates/register.html   (Session 9, Q40) -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Admission Portal - Register</title>
+</head>
+<body>
+  <h2>Create your account</h2>
+
+  <!-- th:object binds the form to the "form" model attribute; th:field fills name, id and value -->
+  <form th:action="@{/register}" th:object="${form}" method="post">
+    <p>
+      <label for="username">Username</label>
+      <input type="text" th:field="*{username}" required>
+      <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" style="color:red"></span>
+    </p>
+    <p>
+      <label for="password">Password</label>
+      <input type="password" th:field="*{password}" required>
+      <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color:red"></span>
+    </p>
+    <p>
+      <label for="confirmPassword">Confirm password</label>
+      <input type="password" th:field="*{confirmPassword}" required>
+      <span th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" style="color:red"></span>
+    </p>
+    <button type="submit">Register and sign in</button>
+  </form>
+
+  <p>Already registered? <a th:href="@{/login}">Login</a></p>
+</body>
+</html>

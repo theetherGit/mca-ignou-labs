@@ -36,10 +36,10 @@ const nimbusConfig = defineNimbusConfig({
       {
         label: "Semester 2",
         items: [
-          { label: "MCSL-222 Section 1", badge: { text: "Draft", variant: "caution" }, autogenerate: { directory: "mcsl-222/section-1" } },
-          { label: "MCSL-222 Section 2", badge: { text: "Draft", variant: "caution" }, autogenerate: { directory: "mcsl-222/section-2" } },
-          { label: "MCSL-223 Section 1", badge: { text: "Draft", variant: "caution" }, autogenerate: { directory: "mcsl-223/section-1" } },
-          { label: "MCSL-223 Section 2", badge: { text: "Draft", variant: "caution" }, autogenerate: { directory: "mcsl-223/section-2" } },
+          { label: "MCSL-222 Section 1", autogenerate: { directory: "mcsl-222/section-1" } },
+          { label: "MCSL-222 Section 2", autogenerate: { directory: "mcsl-222/section-2" } },
+          { label: "MCSL-223 Section 1", autogenerate: { directory: "mcsl-223/section-1" } },
+          { label: "MCSL-223 Section 2", autogenerate: { directory: "mcsl-223/section-2" } },
         ],
       },
     ],

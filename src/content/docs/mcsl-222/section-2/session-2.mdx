@@ -7,10 +7,6 @@ sidebar:
 
 JavaServer Pages put Java inside HTML so that the view is easier to write than a servlet full of `println` calls. The session covers scripting elements, JSTL, JDBC from a page, action elements, implicit objects and a small combined project.
 
-<Aside type="caution" title="Draft: questions final, solutions pending">
-  Every question below is copied from the lab manual. Worked solutions are being added session by session. Use the problem statements, prep notes and formula sheet to prepare before your lab.
-</Aside>
-
 ## Objectives
 
 <Explain />
@@ -25,13 +21,13 @@ JavaServer Pages put Java inside HTML so that the view is easier to write than a
 
 | Question | Requirement | Status |
 | --- | --- | --- |
-| Q6 | Write JSP Programme to print current date and time along with timestamp, implement... | Solution pending |
-| Q7 | Create a JSP page and implement a Scripting Tag, Expression tag and Declaration tag | Solution pending |
-| Q8 | Import JSTL library in JSP Page and use its following tags | Solution pending |
-| Q9 | Create a JSP Page for database connectivity using JDBC and show the students details... | Solution pending |
-| Q10 | Write a JSP application using following Action Elements | Solution pending |
-| Q11 | Write a JSP program using the following implicit objects with an example | Solution pending |
-| Q12 | Create a JSP Project implementing all the above (Session 1 and Session 2) concepts.... | Solution pending |
+| Q6 | Write JSP Programme to print current date and time along with timestamp, implement... | Complete |
+| Q7 | Create a JSP page and implement a Scripting Tag, Expression tag and Declaration tag | Complete |
+| Q8 | Import JSTL library in JSP Page and use its following tags | Complete |
+| Q9 | Create a JSP Page for database connectivity using JDBC and show the students details... | Complete |
+| Q10 | Write a JSP application using following Action Elements | Complete |
+| Q11 | Write a JSP program using the following implicit objects with an example | Complete |
+| Q12 | Create a JSP Project implementing all the above (Session 1 and Session 2) concepts.... | Complete |
 
 ## Preparation
 
@@ -39,7 +35,15 @@ JavaServer Pages put Java inside HTML so that the view is easier to write than a
 
 - Add the JSTL jars (jakarta.servlet.jsp.jstl and its API) to the project; JSTL is not part of Tomcat.
 - For auto-refresh use `response.setHeader("Refresh", "5")` or a meta refresh tag.
-- Question 7 is a mini project: plan its pages (login, list, add, edit, delete, error) before coding.
+- Question 12 is a mini project: plan its pages (login, list, add, edit, delete, error) before coding.
+- One Maven web project `JspLab` holds all seven answers, with the same `pom.xml` as Session 1. JSP pages go in `src/main/webapp/`, Java classes in `src/main/java/ignou/`. Questions 9 and 12 need the IGNOU database from Session 1, Question 5.
+
+## Project Setup
+
+<Explain />
+
+1. Create the project as in Session 1 (NetBeans: File, New Project, Java with Maven, Web Application, name, Next, server Tomcat 10.1, Finish; Eclipse: Dynamic Web Project, then Convert to Maven Project) and name it `JspLab`. Copy the Session 1 `pom.xml`, changing `artifactId` and `finalName`.
+2. To add a page: right-click Web Pages (NetBeans) or `src/main/webapp` (Eclipse), New, JSP, name without extension. Base URL after Run: `http://localhost:8080/JspLab/`.
 
 ## Question 6
 
@@ -53,7 +57,37 @@ Write JSP Programme to print current date and time along with timestamp, impleme
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. New JSP `datetime` in `src/main/webapp/`; paste the listing.
+2. Run and open `http://localhost:8080/JspLab/datetime.jsp`. Leave it for 20 seconds: the seconds and the timestamp advance on their own every 5 seconds.
+3. In the browser dev tools, Network tab, watch a new request appear every 5 seconds.
+
+#### Program
+
+```html title="datetime.jsp" file=<rootDir>/public/code/mcsl-222/section-2/session-2/datetime.jsp
+
+```
+
+#### Output
+
+Checked by reading, not executed (no Tomcat here). The page repaints itself every five seconds; one snapshot:
+
+```text
+Current Date and Time
+Date: 26-09-2026
+Time: 11:02:15
+Full: Sat Sep 26 11:02:15 IST 2026
+Timestamp (ms since epoch): 1790398335518
+SQL Timestamp: 2026-09-26 11:02:15.518
+This page refreshes every 5 seconds. Watch the seconds change.
+```
+
+#### Explanation
+
+- Tomcat compiles the JSP into a servlet on first request (`work/Catalina/localhost/JspLab/org/apache/jsp/datetime_jsp.java`); HTML becomes `out.write` calls, scriptlet code is copied into `_jspService`.
+- `response.setHeader("Refresh", "5")` asks the browser to re-request the URL after 5 seconds; the `meta http-equiv="refresh"` tag does the same from the HTML side. One is enough; both are shown so you can explain either in the viva. Headers must be set before output is committed, so the scriptlet sits above the DOCTYPE.
+- `System.currentTimeMillis()` is the timestamp; `SimpleDateFormat` turns it into date and time strings.
 
 ## Question 7
 
@@ -67,7 +101,41 @@ Create a JSP page and implement a Scripting Tag, Expression tag and Declaration 
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. New JSP `scripting` in `src/main/webapp/`.
+2. Open `http://localhost:8080/JspLab/scripting.jsp`, reload several times, then open `scripting.jsp?name=Asha`.
+
+#### Program
+
+```html title="scripting.jsp" file=<rootDir>/public/code/mcsl-222/section-2/session-2/scripting.jsp
+
+```
+
+#### Output
+
+Checked by reading. Third visit with `?name=Asha`:
+
+```text
+JSP Scripting Elements
+Hello, Asha! You are visitor number 3.
+Factorial of 5 is 120.
+Multiplication table of 7 (scriptlet loop)
+7 x 1 = 7  ...  7 x 10 = 70   (ten rows)
+Your name: [Asha] [Greet]
+```
+
+#### Explanation
+
+| Element | Syntax | Becomes in the generated servlet | Used here for |
+| --- | --- | --- | --- |
+| Declaration | `<%! ... %>` | Class-level field or method, outside `_jspService` | `hitCount` field, `factorial()` method |
+| Scriptlet | `<% ... %>` | Statements inside `_jspService`, run on every request | Reading `name`, incrementing `hitCount`, the `for` loop |
+| Expression | `<%= ... %>` | `out.print(...)` of the value | Printing `name`, `hitCount`, `factorial(n)`, `7 * i` |
+
+- `hitCount` keeps counting across requests because it is a field of the one servlet instance; it resets when the page is recompiled or the application redeploys. It is also shared by all users and not thread-safe, which is why real applications keep such state in a session or a database.
+- An expression must not end with a semicolon; a scriptlet must.
+- The loop opens in one scriptlet and closes in another; the HTML row between them is emitted on every iteration.
 
 ## Question 8
 
@@ -87,7 +155,52 @@ Import JSTL library in JSP Page and use its following tags:
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Confirm the two JSTL artifacts (`jakarta.servlet.jsp.jstl-api` 3.0.0 and Glassfish `jakarta.servlet.jsp.jstl` 3.0.1) are in `pom.xml`; without Maven, download both jars and drop them into `src/main/webapp/WEB-INF/lib/`.
+2. New JSP `jstl-demo`; keep `datetime.jsp` from Question 6 as the redirect target.
+3. Open `http://localhost:8080/JspLab/jstl-demo.jsp`, then click the two links at the bottom.
+
+#### Program
+
+```html title="jstl-demo.jsp" file=<rootDir>/public/code/mcsl-222/section-2/session-2/jstl-demo.jsp
+
+```
+
+#### Output
+
+Checked by reading. First visit without parameters:
+
+```text
+JSTL Core Tag Demo
+1. c:out
+Student: Asha Verma
+Unknown parameter with default: not given
+Escaped: <b>bold?</b>
+2. c:if
+Add ?name=YourName to the URL to see c:if fire.
+3. c:forEach
+#  Marks  Result
+1  78     Distinction
+2  92     Distinction
+3  45     Fail
+4  66     Pass
+5  88     Distinction (five rows)
+Counting with begin/end/step: 1 4 7 10
+5. c:url and c:redirect
+Reload with name and city (built by c:url)
+Rendered link: /JspLab/jstl-demo.jsp?name=Rahul+Singh&city=Kolkata
+Go to the clock page (c:redirect)
+```
+
+Clicking the first link shows `Hello, Rahul Singh` under c:if and `Kolkata` under c:out. Clicking the second sends the browser to `/JspLab/datetime.jsp` with an HTTP 302 and the address bar changes.
+
+#### Explanation
+
+- The taglib directive `uri="jakarta.tags.core"` is the JSTL 3.0 name; the old `java.sun.com` URI belongs to JSTL 1.2 on `javax` and fails on Tomcat 10.1 with "cannot be resolved".
+- `c:out` prints an EL value and escapes XML characters by default, so `<b>` shows literally; `default` covers missing values. `c:if` has no else; for branches use `c:choose` with `c:when` and one `c:otherwise` (the manual's "choice").
+- `c:forEach` walks any collection or array (`items`) or counts (`begin`, `end`, `step`). `varStatus` gives `index`, `count`, `first`, `last`.
+- `c:url` prepends the context path, URL-encodes nested `c:param` values and appends `;jsessionid` when cookies are off. `c:redirect` sends a 302 and stops the page; it must run before any output, which is why it sits at the top.
 
 ## Question 9
 
@@ -101,7 +214,38 @@ Create a JSP Page for database connectivity using JDBC and show the students det
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. MySQL must be running with the IGNOU database from Session 1 (`schema.sql`).
+2. `mysql-connector-j` is already in `pom.xml`; if not using Maven, copy the jar to `WEB-INF/lib/`.
+3. New JSP `student-list`; open `http://localhost:8080/JspLab/student-list.jsp`. Stop MySQL and reload once to see the error branch.
+
+#### Program
+
+```html title="student-list.jsp" file=<rootDir>/public/code/mcsl-222/section-2/session-2/student-list.jsp
+
+```
+
+#### Output
+
+Checked by reading. With the three seeded rows:
+
+```text
+Students in IGNOU database
+Enrolment   Name         DOB         Email                    Mobile      Programme  Semester  Courses
+2451001234  Asha Verma   2001-03-14  asha.verma@example.com   9876543210  MCA        2         MCS-218,MCS-219,MCS-220,MCS-221
+2451001235  Rahul Singh  2000-11-02  rahul.singh@example.com  9123456780  MCA        2         MCS-218,MCS-220,MCS-221
+2451001236  Meera Nair   2002-07-25  meera.nair@example.com   9988776655  MCA        1         MCS-211,MCS-212,MCS-213
+Total students: 3
+```
+
+With MySQL stopped: `Database error: Communications link failure` in red, followed by the hint line.
+
+#### Explanation
+
+- The JDBC steps are the same as in the DAO of Session 1: `DriverManager.getConnection(url, user, password)`, `prepareStatement`, `executeQuery`, loop over `ResultSet`. Connector/J 8 registers its driver automatically through the service loader, so `Class.forName("com.mysql.cj.jdbc.Driver")` is optional.
+- The `try` with resources declares the connection, statement and result set together; they close in reverse order whether the loop finishes or throws.
+- The scriptlet is split around the HTML so the header is written once and a row per `rs.next()`. SQL inside a JSP is acceptable here but mixes data access with presentation; Question 12 moves it back into `StudentDao`.
 
 ## Question 10
 
@@ -120,7 +264,57 @@ Write a JSP application using following Action Elements
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Add class `StudentBean` in package `ignou` (Source Packages, New, Java Class).
+2. Add three JSPs in `src/main/webapp/`: `header`, `action-demo`, `bean-view`.
+3. Open `http://localhost:8080/JspLab/action-demo.jsp`. Submit with a name: `bean-view.jsp` shows the bean. Submit with the name empty: you are forwarded back to the form with a red message while the address bar still says `bean-view.jsp`.
+
+#### Program
+
+```java title="StudentBean.java" file=<rootDir>/public/code/mcsl-222/section-2/session-2/StudentBean.java
+
+```
+
+```html title="header.jsp" file=<rootDir>/public/code/mcsl-222/section-2/session-2/header.jsp
+
+```
+
+```html title="action-demo.jsp" file=<rootDir>/public/code/mcsl-222/section-2/session-2/action-demo.jsp
+
+```
+
+```html title="bean-view.jsp" file=<rootDir>/public/code/mcsl-222/section-2/session-2/bean-view.jsp
+
+```
+
+#### Output
+
+Checked by reading. Submitting name `Meera Nair`, programme `MCA`, semester `2`:
+
+```text
+IGNOU Web Technologies Lab | Page title: Bean View | Served at Sat Sep 26 11:20:44 IST 2026
+Values read back with jsp:getProperty
+Name       Meera Nair
+Programme  MCA
+Semester   2
+After setProperty with a literal value, programme = MCA (forced)
+Back
+```
+
+Submitting with an empty name leaves the address bar at `/JspLab/bean-view.jsp` but renders the form page with the header titled `Action Elements` and the red line `Name is required (you were forwarded back by jsp:forward)`.
+
+#### Explanation
+
+| Action | What it does | Where in the code |
+| --- | --- | --- |
+| `jsp:include` | Runs another resource at request time and inserts its output; `jsp:param` adds request parameters visible only inside it | `header.jsp` at the top of both pages, with `title` |
+| `jsp:forward` | Hands the same request to another page and discards any output so far; the browser URL does not change | Empty name in `bean-view.jsp` |
+| `jsp:useBean` | Looks for a bean with that `id` in the given scope, creates one with the no-arg constructor if absent | `student` in request scope |
+| `jsp:setProperty` | Calls setters; `property="*"` matches every request parameter to a same-named setter and converts types | Fills name, programme, semester (String to int) |
+| `jsp:getProperty` | Calls the getter and prints the value | The three table rows |
+
+- `jsp:include` differs from the `include` directive: the directive pastes source at translation time, the action calls the page at request time, so the header's date is always current. The forward happens before any output; forwarding after content was flushed throws `IllegalStateException`.
 
 ## Question 11
 
@@ -141,7 +335,59 @@ Write a JSP program using the following implicit objects with an example:
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Add JSPs `implicit` and `error` in `src/main/webapp/`.
+2. Open `http://localhost:8080/JspLab/implicit.jsp?name=Asha`, reload twice, then click the divide-by-zero link. In dev tools, Network, the response headers show `X-Lab: MCSL-222` and `Set-Cookie: lastPage=implicit`.
+
+#### Program
+
+```html title="implicit.jsp" file=<rootDir>/public/code/mcsl-222/section-2/session-2/implicit.jsp
+
+```
+
+```html title="error.jsp" file=<rootDir>/public/code/mcsl-222/section-2/session-2/error.jsp
+
+```
+
+#### Output
+
+Checked by reading. Second visit:
+
+```text
+JSP Implicit Objects
+1. out
+Written with out.println(). Buffer size: 8192 bytes, remaining: 7810
+2. request
+Method: GET, URI: /JspLab/implicit.jsp, client IP: 0:0:0:0:0:0:0:1, name parameter: Asha
+3. response
+Content type set to text/html;charset=UTF-8; header X-Lab and cookie lastPage added (see browser dev tools).
+4. session
+Session id: 7D2C9F1A4B8E3C6D0A5F2E9B1C4D7A8E, visits: 2, new: false
+5. pageContext
+page scope: only visible on this page
+application scope via pageContext: visible to every page
+session via pageContext: true (same object as session)
+6. exception
+Click to divide by zero; error.jsp shows the exception object.
+```
+
+After clicking the link (`implicit.jsp?fail=1`) the browser shows `error.jsp`: `Exception type: java.lang.ArithmeticException`, `Message: / by zero`, `Thrown from: org.apache.jsp.implicit_jsp._jspService(implicit_jsp.java:142)`.
+
+#### Explanation
+
+| Object | Type | Example use in the page |
+| --- | --- | --- |
+| `out` | `JspWriter` | `out.println`, buffer size and remaining space |
+| `request` | `HttpServletRequest` | method, URI, remote address, `name` parameter |
+| `response` | `HttpServletResponse` | `setHeader`, `addCookie`, content type |
+| `session` | `HttpSession` | id, visit counter attribute, `isNew()` |
+| `pageContext` | `PageContext` | attributes in page and application scope, `findAttribute`, `getSession()` |
+| `exception` | `Throwable` | class name, message, first stack frame in `error.jsp` |
+
+- The six objects are local variables that Tomcat declares at the top of `_jspService`; that is why they exist without any import.
+- `exception` exists only in a page marked `isErrorPage="true"`. The page that can fail names its handler with `errorPage="error.jsp"`; on an uncaught exception Tomcat forwards to it and sets the `exception` object. `error.jsp` also serves the `web.xml` error pages of Question 12, where it reads the status code from the `jakarta.servlet.error.status_code` attribute.
+- `pageContext.findAttribute` searches page, request, session then application scope in that order; it is what EL uses when it resolves a bare name.
 
 ## Question 12
 
@@ -155,16 +401,98 @@ Create a JSP Project implementing all the above (Session 1 and Session 2) concep
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Assumptions
+
+- Single administrator account `admin` / `ignou123` hard-coded in `LoginServlet`; a Users table with hashed passwords is left for Session 9 (Spring Security). Database, `Student` and `StudentDao` are those of Session 1, Question 5.
+- Session timeout is 10 minutes; after that any request to `/students` returns to the login page with a message.
+- All database and conversion errors surface either as a red message on the list page (expected errors such as a duplicate enrolment number) or on `error.jsp` (anything unexpected, through `web.xml`).
+
+#### Steps
+
+1. In `JspLab` copy `Student.java` and `StudentDao.java` from Session 1 into package `ignou`.
+2. Add `LoginServlet`, `LogoutServlet`, `StudentController` to package `ignou`.
+3. Add `login.jsp` in `src/main/webapp/` (Question 11's `error.jsp` is reused as is). Create folder `src/main/webapp/WEB-INF/views/` and add `students.jsp` and `student-form.jsp` there.
+4. Replace `WEB-INF/web.xml` with the listing below.
+5. Run. `http://localhost:8080/JspLab/` opens `login.jsp`. Try a wrong password, then the correct one. Add, edit and delete a student as in Session 1.
+6. Click Logout, then type `http://localhost:8080/JspLab/students` directly: you land on the login page with "Please login first". Open `/JspLab/nothing.jsp` for the 404 branch of `error.jsp`; stop MySQL and open the list for the exception branch.
+
+#### Program
+
+```xml title="web.xml" file=<rootDir>/public/code/mcsl-222/section-2/session-2/web.xml
+
+```
+
+```html title="login.jsp" file=<rootDir>/public/code/mcsl-222/section-2/session-2/login.jsp
+
+```
+
+```java title="LoginServlet.java" file=<rootDir>/public/code/mcsl-222/section-2/session-2/LoginServlet.java
+
+```
+
+```java title="LogoutServlet.java" file=<rootDir>/public/code/mcsl-222/section-2/session-2/LogoutServlet.java
+
+```
+
+```java title="StudentController.java" file=<rootDir>/public/code/mcsl-222/section-2/session-2/StudentController.java
+
+```
+
+```html title="students.jsp" file=<rootDir>/public/code/mcsl-222/section-2/session-2/students.jsp
+
+```
+
+```html title="student-form.jsp" file=<rootDir>/public/code/mcsl-222/section-2/session-2/student-form.jsp
+
+```
+
+`Student.java` and `StudentDao.java` are the Session 1, Question 5 listings, copied without change.
+
+#### Output
+
+Checked by reading, not executed. A wrong password returns to `login.jsp` with `Invalid username or password` in red above the form. After a correct login the browser is at `/JspLab/students` and shows `Logged in as admin | Logout`, the heading `IGNOU Students (3)`, the `Add new student` link and the same three-row table as Session 1, Question 5, each row ending in Edit and a Delete button.
+
+After Save on the edit form the same list reappears with `Student updated` in green. Visiting `/students` after Logout shows the login page with `Please login first`. With MySQL stopped, `error.jsp` shows `Exception type: jakarta.servlet.ServletException`, `Message: Database error: Communications link failure`. A wrong URL shows `HTTP status 404 for /JspLab/nothing.jsp`.
+
+#### Explanation
+
+- Flow: `login.jsp` (view) posts to `LoginServlet` (controller), which stores `user` in the `HttpSession` and redirects to `StudentController`. The controller loads data through `StudentDao` (model), puts it in request attributes and forwards to a JSP under `WEB-INF/views/`. That is Model-View-Controller with plain servlets and JSP, the shape Spring MVC automates in Sessions 3 to 5.
+- Session management: `loggedIn()` runs before every action and checks `session.getAttribute("user")`. Login invalidates any old session first so an attacker cannot plant a known session id (fixation). `web.xml` sets a 10 minute timeout and `http-only` on the cookie; `LogoutServlet` invalidates and redirects.
+- Views under `WEB-INF` cannot be requested by URL, so nobody can open `students.jsp` without going through the controller and its login check.
+- Exception handling has two levels. Expected failures (duplicate key, bad number) are caught in `doPost` and shown as a message. Anything else is wrapped in `ServletException` and left to the container, which the `error-page` entries route to `error.jsp`; the same page handles 404.
+- The views use JSTL and EL only (`c:forEach`, `c:out`, `c:url`, `c:if`, `fn:contains`), no scriptlets; every POST ends in a redirect to `/students` (Post-Redirect-Get).
+
+## Viva Questions
+
+<Explain />
+
+- **Q:** How is a JSP different from a servlet? **A:** A JSP is translated into a servlet by the container; it is HTML with embedded Java rather than Java with embedded HTML, so it suits the view layer.
+- **Q:** What is the JSP life cycle? **A:** Translation to a `.java` file, compilation, class loading, `jspInit()`, `_jspService()` per request, `jspDestroy()`.
+- **Q:** Difference between the include directive and `jsp:include`? **A:** The directive merges source at translation time; the action calls the resource at request time and can pass parameters.
+- **Q:** Why prefer JSTL and EL over scriptlets? **A:** Views stay readable, output is escaped by default, no Java in HTML, and designers can edit the page.
+- **Q:** How does `errorPage` differ from the `error-page` in `web.xml`? **A:** `errorPage` is per JSP; `web.xml` mappings apply to the whole application and also cover servlets and HTTP status codes.
+- **Q:** Why put JSPs under `WEB-INF`? **A:** The container never serves `WEB-INF` directly, so the pages can only be reached by a forward from a servlet that has done its checks.
+- **Q:** What is the JSTL core URI for Tomcat 10.1? **A:** `jakarta.tags.core` (JSTL 3.0); the old `java.sun.com` URI is for the `javax` versions.
+
+## Common Mistakes
+
+<Explain />
+
+- Using the JSTL 1.2 URI or jar on Tomcat 10.1: "The absolute uri cannot be resolved" at translation time.
+- Setting a header or calling `c:redirect` after HTML has been written: `IllegalStateException: response already committed`.
+- A bean without a public no-arg constructor or with a getter that does not match the property name: `jsp:useBean` or `getProperty` fails at run time.
+- Forgetting `isErrorPage="true"`: the `exception` object is undefined and the error page itself fails to compile.
+- Leaving `students.jsp` outside `WEB-INF`, which lets anyone skip the login check by typing its URL.
 
 ## Session Summary
 
 <Notebook />
 
-- Question 6: Write JSP Programme to print current date and time along with timestamp, impleme
-- Question 7: Create a JSP page and implement a Scripting Tag, Expression tag and Declaration 
-- Question 8: Import JSTL library in JSP Page and use its following tags:
-- Question 9: Create a JSP Page for database connectivity using JDBC and show the students det
-- Question 10: Write a JSP application using following Action Elements
-- Question 11: Write a JSP program using the following implicit objects with an example:
-- Question 12: Create a JSP Project implementing all the above (Session 1 and Session 2) concep
+- Project `JspLab` on Tomcat 10.1 with JSTL 3.0 (`jakarta.tags.core`) and `mysql-connector-j`
+- Question 6: `datetime.jsp` with date, time, timestamp and 5 second auto-refresh (Refresh header and meta tag)
+- Question 7: `scripting.jsp` with declaration, scriptlet and expression elements
+- Question 8: `jstl-demo.jsp` using `c:out`, `c:if`, `c:forEach`, `c:choose`/`c:when`/`c:otherwise`, `c:url`, `c:redirect`
+- Question 9: `student-list.jsp` reading the IGNOU Student table through JDBC
+- Question 10: `StudentBean`, `header.jsp`, `action-demo.jsp`, `bean-view.jsp` using `jsp:include`, `jsp:forward`, `jsp:useBean`, `jsp:setProperty`, `jsp:getProperty`
+- Question 11: `implicit.jsp` and `error.jsp` covering `out`, `request`, `response`, `session`, `pageContext`, `exception`
+- Question 12: login (`login.jsp`, `LoginServlet`, `LogoutServlet`), `StudentController` with session check, views `students.jsp` and `student-form.jsp` under `WEB-INF/views`, `web.xml` error pages

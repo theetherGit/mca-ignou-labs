@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- src/main/resources/beans.xml : XML wiring for the Course CRUD API (Session 8, Q35) -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <!-- courseRepository already exists: Spring Data registered it from the interface name.
+       Constructor injection by reference, same as @Autowired would do. -->
+  <bean id="courseService" class="in.ignou.xmlapi.CourseService">
+    <constructor-arg ref="courseRepository"/>
+  </bean>
+
+  <bean id="courseRestController" class="in.ignou.xmlapi.CourseRestController">
+    <constructor-arg ref="courseService"/>
+  </bean>
+
+</beans>

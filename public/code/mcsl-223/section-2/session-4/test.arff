@@ -1,0 +1,22 @@
+% test.arff - 10 market-basket transactions, one binary attribute per item.
+% Value 1 (the second value, WEKA's positiveIndex 2) means the item was bought.
+@relation test
+
+@attribute bread {0, 1}
+@attribute milk {0, 1}
+@attribute butter {0, 1}
+@attribute eggs {0, 1}
+@attribute jam {0, 1}
+@attribute beer {0, 1}
+
+@data
+1,1,1,0,0,0
+1,1,0,1,0,0
+1,0,1,0,1,0
+0,1,0,1,0,1
+1,1,1,1,0,0
+1,0,1,0,1,0
+0,1,0,0,0,1
+1,1,1,0,1,0
+1,1,0,1,0,0
+1,1,1,0,0,0

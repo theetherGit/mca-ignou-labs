@@ -1,0 +1,9 @@
+<!-- Q21: add inside <dependencies> of pom.xml. Hibernate Validator is the Bean
+     Validation 3.0 provider; Spring MVC picks it up automatically for @Valid.
+     Tomcat 10.1 supplies the Jakarta EL implementation it needs; add
+     org.glassfish.expressly:expressly:5.0.0 only if you validate outside Tomcat. -->
+<dependency>
+  <groupId>org.hibernate.validator</groupId>
+  <artifactId>hibernate-validator</artifactId>
+  <version>8.0.1.Final</version>
+</dependency>

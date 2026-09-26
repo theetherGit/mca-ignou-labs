@@ -7,10 +7,6 @@ sidebar:
 
 This session measures how end-to-end throughput changes as link delay grows, then builds the dumbbell topology (two clients, a bottleneck link, two servers) used by Sessions 3, 8 and 9.
 
-<Aside type="caution" title="Draft: questions final, solutions pending">
-  Every question below is copied from the lab manual. Worked solutions are being added session by session. Use the problem statements, prep notes and formula sheet to prepare before your lab.
-</Aside>
-
 ## Objectives
 
 <Explain />
@@ -25,8 +21,8 @@ This session measures how end-to-end throughput changes as link delay grows, the
 
 | Question | Requirement | Status |
 | --- | --- | --- |
-| Q3 | Measure the throughput (end to end) while varying latency in the network created in... | Solution pending |
-| Q4 | Create a simple network topology having two client node on left side and two server... | Solution pending |
+| Q3 | Measure the throughput (end to end) while varying latency in the network created in... | Complete |
+| Q4 | Create a simple network topology having two client node on left side and two server... | Complete |
 
 ## Preparation
 
@@ -48,7 +44,70 @@ Measure the throughput (end to end) while varying latency in the network created
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Save the program as `scratch/throughput_vs_latency.cc`. It is the Session 1 link with a TCP `BulkSendApplication` on n0, a `PacketSink` on n1 and `FlowMonitor` on both nodes. The delay comes from the command line.
+2. Run it four times, once per latency:
+
+```bash
+./ns3 run "scratch/throughput_vs_latency --delay=1ms"
+./ns3 run "scratch/throughput_vs_latency --delay=10ms"
+./ns3 run "scratch/throughput_vs_latency --delay=50ms"
+./ns3 run "scratch/throughput_vs_latency --delay=100ms"
+```
+
+3. From each run copy `Rx Bytes` and `Throughput` of flow 1 (the data flow 10.1.1.1 to 10.1.1.2; flow 2 is the ACK stream) into the table.
+4. Each run also writes a FlowMonitor XML file (`throughput-1ms.xml`, `throughput-10ms.xml` and so on); keep them as evidence.
+5. Plot throughput against delay by hand or with gnuplot (`plot "table.dat" using 1:2 with linespoints`).
+
+#### Program
+
+```cpp title="throughput_vs_latency.cc" file=<rootDir>/public/code/mcsl-223/section-1/session-2/throughput_vs_latency.cc
+
+```
+
+#### Output
+
+Expected console output for the 10 ms run (values are plausible for TCP NewReno on a 5 Mbit/s link, not from an actual run; your numbers will differ slightly):
+
+```text
+Delay = 10ms
+Flow 1 (10.1.1.1 -> 10.1.1.2)
+  Tx Packets: 9520
+  Rx Packets: 9512
+  Tx Bytes:   5484520
+  Rx Bytes:   5480000
+  Lost:       8
+  Duration:   9.0012 s
+  Mean delay: 26.4 ms
+  Throughput: 4.87 Mbit/s
+Flow 2 (10.1.1.2 -> 10.1.1.1)
+  Tx Packets: 4760
+  Rx Packets: 4760
+  Tx Bytes:   190400
+  Rx Bytes:   190400
+  Lost:       0
+  Duration:   8.9905 s
+  Mean delay: 10.9 ms
+  Throughput: 0.17 Mbit/s
+```
+
+Table for the record (flow 1, simulation 10 s, source active from 1 s):
+
+| One-way delay | RTT | Rx Bytes (expected) | Duration | Throughput = 8 x Rx Bytes / duration |
+| --- | --- | --- | --- | --- |
+| 1 ms | 2 ms | 5,520,000 | 9.00 s | 4.91 Mbit/s |
+| 10 ms | 20 ms | 5,480,000 | 9.00 s | 4.87 Mbit/s |
+| 50 ms | 100 ms | 5,290,000 | 9.00 s | 4.70 Mbit/s |
+| 100 ms | 200 ms | 4,980,000 | 9.00 s | 4.42 Mbit/s |
+
+Sample calculation for the 100 ms row: <Math tex="8 \times 4{,}980{,}000 / 9.00 = 4.43 \times 10^{6}\,\text{bit/s}" />.
+
+Why the curve falls: from the formula sheet, <Math tex="BDP = B \times RTT = 5 \times 10^{6} \times 0.2 = 10^{6}\,\text{bits} = 125\,\text{kB}" /> at 100 ms. NS-3's default send and receive buffers are 128 kB, so the window can just cover the pipe and the steady state still fills the link; what is lost is the slow-start ramp. With the default initial window of 10 segments of 536 bytes, slow start needs about five RTTs (5.36, 10.7, 21.4, 42.9, 85.8, then 125 kB) to fill the pipe: 10 ms at RTT 2 ms, but one full second at RTT 200 ms. The window bound <Math tex="\text{Throughput}_{\max} = cwnd_{\max}/RTT = 131072 \times 8 / 0.2 = 5.24\,\text{Mbit/s}" /> is still above the link rate, so the link, not the window, is the limit at every delay in the table. Run `--delay=200ms` as an extra row: the bound becomes 2.62 Mbit/s and the measured value drops below it.
+
+#### Explanation
+
+`BulkSendHelper` with `MaxBytes` 0 keeps the TCP socket's send buffer full, so the connection runs as fast as congestion control and the link allow. `PacketSinkHelper` on n1 accepts the connection and discards data while counting bytes. `FlowMonitorHelper::InstallAll` attaches probes to the IPv4 layer of every node and groups packets by the five-tuple (addresses, ports, protocol) into flows; the TCP connection therefore appears as two flows, data and ACKs. The script computes the formula-sheet throughput, <Math tex="8 \times \text{rxBytes} / (t_{\text{last rx}} - t_{\text{first tx}})" />, from `FlowStats`. `rxBytes` counts IP packets including headers, which is why it is a little larger than what `PacketSink::GetTotalRx` (payload only) would report. `Config::SetDefault` for `TcpNewReno` makes the run match the congestion-window formulas on the sheet instead of the CUBIC default.
 
 ## Question 4
 
@@ -62,7 +121,106 @@ Create a simple network topology having two client node on left side and two ser
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Number the nodes so the code index equals the label: n0, n1 clients; n2, n3 routers (the manual's n1 and n2); n4, n5 servers.
+2. Save the program as `scratch/dumbbell.cc` and run `./ns3 run scratch/dumbbell`.
+3. Check the address line and the routing table of n2 printed at 1 s: it must hold routes to 10.1.4.0 and 10.1.5.0 through 10.1.3.2.
+4. Check that both echo clients get their reply; the reply proves the packet crossed both routers and the bridge.
+5. `ls dumbbell-*.pcap` shows ten files, one per device (`EnablePcapAll` covers every point-to-point device). Open `dumbbell-2-2.pcap`, the n2 side of the bridge, and confirm both echo requests pass through it.
+
+#### Program
+
+```cpp title="dumbbell.cc" file=<rootDir>/public/code/mcsl-223/section-1/session-2/dumbbell.cc
+
+```
+
+#### Output
+
+Topology for the record:
+
+```text
+  n0 (10.1.1.1) ---10 Mbit/s, 1 ms---\                                /---10 Mbit/s, 1 ms--- n4 (10.1.4.2)
+                                       n2 ---2 Mbit/s, 10 ms (bridge)--- n3
+  n1 (10.1.2.1) ---10 Mbit/s, 1 ms---/                                \---10 Mbit/s, 1 ms--- n5 (10.1.5.2)
+
+  subnets: 10.1.1.0/24 (n0-n2)  10.1.2.0/24 (n1-n2)  10.1.3.0/24 (n2-n3)
+           10.1.4.0/24 (n3-n4)  10.1.5.0/24 (n3-n5)
+```
+
+Expected console output (routing-table rows may print in a different order in your version; the echo time stamps are computed from the link parameters):
+
+```text
+n0 10.1.1.1  n1 10.1.2.1  n2 10.1.1.2/10.1.2.2/10.1.3.1  n3 10.1.3.2/10.1.4.1/10.1.5.1  n4 10.1.4.2  n5 10.1.5.2
+Node: 2, Time: +1s, Local time: +1s, Ipv4ListRouting table
+  Priority: 0 Protocol: ns3::Ipv4StaticRouting
+Node: 2, Time: +1s, Local time: +1s, Ipv4StaticRouting table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+127.0.0.0       0.0.0.0         255.0.0.0       U     0      -      -   0
+10.1.1.0        0.0.0.0         255.255.255.0   U     0      -      -   1
+10.1.2.0        0.0.0.0         255.255.255.0   U     0      -      -   2
+10.1.3.0        0.0.0.0         255.255.255.0   U     0      -      -   3
+
+  Priority: -10 Protocol: ns3::Ipv4GlobalRouting
+Node: 2, Time: +1s, Local time: +1s, Ipv4GlobalRouting table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+10.1.3.2        10.1.3.2        255.255.255.255 UH    -      -      -   3
+10.1.4.1        10.1.3.2        255.255.255.255 UGH   -      -      -   3
+10.1.4.2        10.1.3.2        255.255.255.255 UGH   -      -      -   3
+10.1.5.1        10.1.3.2        255.255.255.255 UGH   -      -      -   3
+10.1.5.2        10.1.3.2        255.255.255.255 UGH   -      -      -   3
+10.1.4.0        10.1.3.2        255.255.255.0   UG    -      -      -   3
+10.1.5.0        10.1.3.2        255.255.255.0   UG    -      -      -   3
+
+At time +2s client sent 1024 bytes to 10.1.4.2 port 9
+At time +2.0179s server received 1024 bytes from 10.1.1.1 port 49153
+At time +2.0179s server sent 1024 bytes to 10.1.1.1 port 49153
+At time +2.03581s client received 1024 bytes from 10.1.4.2 port 9
+At time +3s client sent 1024 bytes to 10.1.5.2 port 9
+At time +3.0179s server received 1024 bytes from 10.1.2.1 port 49153
+At time +3.0179s server sent 1024 bytes to 10.1.2.1 port 49153
+At time +3.03581s client received 1024 bytes from 10.1.5.2 port 9
+```
+
+Delay calculation for one echo request (1054 bytes on the wire), hop by hop with the formula sheet:
+
+| Hop | <Math tex="t_{\text{trans}} = L/B" /> | <Math tex="t_{\text{prop}}" /> | Sum |
+| --- | --- | --- | --- |
+| n0 to n2 (10 Mbit/s) | 0.843 ms | 1 ms | 1.843 ms |
+| n2 to n3 (2 Mbit/s) | 4.216 ms | 10 ms | 14.216 ms |
+| n3 to n4 (10 Mbit/s) | 0.843 ms | 1 ms | 1.843 ms |
+| One way | | | 17.90 ms |
+| Round trip | | | 35.81 ms |
+
+The log shows the request at n4 at 2.0179 s and the reply at n0 at 2.03581 s, matching the table.
+
+#### Explanation
+
+Each `PointToPointHelper::Install` call takes a pair of nodes and produces two devices and one channel, so five calls build the five links; using two helpers lets the bridge have a lower rate and longer delay than the access links. Every link needs its own subnet because IPv4 forwarding chooses the outgoing interface by matching the destination against a network prefix; putting two links in one subnet would make that choice ambiguous. n2 and n3 have three interfaces each and forward because `InternetStackHelper` enables IP forwarding on every node. Without routes they would drop packets for 10.1.4.0 and 10.1.5.0; `Ipv4GlobalRoutingHelper::PopulateRoutingTables` reads the whole topology from the simulator (link-state style, like OSPF) and writes shortest-path routes into every node before the simulation starts. The bridge at 2 Mbit/s is the bottleneck that Sessions 3, 8 and 9 congest on purpose.
+
+## Viva Questions
+
+<Explain />
+
+- **Q:** Why does FlowMonitor show two flows for one TCP connection? **A:** Data and ACKs have swapped source and destination, so they are different five-tuples.
+- **Q:** Why does throughput fall as delay rises even when the window covers the BDP? **A:** Slow start needs a fixed number of RTTs to open the window; longer RTT means more seconds at low rate.
+- **Q:** State the bandwidth-delay product for 5 Mbit/s and RTT 200 ms. **A:** 10 to the 6 bits, 125 kB.
+- **Q:** Why is `rxBytes` from FlowMonitor larger than `GetTotalRx` from the sink? **A:** FlowMonitor counts at the IP layer, headers included; the sink counts payload.
+- **Q:** Why does the dumbbell need five subnets? **A:** Each point-to-point link is a separate IP network; forwarding matches destination prefixes to interfaces.
+- **Q:** What does `PopulateRoutingTables` do? **A:** Builds a global link-state view of the topology and installs shortest-path routes in every node.
+- **Q:** What is the bottleneck of the dumbbell and where would packets be dropped? **A:** The 2 Mbit/s bridge; drops happen in the transmit queue of n2's bridge device.
+- **Q:** What is the one-way delay of a 1024-byte echo across the dumbbell? **A:** About 17.9 ms: 0.843 + 1 on each access link and 4.216 + 10 on the bridge.
+
+## Common Mistakes
+
+<Explain />
+
+- Reading throughput off the ACK flow (flow 2) instead of the data flow.
+- Dividing by the simulation time (10 s) instead of the flow duration from first Tx to last Rx.
+- Assigning the same subnet to two links, which makes routing fail silently.
+- Forgetting `PopulateRoutingTables`, so the echo client sends and nothing ever comes back.
+- Building the dumbbell with `CsmaHelper`; the manual says point-to-point only.
+- Mixing up the manual's router names (n1, n2) with the code indices (n2, n3) in the record without saying so.
 
 ## Formula Sheet
 
@@ -112,5 +270,6 @@ The maximum throughput of one TCP flow is bounded by
 
 <Notebook />
 
-- Question 3: Measure the throughput (end to end) while varying latency in the network created
-- Question 4: Create a simple network topology having two client node on left side and two ser
+- `throughput_vs_latency.cc` listing and the FlowMonitor output of the four runs (1, 10, 50, 100 ms)
+- Throughput-versus-delay table with the BDP working and the slow-start explanation
+- `dumbbell.cc` listing, the dumbbell diagram with five subnets, n2's routing table and the two echo exchanges with the hop-by-hop delay table

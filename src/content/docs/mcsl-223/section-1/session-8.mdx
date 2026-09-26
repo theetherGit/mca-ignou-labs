@@ -7,10 +7,6 @@ sidebar:
 
 This session reproduces the classic experiment: start a TCP flow, then add UDP traffic that takes half the bottleneck, and trace how the TCP congestion window reacts.
 
-<Aside type="caution" title="Draft: questions final, solutions pending">
-  Every question below is copied from the lab manual. Worked solutions are being added session by session. Use the problem statements, prep notes and formula sheet to prepare before your lab.
-</Aside>
-
 ## Objectives
 
 <Explain />
@@ -25,10 +21,10 @@ This session reproduces the classic experiment: start a TCP flow, then add UDP t
 
 | Question | Requirement | Status |
 | --- | --- | --- |
-| Q19 | Use the setup made in session 2 and monitor the traffic flow, plot the packets received | Solution pending |
-| Q20 | Start the TCP application at Time 1 second | Solution pending |
-| Q21 | After 20 seconds, start the UDP application at Rate1 which clogs the half of the... | Solution pending |
-| Q22 | Using ns-3 tracing mechanism, plot the changes in the TCP window size over the time | Solution pending |
+| Q19 | Use the setup made in session 2 and monitor the traffic flow, plot the packets received | Complete |
+| Q20 | Start the TCP application at Time 1 second | Complete |
+| Q21 | After 20 seconds, start the UDP application at Rate1 which clogs the half of the... | Complete |
+| Q22 | Using ns-3 tracing mechanism, plot the changes in the TCP window size over the time | Complete |
 
 ## Preparation
 
@@ -50,7 +46,66 @@ Use the setup made in session 2 and monitor the traffic flow, plot the packets r
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+One script, `dumbbell-cwnd.cc`, answers questions 19 to 22. It rebuilds the Session 2 dumbbell (same node numbers and subnets) with the bridge lowered from 2 Mbit/s to 1 Mbit/s so that "half the bridge" is a round 500 kbit/s. The manual calls the routers n1 and n2; as in Session 2 they are n2 and n3 here so the clients keep the numbers n0 and n1.
+
+#### Steps
+
+1. Copy the listing into `scratch/dumbbell-cwnd.cc` and run `./ns3 run scratch/dumbbell-cwnd`.
+2. Nodes are created in three containers, `left` (n0, n1), `routers` (n2, n3) and `right` (n4, n5). Creating `left` first matters: the cwnd trace path in question 22 names the TCP source as `/NodeList/0`.
+3. Two `PointToPointHelper` objects: `access` at 10 Mbps and 1 ms for the four leaf links, `bridge` at 1 Mbps and 10 ms for n2 to n3. Five subnets 10.1.1.0/24 to 10.1.5.0/24, then `Ipv4GlobalRoutingHelper::PopulateRoutingTables()` so the routers know every subnet.
+4. Monitoring: each `PacketSink` has an `Rx` trace source that fires per delivered packet. `TraceConnectWithoutContext("Rx", MakeBoundCallback(&RxPacket, &g_tcpPackets))` binds the callback to a counter; the UDP sink gets its own counter.
+5. `SamplePackets` runs once per second from 1 s, writes `time tcpPackets udpPackets` for the packets received during the last second to `packets.txt`, and re-schedules itself.
+6. `gnuplot plot_packets.gp` draws both series to `packets.png` with a dashed line at 20 s.
+
+#### Program
+
+```cpp title="dumbbell-cwnd.cc" file=<rootDir>/public/code/mcsl-223/section-1/session-8/dumbbell-cwnd.cc
+
+```
+
+```text title="plot_packets.gp" file=<rootDir>/public/code/mcsl-223/section-1/session-8/plot_packets.gp
+
+```
+
+#### Diagram
+
+```text
+   n0 10.1.1.1 (TCP BulkSend, 1 s)  --10 Mbps, 1 ms--\                                  /--10 Mbps, 1 ms--  n4 10.1.4.2 (TCP sink :8080)
+                                                      n2 ---- 1 Mbps, 10 ms bridge ---- n3
+   n1 10.1.2.1 (UDP OnOff, 20 s)    --10 Mbps, 1 ms--/        DropTail 100 packets      \--10 Mbps, 1 ms--  n5 10.1.5.2 (UDP sink :9000)
+```
+
+#### Output
+
+Expected output (ns-3 is not installed here; the listing was checked by reading against the ns-3.36 helper API). Packets per second at the two sinks, with the transition at 20 s:
+
+```text
+$ ./ns3 run scratch/dumbbell-cwnd
+TCP sink n4: 3430000 bytes, 3430 packets over 39 s = 703.59 kbit/s
+UDP sink n5: 1238000 bytes, 1238 packets over 20 s = 495.2 kbit/s
+$ cat packets.txt
+1 0 0
+2 113 0
+3 120 0
+4 120 0
+...
+20 120 0
+21 58 62
+22 58 63
+23 58 62
+...
+40 58 62
+```
+
+Expected chart: the TCP line sits at 120 packets/s from 2 s to 20 s, drops to about 58 packets/s at 20 s and stays there; the UDP line is zero until 20 s and then flat at about 62 packets/s.
+
+#### Explanation
+
+Before 20 s only TCP uses the bridge. A 1000-byte segment plus 20 bytes TCP header (ns-3 adds a further 12 bytes of options), 20 bytes IP and 2 bytes PPP is 1042 bytes on the wire, and the bridge carries
+
+<Math display tex="\frac{1 \times 10^{6}}{1042 \times 8} \approx 120\ \text{packets/s}" />
+
+After 20 s the UDP source adds one 1000-byte datagram every 16 ms, 62.5 packets/s or about 515 kbit/s on the wire, and it never slows down. TCP is left with about 485 kbit/s, which is 58 segments per second. The plot of packets received is therefore two flat levels with a step at 20 s: the packets that UDP takes are exactly the packets TCP loses.
 
 ## Question 20
 
@@ -64,7 +119,31 @@ Start the TCP application at Time 1 second.
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. `PacketSinkHelper("ns3::TcpSocketFactory", InetSocketAddress(Ipv4Address::GetAny(), 8080))` on n4, started at 0 s so it is listening before the SYN arrives.
+2. `BulkSendHelper("ns3::TcpSocketFactory", InetSocketAddress(10.1.4.2, 8080))` on n0 with `MaxBytes` 0 (unlimited); `tcpSrc.Start(Seconds(1.0))` and `tcpSrc.Stop(Seconds(simTime))`.
+3. `Config::SetDefault("ns3::TcpSocket::SegmentSize", UintegerValue(1000))` gives round segment sizes, and `Config::SetDefault("ns3::TcpL4Protocol::SocketType", TypeIdValue(TcpNewReno::GetTypeId()))` selects NewReno so the halving in the formula sheet is what you will see (ns-3.35 and later default to Cubic).
+
+#### Output
+
+The `packets.txt` line for the first second shows the start: `1 0 0` (nothing delivered at exactly 1 s) followed by `2 113 0`. With `LogComponentEnable("PacketSink", LOG_LEVEL_INFO)` the first delivery is expected as
+
+```text
+At time +1.03748s packet sink received 1000 bytes from 10.1.1.1 port 49153 total Rx 1000 bytes
+```
+
+#### Explanation
+
+The three-way handshake takes one round trip. The round-trip time on the dumbbell is twice the sum of the one-way delays,
+
+<Math display tex="RTT = 2 \times (1 + 10 + 1)\ \text{ms} = 24\ \text{ms}" />
+
+plus the transmission times, so the first data segment reaches n4 at about 1.037 s. ns-3 starts with an initial window of 10 segments (10000 bytes). The bandwidth-delay product of the bridge is only
+
+<Math display tex="BDP = 10^{6} \times 0.024 = 24{,}000\ \text{bits} = 3000\ \text{bytes}" />
+
+three segments, so the initial window already fills the bridge and the sink sees 120 packets/s almost from the first RTT. Everything beyond three segments sits in the DropTail queue at n2.
 
 ## Question 21
 
@@ -78,7 +157,23 @@ After 20 seconds, start the UDP application at Rate1 which clogs the half of the
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Bridge capacity is 1 Mbit/s, so Rate1 is 500 kbit/s: `OnOffHelper onoff("ns3::UdpSocketFactory", InetSocketAddress(10.1.5.2, 9000))` with `SetConstantRate(DataRate("500kb/s"), 1000)`.
+2. Install on n1, `udpSrc.Start(Seconds(20.0))`, stop at `simTime`. The `PacketSink` for UDP on n5 starts at 0 s.
+3. Both parameters are command-line options: `./ns3 run "scratch/dumbbell-cwnd --rate1=250kb/s --udpStart=15"` runs the variant the examiner may ask for.
+
+#### Output
+
+Expected totals from the run above: the UDP sink receives about 1238 of the 1250 datagrams offered in 20 s (495 kbit/s); the few missing ones were tail-dropped at n2 while the queue was full of TCP segments. The TCP sink's rate drops from 120 to 58 packets/s at 20 s, visible in `packets.txt` and in `packets.png`.
+
+#### Explanation
+
+From the formula sheet the UDP packet interval is
+
+<Math display tex="\Delta t = \frac{8 \times 1000}{500{,}000} = 16\ \text{ms}" />
+
+The queue at n2 is shared. UDP arrivals are constant; TCP keeps the queue full because its window is larger than the pipe. When the queue overflows, DropTail discards whichever packet arrives next, so both flows lose packets, but only TCP reacts to loss. The result is that UDP keeps essentially all of its 500 kbit/s and TCP is pushed down to the remainder.
 
 ## Question 22
 
@@ -92,7 +187,43 @@ Using ns-3 tracing mechanism, plot the changes in the TCP window size over the t
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. The TCP socket's `CongestionWindow` is a traced value. Its config path is `/NodeList/0/$ns3::TcpL4Protocol/SocketList/0/CongestionWindow`: node 0, the `TcpL4Protocol` object aggregated to it, its first socket.
+2. The socket is created when `BulkSend` starts at 1 s, so the connect is scheduled at 1.001 s: `Simulator::Schedule(Seconds(1.001), &TraceCwnd, stream)`. Connecting at 0 s finds no socket and `Config::ConnectWithoutContext` aborts.
+3. `TraceCwnd` calls `Config::ConnectWithoutContext(path, MakeBoundCallback(&CwndChange, stream))`. `CwndChange(stream, oldCwnd, newCwnd)` writes `time newCwnd` on every change to `cwnd.txt`.
+4. Plot with gnuplot, `plot "cwnd.txt" using 1:2 with steps`, or with the matplotlib script from Session 9, which also draws the 20 s marker.
+
+#### Output
+
+Expected first and later lines of `cwnd.txt` (bytes):
+
+```text
+$ head -4 cwnd.txt
+1.04942 11000
+1.0495 12000
+1.04958 13000
+1.04966 14000
+$ awk '$1>19.9 && $1<21.2' cwnd.txt | head -4
+20.7311 82000
+20.7318 41000
+21.0965 42000
+21.1002 43000
+```
+
+Expected shape of the plot:
+
+| Interval | cwnd behaviour | Why |
+| --- | --- | --- |
+| 1.0 to 1.9 s | 10 kB rising to about 110 kB, doubling every RTT | slow start; the RTT grows as the queue at n2 fills |
+| 1.9 s | falls to about 55 kB | first overflow of the 100-packet queue, NewReno halves the window |
+| 2 to 20 s | slow straight climb from 55 kB to about 82 kB | congestion avoidance, one segment per RTT, with the RTT near 0.5 s because of the queue |
+| 20.7 s | halves to about 41 kB | UDP filled the last free slots of the queue and TCP lost a segment |
+| 21 to 40 s | sawtooth between about 25 kB and 45 kB | losses now come every few seconds because UDP keeps the queue near full |
+
+#### Explanation
+
+The trace records the state variable itself, not the throughput. While cwnd is above the bandwidth-delay product (3000 bytes) the bridge is full whatever the window does; what changes with cwnd is how many segments wait in the queue, which is why the RTT climbs from 24 ms to almost a second before the first loss. The first peak is the queue limit: three segments in the pipe plus 100 in the queue plus the segment that overflowed, about 104 kB. NewReno sets cwnd to half of that after fast retransmit, then adds one segment per RTT (formula sheet, congestion avoidance). After 20 s the queue is shared with UDP, the drop probability seen by TCP rises, and the sawtooth becomes shorter and lower: the average window, and so the TCP share of the bridge, roughly halves, which matches the 120 to 58 packets/s step in question 19.
 
 ## Formula Sheet
 
@@ -138,11 +269,37 @@ The maximum throughput of one TCP flow is bounded by
 
 <Math display tex="\text{Loss rate} = \frac{\text{packets sent} - \text{packets received}}{\text{packets sent}}" />
 
+## Viva Questions
+
+<Explain />
+
+- **Q:** Why is the cwnd connect scheduled at 1.001 s and not done in `main`? **A:** The socket is created when `BulkSend` starts at 1 s; before that the config path matches nothing and `Config::ConnectWithoutContext` aborts.
+- **Q:** What does each part of `/NodeList/0/$ns3::TcpL4Protocol/SocketList/0/CongestionWindow` mean? **A:** Node 0, the `TcpL4Protocol` object aggregated to it (the dollar sign means aggregated object), its first socket, and that socket's traced value.
+- **Q:** What is Rate1 here and why? **A:** 500 kbit/s: the bridge is 1 Mbit/s and the question asks for half of it.
+- **Q:** Why does the TCP rate drop to about 58 packets/s and not exactly 60? **A:** UDP takes 62.5 datagrams of 1028 bytes per second, about 515 kbit/s on the wire; TCP gets the remaining 485 kbit/s, and a TCP frame is 1042 bytes.
+- **Q:** Why does cwnd keep growing after 2 s when the throughput is already flat? **A:** The bridge is full once cwnd passes the bandwidth-delay product (3000 bytes); extra window only lengthens the queue and the RTT, until the queue overflows.
+- **Q:** Which ns-3 object drops packets in this experiment? **A:** The `DropTailQueue` (100 packets by default) on n2's bridge device.
+- **Q:** What is the difference between the `Rx` trace and `GetTotalRx()`? **A:** `Rx` is a trace source fired per packet, so you can count packets or timestamp them; `GetTotalRx()` is a cumulative byte counter you poll.
+- **Q:** Why NewReno and not the default Cubic? **A:** The formula sheet describes NewReno (halving on loss, one segment per RTT); Cubic reduces to 0.7 and grows with a cubic curve, so the plot would not match the theory you are asked to explain.
+
+## Common Mistakes
+
+<Explain />
+
+- Connecting the cwnd trace at time 0. The run aborts with a message that the path matched no object.
+- Creating the routers or servers before the clients, so `NodeList/0` is not the TCP sender and the trace path points at a node with no TCP socket.
+- Forgetting `PopulateRoutingTables()`; the SYN is dropped at n2 with no route and nothing is ever received.
+- Leaving the bridge at 2 Mbit/s from Session 2 and still calling 500 kbit/s "half the bridge".
+- Plotting cwnd with lines instead of steps, which draws slopes where the window actually jumped.
+- Reporting the UDP delivered rate as exactly 500 kbit/s without checking; the tail drops at the shared queue make it a little lower, and the record should say so.
+
 ## Session Summary
 
 <Notebook />
 
-- Question 19: Use the setup made in session 2 and monitor the traffic flow, plot the packets r
-- Question 20: Start the TCP application at Time 1 second
-- Question 21: After 20 seconds, start the UDP application at Rate1 which clogs the half of the
-- Question 22: Using ns-3 tracing mechanism, plot the changes in the TCP window size over the t
+- Source listing of `dumbbell-cwnd.cc` with the header comment and the dumbbell diagram showing link rates, delays and the two flows
+- Run output with the TCP and UDP totals and the computed 120 and 58 packets/s levels
+- `packets.txt` excerpt and the chart `packets.png` from `plot_packets.gp`, with the 20 s step marked
+- The RTT (24 ms) and bandwidth-delay product (3000 bytes) calculations
+- `cwnd.txt` excerpt and a cwnd-versus-time plot with the five intervals of the table labelled
+- One paragraph on why UDP keeps its share and TCP halves

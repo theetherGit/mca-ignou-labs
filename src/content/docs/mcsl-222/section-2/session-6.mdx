@@ -7,9 +7,7 @@ sidebar:
 
 Hibernate maps entity classes to tables so that persistence code is annotations and a session or entity manager call rather than hand-written SQL. This session persists the student admission data and performs a batch update.
 
-<Aside type="caution" title="Draft: questions final, solutions pending">
-  Every question below is copied from the lab manual. Worked solutions are being added session by session. Use the problem statements, prep notes and formula sheet to prepare before your lab.
-</Aside>
+The `student-admission` project gets a proper schema: five entities, a fresh `student_admission` database, full CRUD on students and a batch approval that assigns enrolment numbers in one transaction.
 
 ## Objectives
 
@@ -25,10 +23,10 @@ Hibernate maps entity classes to tables so that persistence code is annotations 
 
 | Question | Requirement | Status |
 | --- | --- | --- |
-| Q25 | Create a database for the student admission lifecycle and configure Hibernate and JPA... | Solution pending |
-| Q26 | Retrieve Student information using Hibernate and printing the value in the console | Solution pending |
-| Q27 | Create CRUD (Create/Save, Read/Fetch, Edit/Update, Delete) using Spring MVC and... | Solution pending |
-| Q28 | Apply batch update for student's admission approval using Spring MVC and Hibernate | Solution pending |
+| Q25 | Create a database for the student admission lifecycle and configure Hibernate and JPA... | Complete |
+| Q26 | Retrieve Student information using Hibernate and printing the value in the console | Complete |
+| Q27 | Create CRUD (Create/Save, Read/Fetch, Edit/Update, Delete) using Spring MVC and... | Complete |
+| Q28 | Apply batch update for student's admission approval using Spring MVC and Hibernate | Complete |
 
 ## Preparation
 
@@ -50,7 +48,78 @@ Create a database for the student admission lifecycle and configure Hibernate an
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+Life cycle: a student applies to one programme and picks courses (status `PENDING`); the office approves or rejects; every change is recorded. Tables and relations:
+
+| Table | Key columns | Relation |
+| --- | --- | --- |
+| programme | id, code, name | one programme has many courses |
+| course | id, code, title, programme_id | many courses belong to one programme |
+| student | id, enrolment_no, name, email, mobile, dob, address, hostel_required, programme_id, status, applied_on | many students apply to one programme |
+| student_course | id, student_id, course_id, enrolled_on | join entity between student and course (many-to-many with a date) |
+| admission_status | id, student_id, status, changed_on, remark | one student has many status changes, oldest first |
+
+#### Steps
+
+1. Run `student_admission.sql` in MySQL (Workbench or `mysql -u root -p < student_admission.sql`). It creates the database, five tables and seeds two programmes and six courses.
+2. Point `db.properties` at `student_admission`.
+3. Replace `JpaConfig.java` (batch size and validation mode are new) and confirm `pom.xml` matches the final listing below.
+4. In `com.ignou.lab.admission.entity` replace `Student.java` and add `Programme.java`, `Course.java`, `StudentCourse.java`, `AdmissionStatus.java`.
+5. Delete Session 5's `AdmissionController.java`, `admission-form.jsp` and `admission-result.jsp`; Q27 replaces them. Rebuild only after Q27's files are in place, because `AdmissionForm` changes shape.
+
+#### Program
+
+```sql title="student_admission.sql" file=<rootDir>/public/code/mcsl-222/section-2/session-6/student_admission.sql
+
+```
+
+```properties title="db.properties" file=<rootDir>/public/code/mcsl-222/section-2/session-6/db.properties
+
+```
+
+```java title="JpaConfig.java" file=<rootDir>/public/code/mcsl-222/section-2/session-6/JpaConfig.java
+
+```
+
+```java title="entity/Programme.java" file=<rootDir>/public/code/mcsl-222/section-2/session-6/Programme.java
+
+```
+
+```java title="entity/Course.java" file=<rootDir>/public/code/mcsl-222/section-2/session-6/Course.java
+
+```
+
+```java title="entity/Student.java" file=<rootDir>/public/code/mcsl-222/section-2/session-6/Student.java
+
+```
+
+```java title="entity/StudentCourse.java" file=<rootDir>/public/code/mcsl-222/section-2/session-6/StudentCourse.java
+
+```
+
+```java title="entity/AdmissionStatus.java" file=<rootDir>/public/code/mcsl-222/section-2/session-6/AdmissionStatus.java
+
+```
+
+```xml title="pom.xml (final)" file=<rootDir>/public/code/mcsl-222/section-2/session-6/pom.xml
+
+```
+
+#### Output
+
+Expected, checked by reading, not executed. `SHOW TABLES` in MySQL lists `admission_status, course, programme, student, student_course`. On deployment Tomcat's log shows Hibernate starting with the five entities and, because `hbm2ddl.auto=update` finds every table already there, no `create table` statements:
+
+```text
+HHH000412: Hibernate ORM core version 6.6.3.Final
+HHH10001005: Database info: Database JDBC URL [jdbc:mysql://localhost:3306/student_admission] ... Database version: 8.0
+```
+
+#### Explanation
+
+- `@Entity` plus `@Table` name the table; `@Id` with `IDENTITY` uses MySQL auto-increment; `@Column` sets name, length and nullability so that generated DDL and the script agree.
+- `@ManyToOne` with `@JoinColumn` owns the foreign key (`Course.programme`, `Student.programme`, both sides of `StudentCourse`). `@OneToMany(mappedBy = ...)` is the inverse, read-only view of the same key.
+- Student to Course is many-to-many, but the join row has its own data (`enrolled_on`), so it is modelled as the entity `StudentCourse` rather than `@ManyToMany`. `cascade = ALL, orphanRemoval = true` on `Student.courses` means saving or deleting a student saves or deletes its rows.
+- `AdmissionStatus` is the life cycle: one row per change, ordered by `@OrderBy("changedOn")`. `Student.status` keeps the current stage as a column for cheap filtering; `changeStatus()` is the only method that writes it, so column and history never disagree. `@Enumerated(STRING)` stores `PENDING`, not `0`.
+- `JpaConfig` is the Hibernate configuration: data source, entity package, provider, and the `hibernate.*` properties (`hbm2ddl.auto`, `show_sql`, `jdbc.batch_size` for Q28). Hibernate 6 detects the MySQL dialect from the connection, so no `dialect` property is needed. `validation.mode=none` stops Hibernate re-running the Bean Validation the controller already ran.
 
 ## Question 26
 
@@ -64,7 +133,35 @@ Retrieve Student information using Hibernate and printing the value in the conso
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Add `ConsoleApp.java` in `com.ignou.lab.admission`. It boots only `JpaConfig`, so no Tomcat is involved.
+2. Insert at least two students first (Q27's form, or two `INSERT` statements in MySQL).
+3. Run: `mvn -q compile exec:java -Dexec.mainClass=com.ignou.lab.admission.ConsoleApp`, or Run As → Java Application.
+
+#### Program
+
+```java title="ConsoleApp.java" file=<rootDir>/public/code/mcsl-222/section-2/session-6/ConsoleApp.java
+
+```
+
+#### Output
+
+Expected console output after two applications and one approval, checked by reading, not executed. The `Hibernate:` block with the SELECT (one query with three joins) prints first because `show_sql` is on, then:
+
+```text
+ID   ENROLMENT   NAME               PROG  STATUS    COURSES
+1    2026000001  Asha Verma         MCA   APPROVED  MCS-218,MCS-220
+2    -           Rahul Singh        MCA   PENDING   MCS-219
+2 student(s)
+```
+
+#### Explanation
+
+- The Spring-managed `EntityManagerFactory` is Hibernate underneath; `unwrap(SessionFactory.class)` exposes the native API, and `openSession()` gives a Hibernate `Session`.
+- The query is HQL. `join fetch s.programme` and `left join fetch s.courses sc left join fetch sc.course` load the related rows in the same SELECT; without them each `getProgramme()` or `getCourses()` would fire another query (the N+1 problem) or fail with `LazyInitializationException` once the session is closed.
+- `select distinct` collapses the duplicate `Student` rows the join produces (one per course).
+- `printf` with fixed widths makes the console a table; enrolment shows `-` while it is null, which is every pending application.
 
 ## Question 27
 
@@ -78,7 +175,65 @@ Create CRUD (Create/Save, Read/Fetch, Edit/Update, Delete) using Spring MVC and 
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Replace `StudentRepository.java` (all persistence), `AdmissionForm.java` (now carries `id`, `programmeId`, `courseIds`) and `StudentController.java` (all URLs under `/students`).
+2. Replace `students.jsp` and add `student-form.jsp` in `WEB-INF/views`. `head.jspf` from Session 5 stays.
+3. In `home.jsp` change the "Apply for admission" link to `/students/new`.
+4. Rebuild, redeploy and walk the cycle: `/students` (empty) → New application → Save → row appears → Edit → change the mobile, tick another course → Save → Delete → confirm → row gone. Watch Tomcat's console for the SQL at each step.
+
+| Operation | URL and method | Repository call | SQL Hibernate sends |
+| --- | --- | --- | --- |
+| Create | GET `/students/new`, POST `/students/save` | `save(form)` with `id` null | INSERT student, INSERT student_course per course, INSERT admission_status |
+| Read | GET `/students` | `findAll()` | one SELECT with joins |
+| Update | GET `/students/7/edit`, POST `/students/save` | `save(form)` with `id` 7 | UPDATE student, DELETE and INSERT student_course as needed |
+| Delete | POST `/students/7/delete` | `delete(7)` | DELETE admission_status, DELETE student_course, DELETE student |
+
+#### Program
+
+```java title="repo/StudentRepository.java" file=<rootDir>/public/code/mcsl-222/section-2/session-6/StudentRepository.java
+
+```
+
+```java title="web/AdmissionForm.java" file=<rootDir>/public/code/mcsl-222/section-2/session-6/AdmissionForm.java
+
+```
+
+```java title="web/StudentController.java" file=<rootDir>/public/code/mcsl-222/section-2/session-6/StudentController.java
+
+```
+
+```html title="WEB-INF/views/student-form.jsp" file=<rootDir>/public/code/mcsl-222/section-2/session-6/student-form.jsp
+
+```
+
+#### Output
+
+Expected, checked by reading, not executed. After saving a new application the list page shows a green alert `Saved Asha Verma (id 1)` and a row:
+
+```text
+[ ]  1  -  Asha Verma  MCA  MCS-218, MCS-220  PENDING  2026-09-26  Edit Delete
+```
+
+Tomcat's console for that save:
+
+```text
+Hibernate: insert into student (address,applied_on,dob,email,enrolment_no,hostel_required,mobile,name,programme_id,status) values (?,?,?,?,?,?,?,?,?,?)
+Hibernate: insert into student_course (course_id,enrolled_on,student_id) values (?,?,?)
+Hibernate: insert into student_course (course_id,enrolled_on,student_id) values (?,?,?)
+Hibernate: insert into admission_status (changed_on,remark,status,student_id) values (?,?,?,?)
+```
+
+Editing and saving with one course removed prints one `update student ...` and one `delete from student_course where id=?`. Delete prints the three DELETEs in child-first order.
+
+#### Explanation
+
+- Create and update share one method. `save(form)` either makes a `new Student()` or loads the existing one with `em.find`, copies the fields, and rebuilds the course list. A loaded entity is managed: Hibernate compares it with the snapshot at commit and issues an UPDATE only for what changed (dirty checking). `persist` is called only for a new object.
+- `em.getReference(Programme.class, id)` returns a proxy holding just the id; setting it writes the foreign key without a SELECT.
+- Clearing `s.getCourses()` and adding new `StudentCourse` objects is enough: `orphanRemoval` deletes rows no longer in the list, `cascade` inserts the new ones.
+- `formFor(id)` converts entity to form inside the transaction because `courses` is lazy; converting in the controller would hit a closed session.
+- The controller follows POST-redirect-GET: after a POST it redirects to `/students`, so a browser refresh does not save twice; `RedirectAttributes.addFlashAttribute` carries the message across the redirect.
+- Delete is a POST button, not a link, so a crawler or a prefetching browser cannot delete rows. The Delete buttons use the HTML `form` attribute to point at small forms outside the approval form, because forms cannot nest.
 
 ## Question 28
 
@@ -92,13 +247,92 @@ Apply batch update for student's admission approval using Spring MVC and Hiberna
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. `StudentRepository.approve()` and `StudentController.approve()` are in the Q27 listings; `students.jsp` below adds a checkbox to every `PENDING` row and an "Approve selected" button posting to `/students/approve`.
+2. `JpaConfig` (Q25) sets `hibernate.jdbc.batch_size=20` and `hibernate.order_updates=true`.
+3. Create five applications, tick three, press Approve selected. The three rows turn green with enrolment numbers; the alert reads `3 application(s) approved in one transaction`.
+4. Prove it is one transaction: temporarily change `%06d` in `approve()` to `%s` with a text longer than 12 characters so the third UPDATE fails on column length; after the exception none of the three is approved.
+
+The method under test, from `StudentRepository.java`:
+
+```java
+public int approve(List<Long> ids) {
+    int approved = 0;
+    for (Long id : ids) {
+        Student s = find(id);
+        if (s.getStatus() != Status.PENDING) {
+            continue;
+        }
+        s.setEnrolmentNo(String.format("%d%06d", Year.now().getValue(), id));
+        s.changeStatus(Status.APPROVED, "Approved in batch");
+        if (++approved % 20 == 0) {
+            em.flush();
+            em.clear();
+        }
+    }
+    return approved;
+}
+```
+
+#### Program
+
+```html title="WEB-INF/views/students.jsp" file=<rootDir>/public/code/mcsl-222/section-2/session-6/students.jsp
+
+```
+
+#### Output
+
+Expected, checked by reading, not executed. After approving ids 1, 2 and 4 the list shows:
+
+```text
+     1  2026000001  Asha Verma    MCA  MCS-218, MCS-220  APPROVED  2026-09-26  Edit Delete
+     2  2026000002  Rahul Singh   MCA  MCS-219           APPROVED  2026-09-26  Edit Delete
+[ ]  3  -           Priya Nair    BCA  BCS-011           PENDING   2026-09-26  Edit Delete
+     4  2026000004  Amit Kumar    MCA  MCS-220, MCS-221  APPROVED  2026-09-26  Edit Delete
+[ ]  5  -           Sunita Devi   BCA  BCS-012           PENDING   2026-09-26  Edit Delete
+```
+
+Tomcat's console prints the SELECT for each `find`, then at commit three `update student set ... status=? where id=?` statements followed by three `insert into admission_status` statements, grouped because of `order_updates`. `SELECT * FROM admission_status` in MySQL shows two rows for each approved student: `PENDING` from the application and `APPROVED` from this batch.
+
+#### Explanation
+
+- The browser sends the ticked ids as repeated `ids=1&ids=2&ids=4`; `@RequestParam List<Long> ids` collects them. Untick everything and `ids` is absent, so it is `required = false` with a null check.
+- `approve()` is one `@Transactional` method, so the whole batch is one transaction: all rows are approved or, if any UPDATE fails, the rollback leaves every row `PENDING`.
+- Inside the loop nothing is sent to MySQL; each managed `Student` is marked dirty. At flush time Hibernate emits the UPDATEs, and with `hibernate.jdbc.batch_size=20` the JDBC driver sends them in groups of 20 statements per round trip instead of one each.
+- `flush()` then `clear()` every 20 rows bounds memory: the persistence context does not hold thousands of entities for a long batch. For a lab-sized list the loop ends before the first flush and the commit does it all.
+- The status guard skips rows that are already approved or rejected, so re-submitting the same ids is harmless and returns a count of 0.
+- The enrolment number is year plus zero-padded id, unique because the id is; a real registry would take the next value from a sequence table inside the same transaction.
+
+## Viva Questions
+
+<Explain />
+
+- **Q:** Why is `StudentCourse` an entity instead of `@ManyToMany`? **A:** The join row carries `enrolled_on`; `@ManyToMany` cannot hold extra columns.
+- **Q:** What does `orphanRemoval = true` do? **A:** When a child is removed from the collection of a managed parent, Hibernate deletes its row at flush.
+- **Q:** Managed, detached, transient: what are they? **A:** Transient: new object, no row. Managed: loaded or persisted inside an open persistence context; changes are tracked. Detached: was managed, the context closed; changes are not tracked.
+- **Q:** What is `LazyInitializationException`? **A:** Touching a lazy collection after the session closed. Fix with `join fetch` or by doing the access inside the transaction.
+- **Q:** What is the N+1 problem? **A:** One query for the list and one more per row for a relation; `join fetch` turns it into one query.
+- **Q:** How does the batch approval stay atomic? **A:** One `@Transactional` method; commit at the end or rollback on exception, nothing in between is visible.
+- **Q:** Why `flush` and `clear` every 20? **A:** `flush` sends the pending statements, `clear` frees the managed entities; together they keep memory flat on large batches.
+- **Q:** Where is the Hibernate dialect configured? **A:** Nowhere; Hibernate 6 reads the database metadata from the connection and picks `MySQLDialect` itself.
+
+## Common Mistakes
+
+<Explain />
+
+- Accessing `student.courses` in the JSP after a `findAll` without `join fetch`, then reporting a `LazyInitializationException` as a Hibernate bug.
+- Calling `em.merge` on a detached entity for every update instead of loading and changing the managed one; the collection handling gets unpredictable.
+- Putting `@Transactional` on the controller instead of the repository, which drags the JSP rendering into the transaction.
+- Deleting through a GET link; browsers prefetch links and delete rows nobody clicked.
+- Setting `hbm2ddl.auto=create` in the lab and losing every row on each redeploy.
+- Forgetting `distinct` in the fetch-join query and showing each student once per course.
 
 ## Session Summary
 
 <Notebook />
 
-- Question 25: Create a database for the student admission lifecycle and configure Hibernate an
-- Question 26: Retrieve Student information using Hibernate and printing the value in the conso
-- Question 27: Create CRUD (Create/Save, Read/Fetch, Edit/Update, Delete) using Spring MVC and 
-- Question 28: Apply batch update for student's admission approval using Spring MVC and Hiberna
+- Question 25: `student_admission` schema (five tables), entities `Programme`, `Course`, `Student`, `StudentCourse`, `AdmissionStatus`, Hibernate configured in `JpaConfig`
+- Question 26: `ConsoleApp` reading students through the Hibernate `Session` and HQL fetch joins, printed as a console table
+- Question 27: `StudentRepository` and `StudentController` with list, new, edit, save and delete, views `students.jsp` and `student-form.jsp`
+- Question 28: batch approval of ticked applications in one transaction with JDBC batching, enrolment numbers assigned, history rows written

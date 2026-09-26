@@ -1,0 +1,17 @@
+% study_marks.arff : 10 students, hours studied per week vs marks out of 100
+@relation study_marks
+
+@attribute hours numeric
+@attribute marks numeric
+
+@data
+2,35
+4,48
+5,50
+6,58
+8,66
+9,70
+10,74
+12,80
+14,89
+16,94

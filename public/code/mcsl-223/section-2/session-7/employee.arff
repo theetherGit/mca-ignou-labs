@@ -1,0 +1,41 @@
+% employee.arff : 30 employees, class = promoted
+% promotion follows experience and salary; two noisy rows and two outliers on purpose
+@relation employee
+
+@attribute age numeric
+@attribute experience numeric
+@attribute department {sales,hr,it,finance}
+@attribute salary numeric
+@attribute promoted {yes,no}
+
+@data
+24,1,sales,28,no
+25,2,it,35,no
+26,3,hr,30,no
+27,2,finance,33,no
+28,4,sales,38,no
+29,5,it,45,no
+30,6,hr,42,yes
+31,7,finance,55,yes
+32,8,sales,52,yes
+33,9,it,68,yes
+34,10,hr,58,yes
+35,11,finance,72,yes
+36,12,sales,65,yes
+37,13,it,85,yes
+38,14,hr,70,yes
+39,15,finance,90,yes
+40,16,sales,78,yes
+42,18,it,105,yes
+44,20,hr,88,yes
+46,22,finance,120,yes
+23,0,it,25,no
+25,1,hr,27,no
+27,3,sales,36,no
+29,4,finance,40,no
+30,5,it,48,no
+31,6,sales,44,no
+34,9,hr,60,no
+36,12,it,80,yes
+58,35,finance,250,yes
+22,0,sales,15,no

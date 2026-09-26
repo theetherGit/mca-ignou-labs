@@ -1,0 +1,49 @@
+/* src/main/webapp/css/admission.css : custom styling on top of Bootstrap */
+:root {
+  --ignou-maroon: #7b1e3c;
+  --ignou-sand: #f6f1ea;
+}
+
+body {
+  background: var(--ignou-sand);
+}
+
+.navbar {
+  background: var(--ignou-maroon);
+}
+
+.card-form {
+  max-width: 760px;
+  margin: 2rem auto;
+  border: 0;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08);
+}
+
+.card-title {
+  color: var(--ignou-maroon);
+  border-bottom: 2px solid var(--ignou-maroon);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.btn-primary {
+  background: var(--ignou-maroon);
+  border-color: var(--ignou-maroon);
+}
+
+.btn-primary:hover {
+  background: #5d1630;
+  border-color: #5d1630;
+}
+
+/* red asterisk after every mandatory label */
+label.required::after {
+  content: " *";
+  color: #dc3545;
+}
+
+/* the lab record is printed: hide navigation, keep the data */
+@media print {
+  .navbar, .btn { display: none; }
+  .card-form { box-shadow: none; max-width: none; margin: 0; }
+}

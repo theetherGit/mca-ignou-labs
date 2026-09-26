@@ -7,10 +7,6 @@ sidebar:
 
 This session is a guided reading of one Apriori run so that every number in the output, from the run information to the large itemset counts, can be reproduced by hand.
 
-<Aside type="caution" title="Draft: questions final, solutions pending">
-  Every question below is copied from the lab manual. Worked solutions are being added session by session. Use the problem statements, prep notes and formula sheet to prepare before your lab.
-</Aside>
-
 ## Objectives
 
 <Explain />
@@ -25,7 +21,7 @@ This session is a guided reading of one Apriori run so that every number in the 
 
 | Question | Requirement | Status |
 | --- | --- | --- |
-| Q12 | Perform the following | Solution pending |
+| Q12 | Perform the following | Complete |
 
 ## Preparation
 
@@ -51,7 +47,201 @@ Perform the following:
 
 <Notebook />
 
-Solution pending. Prepare using the notes above; the worked answer will appear here.
+#### Steps
+
+1. Explorer, Open file, `data/contact-lenses.arff`. In the Attributes list click each of the five names: the Type field reads Nominal every time, Missing is 0, and the label tables show age 8, 8, 8; spectacle-prescrip 12, 12; astigmatism 12, 12; tear-prod-rate 12, 12; contact-lenses soft 5, hard 4, none 15.
+2. Associate tab, Choose, `weka.associations.Apriori`. Click the name, tick `outputItemSets` so the itemsets are printed as well, leave everything else at its default, OK, Start.
+3. Read the Run information, then the Associator model, then the rules, against the hand calculations below. The same output comes from `python3 apriori.py contact-lenses.arff -I` (the program from Session 3).
+
+#### Output
+
+```text
+=== Run information ===
+
+Scheme:       weka.associations.Apriori -N 10 -T 0 -C 0.9 -D 0.05 -U 1.0 -M 0.1 -S -1.0 -c -1
+Relation:     contact-lenses
+Instances:    24
+Attributes:   5
+              age
+              spectacle-prescrip
+              astigmatism
+              tear-prod-rate
+              contact-lenses
+=== Associator model (full training set) ===
+
+
+Apriori
+=======
+
+Minimum support: 0.2 (5 instances)
+Minimum metric <confidence>: 0.9
+Number of cycles performed: 16
+
+Generated sets of large itemsets:
+
+Size of set of large itemsets L(1): 11
+
+Large Itemsets L(1):
+age=young 8
+age=pre-presbyopic 8
+age=presbyopic 8
+spectacle-prescrip=myope 12
+spectacle-prescrip=hypermetrope 12
+astigmatism=no 12
+astigmatism=yes 12
+tear-prod-rate=reduced 12
+tear-prod-rate=normal 12
+contact-lenses=soft 5
+contact-lenses=none 15
+
+Size of set of large itemsets L(2): 21
+
+Large Itemsets L(2):
+age=pre-presbyopic contact-lenses=none 5
+age=presbyopic contact-lenses=none 6
+spectacle-prescrip=myope astigmatism=no 6
+spectacle-prescrip=myope astigmatism=yes 6
+spectacle-prescrip=myope tear-prod-rate=reduced 6
+spectacle-prescrip=myope tear-prod-rate=normal 6
+spectacle-prescrip=myope contact-lenses=none 7
+spectacle-prescrip=hypermetrope astigmatism=no 6
+spectacle-prescrip=hypermetrope astigmatism=yes 6
+spectacle-prescrip=hypermetrope tear-prod-rate=reduced 6
+spectacle-prescrip=hypermetrope tear-prod-rate=normal 6
+spectacle-prescrip=hypermetrope contact-lenses=none 8
+astigmatism=no tear-prod-rate=reduced 6
+astigmatism=no tear-prod-rate=normal 6
+astigmatism=no contact-lenses=soft 5
+astigmatism=no contact-lenses=none 7
+astigmatism=yes tear-prod-rate=reduced 6
+astigmatism=yes tear-prod-rate=normal 6
+astigmatism=yes contact-lenses=none 8
+tear-prod-rate=reduced contact-lenses=none 12
+tear-prod-rate=normal contact-lenses=soft 5
+
+Size of set of large itemsets L(3): 6
+
+Large Itemsets L(3):
+spectacle-prescrip=myope tear-prod-rate=reduced contact-lenses=none 6
+spectacle-prescrip=hypermetrope astigmatism=yes contact-lenses=none 5
+spectacle-prescrip=hypermetrope tear-prod-rate=reduced contact-lenses=none 6
+astigmatism=no tear-prod-rate=reduced contact-lenses=none 6
+astigmatism=no tear-prod-rate=normal contact-lenses=soft 5
+astigmatism=yes tear-prod-rate=reduced contact-lenses=none 6
+
+Best rules found:
+
+ 1. tear-prod-rate=reduced 12 ==> contact-lenses=none 12    <conf:(1)> lift:(1.6) lev:(0.19) [4] conv:(4.5)
+ 2. spectacle-prescrip=myope tear-prod-rate=reduced 6 ==> contact-lenses=none 6    <conf:(1)> lift:(1.6) lev:(0.09) [2] conv:(2.25)
+ 3. spectacle-prescrip=hypermetrope tear-prod-rate=reduced 6 ==> contact-lenses=none 6    <conf:(1)> lift:(1.6) lev:(0.09) [2] conv:(2.25)
+ 4. astigmatism=no tear-prod-rate=reduced 6 ==> contact-lenses=none 6    <conf:(1)> lift:(1.6) lev:(0.09) [2] conv:(2.25)
+ 5. astigmatism=yes tear-prod-rate=reduced 6 ==> contact-lenses=none 6    <conf:(1)> lift:(1.6) lev:(0.09) [2] conv:(2.25)
+ 6. contact-lenses=soft 5 ==> astigmatism=no 5    <conf:(1)> lift:(2) lev:(0.1) [2] conv:(2.5)
+ 7. contact-lenses=soft 5 ==> tear-prod-rate=normal 5    <conf:(1)> lift:(2) lev:(0.1) [2] conv:(2.5)
+ 8. tear-prod-rate=normal contact-lenses=soft 5 ==> astigmatism=no 5    <conf:(1)> lift:(2) lev:(0.1) [2] conv:(2.5)
+ 9. astigmatism=no contact-lenses=soft 5 ==> tear-prod-rate=normal 5    <conf:(1)> lift:(2) lev:(0.1) [2] conv:(2.5)
+10. contact-lenses=soft 5 ==> astigmatism=no tear-prod-rate=normal 5    <conf:(1)> lift:(4) lev:(0.16) [3] conv:(3.75)
+```
+
+#### Explanation
+
+**Run information.** The Scheme line is the option string: `-N 10` numRules, `-T 0` metricType confidence (1 lift, 2 leverage, 3 conviction), `-C 0.9` minMetric, `-D 0.05` delta, `-U 1.0` upperBoundMinSupport, `-M 0.1` lowerBoundMinSupport, `-S -1.0` significance test off, `-c -1` class index last (unused because `car` is false). Relation, Instances 24 and the five attribute names come from the ARFF header.
+
+**Minimum support 0.2 (5 instances).** WEKA starts at <Math tex="1.0 - 0.05 = 0.95" /> and lowers by 0.05 per cycle; cycle 16 is at <Math tex="0.95 - 15 \times 0.05 = 0.2" />, which is why Number of cycles performed is 16. The instance count is <Math tex="\lfloor 0.2 \times 24 + 0.5 \rfloor = \lfloor 5.3 \rfloor = 5" />. It stopped there because 10 rules passed; at 0.3 (7 instances) only one rule passes and at 0.25 (6 instances) only five (the first five in the list), both fewer than numRules.
+
+**L(1) = 11.** There are 12 distinct items; every count except `contact-lenses=hard` (4) is at least 5:
+
+| Attribute | Items and counts | Large |
+| --- | --- | --- |
+| age | young 8, pre-presbyopic 8, presbyopic 8 | 3 |
+| spectacle-prescrip | myope 12, hypermetrope 12 | 2 |
+| astigmatism | no 12, yes 12 | 2 |
+| tear-prod-rate | reduced 12, normal 12 | 2 |
+| contact-lenses | soft 5, hard 4, none 15 | 2 |
+
+**L(2) = 21.** Pairs come from different attributes, so there are <Math tex="\binom{11}{2} - 7 = 48" /> candidates (55 pairs minus the 7 same-attribute pairs). The data is a full factorial of age, spectacle-prescrip, astigmatism and tear-prod-rate, so counts follow from the design:
+
+| Pair type | Count | Large pairs |
+| --- | --- | --- |
+| two of spectacle-prescrip, astigmatism, tear-prod-rate | <Math tex="\frac{24}{2 \times 2} = 6" /> each | all 12 |
+| age with any of those three | <Math tex="\frac{24}{3 \times 2} = 4" /> | none of 18 |
+| age with none | young 4, pre-presbyopic 5, presbyopic 6 | 2 |
+| age with soft | 2, 2, 1 | none |
+| binary attribute with none | myope 7, hypermetrope 8, no 7, yes 8, reduced 12, normal 3 | 5 |
+| binary attribute with soft | myope 2, hypermetrope 3, no 5, yes 0, reduced 0, normal 5 | 2 |
+
+12 + 2 + 5 + 2 = 21, the 21 itemsets WEKA lists.
+
+**L(3) = 6.** A triple is a candidate only if all three of its pairs are in L(2). No triple can contain an age item with a binary attribute (those pairs failed), so age drops out. Triples of three binary attributes have count <Math tex="\frac{24}{8} = 3" />, too small. What is left is two binary items plus a lens value:
+
+| Triple | Count | Why |
+| --- | --- | --- |
+| myope, reduced, none | 6 | every reduced row is none |
+| hypermetrope, reduced, none | 6 | same |
+| no, reduced, none | 6 | same |
+| yes, reduced, none | 6 | same |
+| hypermetrope, yes, none | 5 | 6 rows, only the young normal one is hard |
+| no, normal, soft | 5 | 6 rows, only the presbyopic myope one is none |
+| myope, no, none | 4 | fails: two of the six rows are soft |
+| myope, yes, none | 3 | fails: three are hard |
+
+**No L(4).** Every 4-itemset would need all four of its triples large; for example myope, no, reduced, none needs myope, no, none, which has count 4. So the algorithm stops and prints nothing for L(4).
+
+**The rules.** For each of the ten rules, support is the count after the arrow over 24 and confidence is the count after the arrow over the count before it:
+
+| Rule | Before, after | Support | Confidence | Lift |
+| --- | --- | --- | --- | --- |
+| 1. reduced ==> none | 12, 12 | <Math tex="\frac{12}{24} = 0.5" /> | <Math tex="\frac{12}{12} = 1" /> | <Math tex="\frac{1}{15/24} = 1.6" /> |
+| 2. myope, reduced ==> none | 6, 6 | <Math tex="\frac{6}{24} = 0.25" /> | <Math tex="\frac{6}{6} = 1" /> | 1.6 |
+| 3. hypermetrope, reduced ==> none | 6, 6 | 0.25 | 1 | 1.6 |
+| 4. no, reduced ==> none | 6, 6 | 0.25 | 1 | 1.6 |
+| 5. yes, reduced ==> none | 6, 6 | 0.25 | 1 | 1.6 |
+| 6. soft ==> no | 5, 5 | <Math tex="\frac{5}{24} = 0.21" /> | <Math tex="\frac{5}{5} = 1" /> | <Math tex="\frac{1}{12/24} = 2" /> |
+| 7. soft ==> normal | 5, 5 | 0.21 | 1 | 2 |
+| 8. normal, soft ==> no | 5, 5 | 0.21 | 1 | 2 |
+| 9. no, soft ==> normal | 5, 5 | 0.21 | 1 | 2 |
+| 10. soft ==> no, normal | 5, 5 | 0.21 | 1 | <Math tex="\frac{1}{6/24} = 4" /> |
+
+Rules that were generated and rejected at this support: `no, normal ==> soft` with confidence <Math tex="\frac{5}{6} = 0.83" />, `hypermetrope, yes ==> none` with <Math tex="\frac{5}{6} = 0.83" />, `presbyopic ==> none` with <Math tex="\frac{6}{8} = 0.75" />, `pre-presbyopic ==> none` with <Math tex="\frac{5}{8} = 0.625" />, and `hypermetrope ==> none` with <Math tex="\frac{8}{12} = 0.67" />. All fall below 0.9.
+
+The other metrics on rule 1 check the same way. Leverage is <Math tex="\frac{12}{24} - \frac{12}{24} \times \frac{15}{24} = 0.5 - 0.3125 = 0.19" />, and the bracketed 4 is that leverage times 24, truncated (4.5 becomes 4). Conviction is <Math tex="\frac{12 \times (24 - 15)/24}{12 - 12 + 1} = 4.5" />; WEKA adds 1 to the denominator so that a rule with confidence 1 does not divide by zero.
+
+**What the rules mean.** Rule 1 is the clinical fact in the data: reduced tear production rules out contact lenses, in every one of the 12 cases. Rules 2 to 5 are the same fact with an extra irrelevant condition on the left; they are not new information, and their lift is the same 1.6. Rules 6 to 10 describe soft-lens wearers: all five have no astigmatism and normal tear production, and rule 10 says both at once with lift 4, because that combination occurs in only 6 of 24 rows. The reverse rule (no astigmatism and normal tears predict soft) is the one a doctor would want, but it has confidence 0.83 and misses the cut, which shows that Apriori rules run from frequent premise to frequent consequent and are not classification rules; for those, set `car` True and `classIndex` to 5.
+
+## Viva Questions
+
+<Explain />
+
+**Q:** Why does the output say 16 cycles when the support went from 1.0 to 0.2?
+**A:** The first cycle already runs at 0.95; sixteen steps of 0.05 from 0.95 end at 0.2.
+
+**Q:** How does WEKA turn support 0.2 into 5 instances on 24 rows?
+**A:** It rounds 0.2 times 24 = 4.8 to the nearest integer.
+
+**Q:** Why is `contact-lenses=hard` not in L(1)?
+**A:** It occurs 4 times, below the 5 needed.
+
+**Q:** Why are there no age items in L(3)?
+**A:** Every pair of an age value with a binary attribute value has count 4, so no such pair is in L(2), and Apriori only builds triples from large pairs.
+
+**Q:** What are the two numbers in `tear-prod-rate=reduced 12 ==> contact-lenses=none 12`?
+**A:** 12 rows match the premise; 12 of them also match the consequent; confidence is their ratio.
+
+**Q:** Which rule has the highest lift and why?
+**A:** Rule 10, lift 4: its consequent (no astigmatism and normal tears) covers 25 percent of rows but 100 percent of soft-lens rows.
+
+**Q:** Why is the useful rule "no astigmatism and normal tears imply soft" missing?
+**A:** Its confidence is 5 of 6, below 0.9; one presbyopic myope with those values gets no lenses.
+
+## Common Mistakes
+
+<Explain />
+
+- Reading the number after the arrow as the confidence; it is a count, confidence is the ratio in brackets.
+- Reporting support as the count before the arrow; support uses the joint count after the arrow divided by 24.
+- Counting L(2) candidates as 55 and forgetting to drop pairs from the same attribute, which can never occur together.
+- Assuming the 10 rules are all the rules with confidence 0.9; they are the top 10 at the final support, and more appear if `numRules` is raised.
+- Treating rules 2 to 5 as new findings when they only restate rule 1 with an extra condition.
 
 ## Formula Sheet
 
@@ -111,8 +301,9 @@ Hierarchical (agglomerative) clustering merges the two closest clusters each ste
 
 DBSCAN calls a point a core point when at least <Math tex="\text{minPts}" /> points lie within radius <Math tex="\varepsilon" />; clusters grow from core points, and points reachable from none are noise.
 
+
 ## Session Summary
 
 <Notebook />
 
-- Question 12: Perform the following:
+- Question 12: contact-lenses.arff loaded and confirmed all nominal; Apriori run with defaults and `outputItemSets`; every line of the Run information decoded; the support of 0.2 and 16 cycles, L(1) = 11, L(2) = 21, L(3) = 6, and the support, confidence and lift of all ten rules recomputed by hand and matched to the output

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<!-- src/main/webapp/student-form.html : Q2 input form.
+     method="post" sends the fields in the request body over HTTP;
+     change to method="get" once to see them appear in the URL instead. -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Information Form</title>
+</head>
+<body>
+  <h2>Student Information</h2>
+  <form action="studentInfo" method="post">
+    <p><label>Enrolment No: <input type="text" name="enrolmentNo" required></label></p>
+    <p><label>Name: <input type="text" name="name" required></label></p>
+    <p><label>Date of Birth: <input type="date" name="dob"></label></p>
+    <p><label>Email: <input type="email" name="email"></label></p>
+    <p><label>Mobile: <input type="tel" name="mobile" pattern="[0-9]{10}"></label></p>
+    <p><label>Programme:
+      <select name="programme">
+        <option>MCA</option>
+        <option>BCA</option>
+        <option>MSc</option>
+      </select></label></p>
+    <p>Courses:
+      <label><input type="checkbox" name="courses" value="MCS-218"> MCS-218</label>
+      <label><input type="checkbox" name="courses" value="MCS-219"> MCS-219</label>
+      <label><input type="checkbox" name="courses" value="MCS-220"> MCS-220</label>
+      <label><input type="checkbox" name="courses" value="MCS-221"> MCS-221</label>
+    </p>
+    <p><button type="submit">Submit</button> <button type="reset">Reset</button></p>
+  </form>
+</body>
+</html>
