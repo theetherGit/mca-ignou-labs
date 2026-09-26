@@ -663,6 +663,29 @@ body:not(:has([data-mobile-sidebar])) [data-menu-btn] {
 [data-mode="dark"] .nb-tabs-hint {
 	color: var(--nb-primary);
 }
+.nb-tabs-hint {
+	flex-wrap: wrap;
+}
+.nb-tabs-pick {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+	margin-left: auto;
+	color: var(--nb-foreground);
+}
+.nb-tabs-pick select {
+	font: inherit;
+	padding: 0.1rem 0.4rem;
+	border: 1px solid var(--nb-border);
+	border-radius: 0.3rem;
+	background: var(--nb-card);
+	color: var(--nb-foreground);
+}
+@media print {
+	.nb-tabs-pick {
+		display: none;
+	}
+}
 
 /* Pull a mark that directly follows a heading up under it. */
 .docs-content h2 + p > .nb-mark:only-child,

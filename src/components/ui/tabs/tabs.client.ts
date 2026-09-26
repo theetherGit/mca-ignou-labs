@@ -60,6 +60,37 @@ function initTabContainer(container: HTMLElement): () => void {
     });
   }
 
+  // "Your language" picker (record="one" groups): mirrors the synced label so a
+  // single choice applies to every language tab group on every page.
+  const pick = container.querySelector<HTMLSelectElement>("[data-nb-lang-pick]");
+  if (pick && syncKey && tablist) {
+    const key = `ui-synced-tabs__${syncKey}`;
+    const labels = Array.from(container.querySelectorAll<HTMLElement>("[data-nb-tabs-content]"))
+      .filter((p) => p.closest("[data-nb-tabs]") === container)
+      .map((p) => p.dataset.nbTabLabel ?? "");
+    for (const l of labels) {
+      const o = document.createElement("option");
+      o.value = l;
+      o.textContent = l;
+      pick.appendChild(o);
+    }
+    let saved: string | null = null;
+    try {
+      saved = localStorage.getItem(key);
+    } catch {}
+    pick.value = saved && labels.includes(saved) ? saved : labels[0] ?? "";
+    pick.addEventListener("change", () => {
+      try {
+        localStorage.setItem(key, pick.value);
+      } catch {}
+      window.dispatchEvent(new CustomEvent("ui-tab-sync", { detail: { key, label: pick.value, origin: null } }));
+    });
+    window.addEventListener("ui-tab-sync", (e) => {
+      const d = (e as CustomEvent).detail;
+      if (d?.key === key && labels.includes(d.label)) pick.value = d.label;
+    });
+  }
+
   const instance = initTabs({
     container,
     tabSelector: "[data-nb-tabs-trigger]",

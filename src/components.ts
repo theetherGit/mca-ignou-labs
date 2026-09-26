@@ -11,6 +11,7 @@ import Preview from "./components/Preview.astro";
 import Notebook from "./components/Notebook.astro";
 import Explain from "./components/Explain.astro";
 import Math from "./components/Math.astro";
+import LanguagePicker from "./components/LanguagePicker.astro";
 import { Card } from "./components/ui/card";
 import { CardGrid } from "./components/ui/card-grid";
 import { PackageManagers } from "./components/ui/package-managers";
@@ -21,6 +22,7 @@ export const components = {
   Aside,
   Card,
   Explain,
+  LanguagePicker,
   Math,
   CardGrid,
   PackageManagers,

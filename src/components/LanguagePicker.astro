@@ -1,0 +1,35 @@
+---
+/**
+ * Standalone "your language" picker. Writes the same localStorage key the
+ * synced language tabs use (ui-synced-tabs__lang), so every <Tabs syncKey="lang">
+ * on every page opens on the chosen language.
+ */
+const LANGS = ["C", "C++", "Python", "Rust", "TypeScript"];
+---
+<label class="nb-lang-picker not-prose inline-flex items-center gap-2 text-sm">
+  <span class="font-medium text-foreground">Your language for the lab record</span>
+  <select data-nb-lang-global class="rounded-md border border-border bg-card px-2 py-1 text-sm text-foreground">
+    <option value="">Not chosen yet</option>
+    {LANGS.map((l) => <option value={l}>{l}</option>)}
+  </select>
+</label>
+
+<script>
+  const KEY = "ui-synced-tabs__lang";
+  document.querySelectorAll<HTMLSelectElement>("[data-nb-lang-global]").forEach((sel) => {
+    const saved = localStorage.getItem(KEY) ?? "";
+    if ([...sel.options].some((o) => o.value === saved)) sel.value = saved;
+    sel.addEventListener("change", () => {
+      if (!sel.value) {
+        localStorage.removeItem(KEY);
+        return;
+      }
+      localStorage.setItem(KEY, sel.value);
+      window.dispatchEvent(new CustomEvent("ui-tab-sync", { detail: { key: KEY, label: sel.value, origin: null } }));
+    });
+    window.addEventListener("ui-tab-sync", (e) => {
+      const d = (e as CustomEvent).detail;
+      if (d?.key === KEY && [...sel.options].some((o) => o.value === d.label)) sel.value = d.label;
+    });
+  });
+</script>

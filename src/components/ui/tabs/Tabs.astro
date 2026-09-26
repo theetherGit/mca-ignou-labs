@@ -26,7 +26,7 @@ interface Props extends HTMLAttributes<"div"> {
 const { syncKey, record = syncKey === "lang" ? "one" : "none", class: className, ...attrs } = Astro.props;
 const hint =
   record === "one"
-    ? "Lab record: write one language only, the one your lab uses. The other tabs are the same solution for comparison."
+    ? "Lab record: write one language only. Pick yours once and every page opens on it; the other tabs are the same solution for comparison."
     : record === "all"
       ? "Lab record: every tab is one file of the answer. Write all of them."
       : null;
@@ -41,7 +41,13 @@ const hint =
   {hint && (
     <p class="nb-tabs-hint" role="note">
       <span aria-hidden="true" class="nb-tabs-hint-mark"></span>
-      {hint}
+      <span>{hint}</span>
+      {record === "one" && (
+        <label class="nb-tabs-pick">
+          <span>Your language</span>
+          <select data-nb-lang-pick aria-label="Preferred language for the lab record"></select>
+        </label>
+      )}
     </p>
   )}
   <TabsList />
