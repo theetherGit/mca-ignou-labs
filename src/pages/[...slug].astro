@@ -14,7 +14,7 @@ import {
   stripBase,
 } from "@cloudflare/nimbus-docs/runtime";
 import { components } from "../components";
-import PrintButton from "../components/PrintButton.astro";
+import PageTools from "../components/PageTools.astro";
 
 export const prerender = true;
 export const getStaticPaths = getDocsStaticPaths;
@@ -73,6 +73,6 @@ const socialImage = entry.data.socialImage ?? `/og/${entry.id}.png`;
   collection={entry.collection}
   entryId={entry.id}
 >
-  <PrintButton />
+  <PageTools entryId={entry.id} />
   <Content components={components} />
 </DocsLayout>

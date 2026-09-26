@@ -1,0 +1,46 @@
+---
+/**
+ * Print and download row shown at the top of every docs page.
+ * Download targets are produced by scripts/build-pdfs.mjs after `astro build`:
+ *   /downloads/<section-key>/<section-key>-session-NN.pdf
+ *   /downloads/<section-key>.zip · /downloads/<course>.zip · /downloads/semester-N.zip
+ */
+import { withBase } from "@cloudflare/nimbus-docs/runtime";
+
+interface Props {
+  entryId: string;
+}
+const { entryId } = Astro.props;
+
+const SEMESTER: Record<string, number> = { "mcs-216": 1, "mcs-217": 1, "mcsl-222": 2, "mcsl-223": 2 };
+const LABEL: Record<string, string> = { "mcs-216": "MCS-216", "mcs-217": "MCS-217", "mcsl-222": "MCSL-222", "mcsl-223": "MCSL-223" };
+
+const parts = entryId.split("/");
+const course = parts[0];
+const known = course in SEMESTER;
+const section = parts.length === 3 ? parts[1] : null;
+const last = parts[parts.length - 1];
+const sessionMatch = parts.length >= 2 ? /^session-(\d+)$/.exec(last) : null;
+const sectionKey = section ? `${course}-${section}` : course;
+const sectionLabel = section ? `${LABEL[course]} ${section.replace("-", " ").replace(/^s/, "S")}` : LABEL[course];
+
+const dl = (p: string) => withBase(`/downloads/${p}`, import.meta.env.BASE_URL);
+const links: { href: string; text: string }[] = [];
+if (known && sessionMatch) {
+  const nn = sessionMatch[1].padStart(2, "0");
+  links.push({ href: dl(`${sectionKey}/${sectionKey}-session-${nn}.pdf`), text: "This session (PDF)" });
+}
+if (known && (sessionMatch || parts.length >= 2)) {
+  links.push({ href: dl(`${sectionKey}.zip`), text: `${sectionLabel} (ZIP)` });
+  if (section) links.push({ href: dl(`${course}.zip`), text: `${LABEL[course]} (ZIP)` });
+  links.push({ href: dl(`semester-${SEMESTER[course]}.zip`), text: `Semester ${SEMESTER[course]} (ZIP)` });
+}
+const btn =
+  "inline-flex items-center rounded-md border border-border bg-card px-3 py-1.5 text-sm font-medium text-foreground no-underline hover:bg-accent";
+---
+<div class="no-print my-3 flex flex-wrap items-center gap-2">
+  <button type="button" class={btn} onclick="window.print()">Print</button>
+  {links.map((l) => (
+    <a href={l.href} class={btn} download>{l.text}</a>
+  ))}
+</div>

@@ -572,12 +572,41 @@ body:not(:has([data-mobile-sidebar])) [data-menu-btn] {
 		max-width: none !important;
 		padding: 0 !important;
 	}
-	pre.astro-code {
+	pre.astro-code,
+	pre.astro-code code,
+	pre.astro-code .line {
 		white-space: pre-wrap !important;
+		overflow-wrap: anywhere;
 		word-break: break-word;
+	}
+	[data-nb-page-actions],
+	[data-nb-mobile-toc],
+	div:has(> [data-nb-mobile-toc]),
+	.nb-code-title-lang {
+		display: none !important;
 	}
 	a[href]::after {
 		content: none !important;
+	}
+	/* Tabs: print every panel, labelled, instead of only the active one. */
+	[role="tablist"] {
+		display: none !important;
+	}
+	[role="tabpanel"] {
+		display: block !important;
+	}
+	[role="tabpanel"]::before {
+		content: attr(data-nb-tab-label);
+		display: block;
+		font-weight: 600;
+		font-size: 0.875rem;
+		margin: 0.75rem 0 0.25rem;
+	}
+	h2, h3 {
+		break-after: avoid;
+	}
+	pre, table, figure, .aside-card {
+		break-inside: avoid;
 	}
 }
 

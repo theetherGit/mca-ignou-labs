@@ -43,7 +43,8 @@ This site is built with [Nimbus](https://nimbus-docs.com) on Astro.
 ```bash
 pnpm install
 pnpm dev        # local server
-pnpm build      # static output in dist/
+pnpm build      # static site in dist/ plus PDFs and ZIPs in dist/downloads/ (needs Chromium: pnpm exec playwright install chromium)
+pnpm build:site # site only, fast
 pnpm lint:docs  # content lint (frontmatter, internal links)
 pnpm deploy     # Cloudflare Workers via wrangler
 ```
@@ -60,6 +61,7 @@ pnpm deploy     # Cloudflare Workers via wrangler
 - Multi-language solutions go in `<Tabs syncKey="lang">` with one `<TabItem label="C">` per language.
 - HTML solutions get `<Preview src="/code/..." height="300px" />` above the code fence.
 - `pnpm lint:docs` enforces frontmatter, internal links and heading hierarchy. MCS-217 pages follow `docs-plan/mcs-217-brief.md`.
+- Downloads: `scripts/build-pdfs.mjs` prints every session page to A4 PDF and zips them. Names: `<course>-<section>-session-NN.pdf`, `<course>-<section>.zip`, `<course>.zip`, `semester-N.zip`; each ZIP holds one folder per section plus the manual's question sheet. Links are rendered by `src/components/PageTools.astro`.
 - Math: plain `$x^2$` works for simple inline LaTeX. Anything with braces that is not a valid JS expression (`\text{...}`, `\frac{a}{b}`) must use `<Math tex="..." />` or `<Math display tex="..." />`, because Nimbus pre-parses MDX and rejects those braces. Formula sheets on the MCSL-223 pages are the reference.
 
 ## ⚠️ Important Notice for Students
