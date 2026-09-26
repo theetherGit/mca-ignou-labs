@@ -16,6 +16,8 @@ This session shifts focus from inline event attributes (e.g., `onclick="func()"`
 
 ## Objectives
 
+<Explain />
+
 - Understand common HTML DOM events and their triggers
 - Attach event handlers using `addEventListener()` without overwriting existing ones
 - Control event propagation using the `useCapture` parameter (bubbling vs. capturing)
@@ -90,6 +92,8 @@ When nested elements have event listeners, the browser must decide the execution
 
 ### Example
 
+<Explain />
+
 ```html
 <div id="outer">
   <p id="inner">Click me</p>
@@ -100,6 +104,8 @@ When nested elements have event listeners, the browser must decide the execution
 
 ## Best Practices & Common Pitfalls
 
+<Explain />
+
 | Pitfall | Best Practice |
 | ------- | ------------- |
 | Using inline `onclick` in modern projects | Use `addEventListener()` for separation of concerns |
@@ -109,6 +115,8 @@ When nested elements have event listeners, the browser must decide the execution
 | Ignoring `preventDefault()` on form/button clicks | Use `event.preventDefault()` to stop default browser actions when needed |
 
 ## Quick Guide
+
+<Explain />
 
 ```js
 // 🔗 Add Listener
@@ -140,6 +148,8 @@ el.addEventListener("submit", function(e) { e.preventDefault(); });
 
 ### Problem Statement
 
+<Notebook />
+
 Design an HTML page as shown in figure(refer to lab manual). Implement the event "on button click display data" using HTML DOM events.
 
 Before click on submit button: <br />
@@ -150,9 +160,13 @@ Figure 2: _Show Date & Time below submit button_
 
 ### Preview (Working)
 
+<Explain />
+
 <Question1 client:visible />
 
 ### Code
+
+<Notebook />
 
 ```html title="date.html" file=<rootDir>/public/code/mcs-216/section-2/session-5/1.html
 
@@ -162,13 +176,19 @@ Figure 2: _Show Date & Time below submit button_
 
 ### Problem Statement
 
+<Notebook />
+
 Design an HTML page to shown that, when this page is loaded it must check the cookies status of the user's browser and dispay a message accordingly in the popup box i.e if cookies are enabled show: "Cookies are enabled" and if not then show: "Cookies are disabled". Implement the event "on load" using HTML DOM events
 
 ### Preview (Working)
 
+<Explain />
+
 <Question2 client:visible />
 
 ### Code
+
+<Notebook />
 
 ```html title="color-change.html" file=<rootDir>/public/code/mcs-216/section-2/session-5/2.html
 
@@ -178,13 +198,19 @@ Design an HTML page to shown that, when this page is loaded it must check the co
 
 ### Problem Statement
 
+<Notebook />
+
 Whenever user input a text in the text box in any case (i.e. upper or lower case), automatically it should be converted to uppercase. Design an HTML page to implement above functionality using HTML DOM event "onchange".
 
 ### Preview (Working)
 
+<Explain />
+
 <Question3 client:visible />
 
 ### Code
+
+<Notebook />
 
 ```html title="onchange.html" file=<rootDir>/public/code/mcs-216/section-2/session-5/3.html
 
@@ -194,13 +220,19 @@ Whenever user input a text in the text box in any case (i.e. upper or lower case
 
 ### Problem Statement
 
+<Notebook />
+
 Design HTML page to implement HTML DOM events by changing an image on the following events: onmouseover, onmouseout, onmousedown, and onmouseup Events.
 
 ### Preview (Working)
 
+<Explain />
+
 <Question4 client:visible />
 
 ### Code
+
+<Notebook />
 
 ```html title="image-mouse-event.html" file=<rootDir>/public/code/mcs-216/section-2/session-5/4.html
 

@@ -8,11 +8,15 @@ This session is about building a minimum cost spanning tree from a connected, un
 
 ## Objectives
 
+<Explain />
+
 - Understand the minimum cost spanning tree problem.
 - Implement Prim's algorithm and Kruskal's algorithm.
 - Compare both algorithms on different graph instances.
 
 ## Concept
+
+<Explain />
 
 A spanning tree connects all vertices of a connected, undirected graph without cycles. A minimum cost spanning tree chooses the set of edges with the lowest possible total weight.
 
@@ -28,15 +32,21 @@ Kruskal's algorithm sorts all edges by weight and repeatedly picks the smallest 
 
 ### Problem Statement
 
+<Notebook />
+
 Implement Prim's algorithm to find a minimum cost spanning tree(MCST) in the given graph. Show all the processes.
 
 <img src="/216-sc1-ss7-1.png" class="mt-5 rounded-xl" />
 
 ### Explanation / Approach
 
+<Explain />
+
 Start from any vertex and repeatedly choose the minimum-weight edge that connects the current tree to an unvisited vertex. Keep a table of selected edges and running total cost.
 
 ### Algorithm
+
+<Notebook />
 
 Prim's algorithm is a greedy algorithm that builds the MST incrementally:
 - Start with an arbitrary vertex and add it to the MST set.
@@ -69,6 +79,8 @@ Time Complexity: O(E log V) with priority queue, O(V²) with array scan.
 
 ### Implementation
 
+<Notebook />
+
 <Tabs syncKey="lang">
 <TabItem label="Python">
 ```python title="prims-algo.py" file=<rootDir>/public/code/mcs-216/section-1/session-7/1/1.py 
@@ -91,9 +103,13 @@ Time Complexity: O(E log V) with priority queue, O(V²) with array scan.
 
 ### Problem Statement
 
+<Notebook />
+
 Implement Kruskal's algorithm to find a minimum cost spanning tree for the given graph. Show all the processes.
 
 ### Explanation
+
+<Explain />
 
 Kruskal’s algorithm is a classic greedy algorithm used to discover an MCST. It focuses directly on the edges of the graph. The algorithm operates by selecting the absolute shortest edges from anywhere in the graph, one by one, and placing them into a growing forest.
 
@@ -119,6 +135,8 @@ To efficiently check for cycles, the Disjoint-Set Data Structure is utilized.
 
 ### Implementation
 
+<Notebook />
+
 <Tabs syncKey="lang">
 <TabItem label="Python">
 ```python title="kruskal-algo.py" file=<rootDir>/public/code/mcs-216/section-1/session-7/2/2.py 
@@ -139,6 +157,8 @@ To efficiently check for cycles, the Disjoint-Set Data Structure is utilized.
 
 ### Sample Output 
 
+<Notebook />
+
 ```sh
 Edges in the constructed MCST:
 V4 -- V8 == 5
@@ -157,9 +177,13 @@ Minimum Spanning Tree Cost: 110
 
 ### Problem Statement
 
+<Notebook />
+
 Analyze the performance of both algorithms on different problem instances and write a brief report.
 
 ### Explanation / Approach
+
+<Explain />
 
 This report provides an analytical comparison of Kruskal’s and Prim’s algorithms for finding a Minimum Cost Spanning Tree (MCST). While both guarantee an optimal minimum spanning tree, their architectural designs perform differently depending on the structural density and representation of the input graph.
 

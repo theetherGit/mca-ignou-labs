@@ -13,6 +13,8 @@ import Question4 from "../../../../components/demo/mcs-216/section-2/session-10/
 Cookies are small text files stored on the user's client-side computer that allow web applications to "remember" information across page reloads or future visits. While modern web development often uses `localStorage` or `sessionStorage` for client-side persistence, cookies remain essential for session tracking, authentication tokens, and server-side state management because they are automatically sent with every HTTP request to the matching domain. Session 10 covers the complete lifecycle of cookies using the native `document.cookie` API, teaching you how to create, read, parse, modify, and delete them programmatically.
 
 ## Objectives
+
+<Explain />
 - Understand how cookies work and their role in web state management
 - Create, read, update, and delete cookies using document.cookie
 - Parse the raw cookie string to extract specific name=value pairs
@@ -73,6 +75,8 @@ function getCookie(name) {
 
 ## Quick Guide
 
+<Explain />
+
 ```js
 // ✅ Set Cookie
 function setCookie(name, value, days) {
@@ -96,15 +100,21 @@ function deleteCookie(name) {
 
 ### Problem Statement
 
+<Notebook />
+
 Create an HTML web page, as shown below. The cookie will be set on pressing setCookie button and the stored cookie value will be displayed on pressing getCookie button.
 
 > Note: Check lab manual for images
 
 ### Demo
 
+<Explain />
+
 <Question1 client:visible />
 
 ### Code
+
+<Notebook />
 
 ```html title="time.html" file=<rootDir>/public/code/mcs-216/section-2/session-10/1.html
 
@@ -118,15 +128,21 @@ Create an HTML web page, as shown below. The cookie will be set on pressing setC
 
 ### Problem Statement
 
+<Notebook />
+
 Considering exercise 1, modify the web page to display the cookie's name-value pair separately as shown in figure below.
 
 > Note: Check lab manual for images/figures
 
 ### Demo
 
+<Explain />
+
 <Question2 client:visible />
 
 ### Code
+
+<Notebook />
 
 ```html title="time.html" file=<rootDir>/public/code/mcs-216/section-2/session-10/2.html
 
@@ -140,15 +156,21 @@ Considering exercise 1, modify the web page to display the cookie's name-value p
 
 ### Problem Statement
 
+<Notebook />
+
 A list of color is provided in the form of drop down list. The background color of the web page changes as per the selection of the color from the list by the user. At the same time the chosencoloris passed to the cookie. The cookie stores the last choice of a user in a browser which will be used on reloading the web page to display the same color as background color.
 
 > Note: Check lab manual for images/figures
 
 ### Demo
 
+<Explain />
+
 <Question3 client:visible />
 
 ### Code
+
+<Notebook />
 
 ```html title="time.html" file=<rootDir>/public/code/mcs-216/section-2/session-10/3.html
 
@@ -162,15 +184,21 @@ A list of color is provided in the form of drop down list. The background color 
 
 ### Problem Statement
 
+<Notebook />
+
 Create an HTML web page, as shown below. The cookie1 and cookie2 will be set on pressing Set Cookie1or Set Cookie2 button and the stored cookie value will be displayed on pressing Get Cookie1 or Get Cookie2 button respectively. On the other hand selectively cookie can be deleted by pressing Delete Cookie1 or Delete Cookie2 button. Display all cookies button will show all the stored cookies.
 
 > Note: Check lab manual for images/figures
 
 ### Demo
 
+<Explain />
+
 <Question4 client:visible />
 
 ### Code
+
+<Notebook />
 
 ```html title="time.html" file=<rootDir>/public/code/mcs-216/section-2/session-10/4.html
 

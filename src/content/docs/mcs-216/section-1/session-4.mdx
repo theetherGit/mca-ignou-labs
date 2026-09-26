@@ -25,6 +25,8 @@ The core idea behind Huffman Coding is to assign variable-length binary codes to
 
 ## Objective
 
+<Explain />
+
 The main objectives of this session are to:
 - Implement Huffman’s Coding algorithm.
 - Test the implementation on different problem instances
@@ -33,6 +35,8 @@ The main objectives of this session are to:
 ## Question 1
 
 ### Problem Statement
+
+<Notebook />
 
 Apply Huffman’s algorithm to construct an optimal binary prefix code for the letters and its frequencies in the following table.
 
@@ -44,6 +48,8 @@ Show the complete steps.
 
 ### Explanation
 
+<Explain />
+
 Using your data: A(10), B(7), I(15), M(8), S(10), X(5), Z(2).
 
 - **Initialize**: Create a leaf node for each character.
@@ -53,6 +59,8 @@ Using your data: A(10), B(7), I(15), M(8), S(10), X(5), Z(2).
 - **Assign Bits**: Starting from the Root, assign `0` to every left branch and `1` to every right branch.
 
 ### Implementation
+
+<Notebook />
 
 <Tabs syncKey="lang">
 <TabItem label="Python">
@@ -73,6 +81,8 @@ Using your data: A(10), B(7), I(15), M(8), S(10), X(5), Z(2).
 </Tabs>
 
 ### Sample Output
+
+<Notebook />
 
 ```sh
 --- STEP-BY-STEP MERGING (GREEDY STEPS) ---
@@ -99,9 +109,13 @@ Z          | 2          | 0110
 
 ### Problem Statement
 
+<Notebook />
+
 Implement Huffman's coding algorithm and run it on the problem instance of Q1.
 
 ### Implementation
+
+<Notebook />
 
 <Aside type="note" title="Implementation">
     Refer to Question 1, Implementation. It's the proper solution for this question.
@@ -111,11 +125,15 @@ Implement Huffman's coding algorithm and run it on the problem instance of Q1.
 
 ### Problem Statement
 
+<Notebook />
+
 What is an optimal binary tree and Huffman code for the following set of frequencies? Find out the average number of bits required per character. Show complete steps.
 
 A:15 B:25 C:5 D:7 E:10 F:13 G:9
 
 ### Initial Frequencies - Sorted
+
+<Notebook />
 
 | Char | C | D | G | E | F | A | B |
 |------|---|---|---|---|---|---|---|
@@ -124,6 +142,8 @@ A:15 B:25 C:5 D:7 E:10 F:13 G:9
 #### Total Frequency = `84`
 
 ### Huffman Tree
+
+<Notebook />
 
 | Step | Nodes in Pool (Sorted) | Merged Nodes | New Node |
 |------|------------------------|--------------|----------|
@@ -135,6 +155,8 @@ A:15 B:25 C:5 D:7 E:10 F:13 G:9
 | 6 | N4:34, N5:50 | N4(34)+N5(50) | Root:84 |
 
 ### Assigning Codes
+
+<Notebook />
 
 Convention: `0` = Left Child, `1` = Right Child
 
@@ -156,6 +178,8 @@ Root(84)
 
 ### Huffman Codes
 
+<Notebook />
+
 | Char | Frequency | Code | Length |
 |------|-----------|------|--------|
 | A | 15 | 00 | 2 |
@@ -168,6 +192,8 @@ Root(84)
 
 ### Bits/Character
 
+<Explain />
+
 ```sh
 Total Bits = Σ (Frequency × Code Length)
            = (15×2) + (25×2) + (5×4) + (7×4) + (10×3) + (13×3) + (9×3)
@@ -178,6 +204,8 @@ Average Bits = Total Bits / Total Frequency
 ```
 
 ### Implementations
+
+<Notebook />
 
 <Tabs syncKey="lang">
 <TabItem label="Python">
@@ -199,6 +227,8 @@ Average Bits = Total Bits / Total Frequency
 
 ### Sample Output
 
+<Notebook />
+
 ```sh
 Huffman Codes:
 A: 00
@@ -215,6 +245,8 @@ Average bits per character: 2.67
 ## Question 4
 
 ### Problem Statement
+
+<Notebook />
 
 A file contains only colon, spaces, new line character and digits in the following frequency:
 colon(80), space(500), new line(110), commas(500), 0(300), 1(200), 2(150), 3(60), 4(180), 5(240), 6(170), 7(200), 8(202).
@@ -293,6 +325,8 @@ Root(2892)
 
 ### Huffman Codes
 
+<Notebook />
+
 | Char | Freq | Code | Length |
 |:----:|:----:|:----:|:------:|
 | `space` | 500 | 00 | 2 |
@@ -311,6 +345,8 @@ Root(2892)
 
 ### Bits/Character
 
+<Explain />
+
 ```sh
 Total Bits = Σ(Frequency × Code Length) 
 => (500×2) + (300×3) + (150×4) + (170×4) + (180×4) + (200×4)  (200×4) + (202×4) + (240×4) + (110×5) + (60×6) + (80×6) + (500×3) 
@@ -322,6 +358,8 @@ Average Bits = Total Bits / Total Frequency
 ```
 
 ### Implementations
+
+<Notebook />
 
 <Tabs syncKey="lang">
 <TabItem label="Python">
@@ -342,6 +380,8 @@ Average Bits = Total Bits / Total Frequency
 </Tabs>
 
 ### Sample Output
+
+<Notebook />
 
 ```sh
 Huffman Codes:

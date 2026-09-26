@@ -12,6 +12,8 @@ JavaScript Classes, introduced in ES6, provide a clean, syntactic sugar over Jav
 
 ## Objectives
 
+<Explain />
+
 - Understand OOP architecture in JavaScript 
 - Define classes and instantiate objects with methods
 - Implement getters and setters for controlled property access
@@ -88,6 +90,8 @@ class Dog extends Animal {
 
 ## Best Practices & Common Pitfalls
 
+<Explain />
+
 | Pitfall | Best Practice |
 |---------|---------------|
 | Forgetting `super()` in derived constructor | Always call `super()` first in child class constructors |
@@ -96,6 +100,8 @@ class Dog extends Animal {
 | Overusing deep inheritance chains | Prefer composition when relationships aren't strict `is-a` |
 
 ## Quick Guide
+
+<Explain />
 
 ```js
 // 🔹 Basic Class
@@ -122,6 +128,8 @@ class Student extends User {
 
 ### Problem Statement
 
+<Notebook />
+
 Let us assume you need to organize a library of some electronic manuals and novels for a particular company. For each book, you need to store following information:
 - The title
 - The author
@@ -141,6 +149,8 @@ Company wants to perform certain actions when the any book is outdated. The manu
 for novel book so that they can be discarded based on the duration.
 
 ### Requirements
+
+<Notebook />
 - Create `Book` base class + `Manual` & `Novel` child classes
 - Store: title, author, copyright date, ISBN, pages, checkout count, discarded status
 - Manual: discard if age > 5 years
@@ -150,9 +160,13 @@ for novel book so that they can be discarded based on the duration.
 
 ### Demo
 
+<Explain />
+
 <Question1 client:visible />
 
 ### Code
+
+<Notebook />
 
 ```html title="library.html" file=<rootDir>/public/code/mcs-216/section-2/session-8/1.html
 
@@ -166,9 +180,13 @@ for novel book so that they can be discarded based on the duration.
 
 ### Problem Statement
 
+<Notebook />
+
 Create a `product` with properties: ID, Name, Description and Price. The create function for this object called `displayProductDetails()`. This function when invoked should display the name, description and discounted price of the product. For the calculation of discounted price you need to create another function `CalculateDisc(percentage)`. The discount percentage would be given by user.
 
 ### Requirements
+
+<Notebook />
 
 - Create `product` object with: ID, Name, Description, Price
 - Method `displayProductDetails()` → shows name, description, discounted price
@@ -177,9 +195,13 @@ Create a `product` with properties: ID, Name, Description and Price. The create 
 
 ### Demo
 
+<Explain />
+
 <Question2 client:visible />
 
 ### Code
+
+<Notebook />
 
 ```html title="product.html" file=<rootDir>/public/code/mcs-216/section-2/session-8/2.html
 

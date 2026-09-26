@@ -8,11 +8,15 @@ This session introduces shortest path problems in weighted graphs. The main idea
 
 ## Objectives
 
+<Explain />
+
 - Understand single-source shortest path problems.
 - Apply Dijkstra's algorithm when all edge weights are non-negative.
 - Identify why negative edge weights require a different algorithm such as Bellman-Ford.
 
 ## Concept
+
+<Explain />
 
 A single-source shortest path algorithm finds the minimum distance from one starting vertex to every other vertex in a weighted graph.
 
@@ -23,12 +27,16 @@ A single-source shortest path algorithm finds the minimum distance from one star
 
 ## Standard Dijkstra Approach
 
+<Explain />
+
 1. Set the source distance to `0` and all other distances to infinity.
 2. Pick the unvisited vertex with the smallest known distance.
 3. Relax all outgoing edges from that vertex.
 4. Repeat until all vertices are processed.
 
 ## Standard Bellman-Ford Approach
+
+<Explain />
 
 1. Set the source distance to `0` and all other distances to infinity.
 2. Relax every edge `V - 1` times.
@@ -68,13 +76,19 @@ Implement Dijkstra’s algorithm to find the single source shortest path algorit
 
 ### Problem Statement
 
+<Notebook />
+
 Find the shortest path from `A` to the rest of vertices.
 
 ### Explanation / Approach
 
+<Explain />
+
 Use Dijkstra's algorithm if all edge weights in the graph are non-negative. Start with distance of `A = 0`, mark all other vertices as infinity, and repeatedly relax the nearest unvisited vertex.
 
 ### Answer
+
+<Notebook />
 
 #### Initial State
 ```js
@@ -83,6 +97,8 @@ Visited: {}
 ```
 
 #### Iteration 1: Process A (dist=0)
+
+<Notebook />
 ```js
 Neighbors: B(6), G(4)
 Update: B=0+6=6, G=0+4=4
@@ -91,6 +107,8 @@ Visited: {A}
 ```
 
 #### Iteration 2: Process G (dist=4) ← Minimum unvisited
+
+<Notebook />
 ```js
 Neighbors: D(8), F(8)
 Update: D=4+8=12, F=4+8=12
@@ -99,6 +117,8 @@ Visited: {A, G}
 ```
 
 #### Iteration 3: Process B (dist=6) ← Minimum unvisited
+
+<Notebook />
 ```js
 Neighbors: C(2), D(4)
 Update: C=6+2=8, D=min(12, 6+4)=10
@@ -106,6 +126,8 @@ Distances: A=0, B=6, C=8, D=10, E=∞, F=12, G=4
 Visited: {A, G, B}
 ```
 #### Iteration 4: Process C (dist=8) ← Minimum unvisited
+
+<Notebook />
 ```js
 Neighbors: D(2)
 Update: D=min(10, 8+2)=10 (no change)
@@ -114,6 +136,8 @@ Visited: {A, G, B, C}
 ```
 
 #### Iteration 5: Process D (dist=10) ← Minimum unvisited
+
+<Notebook />
 ```js
 Neighbors: F(2), E(1)
 Update: F=min(12, 10+2)=12 (no change), E=10+1=11
@@ -122,6 +146,8 @@ Visited: {A, G, B, C, D}
 ```
 
 #### Iteration 6: Process E (dist=11) ← Minimum unvisited
+
+<Notebook />
 ```js
 Neighbors: (none that improve distances)
 Distances: A=0, B=6, C=8, D=10, E=11, F=12, G=4
@@ -129,6 +155,8 @@ Visited: {A, G, B, C, D, E}
 ```
 
 #### Iteration 7: Process F (dist=12) ← Last unvisited
+
+<Notebook />
 ```js
 Neighbors: A(3), E(7)
 Both already visited, no updates
@@ -151,13 +179,19 @@ A→G: 4  (Path: A→G)
 
 ### Problem Statement
 
+<Notebook />
+
 Find the shortest path from `B` to the rest of nodes.
 
 ### Explanation / Approach
 
+<Explain />
+
 The method is the same as Question 1, but the source vertex changes to `B`. The initial distance table should therefore start with `B = 0` and all other vertices as infinity.
 
 ### Answer
+
+<Notebook />
 
 #### Initial State:
 ```js
@@ -165,41 +199,55 @@ Distances: A=∞, B=0, C=∞, D=∞, E=∞, F=∞, G=∞
 ```
 
 #### Iteration 1: Process B (dist=0)
+
+<Notebook />
 ```js
 Update: C=2, D=4
 Distances: A=∞, B=0, C=2, D=4, E=∞, F=∞, G=∞
 ```
 
 #### Iteration 2: Process C (dist=2)
+
+<Notebook />
 ```js
 Update: D=min(4, 2+2)=4
 Distances: A=∞, B=0, C=2, D=4, E=∞, F=∞, G=∞
 ```
 
 #### Iteration 3: Process D (dist=4)
+
+<Notebook />
 ```js
 Update: F=4+2=6, E=4+1=5
 Distances: A=∞, B=0, C=2, D=4, E=5, F=6, G=∞
 ```
 
 #### Iteration 4: Process E (dist=5)
+
+<Notebook />
 ```js
 No updates
 ```
 
 #### Iteration 5: Process F (dist=6)
+
+<Notebook />
 ```js
 Update: A=6+3=9, E=min(5, 6+7)=5
 Distances: A=9, B=0, C=2, D=4, E=5, F=6, G=∞
 ```
 
 #### Iteration 6: Process A (dist=9)
+
+<Notebook />
 ```js
 Update: B=min(0, 9+6)=0, G=9+4=13
 Distances: A=9, B=0, C=2, D=4, E=5, F=6, G=13
 ```
 
 #### Iteration 7: Process G (dist=13)
+
+<Notebook />
 ```js
 Update: D=min(4, 13+8)=4, F=min(6, 13+8)=6
 Final: A=9, B=0, C=2, D=4, E=5, F=6, G=13
@@ -221,17 +269,25 @@ B→G: 13 (Path: B→D→F→A→G)
 
 ### Problem Statement
 
+<Notebook />
+
 Find the shortest path from `A` to the rest of vertices when there are negative weights `-8` between `G` and `F` and `-3` between `F` and `A`.
 
 ### Explanation / Approach
+
+<Explain />
 
 Dijkstra's algorithm should not be used when negative edge weights exist. For this case, use Bellman-Ford reasoning because it can handle negative edges and can also detect negative cycles.
 
 ### Answer
 
+<Notebook />
+
 > CRITICAL ISSUE: Dijkstra's algorithm FAILS with negative weights
 
 #### Why it fails:
+
+<Explain />
 - Dijkstra marks vertices as "visited" permanently
 - It assumes once visited, the shortest path is found
 - Negative edges can create shorter paths through already-visited vertices
@@ -247,6 +303,8 @@ You can loop infinitely to reduce distance.
 ```
 
 ## Viva Questions
+
+<Explain />
 
 - Why does Dijkstra fail with negative edge weights?
 - What is edge relaxation?

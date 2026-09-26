@@ -8,6 +8,8 @@ In Divide and conquer approach, the original problem is divided into two or more
 
 ## Objectives
 
+<Explain />
+
 - Understand how divide and conquer splits a problem into smaller independent subproblems.
 - Implement recursive binary search, merge sort, quick sort, and Strassen's matrix multiplication.
 - Show dry runs, recursive call trees, loop counts, comparisons, exchanges, and operation counts where the lab manual asks for them.
@@ -27,6 +29,8 @@ In Divide and conquer approach, the original problem is divided into two or more
 
 ### Problem Statement
 
+<Notebook />
+
 Implement a recursive binary search algorithm on your system to search for number `100` in the following array of integers. Show the process step by step and draw recursive calls.
 
 ```text
@@ -35,9 +39,13 @@ Implement a recursive binary search algorithm on your system to search for numbe
 
 ### Approach
 
+<Explain />
+
 Binary search compares the target with the middle element. If the target is larger, the search continues in the right half; if smaller, it continues in the left half. Because the array is sorted, every recursive call reduces the search range by half.
 
 ### Step-by-Step Trace
+
+<Notebook />
 
 | Call | Low | High | Mid | A[mid] | Decision |
 | ---- | --- | ---- | --- | ------ | -------- |
@@ -58,10 +66,14 @@ binarySearch(0, 9)
 
 ### Complexity
 
+<Explain />
+
 - Time complexity: `O(log n)`
 - Space complexity: `O(log n)` due to recursive call stack
 
 ### Implementation
+
+<Notebook />
 
 <Tabs syncKey="lang">
 <TabItem label="Python">
@@ -85,9 +97,13 @@ binarySearch(0, 9)
 
 ### Problem Statement
 
+<Notebook />
+
 Suppose we are required to search among 512 million items in a list using binary search. What is the maximum number of searches needed to find a given item or conclude that it is not present?
 
 ### Solution
+
+<Notebook />
 
 Binary search needs at most `ceil(log2 n)` comparisons.
 
@@ -108,6 +124,8 @@ Maximum searches = 29
 
 ### Problem Statement
 
+<Notebook />
+
 Implement Merge Sort algorithm to sort the following list and show the process step by step. Draw a tree of recursive calls.
 
 ```text
@@ -116,9 +134,13 @@ Implement Merge Sort algorithm to sort the following list and show the process s
 
 ### Approach
 
+<Explain />
+
 Merge sort divides the list into two halves until each sublist has one element, then merges the sorted sublists.
 
 ### Recursive Split Tree
+
+<Explain />
 
 ```text
 [200,150,50,100,75,25,10,5]
@@ -139,6 +161,8 @@ Merge sort divides the list into two halves until each sublist has one element, 
 ```
 
 ### Implementation
+
+<Notebook />
 
 <Tabs syncKey="lang">
 <TabItem label="Python">
@@ -168,6 +192,8 @@ Merge sort divides the list into two halves until each sublist has one element, 
 
 ### Problem Statement
 
+<Notebook />
+
 Implement Quick Sort's algorithm to sort the following list and show step-by-step processes.
 
 ```text
@@ -176,9 +202,13 @@ Implement Quick Sort's algorithm to sort the following list and show step-by-ste
 
 ### Approach
 
+<Explain />
+
 Choose a pivot, partition the list so smaller elements move before the pivot and larger elements move after it, then recursively sort the two partitions.
 
 ### Recursive Split Tree
+
+<Explain />
 
 > Here, we are using array index for understanding how the loop will work for quicksort.
 
@@ -229,6 +259,8 @@ quickSort(0,9) pivot=15
 ```
 
 ### Complexity
+
+<Explain />
 | Metric | Value | Explanation |
 |--------|-------|-------------|
 | Best Case Time | O(n log n) | Pivot divides array evenly every time |
@@ -241,6 +273,8 @@ quickSort(0,9) pivot=15
 ## Question 5
 
 ### Problem Statement
+
+<Notebook />
 
 Examine the performance of Quick Sort for the following list in terms of comparisons, exchange operations, and loop iterations.
 
@@ -265,6 +299,8 @@ For `n = 10`, the worst-case comparison count is:
 ```
 
 ### Performance Summary
+
+<Explain />
 
 | Metric | Count Formula/Explanation | 
 |--------|---------------------------|
@@ -296,6 +332,8 @@ Space Complexity = O(n) ← Recursion stack depth
 
 ### Problem Statement
 
+<Notebook />
+
 Implement Strassen's multiplication algorithm for two `n x n` matrices, where `n` is a power of 2, on different problem instances and compare all instances in terms of number of multiplications and additions required.
 
 ### Strassen’s Algorithm
@@ -321,6 +359,8 @@ M7 = (A12 - A22) × (B21 + B22)
 
 ### Implementation
 
+<Notebook />
+
 <Tabs syncKey="lang">
 <TabItem label="Python">
 ```python title="matrix-multiplication.py" file=<rootDir>/public/code/mcs-216/section-1/session-5/6/6.py 
@@ -340,6 +380,8 @@ M7 = (A12 - A22) × (B21 + B22)
 </Tabs>
 
 ## Viva Questions
+
+<Explain />
 
 - Why must the input array be sorted for binary search?
 - Why is merge sort stable?

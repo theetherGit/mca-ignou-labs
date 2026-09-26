@@ -595,3 +595,101 @@ body:not(:has([data-mobile-sidebar])) [data-menu-btn] {
 	color: var(--nb-muted-foreground);
 	user-select: none;
 }
+
+/* Content marks: what goes in the lab record vs. what is for understanding. */
+.nb-mark {
+	line-height: 1.4;
+	vertical-align: middle;
+}
+.nb-mark-notebook {
+	color: var(--nb-primary-hover);
+	background: color-mix(in oklch, var(--nb-primary) 12%, transparent);
+}
+.nb-mark-explain {
+	color: var(--nb-muted-foreground);
+	background: var(--nb-muted);
+}
+[data-mode="dark"] .nb-mark-notebook {
+	color: var(--nb-primary);
+	background: color-mix(in oklch, var(--nb-primary) 16%, transparent);
+}
+/* Pull a mark that directly follows a heading up under it. */
+.docs-content h2 + p > .nb-mark:only-child,
+.docs-content h3 + p > .nb-mark:only-child,
+.docs-content h4 + p > .nb-mark:only-child {
+	margin-top: -0.35rem;
+}
+.docs-content h2 + p:has(> .nb-mark:only-child),
+.docs-content h3 + p:has(> .nb-mark:only-child),
+.docs-content h4 + p:has(> .nb-mark:only-child) {
+	margin-top: 0;
+	margin-bottom: 0.75rem;
+}
+
+/* Home page: a lab-record index on ruled paper with a margin line. */
+.nb-home {
+	position: relative;
+}
+.nb-home::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0.25rem;
+	width: 2px;
+	background: color-mix(in oklch, var(--nb-primary) 55%, transparent);
+}
+@media (min-width: 640px) {
+	.nb-home::before {
+		left: 1rem;
+	}
+}
+.nb-index-row {
+	border-bottom: 1px solid var(--nb-border);
+}
+.nb-index-row:first-child {
+	border-top: 1px solid var(--nb-border);
+}
+.nb-index-link {
+	display: grid;
+	grid-template-columns: 2.5rem 1fr auto;
+	gap: 0.75rem 1rem;
+	align-items: baseline;
+	padding: 1.1rem 0.25rem;
+	color: inherit;
+	transition: background-color 120ms ease;
+}
+.nb-index-link:hover,
+.nb-index-link:focus-visible {
+	background: color-mix(in oklch, var(--nb-primary) 6%, transparent);
+	outline: none;
+}
+.nb-index-link:focus-visible {
+	box-shadow: inset 0 0 0 2px var(--nb-primary);
+}
+.nb-index-link:hover .nb-index-body > span:nth-child(2) {
+	color: var(--nb-primary-hover);
+}
+@media (max-width: 480px) {
+	.nb-index-link {
+		grid-template-columns: 2rem 1fr;
+	}
+	.nb-index-count {
+		grid-column: 2;
+	}
+}
+.nb-setup th,
+.nb-setup td {
+	text-align: left;
+	padding: 0.5rem 0.75rem 0.5rem 0;
+	border-bottom: 1px solid var(--nb-border);
+	vertical-align: top;
+}
+.nb-setup th {
+	font-weight: 500;
+	color: var(--nb-muted-foreground);
+}
+.nb-setup code {
+	font-family: var(--nb-font-mono);
+	font-size: 0.8125rem;
+}

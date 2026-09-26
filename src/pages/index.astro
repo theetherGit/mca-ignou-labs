@@ -1,50 +1,151 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Header from "../components/Header.astro";
+import Notebook from "../components/Notebook.astro";
+import Explain from "../components/Explain.astro";
 import { config } from "virtual:nimbus/config";
 import { withBase } from "@cloudflare/nimbus-docs/runtime";
 
-// Prerender explicitly so the homepage stays a static route under
-// `output: "server"` — an adapter alone must add zero on-demand routes.
 export const prerender = true;
+
+const href = (p: string) => withBase(p, import.meta.env.BASE_URL);
+
+// The index of a lab record: one row per section of the two courses.
+const index = [
+  {
+    no: 1,
+    course: "MCS-216, Section 1",
+    title: "Design and analysis of algorithms",
+    detail: "Greedy, divide and conquer, dynamic programming, graphs. Each problem in Python, C and Rust.",
+    sessions: 11,
+    link: "/mcs-216/section-1/",
+  },
+  {
+    no: 2,
+    course: "MCS-216, Section 2",
+    title: "Web design",
+    detail: "HTML forms, CSS, DOM and JavaScript. Source files with live previews.",
+    sessions: 10,
+    link: "/mcs-216/section-2/",
+  },
+  {
+    no: 3,
+    course: "MCS-217",
+    title: "Software engineering",
+    detail: "Scope, estimation, SRS, DFD and ERD, design, testing, change control. Railway Reservation System as the running case.",
+    sessions: 20,
+    link: "/mcs-217/introduction",
+  },
+];
+
+const setup = [
+  { lang: "C", check: "gcc --version", run: "gcc 1.c -o 1 && ./1" },
+  { lang: "Python", check: "python3 --version", run: "python3 1.py" },
+  { lang: "Rust", check: "rustc --version", run: "rustc 1.rs && ./1" },
+];
 ---
 
 <BaseLayout title={config.title} description={config.description}>
   <div class="flex flex-col min-h-screen">
     <Header />
-    <main id="main-content" tabindex="-1" class="flex-1 mx-auto max-w-2xl w-full px-6 py-24">
-      <h1
-        class="text-foreground leading-tight"
-        style="font-size: var(--nb-h1-size); font-weight: var(--nb-h1-weight); letter-spacing: var(--nb-h1-tracking);"
-      >
-        {config.title}
-      </h1>
-      <p class="mt-2 text-[1.0625rem] text-muted-foreground leading-relaxed">
-        {config.description}
-      </p>
+    <main id="main-content" tabindex="-1" class="flex-1 w-full">
+      <div class="nb-home mx-auto w-full max-w-3xl px-5 sm:px-8 pt-14 pb-24 sm:pt-20">
+        <h1
+          class="text-foreground leading-[1.05] max-w-[18ch]"
+          style="font-size: clamp(2rem, 5vw, 3rem); font-weight: 650; letter-spacing: -0.02em;"
+        >
+          Your lab record, worked out.
+        </h1>
+        <p class="mt-5 max-w-[60ch] text-[1.0625rem] leading-relaxed text-muted-foreground">
+          Every lab session from the IGNOU manuals for MCS-216 and MCS-217: the problem as set,
+          the reasoning, the program, the output. Each part is marked so you know what to copy
+          into the record and what is there to help you answer in the viva.
+        </p>
 
-      <div class="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <a
-          href={withBase("/introduction", import.meta.env.BASE_URL)}
-          class="block rounded-lg border border-border p-4 transition-colors hover:border-border-strong no-underline"
-        >
-          <div class="font-medium text-foreground">Introduction</div>
-          <div class="mt-0.5 text-sm text-muted-foreground">What is Syntax Lab?</div>
-        </a>
-        <a
-          href={withBase("/mcs-216/section-1/session-1", import.meta.env.BASE_URL)}
-          class="block rounded-lg border border-border p-4 transition-colors hover:border-border-strong no-underline"
-        >
-          <div class="font-medium text-foreground">MCS-216</div>
-          <div class="mt-0.5 text-sm text-muted-foreground">DAA and Web Design labs</div>
-        </a>
-        <a
-          href={withBase("/mcs-217/introduction", import.meta.env.BASE_URL)}
-          class="block rounded-lg border border-border p-4 transition-colors hover:border-border-strong no-underline"
-        >
-          <div class="font-medium text-foreground">MCS-217</div>
-          <div class="mt-0.5 text-sm text-muted-foreground">Software Engineering labs</div>
-        </a>
+        <section class="mt-14" aria-labelledby="index-heading">
+          <h2 id="index-heading" class="text-base font-semibold text-foreground">Index</h2>
+          <ol class="nb-index mt-3 list-none p-0 m-0">
+            {index.map((row) => (
+              <li class="nb-index-row">
+                <a href={href(row.link)} class="nb-index-link no-underline">
+                  <span class="nb-index-no font-mono text-sm text-muted-foreground">{row.no}</span>
+                  <span class="nb-index-body">
+                    <span class="block text-sm text-muted-foreground">{row.course}</span>
+                    <span class="block text-lg font-medium text-foreground">{row.title}</span>
+                    <span class="block mt-1 text-sm leading-relaxed text-muted-foreground max-w-[52ch]">{row.detail}</span>
+                  </span>
+                  <span class="nb-index-count font-mono text-sm text-muted-foreground whitespace-nowrap">
+                    {row.sessions} sessions
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section class="mt-14 max-w-[60ch]" aria-labelledby="marks-heading">
+          <h2 id="marks-heading" class="text-base font-semibold text-foreground">What goes in the notebook</h2>
+          <p class="mt-3 leading-relaxed text-muted-foreground">
+            Students were copying whole pages. Two marks now sit under section headings so the
+            split is obvious at a glance.
+          </p>
+          <dl class="mt-5 space-y-4">
+            <div class="flex flex-col gap-1.5">
+              <dt><Notebook /></dt>
+              <dd class="text-sm leading-relaxed text-muted-foreground">
+                Problem statement, algorithm, program, sample output. This is what the examiner
+                expects to see in the record, in your handwriting.
+              </dd>
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <dt><Explain /></dt>
+              <dd class="text-sm leading-relaxed text-muted-foreground">
+                Explanations, worked reasoning, complexity notes, demos. Read these; they are what
+                you will be asked about. Do not copy them.
+              </dd>
+            </div>
+          </dl>
+        </section>
+
+        <section class="mt-14 max-w-[60ch]" aria-labelledby="run-heading">
+          <h2 id="run-heading" class="text-base font-semibold text-foreground">Run the programs yourself</h2>
+          <p class="mt-3 leading-relaxed text-muted-foreground">
+            Every solution is a plain file. Download it from the page, then:
+          </p>
+          <table class="nb-setup mt-4 w-full text-sm">
+            <thead>
+              <tr>
+                <th scope="col">Language</th>
+                <th scope="col">Check install</th>
+                <th scope="col">Run</th>
+              </tr>
+            </thead>
+            <tbody>
+              {setup.map((r) => (
+                <tr>
+                  <td class="font-medium text-foreground">{r.lang}</td>
+                  <td><code>{r.check}</code></td>
+                  <td><code>{r.run}</code></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p class="mt-4 text-sm leading-relaxed text-muted-foreground">
+            No compiler on hand? <a href={href("/getting-started#online-playgrounds")}>Online playgrounds</a> that work for all three languages are listed in Getting Started.
+          </p>
+        </section>
+
+        <section class="mt-14 max-w-[60ch]" aria-labelledby="manuals-heading">
+          <h2 id="manuals-heading" class="text-base font-semibold text-foreground">Official lab manuals</h2>
+          <ul class="mt-3 space-y-1.5 text-sm">
+            <li><a href={href("/mcs-216.pdf")} target="_blank" rel="noopener">MCS-216 lab manual (PDF)</a></li>
+            <li><a href={href("/mcs-217.pdf")} target="_blank" rel="noopener">MCS-217 lab manual (PDF)</a></li>
+          </ul>
+          <p class="mt-4 text-sm leading-relaxed text-muted-foreground">
+            Session numbers and problem instances here match the manuals. Read the
+            <a href={href("/important-notice")}>notice on using this material</a> before you submit.
+          </p>
+        </section>
       </div>
     </main>
   </div>

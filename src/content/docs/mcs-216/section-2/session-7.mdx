@@ -14,6 +14,8 @@ During script execution, errors are inevitable. They can stem from syntax mistak
 
 ## Objectives
 
+<Explain />
+
 - Understand the `try...catch...finally` execution flow
 - Implement custom `error` throwing using the `throw` statement
 - Utilize JavaScript's built-in `Error` object to diagnose failures
@@ -91,6 +93,8 @@ try {
 
 ## Best Practices & Common Pitfalls
 
+<Explain />
+
 | Pitfall | Best Practice |
 | ------- | ------------- |
 | Empty catch `{}` blocks | Always log or handle the error; never silently swallow failures |
@@ -100,6 +104,8 @@ try {
 | Assuming all errors are recoverable | Some errors (e.g., SyntaxError) should be fixed at development time, not caught at runtime |
 
 ## Quick Guide
+
+<Explain />
 
 ```js
 // 🔍 Basic Error Handling
@@ -123,15 +129,21 @@ function safeMultiply(a, b) {
 
 ### Problem Statement
 
+<Notebook />
+
 Write an HTML code using JavaScript to add two numbers taken as input from user
 and display the result of division operation on them i.e. a/b. If an error occurs, show
 the error. Use error handling concepts in JavaScript.
 
 ### Preview
 
+<Explain />
+
 <Question1 client:visible />
 
 ### Code
+
+<Notebook />
 
 ```html title="add-division.html" file=<rootDir>/public/code/mcs-216/section-2/session-7/1.html
 
@@ -145,14 +157,20 @@ the error. Use error handling concepts in JavaScript.
 
 ### Problem Statement
 
+<Notebook />
+
 A teacher has created a gradeLabs function that verifies if student programming labs work. This function loops over an array of JavaScript objects that should contain a student property and runLab property. The runLab property is expected to be a function containing the student's code. The runLab function is called and the result is compared to the expected result. If the result and expected result don't match, then the
 lab is considered a failure.
 
 ### Demo 
 
+<Explain />
+
 <Question2 client:visible />
 
 ### Code
+
+<Notebook />
 
 ```html title="grade-lab.html" file=<rootDir>/public/code/mcs-216/section-2/session-7/2.html
 
@@ -166,6 +184,8 @@ lab is considered a failure.
 
 ### Problem Statement
 
+<Notebook />
+
 There is an array of animals. The user is asked to enter the index for the animal they want to see.
 1. If the user enters an index that does NOT contain an animal, the code will throw a
 TypeError when name is referenced on an undefined value.
@@ -174,9 +194,13 @@ message to be printed EVERY time the code runs
 
 ### Demo 
 
+<Explain />
+
 <Question3 client:visible />
 
 ### Code
+
+<Notebook />
 
 ```html title="animals.html" file=<rootDir>/public/code/mcs-216/section-2/session-7/3.html
 
@@ -190,14 +214,20 @@ message to be printed EVERY time the code runs
 
 ### Problem Statement
 
+<Notebook />
+
 Assume you have a function `primitiveMultiply` that in 20 percent of cases multiplies two numbers and in the other 80 percent of cases raises an exception of type `MultiplicatorUnitFailure`. Write a function that wraps this clunky function and just keeps trying until a call succeeds, after which it returns the result.
 Make sure you handle only the exceptions you are trying to handle.
 
 ### Demo 
 
+<Explain />
+
 <Question4 client:visible />
 
 ### Code
+
+<Notebook />
 
 ```html title="primitive-multiplyn.html" file=<rootDir>/public/code/mcs-216/section-2/session-7/4.html
 

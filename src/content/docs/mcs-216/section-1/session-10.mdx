@@ -8,11 +8,15 @@ This session explains why the order of multiplying matrices matters. Matrix mult
 
 ## Objectives
 
+<Explain />
+
 - Understand why matrix-chain order affects multiplication cost.
 - Find all possible orders for multiplying five matrices.
 - Use dynamic programming to find optimal parenthesization.
 
 ## Given Dimensions
+
+<Notebook />
 
 | Matrix | Dimension |
 | ------ | --------- |
@@ -30,6 +34,8 @@ p = [10, 4, 5, 20, 2, 50]
 
 ## Concept
 
+<Explain />
+
 Matrix multiplication is associative:
 
 ```text
@@ -39,6 +45,8 @@ Matrix multiplication is associative:
 The result is the same, but the number of scalar multiplications can be very different.
 
 ## Dynamic Programming Recurrence
+
+<Explain />
 
 ```text
 m[i][j] = min(m[i][k] + m[k+1][j] + p[i-1] * p[k] * p[j])
@@ -50,9 +58,13 @@ where `i <= k < j`.
 
 ### Problem Statement
 
+<Notebook />
+
 List different orders for evaluating the product of `A, B, C, D, E` matrices.
 
 ### Explanation / Approach
+
+<Explain />
 
 For a fixed sequence of matrices $A × B × C × D × E$, the order of evaluation refers to how you place parentheses. Due to the associative property of matrix multiplication, all valid parenthesizations yield the same final matrix, but they require vastly different amounts of computational work.
 
@@ -83,9 +95,13 @@ For `5` matrices, there are exactly **14 valid parenthesization orders** (given 
 
 ### Problem Statement
 
+<Notebook />
+
 Find the optimal order for evaluating `A * B * C * D * E` using the given dimensions.
 
 ### Explanation / Approach
+
+<Explain />
 
 The optimal parenthesization is:
 $((A · (B · (C · D))) · E)$
@@ -102,6 +118,8 @@ Minimum scalar multiplication cost: 1,320
 
 ### Why This Order is Optimal
 
+<Explain />
+
 - Matrix chain multiplication is all about controlling the size of intermediate matrices. $C·D$ collapses the large `20` inner dimension early, producing a skinny $5×2$ matrix.
 - Subsequent multiplications with `B` and `A` keep the intermediate column dimension at `2`, avoiding expensive operations with the `50` columns of `E` until the very last step.
 - Multiplying the final $10×2$ intermediate by `E` ($2×50$) is cheap because the shared dimension is only `2`.
@@ -112,9 +130,13 @@ Any other parenthesization forces a larger inner dimension to be multiplied earl
 
 ### Problem Statement
 
+<Notebook />
+
 Implement chained matrix multiplication and print the optimal parentheses. Study the performance on different problem instances.
 
 ### Answer
+
+<Notebook />
 | Aspect | Complexity / Behavior |
 |--------|-----------------------|
 | Time Complexity | O(n³) due to 3 nested loops (chain_len, i, k) |
@@ -124,6 +146,8 @@ Implement chained matrix multiplication and print the optimal parentheses. Study
 | Practical Limit | Python's pure loops cap out around n ≈ 300-400 (~1-2 sec). For n > 1000, use C/C++ extensions or iterative reconstruction to avoid recursion limits. |
 
 ### Implementation
+
+<Notebook />
 
 <Tabs syncKey="lang">
 <TabItem label="Python">
@@ -153,6 +177,8 @@ Implement chained matrix multiplication and print the optimal parentheses. Study
 </Tabs>
 
 #### Sample Output
+
+<Notebook />
 
 ```sh
 N     | Pattern      | Cost       | Time(ms)

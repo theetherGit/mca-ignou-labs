@@ -13,6 +13,8 @@ import Question3 from "../../../../components/demo/mcs-216/section-2/session-9/3
 JavaScript is inherently a **single-threaded, synchronous language**, meaning it executes code line-by-line from top to bottom. However, modern web applications frequently require tasks that take time to complete (e.g., fetching data from a server, waiting for user input, or running timers). If JavaScript waited for these tasks to finish before moving to the next line, the entire browser UI would freeze. This session introduces **Asynchronous Programming**, which allows JavaScript to initiate a long-running task, continue executing other code, and handle the result later using **callbacks**. This session covers the foundational async patterns required for responsive, non-blocking web applications.
 
 ## Objectives
+
+<Explain />
 - Understand the difference between synchronous and asynchronous execution
 - Master callback functions as the primary mechanism for async flow control
 - Implement built-in async methods: `setTimeout()` and `setInterval()`
@@ -80,6 +82,8 @@ xhr.send(); // Triggers the request
 
 ## Best Practices & Common Pitfalls
 
+<Explain />
+
 | Pitfall | Best Practice |
 |---------|---------------|
 | Passing `callback()` with parentheses | Pass function reference only: `setTimeout(myFunc, 1000)` not `setTimeout(myFunc(), 1000)` |
@@ -89,6 +93,8 @@ xhr.send(); // Triggers the request
 | Ignoring XHR `status` codes | Always check `xhr.status === 200` before processing `responseText` |
 
 ## Quick Guide
+
+<Explain />
 
 ```js
 // ⏱️ Timers
@@ -116,13 +122,19 @@ xhr.send();
 
 ### Problem Statement
 
+<Notebook />
+
 Implement a clock in HTML which shows the live time in the format `HH:MM:SS`. Use the JavaScript `setInterval()` method and a callback function by displaying the system time every second.
 
 ### Demo
 
+<Explain />
+
 <Question1 client:visible />
 
 ### Code
+
+<Notebook />
 
 ```html title="time.html" file=<rootDir>/public/code/mcs-216/section-2/session-9/1.html
 
@@ -136,13 +148,19 @@ Implement a clock in HTML which shows the live time in the format `HH:MM:SS`. Us
 
 ### Problem Statement
 
+<Notebook />
+
 Sometimes we use external resource files in our HTML page. The content of an external file cannot be used until loaded completely. This can be implemented with JavaScript Callback. Design a web page which loads an external HTML file on the event: `onLoad`. Hint: use the inbuilt class `XMLHttpRequest()` to use its functions: `open()`, `onLoad()` etc. to load an external HTML file.
 
 ### Demo
 
+<Explain />
+
 <Question2 client:visible />
 
 ### Code
+
+<Notebook />
 
 ```html title="request.html" file=<rootDir>/public/code/mcs-216/section-2/session-9/2.html
 
@@ -160,6 +178,8 @@ Sometimes we use external resource files in our HTML page. The content of an ext
 
 ### Problem Statement
 
+<Notebook />
+
 The village crows own an old scalpel that they occasionally use on special missions say, to cut through screen doors or packaging. To be able to quickly track it down, every time the scalpel is moved to another nest, an entry is added to the storage of both the nest that had it and the nest that took it, under the name "scalpel", with its new location as the value.This means that finding the scalpel is a matter of following the breadcrumb trail of storage entries, until you find a nest where that
 points at the nest itself.
 
@@ -167,9 +187,13 @@ Write an async function locateScalpel that does this, starting at the nest on wh
 
 ### Demo
 
+<Explain />
+
 <Question3 client:visible />
 
 ### Code
+
+<Notebook />
 
 ```html title="scalpel.html" file=<rootDir>/public/code/mcs-216/section-2/session-9/3.html
 

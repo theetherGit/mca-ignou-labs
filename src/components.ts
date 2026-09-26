@@ -8,6 +8,8 @@ import { Aside } from "./components/ui/aside";
 import Render from "./components/Render.astro";
 import PrintButton from "./components/PrintButton.astro";
 import Preview from "./components/Preview.astro";
+import Notebook from "./components/Notebook.astro";
+import Explain from "./components/Explain.astro";
 import { Card } from "./components/ui/card";
 import { CardGrid } from "./components/ui/card-grid";
 import { PackageManagers } from "./components/ui/package-managers";
@@ -17,9 +19,11 @@ import { Tabs, TabItem } from "./components/ui/tabs";
 export const components = {
   Aside,
   Card,
+  Explain,
   CardGrid,
   PackageManagers,
   Preview,
+  Notebook,
   PrintButton,
   Render,
   Step,
