@@ -606,8 +606,9 @@ body:not(:has([data-mobile-sidebar])) [data-menu-btn] {
 	background: color-mix(in oklch, var(--nb-primary) 12%, transparent);
 }
 .nb-mark-explain {
-	color: var(--nb-muted-foreground);
-	background: var(--nb-muted);
+	color: var(--nb-danger);
+	background: var(--nb-danger-muted);
+	border: 1px solid color-mix(in oklch, var(--nb-danger) 35%, transparent);
 }
 [data-mode="dark"] .nb-mark-notebook {
 	color: var(--nb-primary);

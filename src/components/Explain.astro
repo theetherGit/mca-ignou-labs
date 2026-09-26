@@ -3,12 +3,12 @@
 interface Props {
   label?: string;
 }
-const { label = "For understanding, not for the record" } = Astro.props;
+const { label = "Do not copy. Read for understanding and the viva" } = Astro.props;
 ---
 <span
   class="nb-mark nb-mark-explain not-prose inline-flex items-center gap-1.5 rounded-sm px-2 py-0.5 text-xs font-medium"
   role="note"
 >
-  <span aria-hidden="true" class="size-2 rounded-[2px] border border-current"></span>
+  <span aria-hidden="true" class="font-bold leading-none">×</span>
   {label}
 </span>
