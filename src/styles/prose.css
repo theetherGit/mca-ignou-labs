@@ -339,3 +339,33 @@
   margin-left: 1rem;
   color: var(--nb-muted-foreground);
 }
+
+/* MathML matrices (Floyd–Warshall session) */
+.docs-content mrow > mtable {
+  background-color: rgba(0, 0, 0, 0.02);
+  border-radius: 6px;
+  margin: 1rem auto;
+  font-variant-numeric: tabular-nums;
+}
+.docs-content mrow > mtable mtd {
+  padding: 0.5rem 0.8rem !important;
+  text-align: center;
+  vertical-align: middle;
+}
+.docs-content mrow > mo[fence="true"] {
+  color: var(--nb-primary);
+  font-weight: bold;
+  padding: 0 0.2rem;
+}
+.docs-content mrow > mtable mtr:has(mtd[style*="font-size:1"]) {
+  height: 10px;
+}
+.docs-content mrow:has(mtable) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+  padding: 0.5rem 0;
+}
