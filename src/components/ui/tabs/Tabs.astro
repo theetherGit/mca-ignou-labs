@@ -14,9 +14,22 @@ import TabsList from "./TabsList.astro";
 interface Props extends HTMLAttributes<"div"> {
   /** Sync tab selection across instances with the same key via localStorage */
   syncKey?: string;
+  /**
+   * What a student copies into the lab record from this group:
+   * "one"  – alternatives (languages); write only the one your lab uses.
+   * "all"  – parts of one answer (files of a project); write every tab.
+   * Defaults to "one" when syncKey is "lang", otherwise no hint.
+   */
+  record?: "one" | "all" | "none";
 }
 
-const { syncKey, class: className, ...attrs } = Astro.props;
+const { syncKey, record = syncKey === "lang" ? "one" : "none", class: className, ...attrs } = Astro.props;
+const hint =
+  record === "one"
+    ? "Lab record: write one language only, the one your lab uses. The other tabs are the same solution for comparison."
+    : record === "all"
+      ? "Lab record: every tab is one file of the answer. Write all of them."
+      : null;
 ---
 
 <div
@@ -25,6 +38,12 @@ const { syncKey, class: className, ...attrs } = Astro.props;
   class={cn(className)}
   {...attrs}
 >
+  {hint && (
+    <p class="nb-tabs-hint" role="note">
+      <span aria-hidden="true" class="nb-tabs-hint-mark"></span>
+      {hint}
+    </p>
+  )}
   <TabsList />
   <div class="mt-3">
     <slot />

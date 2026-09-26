@@ -90,7 +90,7 @@ Assumptions:
 | Payment | paymentId: int, amount: double, mode: String, status: String | process(), refund() | for 1 Order |
 | Shipment | shipmentId: int, courier: String, trackingNo: String, status: String | dispatch(), deliver() | for 1 Order |
 
-<Tabs>
+<Tabs record="all">
 <TabItem label="Sketch">
 ```text
  +----------+ 1     1..* +---------+      +----------+ 1   0..* +---------+ 0..*    1 +-------+
@@ -276,7 +276,7 @@ Assumptions:
 | Answer | answerId: int | none | for 1 Question; selects 1 Option |
 | Result | resultId: int, marksObtained: int, percentage: double, status: String, published: boolean | publish() | of 1 Attempt |
 
-<Tabs>
+<Tabs record="all">
 <TabItem label="Sketch">
 ```text
                     +-----------+ (abstract)
@@ -468,7 +468,7 @@ Objects at the snapshot instant:
 | t1 | Transaction | txnId = T5001, type = DEBIT, amount = 5000.00, date = 2026-09-26, reference = TR26092601 | acc1 |
 | t2 | Transaction | txnId = T5002, type = CREDIT, amount = 5000.00, date = 2026-09-26, reference = TR26092601 | acc3 |
 
-<Tabs>
+<Tabs record="all">
 <TabItem label="Sketch">
 ```text
  +-------------------+     +----------------------+

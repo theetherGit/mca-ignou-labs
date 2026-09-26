@@ -643,6 +643,27 @@ body:not(:has([data-mobile-sidebar])) [data-menu-btn] {
 	color: var(--nb-primary);
 	background: color-mix(in oklch, var(--nb-primary) 16%, transparent);
 }
+/* Hint above a code tab group: write one language, or all files. */
+.nb-tabs-hint {
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
+	margin: 0 0 0.35rem;
+	font-size: 0.75rem;
+	line-height: 1.4;
+	color: var(--nb-primary-hover);
+}
+.nb-tabs-hint-mark {
+	width: 0.5rem;
+	height: 0.5rem;
+	flex: none;
+	border-radius: 2px;
+	background: currentColor;
+}
+[data-mode="dark"] .nb-tabs-hint {
+	color: var(--nb-primary);
+}
+
 /* Pull a mark that directly follows a heading up under it. */
 .docs-content h2 + p > .nb-mark:only-child,
 .docs-content h3 + p > .nb-mark:only-child,

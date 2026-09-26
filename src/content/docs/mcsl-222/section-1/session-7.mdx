@@ -83,7 +83,7 @@ Each dependency between components is drawn as a named interface. The component 
 | Notification Service | Application | INotify | none |
 | Exam Database | Data | IDataAccess | none |
 
-<Tabs>
+<Tabs record="all">
 <TabItem label="Sketch">
 ```text
  Legend: O provided interface (lollipop), C required interface (socket)
@@ -222,7 +222,7 @@ The important design decision that the diagram records is the adapter pattern fo
 | Payment Gateway | External | IGatewayAPI | none |
 | Courier System | External | ICourierAPI | none |
 
-<Tabs>
+<Tabs record="all">
 <TabItem label="Sketch">
 ```text
  Legend: O provided (lollipop), C required (socket), dashed = uses
@@ -385,7 +385,7 @@ The artefacts follow the component diagram of the same system: the web archive c
 | Application Server | Payment Gateway | HTTPS REST |
 | Application Server | Mail and SMS Gateway | SMTP 587 and HTTPS |
 
-<Tabs>
+<Tabs record="all">
 <TabItem label="Sketch">
 ```text
  <<device>> Applicant PC or Phone        <<device>> Admission Officer PC

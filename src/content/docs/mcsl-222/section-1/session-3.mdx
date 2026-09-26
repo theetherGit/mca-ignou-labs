@@ -100,7 +100,7 @@ Assumptions:
 | 2.4 | order | p | reduceStock(qty) (loop, each line) | none |
 | 2.5 | order | order | setStatus(PaymentFailed) (alt declined) | none |
 
-<Tabs>
+<Tabs record="all">
 <TabItem label="Sketch">
 ```text
  customer      cart:ShoppingCart   item:CartItem   p:Product   order:Order   pay:Payment   gateway
@@ -265,7 +265,7 @@ Assumptions:
 | 3.2 | attempt | result | create Result(marks, percentage, status) | result |
 | 3.3 | attempt | student | submitted, result pending publication | none |
 
-<Tabs>
+<Tabs record="all">
 <TabItem label="Sketch">
 ```text
  student        exam:Exam        attempt:Attempt     ans:Answer     q:Question    result:Result
@@ -428,7 +428,7 @@ Assumptions:
 | 2.2.1 | emp | bal | deduct(type, days) (alt approved) | none |
 | 2.3 | mgr | manager | decision recorded (reply) | none |
 
-<Tabs>
+<Tabs record="all">
 <TabItem label="Sketch">
 ```text
  employee     emp:Employee     bal:LeaveBalance   req:LeaveRequest    mgr:Manager     manager
