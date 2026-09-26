@@ -1,0 +1,112 @@
+---
+title: Session 7
+description: "Spring Boot and REST controllers"
+sidebar:
+  order: 7
+---
+
+Spring Boot removes most configuration: an embedded server, auto-configured data source and one property file. REST controllers return JSON instead of views, which is how modern front ends consume the same student data.
+
+<Aside type="caution" title="Draft: questions final, solutions pending">
+  Every question below is copied from the lab manual. Worked solutions are being added session by session. Use the problem statements, prep notes and formula sheet to prepare before your lab.
+</Aside>
+
+## Objectives
+
+<Explain />
+
+- Complete questions 29 to 32 of the manual: spring boot and rest controllers
+- Prepare the deliverable before the lab and finish it during the session
+- Be ready to explain every step in the viva
+
+## Questions Covered
+
+<Explain />
+
+| Question | Requirement | Status |
+| --- | --- | --- |
+| Q29 | Create a Spring Boot application using Spring Initializer. Add the following... | Solution pending |
+| Q30 | Configure Database settings through the property file in Spring Boot | Solution pending |
+| Q31 | Create JPA Repositories for all entities used in the Student Admission lifecycle | Solution pending |
+| Q32 | Create Rest Controller to fetch Student Information using JPA Repository; the response... | Solution pending |
+
+## Preparation
+
+<Explain />
+
+- Use Spring Initializr with the listed dependencies; the exact starter names are spring-boot-starter-web, spring-boot-starter-data-jpa, spring-boot-starter-thymeleaf, spring-boot-devtools, spring-boot-starter-actuator and the database driver.
+- Database settings go in `application.properties`: url, username, password, `spring.jpa.hibernate.ddl-auto`.
+- A `JpaRepository<Student, Long>` interface needs no implementation; Spring generates it.
+
+## Question 29
+
+### Problem Statement
+
+<Notebook />
+
+Create a Spring Boot application using Spring Initializer. Add the following dependencies manually:
+
+1. Spring MVC
+2. Hibernate
+3. JPA
+4. Thymeleaf
+5. DevTool
+6. Actuator
+7. MySQL/MSSQL/Oracle/MongoDB (as per your choice) driver.
+
+### Solution
+
+<Notebook />
+
+Solution pending. Prepare using the notes above; the worked answer will appear here.
+
+## Question 30
+
+### Problem Statement
+
+<Notebook />
+
+Configure Database settings through the property file in Spring Boot.
+
+### Solution
+
+<Notebook />
+
+Solution pending. Prepare using the notes above; the worked answer will appear here.
+
+## Question 31
+
+### Problem Statement
+
+<Notebook />
+
+Create JPA Repositories for all entities used in the Student Admission lifecycle.
+
+### Solution
+
+<Notebook />
+
+Solution pending. Prepare using the notes above; the worked answer will appear here.
+
+## Question 32
+
+### Problem Statement
+
+<Notebook />
+
+Create Rest Controller to fetch Student Information using JPA Repository; the response should display in JSON format.
+
+### Solution
+
+<Notebook />
+
+Solution pending. Prepare using the notes above; the worked answer will appear here.
+
+## Session Summary
+
+<Notebook />
+
+- Question 29: Create a Spring Boot application using Spring Initializer. Add the following dep
+- Question 30: Configure Database settings through the property file in Spring Boot
+- Question 31: Create JPA Repositories for all entities used in the Student Admission lifecycle
+- Question 32: Create Rest Controller to fetch Student Information using JPA Repository; the re

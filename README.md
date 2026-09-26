@@ -60,6 +60,7 @@ pnpm deploy     # Cloudflare Workers via wrangler
 - Multi-language solutions go in `<Tabs syncKey="lang">` with one `<TabItem label="C">` per language.
 - HTML solutions get `<Preview src="/code/..." height="300px" />` above the code fence.
 - `pnpm lint:docs` enforces frontmatter, internal links and heading hierarchy. MCS-217 pages follow `docs-plan/mcs-217-brief.md`.
+- Math: plain `$x^2$` works for simple inline LaTeX. Anything with braces that is not a valid JS expression (`\text{...}`, `\frac{a}{b}`) must use `<Math tex="..." />` or `<Math display tex="..." />`, because Nimbus pre-parses MDX and rejects those braces. Formula sheets on the MCSL-223 pages are the reference.
 
 ## ⚠️ Important Notice for Students
 

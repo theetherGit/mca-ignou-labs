@@ -1,0 +1,133 @@
+---
+title: Session 10
+description: "Hierarchical and density-based clustering"
+sidebar:
+  order: 10
+---
+
+Hierarchical clustering produces a tree of merges that does not need k in advance; DBSCAN finds clusters of arbitrary shape and marks noise. Both are run on the datasets you built in Session 1.
+
+<Aside type="caution" title="Draft: questions final, solutions pending">
+  Every question below is copied from the lab manual. Worked solutions are being added session by session. Use the problem statements, prep notes and formula sheet to prepare before your lab.
+</Aside>
+
+## Objectives
+
+<Explain />
+
+- Complete questions 22 to 23 of the manual: hierarchical and density-based clustering
+- Prepare the deliverable before the lab and finish it during the session
+- Be ready to explain every step in the viva
+
+## Questions Covered
+
+<Explain />
+
+| Question | Requirement | Status |
+| --- | --- | --- |
+| Q22 | Implement Hierarchical Clustering Algorithm to demonstrate the clustering rule process... | Solution pending |
+| Q23 | Implement Density based Clustering Algorithm to demonstrate the clustering rule... | Solution pending |
+
+## Preparation
+
+<Explain />
+
+- `HierarchicalClusterer` with `linkType` SINGLE, COMPLETE, AVERAGE; compare the dendrograms (Visualize tree) and note how single linkage chains.
+- `DBSCAN` (install via the package manager if missing) needs `epsilon` and `minPoints`; start with epsilon 0.9 on normalised data and minPoints 3, then vary.
+- For each run, record cluster sizes, unclustered (noise) instances, and one sentence on what the clusters mean for employees or students.
+
+## Question 22
+
+### Problem Statement
+
+<Notebook />
+
+Implement Hierarchical Clustering Algorithm to demonstrate the clustering rule process in the following datasets:
+
+1. `employee.arff`
+2. `student.arff`
+
+### Solution
+
+<Notebook />
+
+Solution pending. Prepare using the notes above; the worked answer will appear here.
+
+## Question 23
+
+### Problem Statement
+
+<Notebook />
+
+Implement Density based Clustering Algorithm to demonstrate the clustering rule process on dataset employee.arff.
+
+### Solution
+
+<Notebook />
+
+Solution pending. Prepare using the notes above; the worked answer will appear here.
+
+## Formula Sheet
+
+<Explain />
+
+### Association rules
+
+For a rule <Math tex="X \Rightarrow Y" /> over $N$ transactions:
+
+<Math display tex="\text{support}(X \Rightarrow Y) = \frac{|X \cup Y|}{N}, \qquad \text{confidence}(X \Rightarrow Y) = \frac{|X \cup Y|}{|X|}, \qquad \text{lift}(X \Rightarrow Y) = \frac{\text{confidence}(X \Rightarrow Y)}{\text{support}(Y)}" />
+
+WEKA's Apriori starts at the upper bound of minimum support and lowers it by the delta each pass until the requested number of rules is found or the lower bound is reached.
+
+### Entropy, information gain and Gini
+
+For a set $S$ with class proportions <Math tex="p_1, \dots, p_c" />:
+
+<Math display tex="H(S) = -\sum_{i=1}^{c} p_i \log_2 p_i, \qquad \text{Gain}(S, A) = H(S) - \sum_{v \in \text{values}(A)} \frac{|S_v|}{|S|} H(S_v), \qquad \text{Gini}(S) = 1 - \sum_{i=1}^{c} p_i^{2}" />
+
+ID3 splits on the attribute with the highest gain; J48 (C4.5) uses the gain ratio <Math tex="\text{Gain}(S,A) / \text{SplitInfo}(S,A)" /> where <Math tex="\text{SplitInfo}(S,A) = -\sum_v \frac{|S_v|}{|S|} \log_2 \frac{|S_v|}{|S|}" />.
+
+### Classifier evaluation
+
+From the confusion matrix with true positives $TP$, false positives $FP$, false negatives $FN$, true negatives $TN$:
+
+<Math display tex="\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}, \quad \text{Precision} = \frac{TP}{TP + FP}, \quad \text{Recall} = \frac{TP}{TP + FN}, \quad F_1 = \frac{2 \cdot \text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}" />
+
+Kappa compares observed agreement $p_o$ (accuracy) with the agreement expected by chance $p_e$:
+
+<Math display tex="\kappa = \frac{p_o - p_e}{1 - p_e}, \qquad p_e = \sum_{i} \frac{(\text{row}_i \text{ total})(\text{column}_i \text{ total})}{N^{2}}" />
+
+The ROC curve plots true positive rate $TP/(TP+FN)$ against false positive rate $FP/(FP+TN)$; the area under it (AUC) is 0.5 for guessing and 1.0 for a perfect classifier.
+
+### Naive Bayes and k-nearest neighbour
+
+<Math display tex="P(C \mid x_1, \dots, x_n) \propto P(C) \prod_{i=1}^{n} P(x_i \mid C)" />
+
+k-NN assigns the majority class among the $k$ nearest training records under Euclidean distance
+
+<Math display tex="d(\mathbf{a}, \mathbf{b}) = \sqrt{\sum_{i=1}^{n} (a_i - b_i)^{2}}" />
+
+after normalising each attribute to $[0, 1]$ with <Math tex="x' = (x - x_{\min}) / (x_{\max} - x_{\min})" />.
+
+### Linear regression
+
+<Math display tex="\hat{y} = \beta_0 + \beta_1 x, \qquad \beta_1 = \frac{\sum (x_i - \bar{x})(y_i - \bar{y})}{\sum (x_i - \bar{x})^{2}}, \qquad \beta_0 = \bar{y} - \beta_1 \bar{x}" />
+
+WEKA reports the correlation coefficient, mean absolute error and root mean squared error <Math tex="\sqrt{\frac{1}{N}\sum (y_i - \hat{y}_i)^{2}}" />.
+
+### Clustering
+
+k-means minimises the within-cluster sum of squared errors over clusters <Math tex="C_1, \dots, C_k" /> with centroids <Math tex="\mu_j" />:
+
+<Math display tex="SSE = \sum_{j=1}^{k} \sum_{\mathbf{x} \in C_j} \lVert \mathbf{x} - \mu_j \rVert^{2}, \qquad \mu_j = \frac{1}{|C_j|} \sum_{\mathbf{x} \in C_j} \mathbf{x}" />
+
+Hierarchical (agglomerative) clustering merges the two closest clusters each step; linkage defines closeness: single <Math tex="\min d(a,b)" />, complete <Math tex="\max d(a,b)" />, average <Math tex="\frac{1}{|A||B|}\sum d(a,b)" />.
+
+DBSCAN calls a point a core point when at least <Math tex="\text{minPts}" /> points lie within radius <Math tex="\varepsilon" />; clusters grow from core points, and points reachable from none are noise.
+
+## Session Summary
+
+<Notebook />
+
+- Question 22: Implement Hierarchical Clustering Algorithm to demonstrate the clustering rule p
+- Question 23: Implement Density based Clustering Algorithm to demonstrate the clustering rule 

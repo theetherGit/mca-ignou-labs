@@ -1,0 +1,116 @@
+---
+title: Session 9
+description: "Saturating the bottleneck and plotting cwnd"
+sidebar:
+  order: 9
+---
+
+Raising the UDP rate until it fills the whole bridge starves TCP completely. The plot of congestion window against time, annotated with both UDP rates, is the deliverable.
+
+<Aside type="caution" title="Draft: questions final, solutions pending">
+  Every question below is copied from the lab manual. Worked solutions are being added session by session. Use the problem statements, prep notes and formula sheet to prepare before your lab.
+</Aside>
+
+## Objectives
+
+<Explain />
+
+- Complete questions 23 to 24 of the manual: saturating the bottleneck and plotting cwnd
+- Prepare the deliverable before the lab and finish it during the session
+- Be ready to explain every step in the viva
+
+## Questions Covered
+
+<Explain />
+
+| Question | Requirement | Status |
+| --- | --- | --- |
+| Q23 | In the last session 8, Increase the UDP rate at 30 second to Rate2 such that it clogs... | Solution pending |
+| Q24 | Use MatPlotlLib or GNUPlot to visualize cwnd vs time, also mention Rate1 and Rate2 | Solution pending |
+
+## Preparation
+
+<Explain />
+
+- Schedule the rate change with `Simulator::Schedule(Seconds(30.0), ...)` that sets the OnOff application's DataRate attribute to Rate2.
+- Plot with matplotlib: time on x, cwnd in bytes on y, vertical lines at 20 s and 30 s labelled Rate1 and Rate2.
+- Explain each phase of the curve in the record: slow start, steady state, halving after 20 s, collapse after 30 s.
+
+## Question 23
+
+### Problem Statement
+
+<Notebook />
+
+In the last session 8, Increase the UDP rate at 30 second to Rate2 such that it clogs whole of the dumbbell bridge capacity.
+
+### Solution
+
+<Notebook />
+
+Solution pending. Prepare using the notes above; the worked answer will appear here.
+
+## Question 24
+
+### Problem Statement
+
+<Notebook />
+
+Use MatPlotlLib or GNUPlot to visualize cwnd vs time, also mention Rate1 and Rate2.
+
+### Solution
+
+<Notebook />
+
+Solution pending. Prepare using the notes above; the worked answer will appear here.
+
+## Formula Sheet
+
+<Explain />
+
+### Throughput
+
+Bytes received at the sink divided by the time the flow was active, converted to bits per second:
+
+<Math display tex="\text{Throughput} = \frac{8 \times \text{bytes received}}{t_{\text{end}} - t_{\text{start}}} \;\text{bit/s}" />
+
+### Bandwidth-delay product
+
+The amount of data in flight on a link of capacity $B$ and round-trip time $RTT$. A TCP window smaller than this cannot fill the link:
+
+<Math display tex="BDP = B \times RTT" />
+
+For the Session 10 defaults, <Math tex="B = 5\,\text{Mbit/s}" /> and one-way delay <Math tex="5\,\text{ms}" /> give <Math tex="RTT = 10\,\text{ms}" /> and <Math tex="BDP = 5 \times 10^{6} \times 0.010 = 50{,}000\,\text{bits} \approx 6.25\,\text{kB}" />.
+
+### Transmission and propagation delay
+
+<Math display tex="t_{\text{trans}} = \frac{L}{B}, \qquad t_{\text{prop}} = \frac{d}{v}, \qquad t_{\text{total}} = t_{\text{trans}} + t_{\text{prop}} + t_{\text{queue}} + t_{\text{proc}}" />
+
+where $L$ is packet size in bits, $B$ link rate, $d$ distance and $v$ signal speed (about <Math tex="2 \times 10^{8}\,\text{m/s}" /> in copper or fibre).
+
+### Constant bit rate traffic
+
+An OnOff application with packet size $L$ bytes and rate $R$ bit/s sends one packet every
+
+<Math display tex="\Delta t = \frac{8L}{R}\ \text{seconds}" />
+
+### TCP congestion window
+
+Slow start doubles the window every RTT until the threshold; congestion avoidance adds one segment per RTT; a loss halves it (TCP NewReno):
+
+<Math display tex="cwnd_{\text{ss}}(n) = 2^{n}\, MSS, \qquad cwnd_{\text{ca}} \leftarrow cwnd + \frac{MSS^{2}}{cwnd}, \qquad cwnd_{\text{loss}} \leftarrow \frac{cwnd}{2}" />
+
+The maximum throughput of one TCP flow is bounded by
+
+<Math display tex="\text{Throughput}_{\max} = \frac{cwnd_{\max}}{RTT}" />
+
+### Packet loss
+
+<Math display tex="\text{Loss rate} = \frac{\text{packets sent} - \text{packets received}}{\text{packets sent}}" />
+
+## Session Summary
+
+<Notebook />
+
+- Question 23: In the last session 8, Increase the UDP rate at 30 second to Rate2 such that it 
+- Question 24: Use MatPlotlLib or GNUPlot to visualize cwnd vs time, also mention Rate1 and Rat

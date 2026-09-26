@@ -1,0 +1,49 @@
+---
+title: "Section 1 \u00b7 Computer Networks Lab (NS-3)"
+description: "Ten NS-3 sessions: point-to-point and dumbbell topologies, UDP and TCP applications, wireless ad-hoc networks with OLSR, tracing, and TCP congestion window analysis."
+sidebar:
+  order: 0
+---
+
+Ten NS-3 sessions: point-to-point and dumbbell topologies, UDP and TCP applications, wireless ad-hoc networks with OLSR, tracing, and TCP congestion window analysis.
+
+<Aside type="caution" title="Draft: questions final, solutions pending">
+  Every question below is copied from the lab manual. Worked solutions are being added session by session. Use the problem statements, prep notes and formula sheet to prepare before your lab.
+</Aside>
+
+<Aside type="tip" title="Lab manual">
+  Download the official manual: <a href={"/mcsl-223.pdf"} target="_blank" rel="noopener">MCSL-223 Lab Manual (PDF)</a>. Session and question numbers here match it.
+</Aside>
+
+## Objectives
+
+<Explain />
+
+- Explore and understand the features available in the NS-3 software
+- Create wired and wireless connection
+- Test and verify various routing and communication protocols
+- Test and verify user defined routing protocols
+- Perform analysis and evaluation of various available protocols
+
+## Sessions
+
+| Session | Topic | Questions |
+| --- | --- | --- |
+| [Session 1](/mcsl-223/section-1/session-1) | Point-to-point topology and UDP echo | Q1 to Q2 |
+| [Session 2](/mcsl-223/section-1/session-2) | Throughput versus latency and the dumbbell topology | Q3 to Q4 |
+| [Session 3](/mcsl-223/section-1/session-3) | TCP sockets on the dumbbell | Q5 to Q7 |
+| [Session 4](/mcsl-223/section-1/session-4) | Wireless ad-hoc network with OLSR | Q8 to Q9 |
+| [Session 5](/mcsl-223/section-1/session-5) | UDP over Wi-Fi with tracing and pcap | Q10 to Q12 |
+| [Session 6](/mcsl-223/section-1/session-6) | Fixed-distance ad-hoc nodes and CBR traffic | Q13 to Q15 |
+| [Session 7](/mcsl-223/section-1/session-7) | Mixed TCP and UDP pairs | Q16 to Q18 |
+| [Session 8](/mcsl-223/section-1/session-8) | TCP under UDP interference: congestion window tracing | Q19 to Q22 |
+| [Session 9](/mcsl-223/section-1/session-9) | Saturating the bottleneck and plotting cwnd | Q23 to Q24 |
+| [Session 10](/mcsl-223/section-1/session-10) | Parameterised point-to-point link and TCP throughput in Wireshark | Q25 |
+
+## Before the first session
+
+<Explain />
+
+- Install NS-3 (3.36 or later) on Ubuntu or in WSL 2; the manual's section 1.5 has the steps. Build once with `./ns3 configure --enable-examples` and `./ns3 build`; it takes a while.
+- Scripts live in `scratch/` and run with `./ns3 run scratch/name`. Start every session by copying the closest example from `examples/tutorial/`.
+- Keep the script, the console output, the pcap or trace file summary and the plot together for each question. The formula sheet on each session page gives the calculations the evaluator expects.

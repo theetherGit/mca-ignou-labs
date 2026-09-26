@@ -1,0 +1,104 @@
+---
+title: Session 6
+description: "Hibernate and JPA"
+sidebar:
+  order: 6
+---
+
+Hibernate maps entity classes to tables so that persistence code is annotations and a session or entity manager call rather than hand-written SQL. This session persists the student admission data and performs a batch update.
+
+<Aside type="caution" title="Draft: questions final, solutions pending">
+  Every question below is copied from the lab manual. Worked solutions are being added session by session. Use the problem statements, prep notes and formula sheet to prepare before your lab.
+</Aside>
+
+## Objectives
+
+<Explain />
+
+- Complete questions 25 to 28 of the manual: hibernate and jpa
+- Prepare the deliverable before the lab and finish it during the session
+- Be ready to explain every step in the viva
+
+## Questions Covered
+
+<Explain />
+
+| Question | Requirement | Status |
+| --- | --- | --- |
+| Q25 | Create a database for the student admission lifecycle and configure Hibernate and JPA... | Solution pending |
+| Q26 | Retrieve Student information using Hibernate and printing the value in the console | Solution pending |
+| Q27 | Create CRUD (Create/Save, Read/Fetch, Edit/Update, Delete) using Spring MVC and... | Solution pending |
+| Q28 | Apply batch update for student's admission approval using Spring MVC and Hibernate | Solution pending |
+
+## Preparation
+
+<Explain />
+
+- Draw the admission life-cycle tables first: Student, Programme, Course, StudentCourse, AdmissionStatus. Map each with `@Entity`, `@Id`, `@OneToMany`, `@ManyToMany`.
+- Configure `hibernate.cfg.xml` or Spring's `LocalSessionFactoryBean` with the MySQL dialect and `hbm2ddl.auto=update` for the lab.
+- Batch update: loop with `session.update` and flush every 20 records, inside one transaction.
+
+## Question 25
+
+### Problem Statement
+
+<Notebook />
+
+Create a database for the student admission lifecycle and configure Hibernate and JPA with the Spring MVC Project along with all table entities.
+
+### Solution
+
+<Notebook />
+
+Solution pending. Prepare using the notes above; the worked answer will appear here.
+
+## Question 26
+
+### Problem Statement
+
+<Notebook />
+
+Retrieve Student information using Hibernate and printing the value in the console.
+
+### Solution
+
+<Notebook />
+
+Solution pending. Prepare using the notes above; the worked answer will appear here.
+
+## Question 27
+
+### Problem Statement
+
+<Notebook />
+
+Create CRUD (Create/Save, Read/Fetch, Edit/Update, Delete) using Spring MVC and Hibernation.
+
+### Solution
+
+<Notebook />
+
+Solution pending. Prepare using the notes above; the worked answer will appear here.
+
+## Question 28
+
+### Problem Statement
+
+<Notebook />
+
+Apply batch update for student's admission approval using Spring MVC and Hibernate.
+
+### Solution
+
+<Notebook />
+
+Solution pending. Prepare using the notes above; the worked answer will appear here.
+
+## Session Summary
+
+<Notebook />
+
+- Question 25: Create a database for the student admission lifecycle and configure Hibernate an
+- Question 26: Retrieve Student information using Hibernate and printing the value in the conso
+- Question 27: Create CRUD (Create/Save, Read/Fetch, Edit/Update, Delete) using Spring MVC and 
+- Question 28: Apply batch update for student's admission approval using Spring MVC and Hiberna

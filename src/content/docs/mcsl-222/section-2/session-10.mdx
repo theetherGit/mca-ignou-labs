@@ -1,0 +1,136 @@
+---
+title: Session 10
+description: "Bootstrap, role based authentication and CSRF"
+sidebar:
+  order: 10
+---
+
+The final session adds roles so that an admin sees pages a student cannot, shows who is logged in, and turns on CSRF protection so that forms cannot be submitted from another site.
+
+<Aside type="caution" title="Draft: questions final, solutions pending">
+  Every question below is copied from the lab manual. Worked solutions are being added session by session. Use the problem statements, prep notes and formula sheet to prepare before your lab.
+</Aside>
+
+## Objectives
+
+<Explain />
+
+- Complete questions 41 to 46 of the manual: bootstrap, role based authentication and csrf
+- Prepare the deliverable before the lab and finish it during the session
+- Be ready to explain every step in the viva
+
+## Questions Covered
+
+<Explain />
+
+| Question | Requirement | Status |
+| --- | --- | --- |
+| Q41 | Add Bootstrap styling in the Login and registration page in the above exercises in... | Solution pending |
+| Q42 | Create a Role Table in the database and configure it with Spring Boot, Security and... | Solution pending |
+| Q43 | Write code for role-based authentication using Spring Security | Solution pending |
+| Q44 | Display current logged in User details on the dashboard along with client IP, data... | Solution pending |
+| Q45 | Add CSRF functionality in the authentication | Solution pending |
+| Q46 | Restrict role-based access to views in Spring Boot Security | Solution pending |
+
+## Preparation
+
+<Explain />
+
+- Role table with a many-to-many link to User; load roles as `GrantedAuthority` in `UserDetailsService`.
+- Restrict URLs with `.requestMatchers("/admin/**").hasRole("ADMIN")` and views with `sec:authorize` (Thymeleaf) or `<sec:authorize>` (JSP).
+- CSRF is on by default in Spring Security 6; forms must carry the token (`th:action` adds it automatically, plain HTML forms need a hidden `_csrf` input).
+
+## Question 41
+
+### Problem Statement
+
+<Notebook />
+
+Add Bootstrap styling in the Login and registration page in the above exercises in session 9.
+
+### Solution
+
+<Notebook />
+
+Solution pending. Prepare using the notes above; the worked answer will appear here.
+
+## Question 42
+
+### Problem Statement
+
+<Notebook />
+
+Create a Role Table in the database and configure it with Spring Boot, Security and Hibernate.
+
+### Solution
+
+<Notebook />
+
+Solution pending. Prepare using the notes above; the worked answer will appear here.
+
+## Question 43
+
+### Problem Statement
+
+<Notebook />
+
+Write code for role-based authentication using Spring Security.
+
+### Solution
+
+<Notebook />
+
+Solution pending. Prepare using the notes above; the worked answer will appear here.
+
+## Question 44
+
+### Problem Statement
+
+<Notebook />
+
+Display current logged in User details on the dashboard along with client IP, data time and user's current role.
+
+### Solution
+
+<Notebook />
+
+Solution pending. Prepare using the notes above; the worked answer will appear here.
+
+## Question 45
+
+### Problem Statement
+
+<Notebook />
+
+Add CSRF functionality in the authentication.
+
+### Solution
+
+<Notebook />
+
+Solution pending. Prepare using the notes above; the worked answer will appear here.
+
+## Question 46
+
+### Problem Statement
+
+<Notebook />
+
+Restrict role-based access to views in Spring Boot Security.
+
+### Solution
+
+<Notebook />
+
+Solution pending. Prepare using the notes above; the worked answer will appear here.
+
+## Session Summary
+
+<Notebook />
+
+- Question 41: Add Bootstrap styling in the Login and registration page in the above exercises 
+- Question 42: Create a Role Table in the database and configure it with Spring Boot, Security 
+- Question 43: Write code for role-based authentication using Spring Security
+- Question 44: Display current logged in User details on the dashboard along with client IP, da
+- Question 45: Add CSRF functionality in the authentication
+- Question 46: Restrict role-based access to views in Spring Boot Security

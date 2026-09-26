@@ -1,0 +1,139 @@
+---
+title: Session 6
+description: "Apriori on the zoo dataset and regression"
+sidebar:
+  order: 6
+---
+
+The zoo dataset shows why attribute selection matters for association rules, and how support and the number of rules interact. The session closes with numeric prediction using regression.
+
+<Aside type="caution" title="Draft: questions final, solutions pending">
+  Every question below is copied from the lab manual. Worked solutions are being added session by session. Use the problem statements, prep notes and formula sheet to prepare before your lab.
+</Aside>
+
+## Objectives
+
+<Explain />
+
+- Complete questions 13 to 14 of the manual: apriori on the zoo dataset and regression
+- Prepare the deliverable before the lab and finish it during the session
+- Be ready to explain every step in the viva
+
+## Questions Covered
+
+<Explain />
+
+| Question | Requirement | Status |
+| --- | --- | --- |
+| Q13 | Perform the following | Solution pending |
+| Q14 | Demonstrate to predict the Numerical Values in the given Data Set is using Regression... | Solution pending |
+
+## Preparation
+
+<Explain />
+
+- Deselect `animal` (an identifier) and `legs` (numeric) or discretise `legs`; Apriori will refuse numeric attributes.
+- Increase `numRules` in steps (20, 30, 50) and record at which count a rule with `type=mammal` first appears; then lower `upperBoundMinSupport` until it is the top rule.
+- For regression use `cpu.arff` or your own numeric dataset with `functions.LinearRegression` and `functions.SimpleLinearRegression`; explain the coefficients with the regression formulas.
+
+## Question 13
+
+### Problem Statement
+
+<Notebook />
+
+Perform the following:
+
+- Use zoo.arff dataset and load it into WEKA. Examine the attributes and make sure you understand their meaning. Are all attributes nominal?
+- In the preprocess area, deselect the animal and legs attributes. The animal attribute is the name of the animal, and is not useful for mining. The legs attribute is numeric and cannot be used directly with Apriori. Alternatively, you can try to use the Discretize Filter to discretize the legs attribute.
+- After deselecting the attributes, use the Apply Filters button to generate a working relation that removes those attributes. Notice how the working relation changes, and has fewer attributes than the base relation.
+- First, try using the Apriori algorithm with the default parameters. Record the generated rules.
+- Vary the number of rules generated (click on the command that you are running). Try 20, 30, and so on. Record how many rules you have to generate before generating a rule containing type=mammal.
+- Vary the maximum support until a rule containing type=mammal is the top rule generated. Record the maximum support needed.
+- Select one generated rule that was interesting to you. Why was it interesting? What does it mean? Check its confidence and support: are they high enough?
+- Suggest one improvement to the Apriori implementation in WEKA that would have made this data mining lab easier to accomplish.
+
+### Solution
+
+<Notebook />
+
+Solution pending. Prepare using the notes above; the worked answer will appear here.
+
+## Question 14
+
+### Problem Statement
+
+<Notebook />
+
+Demonstrate to predict the Numerical Values in the given Data Set is using Regression Methods.
+
+### Solution
+
+<Notebook />
+
+Solution pending. Prepare using the notes above; the worked answer will appear here.
+
+## Formula Sheet
+
+<Explain />
+
+### Association rules
+
+For a rule <Math tex="X \Rightarrow Y" /> over $N$ transactions:
+
+<Math display tex="\text{support}(X \Rightarrow Y) = \frac{|X \cup Y|}{N}, \qquad \text{confidence}(X \Rightarrow Y) = \frac{|X \cup Y|}{|X|}, \qquad \text{lift}(X \Rightarrow Y) = \frac{\text{confidence}(X \Rightarrow Y)}{\text{support}(Y)}" />
+
+WEKA's Apriori starts at the upper bound of minimum support and lowers it by the delta each pass until the requested number of rules is found or the lower bound is reached.
+
+### Entropy, information gain and Gini
+
+For a set $S$ with class proportions <Math tex="p_1, \dots, p_c" />:
+
+<Math display tex="H(S) = -\sum_{i=1}^{c} p_i \log_2 p_i, \qquad \text{Gain}(S, A) = H(S) - \sum_{v \in \text{values}(A)} \frac{|S_v|}{|S|} H(S_v), \qquad \text{Gini}(S) = 1 - \sum_{i=1}^{c} p_i^{2}" />
+
+ID3 splits on the attribute with the highest gain; J48 (C4.5) uses the gain ratio <Math tex="\text{Gain}(S,A) / \text{SplitInfo}(S,A)" /> where <Math tex="\text{SplitInfo}(S,A) = -\sum_v \frac{|S_v|}{|S|} \log_2 \frac{|S_v|}{|S|}" />.
+
+### Classifier evaluation
+
+From the confusion matrix with true positives $TP$, false positives $FP$, false negatives $FN$, true negatives $TN$:
+
+<Math display tex="\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}, \quad \text{Precision} = \frac{TP}{TP + FP}, \quad \text{Recall} = \frac{TP}{TP + FN}, \quad F_1 = \frac{2 \cdot \text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}" />
+
+Kappa compares observed agreement $p_o$ (accuracy) with the agreement expected by chance $p_e$:
+
+<Math display tex="\kappa = \frac{p_o - p_e}{1 - p_e}, \qquad p_e = \sum_{i} \frac{(\text{row}_i \text{ total})(\text{column}_i \text{ total})}{N^{2}}" />
+
+The ROC curve plots true positive rate $TP/(TP+FN)$ against false positive rate $FP/(FP+TN)$; the area under it (AUC) is 0.5 for guessing and 1.0 for a perfect classifier.
+
+### Naive Bayes and k-nearest neighbour
+
+<Math display tex="P(C \mid x_1, \dots, x_n) \propto P(C) \prod_{i=1}^{n} P(x_i \mid C)" />
+
+k-NN assigns the majority class among the $k$ nearest training records under Euclidean distance
+
+<Math display tex="d(\mathbf{a}, \mathbf{b}) = \sqrt{\sum_{i=1}^{n} (a_i - b_i)^{2}}" />
+
+after normalising each attribute to $[0, 1]$ with <Math tex="x' = (x - x_{\min}) / (x_{\max} - x_{\min})" />.
+
+### Linear regression
+
+<Math display tex="\hat{y} = \beta_0 + \beta_1 x, \qquad \beta_1 = \frac{\sum (x_i - \bar{x})(y_i - \bar{y})}{\sum (x_i - \bar{x})^{2}}, \qquad \beta_0 = \bar{y} - \beta_1 \bar{x}" />
+
+WEKA reports the correlation coefficient, mean absolute error and root mean squared error <Math tex="\sqrt{\frac{1}{N}\sum (y_i - \hat{y}_i)^{2}}" />.
+
+### Clustering
+
+k-means minimises the within-cluster sum of squared errors over clusters <Math tex="C_1, \dots, C_k" /> with centroids <Math tex="\mu_j" />:
+
+<Math display tex="SSE = \sum_{j=1}^{k} \sum_{\mathbf{x} \in C_j} \lVert \mathbf{x} - \mu_j \rVert^{2}, \qquad \mu_j = \frac{1}{|C_j|} \sum_{\mathbf{x} \in C_j} \mathbf{x}" />
+
+Hierarchical (agglomerative) clustering merges the two closest clusters each step; linkage defines closeness: single <Math tex="\min d(a,b)" />, complete <Math tex="\max d(a,b)" />, average <Math tex="\frac{1}{|A||B|}\sum d(a,b)" />.
+
+DBSCAN calls a point a core point when at least <Math tex="\text{minPts}" /> points lie within radius <Math tex="\varepsilon" />; clusters grow from core points, and points reachable from none are noise.
+
+## Session Summary
+
+<Notebook />
+
+- Question 13: Perform the following:
+- Question 14: Demonstrate to predict the Numerical Values in the given Data Set is using Regre

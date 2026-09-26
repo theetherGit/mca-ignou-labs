@@ -1,0 +1,148 @@
+---
+title: Session 8
+description: "TCP under UDP interference: congestion window tracing"
+sidebar:
+  order: 8
+---
+
+This session reproduces the classic experiment: start a TCP flow, then add UDP traffic that takes half the bottleneck, and trace how the TCP congestion window reacts.
+
+<Aside type="caution" title="Draft: questions final, solutions pending">
+  Every question below is copied from the lab manual. Worked solutions are being added session by session. Use the problem statements, prep notes and formula sheet to prepare before your lab.
+</Aside>
+
+## Objectives
+
+<Explain />
+
+- Complete questions 19 to 22 of the manual: tcp under udp interference: congestion window tracing
+- Prepare the deliverable before the lab and finish it during the session
+- Be ready to explain every step in the viva
+
+## Questions Covered
+
+<Explain />
+
+| Question | Requirement | Status |
+| --- | --- | --- |
+| Q19 | Use the setup made in session 2 and monitor the traffic flow, plot the packets received | Solution pending |
+| Q20 | Start the TCP application at Time 1 second | Solution pending |
+| Q21 | After 20 seconds, start the UDP application at Rate1 which clogs the half of the... | Solution pending |
+| Q22 | Using ns-3 tracing mechanism, plot the changes in the TCP window size over the time | Solution pending |
+
+## Preparation
+
+<Explain />
+
+- Reuse the Session 2 dumbbell. Choose the bridge (n1 to n2) capacity, for example 1 Mbit/s, so Rate1 is 500 kbit/s.
+- Start applications with `app.Start(Seconds(1.0))` for TCP and `Seconds(20.0)` for UDP.
+- Trace cwnd by connecting to `/NodeList/0/$ns3::TcpL4Protocol/SocketList/0/CongestionWindow` after the socket exists (schedule the connect at 1.001 s) and write time and cwnd to a file.
+
+## Question 19
+
+### Problem Statement
+
+<Notebook />
+
+Use the setup made in session 2 and monitor the traffic flow, plot the packets received.
+
+### Solution
+
+<Notebook />
+
+Solution pending. Prepare using the notes above; the worked answer will appear here.
+
+## Question 20
+
+### Problem Statement
+
+<Notebook />
+
+Start the TCP application at Time 1 second.
+
+### Solution
+
+<Notebook />
+
+Solution pending. Prepare using the notes above; the worked answer will appear here.
+
+## Question 21
+
+### Problem Statement
+
+<Notebook />
+
+After 20 seconds, start the UDP application at Rate1 which clogs the half of the dumbbell bridge capacity.
+
+### Solution
+
+<Notebook />
+
+Solution pending. Prepare using the notes above; the worked answer will appear here.
+
+## Question 22
+
+### Problem Statement
+
+<Notebook />
+
+Using ns-3 tracing mechanism, plot the changes in the TCP window size over the time.
+
+### Solution
+
+<Notebook />
+
+Solution pending. Prepare using the notes above; the worked answer will appear here.
+
+## Formula Sheet
+
+<Explain />
+
+### Throughput
+
+Bytes received at the sink divided by the time the flow was active, converted to bits per second:
+
+<Math display tex="\text{Throughput} = \frac{8 \times \text{bytes received}}{t_{\text{end}} - t_{\text{start}}} \;\text{bit/s}" />
+
+### Bandwidth-delay product
+
+The amount of data in flight on a link of capacity $B$ and round-trip time $RTT$. A TCP window smaller than this cannot fill the link:
+
+<Math display tex="BDP = B \times RTT" />
+
+For the Session 10 defaults, <Math tex="B = 5\,\text{Mbit/s}" /> and one-way delay <Math tex="5\,\text{ms}" /> give <Math tex="RTT = 10\,\text{ms}" /> and <Math tex="BDP = 5 \times 10^{6} \times 0.010 = 50{,}000\,\text{bits} \approx 6.25\,\text{kB}" />.
+
+### Transmission and propagation delay
+
+<Math display tex="t_{\text{trans}} = \frac{L}{B}, \qquad t_{\text{prop}} = \frac{d}{v}, \qquad t_{\text{total}} = t_{\text{trans}} + t_{\text{prop}} + t_{\text{queue}} + t_{\text{proc}}" />
+
+where $L$ is packet size in bits, $B$ link rate, $d$ distance and $v$ signal speed (about <Math tex="2 \times 10^{8}\,\text{m/s}" /> in copper or fibre).
+
+### Constant bit rate traffic
+
+An OnOff application with packet size $L$ bytes and rate $R$ bit/s sends one packet every
+
+<Math display tex="\Delta t = \frac{8L}{R}\ \text{seconds}" />
+
+### TCP congestion window
+
+Slow start doubles the window every RTT until the threshold; congestion avoidance adds one segment per RTT; a loss halves it (TCP NewReno):
+
+<Math display tex="cwnd_{\text{ss}}(n) = 2^{n}\, MSS, \qquad cwnd_{\text{ca}} \leftarrow cwnd + \frac{MSS^{2}}{cwnd}, \qquad cwnd_{\text{loss}} \leftarrow \frac{cwnd}{2}" />
+
+The maximum throughput of one TCP flow is bounded by
+
+<Math display tex="\text{Throughput}_{\max} = \frac{cwnd_{\max}}{RTT}" />
+
+### Packet loss
+
+<Math display tex="\text{Loss rate} = \frac{\text{packets sent} - \text{packets received}}{\text{packets sent}}" />
+
+## Session Summary
+
+<Notebook />
+
+- Question 19: Use the setup made in session 2 and monitor the traffic flow, plot the packets r
+- Question 20: Start the TCP application at Time 1 second
+- Question 21: After 20 seconds, start the UDP application at Rate1 which clogs the half of the
+- Question 22: Using ns-3 tracing mechanism, plot the changes in the TCP window size over the t

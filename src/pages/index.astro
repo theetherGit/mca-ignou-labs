@@ -10,31 +10,73 @@ export const prerender = true;
 
 const href = (p: string) => withBase(p, import.meta.env.BASE_URL);
 
-// The index of a lab record: one row per section of the two courses.
-const index = [
+// The index of a lab record: one row per section of each course, by semester.
+const semesters = [
   {
-    no: 1,
-    course: "MCS-216, Section 1",
-    title: "Design and analysis of algorithms",
-    detail: "Greedy, divide and conquer, dynamic programming, graphs. Each problem in Python, C and Rust.",
-    sessions: 11,
-    link: "/mcs-216/section-1/",
+    name: "Semester 1",
+    rows: [
+      {
+        no: 1,
+        course: "MCS-216, Section 1",
+        title: "Design and analysis of algorithms",
+        detail: "Greedy, divide and conquer, dynamic programming, graphs. Each problem in Python, C and Rust.",
+        sessions: 11,
+        link: "/mcs-216/section-1/",
+      },
+      {
+        no: 2,
+        course: "MCS-216, Section 2",
+        title: "Web design",
+        detail: "HTML forms, CSS, DOM and JavaScript. Source files with live previews.",
+        sessions: 10,
+        link: "/mcs-216/section-2/",
+      },
+      {
+        no: 3,
+        course: "MCS-217",
+        title: "Software engineering",
+        detail: "Scope, estimation, SRS, DFD and ERD, design, testing, change control. Railway Reservation System as the running case.",
+        sessions: 20,
+        link: "/mcs-217/introduction",
+      },
+    ],
   },
   {
-    no: 2,
-    course: "MCS-216, Section 2",
-    title: "Web design",
-    detail: "HTML forms, CSS, DOM and JavaScript. Source files with live previews.",
-    sessions: 10,
-    link: "/mcs-216/section-2/",
-  },
-  {
-    no: 3,
-    course: "MCS-217",
-    title: "Software engineering",
-    detail: "Scope, estimation, SRS, DFD and ERD, design, testing, change control. Railway Reservation System as the running case.",
-    sessions: 20,
-    link: "/mcs-217/introduction",
+    name: "Semester 2",
+    rows: [
+      {
+        no: 4,
+        course: "MCSL-222, Section 1",
+        title: "Object oriented analysis and design",
+        detail: "UML class, use case, sequence, activity, state and deployment diagrams, then code and tables from them. Questions ready, solutions in progress.",
+        sessions: 10,
+        link: "/mcsl-222/section-1/",
+      },
+      {
+        no: 5,
+        course: "MCSL-222, Section 2",
+        title: "Web technologies",
+        detail: "Servlets, JSP, Spring MVC, Hibernate, Spring Boot REST and Spring Security. Questions ready, solutions in progress.",
+        sessions: 10,
+        link: "/mcsl-222/section-2/",
+      },
+      {
+        no: 6,
+        course: "MCSL-223, Section 1",
+        title: "Computer networks",
+        detail: "NS-3 simulations: wired and wireless topologies, TCP and UDP, tracing and congestion window plots. Questions and formula sheets ready.",
+        sessions: 10,
+        link: "/mcsl-223/section-1/",
+      },
+      {
+        no: 7,
+        course: "MCSL-223, Section 2",
+        title: "Data mining",
+        detail: "WEKA: preprocessing, Apriori and FP-Growth, classifiers, regression, clustering. Questions and formula sheets ready.",
+        sessions: 10,
+        link: "/mcsl-223/section-2/",
+      },
+    ],
   },
 ];
 
@@ -64,23 +106,28 @@ const setup = [
 
         <section class="mt-14" aria-labelledby="index-heading">
           <h2 id="index-heading" class="text-base font-semibold text-foreground">Index</h2>
-          <ol class="nb-index mt-3 list-none p-0 m-0">
-            {index.map((row) => (
-              <li class="nb-index-row">
-                <a href={href(row.link)} class="nb-index-link no-underline">
-                  <span class="nb-index-no font-mono text-sm text-muted-foreground">{row.no}</span>
-                  <span class="nb-index-body">
-                    <span class="block text-sm text-muted-foreground">{row.course}</span>
-                    <span class="block text-lg font-medium text-foreground">{row.title}</span>
-                    <span class="block mt-1 text-sm leading-relaxed text-muted-foreground max-w-[52ch]">{row.detail}</span>
-                  </span>
-                  <span class="nb-index-count font-mono text-sm text-muted-foreground whitespace-nowrap">
-                    {row.sessions} sessions
-                  </span>
-                </a>
-              </li>
-            ))}
-          </ol>
+          {semesters.map((sem) => (
+            <div class="mt-6">
+              <h3 class="text-sm font-medium text-muted-foreground">{sem.name}</h3>
+              <ol class="nb-index mt-2 list-none p-0 m-0">
+                {sem.rows.map((row) => (
+                  <li class="nb-index-row">
+                    <a href={href(row.link)} class="nb-index-link no-underline">
+                      <span class="nb-index-no font-mono text-sm text-muted-foreground">{row.no}</span>
+                      <span class="nb-index-body">
+                        <span class="block text-sm text-muted-foreground">{row.course}</span>
+                        <span class="block text-lg font-medium text-foreground">{row.title}</span>
+                        <span class="block mt-1 text-sm leading-relaxed text-muted-foreground max-w-[52ch]">{row.detail}</span>
+                      </span>
+                      <span class="nb-index-count font-mono text-sm text-muted-foreground whitespace-nowrap">
+                        {row.sessions} sessions
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          ))}
         </section>
 
         <section class="mt-14 max-w-[60ch]" aria-labelledby="marks-heading">

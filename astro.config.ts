@@ -25,9 +25,23 @@ const nimbusConfig = defineNimbusConfig({
       "introduction",
       "important-notice",
       "getting-started",
-      { label: "MCS-216 Section 1", autogenerate: { directory: "mcs-216/section-1" } },
-      { label: "MCS-216 Section 2", autogenerate: { directory: "mcs-216/section-2" } },
-      { label: "MCS-217", autogenerate: { directory: "mcs-217" } },
+      {
+        label: "Semester 1",
+        items: [
+          { label: "MCS-216 Section 1", autogenerate: { directory: "mcs-216/section-1" } },
+          { label: "MCS-216 Section 2", autogenerate: { directory: "mcs-216/section-2" } },
+          { label: "MCS-217", autogenerate: { directory: "mcs-217" } },
+        ],
+      },
+      {
+        label: "Semester 2",
+        items: [
+          { label: "MCSL-222 Section 1", badge: { text: "Draft", variant: "caution" }, autogenerate: { directory: "mcsl-222/section-1" } },
+          { label: "MCSL-222 Section 2", badge: { text: "Draft", variant: "caution" }, autogenerate: { directory: "mcsl-222/section-2" } },
+          { label: "MCSL-223 Section 1", badge: { text: "Draft", variant: "caution" }, autogenerate: { directory: "mcsl-223/section-1" } },
+          { label: "MCSL-223 Section 2", badge: { text: "Draft", variant: "caution" }, autogenerate: { directory: "mcsl-223/section-2" } },
+        ],
+      },
     ],
   },
 });

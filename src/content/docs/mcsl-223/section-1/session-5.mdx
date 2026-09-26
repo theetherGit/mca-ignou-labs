@@ -1,0 +1,132 @@
+---
+title: Session 5
+description: "UDP over Wi-Fi with tracing and pcap"
+sidebar:
+  order: 5
+---
+
+This session sends UDP traffic across the wireless network from Session 4 and records what arrives, both as a plot of bytes over time and as a pcap trace of the receiver's Wi-Fi interface.
+
+<Aside type="caution" title="Draft: questions final, solutions pending">
+  Every question below is copied from the lab manual. Worked solutions are being added session by session. Use the problem statements, prep notes and formula sheet to prepare before your lab.
+</Aside>
+
+## Objectives
+
+<Explain />
+
+- Complete questions 10 to 12 of the manual: udp over wi-fi with tracing and pcap
+- Prepare the deliverable before the lab and finish it during the session
+- Be ready to explain every step in the viva
+
+## Questions Covered
+
+<Explain />
+
+| Question | Requirement | Status |
+| --- | --- | --- |
+| Q10 | Create a UDP client on a node n1 and a UDP server on a node n2 | Solution pending |
+| Q11 | Send packets to node n2 from node n1 and plot the number of bytes received with... | Solution pending |
+| Q12 | Show the pcap traces at node n2's Wi-Fi interface | Solution pending |
+
+## Preparation
+
+<Explain />
+
+- Attach a trace to the sink's `Rx` callback and accumulate bytes per second into a file; plot with gnuplot or matplotlib.
+- `YansWifiPhyHelper::EnablePcap("node2", devices.Get(1))` writes the Wi-Fi pcap for node n2 only.
+- In Wireshark, filter on `udp` and use Statistics, IO Graph to cross-check your plot.
+
+## Question 10
+
+### Problem Statement
+
+<Notebook />
+
+Create a UDP client on a node n1 and a UDP server on a node n2.
+
+### Solution
+
+<Notebook />
+
+Solution pending. Prepare using the notes above; the worked answer will appear here.
+
+## Question 11
+
+### Problem Statement
+
+<Notebook />
+
+Send packets to node n2 from node n1 and plot the number of bytes received with respect to time at node n2.
+
+### Solution
+
+<Notebook />
+
+Solution pending. Prepare using the notes above; the worked answer will appear here.
+
+## Question 12
+
+### Problem Statement
+
+<Notebook />
+
+Show the pcap traces at node n2's Wi-Fi interface.
+
+### Solution
+
+<Notebook />
+
+Solution pending. Prepare using the notes above; the worked answer will appear here.
+
+## Formula Sheet
+
+<Explain />
+
+### Throughput
+
+Bytes received at the sink divided by the time the flow was active, converted to bits per second:
+
+<Math display tex="\text{Throughput} = \frac{8 \times \text{bytes received}}{t_{\text{end}} - t_{\text{start}}} \;\text{bit/s}" />
+
+### Bandwidth-delay product
+
+The amount of data in flight on a link of capacity $B$ and round-trip time $RTT$. A TCP window smaller than this cannot fill the link:
+
+<Math display tex="BDP = B \times RTT" />
+
+For the Session 10 defaults, <Math tex="B = 5\,\text{Mbit/s}" /> and one-way delay <Math tex="5\,\text{ms}" /> give <Math tex="RTT = 10\,\text{ms}" /> and <Math tex="BDP = 5 \times 10^{6} \times 0.010 = 50{,}000\,\text{bits} \approx 6.25\,\text{kB}" />.
+
+### Transmission and propagation delay
+
+<Math display tex="t_{\text{trans}} = \frac{L}{B}, \qquad t_{\text{prop}} = \frac{d}{v}, \qquad t_{\text{total}} = t_{\text{trans}} + t_{\text{prop}} + t_{\text{queue}} + t_{\text{proc}}" />
+
+where $L$ is packet size in bits, $B$ link rate, $d$ distance and $v$ signal speed (about <Math tex="2 \times 10^{8}\,\text{m/s}" /> in copper or fibre).
+
+### Constant bit rate traffic
+
+An OnOff application with packet size $L$ bytes and rate $R$ bit/s sends one packet every
+
+<Math display tex="\Delta t = \frac{8L}{R}\ \text{seconds}" />
+
+### TCP congestion window
+
+Slow start doubles the window every RTT until the threshold; congestion avoidance adds one segment per RTT; a loss halves it (TCP NewReno):
+
+<Math display tex="cwnd_{\text{ss}}(n) = 2^{n}\, MSS, \qquad cwnd_{\text{ca}} \leftarrow cwnd + \frac{MSS^{2}}{cwnd}, \qquad cwnd_{\text{loss}} \leftarrow \frac{cwnd}{2}" />
+
+The maximum throughput of one TCP flow is bounded by
+
+<Math display tex="\text{Throughput}_{\max} = \frac{cwnd_{\max}}{RTT}" />
+
+### Packet loss
+
+<Math display tex="\text{Loss rate} = \frac{\text{packets sent} - \text{packets received}}{\text{packets sent}}" />
+
+## Session Summary
+
+<Notebook />
+
+- Question 10: Create a UDP client on a node n1 and a UDP server on a node n2
+- Question 11: Send packets to node n2 from node n1 and plot the number of bytes received with 
+- Question 12: Show the pcap traces at node n2's Wi-Fi interface

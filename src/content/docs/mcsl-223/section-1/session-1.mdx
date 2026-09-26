@@ -1,0 +1,116 @@
+---
+title: Session 1
+description: "Point-to-point topology and UDP echo"
+sidebar:
+  order: 1
+---
+
+The first session builds the smallest possible network in NS-3, two nodes on a point-to-point link, and runs a UDP client and server over it. Every later topology is this pattern repeated.
+
+<Aside type="caution" title="Draft: questions final, solutions pending">
+  Every question below is copied from the lab manual. Worked solutions are being added session by session. Use the problem statements, prep notes and formula sheet to prepare before your lab.
+</Aside>
+
+## Objectives
+
+<Explain />
+
+- Complete questions 1 to 2 of the manual: point-to-point topology and udp echo
+- Prepare the deliverable before the lab and finish it during the session
+- Be ready to explain every step in the viva
+
+## Questions Covered
+
+<Explain />
+
+| Question | Requirement | Status |
+| --- | --- | --- |
+| Q1 | Create a simple point to point network topology using two nodes | Solution pending |
+| Q2 | Create a UdpClient and UdpServer nodes and communicate at a fixed data rate | Solution pending |
+
+## Preparation
+
+<Explain />
+
+- Read `first.cc` in the NS-3 tutorial; it is the answer to question 1 with different parameters.
+- Know the helper sequence: NodeContainer, PointToPointHelper (DataRate, Delay), InternetStackHelper, Ipv4AddressHelper, UdpEchoServerHelper and UdpEchoClientHelper.
+- Fixed data rate for the client means setting MaxPackets, Interval and PacketSize attributes; compute the rate with the CBR formula below.
+
+## Question 1
+
+### Problem Statement
+
+<Notebook />
+
+Create a simple point to point network topology using two nodes.
+
+### Solution
+
+<Notebook />
+
+Solution pending. Prepare using the notes above; the worked answer will appear here.
+
+## Question 2
+
+### Problem Statement
+
+<Notebook />
+
+Create a UdpClient and UdpServer nodes and communicate at a fixed data rate.
+
+### Solution
+
+<Notebook />
+
+Solution pending. Prepare using the notes above; the worked answer will appear here.
+
+## Formula Sheet
+
+<Explain />
+
+### Throughput
+
+Bytes received at the sink divided by the time the flow was active, converted to bits per second:
+
+<Math display tex="\text{Throughput} = \frac{8 \times \text{bytes received}}{t_{\text{end}} - t_{\text{start}}} \;\text{bit/s}" />
+
+### Bandwidth-delay product
+
+The amount of data in flight on a link of capacity $B$ and round-trip time $RTT$. A TCP window smaller than this cannot fill the link:
+
+<Math display tex="BDP = B \times RTT" />
+
+For the Session 10 defaults, <Math tex="B = 5\,\text{Mbit/s}" /> and one-way delay <Math tex="5\,\text{ms}" /> give <Math tex="RTT = 10\,\text{ms}" /> and <Math tex="BDP = 5 \times 10^{6} \times 0.010 = 50{,}000\,\text{bits} \approx 6.25\,\text{kB}" />.
+
+### Transmission and propagation delay
+
+<Math display tex="t_{\text{trans}} = \frac{L}{B}, \qquad t_{\text{prop}} = \frac{d}{v}, \qquad t_{\text{total}} = t_{\text{trans}} + t_{\text{prop}} + t_{\text{queue}} + t_{\text{proc}}" />
+
+where $L$ is packet size in bits, $B$ link rate, $d$ distance and $v$ signal speed (about <Math tex="2 \times 10^{8}\,\text{m/s}" /> in copper or fibre).
+
+### Constant bit rate traffic
+
+An OnOff application with packet size $L$ bytes and rate $R$ bit/s sends one packet every
+
+<Math display tex="\Delta t = \frac{8L}{R}\ \text{seconds}" />
+
+### TCP congestion window
+
+Slow start doubles the window every RTT until the threshold; congestion avoidance adds one segment per RTT; a loss halves it (TCP NewReno):
+
+<Math display tex="cwnd_{\text{ss}}(n) = 2^{n}\, MSS, \qquad cwnd_{\text{ca}} \leftarrow cwnd + \frac{MSS^{2}}{cwnd}, \qquad cwnd_{\text{loss}} \leftarrow \frac{cwnd}{2}" />
+
+The maximum throughput of one TCP flow is bounded by
+
+<Math display tex="\text{Throughput}_{\max} = \frac{cwnd_{\max}}{RTT}" />
+
+### Packet loss
+
+<Math display tex="\text{Loss rate} = \frac{\text{packets sent} - \text{packets received}}{\text{packets sent}}" />
+
+## Session Summary
+
+<Notebook />
+
+- Question 1: Create a simple point to point network topology using two nodes
+- Question 2: Create a UdpClient and UdpServer nodes and communicate at a fixed data rate

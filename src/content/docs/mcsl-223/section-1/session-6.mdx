@@ -1,0 +1,132 @@
+---
+title: Session 6
+description: "Fixed-distance ad-hoc nodes and CBR traffic"
+sidebar:
+  order: 6
+---
+
+Placing nodes at exact 3D coordinates lets you study how distance affects a wireless link. A constant bit rate source then gives a steady, predictable load to measure.
+
+<Aside type="caution" title="Draft: questions final, solutions pending">
+  Every question below is copied from the lab manual. Worked solutions are being added session by session. Use the problem statements, prep notes and formula sheet to prepare before your lab.
+</Aside>
+
+## Objectives
+
+<Explain />
+
+- Complete questions 13 to 15 of the manual: fixed-distance ad-hoc nodes and cbr traffic
+- Prepare the deliverable before the lab and finish it during the session
+- Be ready to explain every step in the viva
+
+## Questions Covered
+
+<Explain />
+
+| Question | Requirement | Status |
+| --- | --- | --- |
+| Q13 | Use 2 nodes to setup a wireless ad-hoc network where nodes are placed at a fixed... | Solution pending |
+| Q14 | Install UDP server and Client at these two nodes | Solution pending |
+| Q15 | Setup a CBR transmission between these nodes | Solution pending |
+
+## Preparation
+
+<Explain />
+
+- Use `ConstantPositionMobilityModel` with a `ListPositionAllocator` and `Vector(x, y, z)` for each node.
+- CBR is an OnOffHelper with `OnTime` constant 1 and `OffTime` constant 0, plus DataRate and PacketSize.
+- Repeat at two or three distances and record delivered bytes; relate the drop to the propagation loss model.
+
+## Question 13
+
+### Problem Statement
+
+<Notebook />
+
+Use 2 nodes to setup a wireless ad-hoc network where nodes are placed at a fixed distance in a 3D plane.
+
+### Solution
+
+<Notebook />
+
+Solution pending. Prepare using the notes above; the worked answer will appear here.
+
+## Question 14
+
+### Problem Statement
+
+<Notebook />
+
+Install UDP server and Client at these two nodes.
+
+### Solution
+
+<Notebook />
+
+Solution pending. Prepare using the notes above; the worked answer will appear here.
+
+## Question 15
+
+### Problem Statement
+
+<Notebook />
+
+Setup a CBR transmission between these nodes.
+
+### Solution
+
+<Notebook />
+
+Solution pending. Prepare using the notes above; the worked answer will appear here.
+
+## Formula Sheet
+
+<Explain />
+
+### Throughput
+
+Bytes received at the sink divided by the time the flow was active, converted to bits per second:
+
+<Math display tex="\text{Throughput} = \frac{8 \times \text{bytes received}}{t_{\text{end}} - t_{\text{start}}} \;\text{bit/s}" />
+
+### Bandwidth-delay product
+
+The amount of data in flight on a link of capacity $B$ and round-trip time $RTT$. A TCP window smaller than this cannot fill the link:
+
+<Math display tex="BDP = B \times RTT" />
+
+For the Session 10 defaults, <Math tex="B = 5\,\text{Mbit/s}" /> and one-way delay <Math tex="5\,\text{ms}" /> give <Math tex="RTT = 10\,\text{ms}" /> and <Math tex="BDP = 5 \times 10^{6} \times 0.010 = 50{,}000\,\text{bits} \approx 6.25\,\text{kB}" />.
+
+### Transmission and propagation delay
+
+<Math display tex="t_{\text{trans}} = \frac{L}{B}, \qquad t_{\text{prop}} = \frac{d}{v}, \qquad t_{\text{total}} = t_{\text{trans}} + t_{\text{prop}} + t_{\text{queue}} + t_{\text{proc}}" />
+
+where $L$ is packet size in bits, $B$ link rate, $d$ distance and $v$ signal speed (about <Math tex="2 \times 10^{8}\,\text{m/s}" /> in copper or fibre).
+
+### Constant bit rate traffic
+
+An OnOff application with packet size $L$ bytes and rate $R$ bit/s sends one packet every
+
+<Math display tex="\Delta t = \frac{8L}{R}\ \text{seconds}" />
+
+### TCP congestion window
+
+Slow start doubles the window every RTT until the threshold; congestion avoidance adds one segment per RTT; a loss halves it (TCP NewReno):
+
+<Math display tex="cwnd_{\text{ss}}(n) = 2^{n}\, MSS, \qquad cwnd_{\text{ca}} \leftarrow cwnd + \frac{MSS^{2}}{cwnd}, \qquad cwnd_{\text{loss}} \leftarrow \frac{cwnd}{2}" />
+
+The maximum throughput of one TCP flow is bounded by
+
+<Math display tex="\text{Throughput}_{\max} = \frac{cwnd_{\max}}{RTT}" />
+
+### Packet loss
+
+<Math display tex="\text{Loss rate} = \frac{\text{packets sent} - \text{packets received}}{\text{packets sent}}" />
+
+## Session Summary
+
+<Notebook />
+
+- Question 13: Use 2 nodes to setup a wireless ad-hoc network where nodes are placed at a fixed
+- Question 14: Install UDP server and Client at these two nodes
+- Question 15: Setup a CBR transmission between these nodes

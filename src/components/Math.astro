@@ -1,0 +1,20 @@
+---
+/**
+ * LaTeX rendered to MathML at build time with temml.
+ *
+ *   <Math tex="H(S) = -\sum_i p_i \log_2 p_i" display />
+ *
+ * Use this instead of $...$ whenever the LaTeX contains braces that are not a
+ * valid JS expression (e.g. \text{...}); the MDX pre-parser rejects those.
+ * JSX string attributes are literal, so backslashes need no escaping.
+ */
+import temml from "temml";
+
+interface Props {
+  tex: string;
+  display?: boolean;
+}
+const { tex, display = false } = Astro.props;
+const html = temml.renderToString(tex, { displayMode: display, throwOnError: false });
+---
+{display ? <div class="my-4 overflow-x-auto" set:html={html} /> : <Fragment set:html={html} />}
