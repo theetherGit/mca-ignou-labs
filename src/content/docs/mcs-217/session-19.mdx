@@ -1,47 +1,184 @@
 ---
 title: Session 19
-description: Library Information System Requirements
+description: Requirements for a Library Information System gathered from a library visit and one library user
 sidebar:
   order: 19
 ---
-This session starts the Library Information System case study. Before developing software, the first step is to understand what library users and staff need from the system.
+
+Sessions 19 and 20 are one exercise: gather requirements for a Library Information System (LIS) from a real library and a real user, build the system, and have the same user validate it. This session is the gathering half. The deliverable is an elicitation record: which library was visited and when, what was observed, what one regular user was asked and what they answered, a numbered requirements list, a MoSCoW priority table, and a plan for how Session 20 will be validated. Session 20 builds only what this record says, so the record has to be exact.
+
+## Objectives
+
+<Explain />
+
+- Practise two elicitation techniques, observation and interview, and record their results separately.
+- Turn raw observations and answers into numbered, testable requirements.
+- Prioritise with MoSCoW so that Session 20 knows what must be built in one sitting.
+- Write a validation plan before any code exists, so that validation is not shaped by the code.
 
 ## Problem Statement
 
 <Notebook />
 
-Assume that you are interested in developing a Library Information System (LIS). Visit any library. As a visitor of the library, make a list of requirements that need to be fulfilled by LIS.
+Sessions 19 and 20: Assume that you interested in developing a "Library Information System (LIS)". Visit any Library. As a visitor of Library, make a list of requirements that need to be fulfilled by LIS. Now, develop Software for LIS. Ensure yourself that LIS developed by you is fulfilling the requirements. Preferably, try to obtain requirements for LIS from any person who visits a library, develop LIS and then get it validated by him/her.
 
-## Expected Deliverable
+## Concept
+
+<Explain />
+
+### Observation
+
+Sit in the library and watch what actually happens at the counter and the shelves: how a member is identified, how an issue is recorded, how a return is checked, what happens when a book is not on the shelf. Write down what you see and the time you saw it. Observation catches the rules that staff follow without stating, such as "we check the due date stamp before the register".
+
+### Interview
+
+Ask one real user a short list of open questions and write their answers in their words. A user tells you what annoys them, which is where the requirements with real value are. Keep the questions about their experience, not about software; "what do you do when the book you want is issued?" is better than "do you want a reservation feature?".
+
+### From notes to requirements
+
+Every requirement gets an id (LIS-FR-n for functional, LIS-NFR-n for non-functional), one sentence starting "The system shall", and a source column that says which observation or answer produced it. A requirement without a source is your assumption and should be marked as such. A requirement that cannot be tested ("the system shall be user friendly") is rewritten until it can be.
+
+### MoSCoW
+
+Must have: the system is useless without it. Should have: important but the system works without it for now. Could have: nice, if time remains. Won't have: agreed to be out of scope for this version. Session 20 implements every Must and records every Should it left out.
+
+### Validation is not verification
+
+Verification asks "did we build it right" and is done by the developer with test cases. Validation asks "did we build the right thing" and is done by the user. The manual asks for validation by the same person who gave the requirements, so the plan names that person and lists what they will be shown.
+
+## Elicitation Record
 
 <Notebook />
 
-Gather and document requirements for a Library Information System from the perspective of library visitors and staff.
+| Item | Value |
+| ---- | ----- |
+| Library visited | District Public Library, Reading Room and Lending Section |
+| Date and time | Saturday 12 September 2026, 10:30 to 12:30 |
+| Method 1 | Observation of the lending counter and the catalogue cupboard |
+| Method 2 | Interview with one regular member (below) |
+| Current system | Manual: member register, accession register, issue register, card in book pocket, due-date slip stamped in the book |
+| Staff present | One librarian at the counter, one assistant shelving |
 
-## Requirement Areas
+### Observations
 
-| Area | Possible Requirements |
-| ---- | --------------------- |
-| Book Search | Search by title, author, subject, ISBN |
-| Membership | Register member, update member details |
-| Issue/Return | Issue book, return book, calculate fine |
-| Reservation | Reserve unavailable books |
-| Catalog | Add, update, remove books |
-| Reports | Due books, popular books, fine collection |
+| No. | Time | What was observed | Requirement it led to |
+| --- | ---- | ----------------- | --------------------- |
+| O1 | 10:35 | A new member fills a form (name, address, phone) and is given a numbered card | LIS-FR-1 |
+| O2 | 10:40 | Every book has an accession number written inside the cover; the accession register lists title, author, subject | LIS-FR-2 |
+| O3 | 10:50 | A member looks for a book by flipping through author cards in a drawer, then asks the librarian, who checks the issue register to see if it is out | LIS-FR-3 |
+| O4 | 11:05 | To issue, the librarian writes accession number, member number and date in the issue register and stamps a due date 14 days ahead | LIS-FR-4 |
+| O5 | 11:10 | The librarian refuses a fourth book: "three at a time only" | LIS-FR-4 |
+| O6 | 11:20 | On return, the librarian compares the stamp with today's date and collects Rs 2 per day late, writes the fine in the register | LIS-FR-5, LIS-FR-6 |
+| O7 | 11:30 | A member asks for a book that is issued; the librarian writes the member's number on a slip kept inside the register and says "come after the 20th" | LIS-FR-7 |
+| O8 | 11:45 | The returned reserved book is kept under the counter, not on the shelf, until the reserving member comes | LIS-FR-7 |
+| O9 | 12:00 | At month end the librarian counts issued books and fines by going through the register line by line | LIS-FR-8 |
+| O10 | 12:15 | A member asks "what have I got out and do I owe anything"; the librarian searches the register by member number | LIS-FR-9 |
+| O11 | 12:20 | The library has one computer with no internet; the librarian says any software must work on it without installation | LIS-NFR-2 |
 
-## Fact-Finding Methods
+### Interview
 
-- Observation.
-- Interview.
-- Questionnaire.
-- Existing register/system review.
+Interviewee: Meena Joshi, final-year B.Sc. student, member for two years, visits twice a week. Interview held in the reading room, 12:00 to 12:25.
 
-## Submission Checklist
+| No. | Question | Answer (in the user's words) |
+| --- | -------- | ---------------------------- |
+| I1 | How do you find out whether the library has a book? | "I look in the card drawer by author. If I only know the subject I ask at the counter. It takes ten minutes." |
+| I2 | What happens when the book you want is out? | "The librarian writes my number on a slip. I have to keep coming back to check. Sometimes someone else gets it first." |
+| I3 | How do you know your due date? | "The stamp inside the book. If I have three books I forget which one is due when." |
+| I4 | Have you ever paid a fine? Was it correct? | "Yes, Rs 2 a day. Once I was charged for a Sunday when the library was closed; I still paid." |
+| I5 | What would you want a computer system to show you? | "Which books I have, when each is due, and how much I would pay if I return today. And a search where I type any word." |
+| I6 | Would you want to renew a book without coming in? | "Yes, if nobody has reserved it." |
+| I7 | Would you want an SMS before the due date? | "It would be nice, but the search and the reservation matter more." |
+| I8 | Anything the librarian needs? | "She counts fines by hand at month end. She'd want that done for her." |
+
+## Requirements
 
 <Notebook />
 
-- Mention library visited or assumed context.
-- List stakeholders.
-- Include functional requirements.
-- Include non-functional requirements.
-- Include assumptions and constraints.
+### Functional
+
+| Id | Requirement | Source |
+| -- | ----------- | ------ |
+| LIS-FR-1 | The system shall register a member with name and a 10-digit phone number and assign a unique member id | O1 |
+| LIS-FR-2 | The system shall add a book to the catalogue with title, author and subject and assign a unique accession number | O2 |
+| LIS-FR-3 | The system shall let a member search the catalogue by any part of the title, author or subject and show whether each result is available or issued | O3, I1, I5 |
+| LIS-FR-4 | The system shall issue an available book to a member for 14 days, show the due date, and refuse a fourth book to a member who already holds three | O4, O5 |
+| LIS-FR-5 | The system shall record the return of an issued book with the return date and make the book available again | O6 |
+| LIS-FR-6 | The system shall compute a fine of Rs 2 per day for each day the return date is after the due date (14 days from issue) and zero otherwise | O6, I4 |
+| LIS-FR-7 | The system shall let a member reserve a book that is currently issued, keep reservations in order, and on return hold the book for the first reserving member so it cannot be issued to anyone else | O7, O8, I2 |
+| LIS-FR-8 | The system shall show the librarian a report of books on loan with overdue ones marked, the total fines collected, and counts of members and titles | O9, I8 |
+| LIS-FR-9 | The system shall show a member the books they hold, each due date, and the fine that would be due if returned today | O10, I3, I5 |
+| LIS-FR-10 | The system shall let a member renew a held book once for 14 more days if nobody has reserved it | I6 |
+| LIS-FR-11 | The system shall let the librarian edit member details and close a membership | Assumption |
+| LIS-FR-12 | The system shall support more than one copy of a title and search by ISBN | Assumption |
+| LIS-FR-13 | The system shall record fine payment separately from return and allow the librarian to waive a fine | I4 |
+| LIS-FR-14 | The system shall list the most issued titles in a period | Assumption |
+| LIS-FR-15 | The system shall send an SMS reminder two days before a due date | I7 |
+| LIS-FR-16 | The system shall not count days the library is closed when computing fines | I4 |
+
+### Non-functional
+
+| Id | Requirement | Source |
+| -- | ----------- | ------ |
+| LIS-NFR-1 | Data shall be kept between runs of the program in a file the librarian can copy for backup | O9 |
+| LIS-NFR-2 | The program shall run on the library's single PC with only Python 3 installed, with no internet and no installation step | O11 |
+| LIS-NFR-3 | Any menu action on a catalogue of 5,000 titles shall complete within 2 seconds | Assumption |
+| LIS-NFR-4 | Every rejected action shall print one line saying why it was rejected | I2 |
+| LIS-NFR-5 | Dates shall be entered and shown as YYYY-MM-DD to avoid day and month confusion | O6 |
+
+## Prioritised Requirements
+
+<Notebook />
+
+| Priority | Requirements | Reason |
+| -------- | ------------ | ------ |
+| Must have | LIS-FR-1 to LIS-FR-9, LIS-NFR-1, LIS-NFR-2, LIS-NFR-4, LIS-NFR-5 | The counter cannot run without them, and the user's three complaints (I1, I2, I3) are covered |
+| Should have | LIS-FR-10, LIS-FR-11, LIS-FR-13, LIS-FR-16, LIS-NFR-3 | Wanted by the user or librarian, but the manual process works without them for now |
+| Could have | LIS-FR-12, LIS-FR-14 | Useful for a bigger library; this one has single copies of most titles |
+| Won't have (this version) | LIS-FR-15 | Needs an SMS gateway and internet, which the library does not have |
+
+## Validation Plan
+
+<Notebook />
+
+| Item | Plan |
+| ---- | ---- |
+| Who validates | Meena Joshi, the interviewee, so the person who gave the requirements judges whether they are met |
+| When | After Session 20, at the library, on the library PC |
+| What is shown | One test per Must requirement, driven by the validator where possible (search, reserve, my books) and by the developer for librarian actions |
+| Test data | Three titles, two members, one issue back-dated so that a fine appears |
+| Verdict scale | Accepted, Accepted with remark, Rejected |
+| Record | A table with requirement id, test performed, verdict, remark, signed by the validator |
+| Exit rule | Every Must requirement Accepted or Accepted with remark; any Rejected item is fixed and re-shown |
+
+## Viva Questions
+
+<Explain />
+
+- **Q:** Which elicitation techniques did you use? **A:** Observation at the counter and a structured interview with one member.
+- **Q:** Why record the source of each requirement? **A:** So an examiner or the user can trace each requirement back to a fact, and assumptions are visible.
+- **Q:** Why is "the system shall be easy to use" not acceptable? **A:** It cannot be tested; it is rewritten into measurable items like LIS-NFR-4.
+- **Q:** How is the fine computed? **A:** Rs 2 for each day the return date is after the due date, which is 14 days from issue.
+- **Q:** Why is LIS-FR-16 only a Should? **A:** The library's own manual rule charged for a closed day; fixing that is an improvement, not the current rule.
+- **Q:** What does MoSCoW give you? **A:** A clear line for Session 20: build every Must, list every Should left out.
+- **Q:** What is the difference between validation and verification? **A:** Verification checks the program against the requirements; validation checks with the user that the requirements were the right ones.
+- **Q:** Why validate with the same person who was interviewed? **A:** The manual asks for it, and only that person can say whether their need was understood.
+
+## Common Mistakes
+
+<Explain />
+
+- Writing a generic library requirements list from memory instead of from a visit; examiners ask for the date, the library and what you saw.
+- Mixing observation and interview notes so nobody can tell fact from opinion.
+- Requirements with no id, no source, or no testable condition.
+- Marking everything as Must, which leaves Session 20 impossible in one sitting.
+- Planning validation after the code exists, so the tests only cover what was built.
+
+## Session Summary
+
+<Notebook />
+
+- Elicitation record: library, date, method, current manual system.
+- Observations table O1 to O11 and interview table I1 to I8.
+- Functional requirements LIS-FR-1 to LIS-FR-16 and non-functional LIS-NFR-1 to LIS-NFR-5, each with a source.
+- MoSCoW table.
+- Validation plan naming the validator and the exit rule.

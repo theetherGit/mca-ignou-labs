@@ -1,38 +1,191 @@
 ---
 title: Session 18
-description: Continue Recreating an Existing Application Portion
+description: Console expense splitter built from the Session 17 study, with sample run and comparison against the original
 sidebar:
   order: 18
 ---
-This session continues the application recreation activity from Session 17. The aim is to improve the first version by adding missing behavior, better validation, better interface details, or cleaner implementation.
+
+This session turns the Session 17 study into a working program. The deliverable is `expense_splitter.py`, a console program that adds members, records expenses with equal or custom shares, shows balances and prints a minimal settlement plan, followed by a real sample run, a comparison of the original app's behaviour with this program, and notes on what the exercise taught about reverse engineering. Everything the program does traces back to a rule or requirement written in Session 17; nothing was added that the original did not show.
+
+## Objectives
+
+<Explain />
+
+- Implement requirements ES-FR-1 to ES-FR-7 from Session 17 in one readable Python file.
+- Reproduce the observed rounding and settlement behaviour exactly.
+- Compare the rebuilt portion with the original feature by feature and record the differences.
+- Reflect on which inferences from Session 17 held and which had to be revised.
 
 ## Problem Statement
 
 <Notebook />
 
-Continue the activity of Session 17 by improving or extending the program developed from observing an existing application or a portion of an application.
+Sessions 17 and 18: Have a look at the output of any program that was not written by you. Preferably, look at an application that is not developed by you and write the program for the development of that application or a portion of that application.
 
-## Expected Deliverable
+## Concept
+
+<Explain />
+
+### From inferred rules to code
+
+Each rule in Session 17 becomes one small function. R2 (equal split with leftover paise to the first members) is `equal_split`. R4 (net balance = paid minus owed) is `balances`. R6 (greedy settlement) is `settle`. When a rule maps to one function, the comparison table at the end can point at the exact place where behaviour matched or differed.
+
+### Money as integers
+
+Rupees with two decimals are stored as an integer number of paise. `to_paise("33.33")` gives 3333 and `fmt(3333)` gives back "33.33". Division then uses `divmod`, which returns the equal share and the leftover paise in one step, and the leftover is handed out one paisa each to the first members. This reproduces the observed 33.34, 33.33, 33.33 with no floating point at all.
+
+### Greedy settlement
+
+Sort debtors by how much they owe (largest first) and creditors by how much they are owed (largest first). Pay the largest creditor from the largest debtor with the smaller of the two amounts; one of them reaches zero and drops out; repeat. Every payment retires at least one member, so a group of n members with non-zero balances needs at most n minus 1 payments. This matches what the original app showed for the test group, although the original may pair members in a different order.
+
+### What is left out on purpose
+
+The original stores data on a server and syncs between phones; this program keeps everything in memory for one run. The original supports percentages and share weights; this program supports equal and exact amounts only, which is what Session 17 recorded as the portion. Leaving these out is a decision, and the comparison table records it.
+
+## Program
 
 <Notebook />
 
-Improve the Session 17 implementation, document changes, and compare the updated version against the observed application behavior.
+```python title="expense_splitter.py" file=<rootDir>/public/code/mcs-217/session-18/expense_splitter.py
 
-## Improvement Areas
+```
 
-- Add missing validation.
-- Improve user interface.
-- Add more realistic data.
-- Improve error handling.
-- Refactor code for maintainability.
-- Add test cases.
+### Sample Output
 
-## Submission Checklist
+The run below was produced by piping the following choices into the program, so each prompt and the typed value appear on one line. Input given, in order: add members Asha, Bimal, Chetan, Divya; expense Dinner 1000 paid by Asha split equally; expense Cab 350 paid by Bimal with custom shares 100, 100, 150, 0; expense Tickets 800 paid by Chetan split equally; then list expenses, balances, settle up, exit.
+
+```text
+1 Add member   2 Add expense   3 List expenses
+4 Balances     5 Settle up     0 Exit
+
+Choice: Member name:   added Asha
+
+1 Add member   2 Add expense   3 List expenses
+4 Balances     5 Settle up     0 Exit
+
+Choice: Member name:   added Bimal
+
+1 Add member   2 Add expense   3 List expenses
+4 Balances     5 Settle up     0 Exit
+
+Choice: Member name:   added Chetan
+
+1 Add member   2 Add expense   3 List expenses
+4 Balances     5 Settle up     0 Exit
+
+Choice: Member name:   added Divya
+
+1 Add member   2 Add expense   3 List expenses
+4 Balances     5 Settle up     0 Exit
+
+Choice: Description: Amount (rupees): Paid by: Split equally (e) or custom shares (c)?   added 'Dinner' 1000.00 paid by Asha
+
+1 Add member   2 Add expense   3 List expenses
+4 Balances     5 Settle up     0 Exit
+
+Choice: Description: Amount (rupees): Paid by: Split equally (e) or custom shares (c)?   share of Asha:   share of Bimal:   share of Chetan:   share of Divya:   added 'Cab' 350.00 paid by Bimal
+
+1 Add member   2 Add expense   3 List expenses
+4 Balances     5 Settle up     0 Exit
+
+Choice: Description: Amount (rupees): Paid by: Split equally (e) or custom shares (c)?   added 'Tickets' 800.00 paid by Chetan
+
+1 Add member   2 Add expense   3 List expenses
+4 Balances     5 Settle up     0 Exit
+
+Choice:   1. Dinner           1000.00  paid by Asha     shares: Asha 250.00, Bimal 250.00, Chetan 250.00, Divya 250.00
+  2. Cab               350.00  paid by Bimal    shares: Asha 100.00, Bimal 100.00, Chetan 150.00
+  3. Tickets           800.00  paid by Chetan   shares: Asha 200.00, Bimal 200.00, Chetan 200.00, Divya 200.00
+
+1 Add member   2 Add expense   3 List expenses
+4 Balances     5 Settle up     0 Exit
+
+Choice:   Asha     gets back 450.00
+  Bimal    owes      200.00
+  Chetan   gets back 200.00
+  Divya    owes      450.00
+
+1 Add member   2 Add expense   3 List expenses
+4 Balances     5 Settle up     0 Exit
+
+Choice:   Divya pays Asha 450.00
+  Bimal pays Chetan 200.00
+  (2 transaction(s))
+
+1 Add member   2 Add expense   3 List expenses
+4 Balances     5 Settle up     0 Exit
+
+Choice: Bye
+```
+
+Hand check of the balances: Asha paid 1000 and owes 250 + 100 + 200 = 550, net +450. Bimal paid 350 and owes 550, net -200. Chetan paid 800 and owes 250 + 150 + 200 = 600, net +200. Divya paid nothing and owes 450. The four nets sum to zero (rule R5). Without simplification the group has four pairwise debts (Divya to Asha, Divya to Chetan, Bimal to Asha, Bimal to Chetan); the plan settles it in two.
+
+The rounding case from Session 17, three members and an expense of 100 split equally, produced this line in a second run:
+
+```text
+  1. Tea               100.00  paid by A        shares: A 33.34, B 33.33, C 33.33
+```
+
+## Comparison with the Original
 
 <Notebook />
 
-- Include Session 17 baseline summary.
-- List improvements made.
-- Include updated code or screenshots.
-- Include comparison with original observed application.
-- Mention remaining limitations.
+| Feature | Original application (observed) | This program | Match |
+| ------- | ------------------------------- | ------------ | ----- |
+| Add member | By name or email; duplicates refused | By name; blank and duplicate refused | Partial: no email |
+| Add expense | Description, amount, payer, split; date automatic | Same fields; no date | Partial: no date |
+| Equal split | 1000 among 4 gives 250.00 each | 250.00 each | Yes |
+| Rounding | 100 among 3 gives 33.34, 33.33, 33.33 | 33.34, 33.33, 33.33 | Yes |
+| Custom split | Exact amounts, percentages, shares; must total the amount | Exact amounts only; refused if total differs | Partial: one mode |
+| Exclude a member | Untick the member | Give the member a share of 0; share not listed | Yes, different input |
+| Balances | "owes", "gets back", "settled up" with colours | Same three words, no colours | Yes |
+| Settle up | Two payments for the test group with simplify debts on | Two payments, same pairs | Yes |
+| Expense list | Date order, shows viewer's share | Entry order, shows all shares | Partial |
+| Edit or delete expense | Supported | Not supported | No |
+| Persistence | Server, multi-device | None; in memory for one run | No, out of scope |
+| Interface | Touch screen forms | Numbered console menu | No, by design |
+
+Rules R1 to R5 and R7 were reproduced exactly. R6 produced the same number of payments and the same pairs for the test group, so the inference stands for this case; it has not been shown to hold for every case.
+
+## What Reverse Engineering Taught
+
+<Notebook />
+
+- The observable rounding rule was enough to fix the internal representation: integer paise. One observation settled a design decision.
+- The behaviour of the settlement screen could be matched without knowing the original algorithm. Two different algorithms can be indistinguishable from outside; a black-box study only proves behaviour on the cases tried.
+- The custom-share check (shares must total the amount) was found only because the original's save button refused to enable. Error behaviour is as much a requirement as normal behaviour, and it is easy to miss when only success paths are tried.
+- Writing the requirements as ES-FR ids before coding made the comparison table mechanical: one row per requirement, match or not.
+- Deciding the portion up front kept the rebuild to 160 lines. Every "No" in the comparison table is a scope decision made in Session 17, not a failure discovered in Session 18.
+
+## Viva Questions
+
+<Explain />
+
+- **Q:** How do you know your program matches the original? **A:** By the comparison table: the same inputs were given to both and the outputs are listed side by side.
+- **Q:** Why does `equal_split` use `divmod`? **A:** It returns the base share and the leftover paise together; the leftover is distributed one paisa each to the first members.
+- **Q:** What happens if custom shares do not total the amount? **A:** The expense is rejected with a message showing both totals, as the original refuses to save.
+- **Q:** Why sort debtors and creditors before settling? **A:** So that the largest debt is retired against the largest credit first, which keeps the payment count small.
+- **Q:** What is the maximum number of payments the greedy method produces? **A:** One fewer than the number of members with a non-zero balance.
+- **Q:** Which inferred rule is least certain and why? **A:** R6, because different pairing orders give the same payment count and cannot be told apart from the screen.
+- **Q:** Why is data not saved to a file? **A:** Persistence was outside the portion chosen in Session 17; adding it would not change the rules being studied.
+- **Q:** What would you test next to strengthen the R6 inference? **A:** Groups where the greedy method is known not to be minimal, and check whether the original does better.
+
+## Common Mistakes
+
+<Explain />
+
+- Using floating point for money and getting shares that total 99.99 or 100.01.
+- Building features the original has but Session 17 never recorded, so there is nothing to compare them against.
+- Pasting output typed by hand instead of captured from a real run; examiners try the program.
+- A comparison table with only "Yes" rows; honest "Partial" and "No" rows show the scope was understood.
+- Letting a member both pay and receive in the settlement plan, which means balances were not netted first.
+
+## Session Summary
+
+<Notebook />
+
+- Source listing of `expense_splitter.py` with the function-to-rule mapping noted in the margin.
+- Sample run with the same numbers used on the original application, plus the rounding case.
+- Hand check that balances sum to zero and the settlement plan clears every balance.
+- Comparison table, one row per observed feature.
+- Notes on what reverse engineering taught, including which inference is still uncertain.

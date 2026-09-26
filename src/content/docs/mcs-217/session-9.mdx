@@ -1,48 +1,151 @@
 ---
 title: Session 9
-description: Matrix Transpose Web Page
+description: Web page that accepts a matrix and computes its transpose
 sidebar:
   order: 9
 ---
-This session applies web programming to a matrix problem. The page should accept matrix dimensions, dynamically create input boxes, read the matrix values, and display the transpose.
+
+This session produces one HTML file with inline CSS and JavaScript, no libraries. The page asks for the number of rows and columns, builds that many text boxes when the user clicks Input Elements, and shows the transpose when the user clicks Compute Transpose. It is the first web page in the course and the page you test in Session 10. The point is not the transpose, which is one loop; the point is creating form controls at run time, wiring events to them, and reading a grid of inputs back into an array.
+
+## Objectives
+
+<Explain />
+
+- Build a page whose second stage of inputs does not exist until the first stage is submitted
+- Create elements with `document.createElement` and attach them with `appendChild`
+- Attach click handlers with `addEventListener` and pass the dimensions into the handler
+- Read a grid of text boxes into a two-dimensional array by id
+- Validate at both stages and show the error in the page, not in an alert
 
 ## Problem Statement
 
 <Notebook />
 
-Design a web page that accepts a matrix as input and computes its transpose.
+Design a web page that accepts a matrix as input and computes its transpose. The web page should have two text boxes and a submit button labelled as Input Elements. After entering the number of rows of the input matrix in the first text box and number of columns of the input matrix in the second text box of the web page, SUBMIT button should be clicked. Once clicked, a number of text boxes which are equivalent to the number of elements in the matrix will appear along with a submit button at the bottom labelled as Compute Transpose. When the Compute Transpose button is clicked, the transpose of the input matrix has to be displayed.
 
-## Expected Deliverable
+## Concept
+
+<Explain />
+
+### Two stages, one page
+
+The page has a fixed part (rows, columns, Input Elements) written in HTML, and a generated part (the grid, Compute Transpose, the result) that JavaScript creates after the first click. Nothing is submitted to a server; there is no `form` tag and no page reload. Every click is handled in the browser.
+
+### Creating elements at run time
+
+`document.createElement("input")` makes a text box that is not yet on the page. Setting its properties (`type`, `id`) and calling `parent.appendChild(box)` puts it in the document. The grid is a `table` built row by row: for each row a `tr`, for each column a `td` containing one `input`. Giving every box an id of the form `a<row>_<col>` (for example `a1_2` for row 1, column 2, counting from zero) means the second handler can find each box with `getElementById` without keeping any array of references.
+
+### Passing the dimensions to the second handler
+
+The Compute Transpose button is created inside the first click handler, where `r` and `c` are known. Its click handler is a small anonymous function that calls `computeTranspose(r, c)`. The anonymous function remembers `r` and `c` because JavaScript functions keep the variables of the scope they were created in. No global state is needed.
+
+### Reading the grid and transposing
+
+`computeTranspose` reads every box into `a[i][j]`, then builds `t` with `t[j][i] = a[i][j]`. If `a` is r x c then `t` is c x r. It renders `t` as a plain table with borders so the result is visibly a matrix and not a line of numbers.
+
+### Reading the grid back in order
+
+The boxes are visited row by row in `computeTranspose` using the same `i` and `j` loops that created them, so the array `a` has the same shape as the grid on screen. Trace for the 2 x 3 example: `a0_0` to `a0_2` fill `a[0]`, `a1_0` to `a1_2` fill `a[1]`. Then `t[0] = [a[0][0], a[1][0]] = [1, 4]`, `t[1] = [2, 5]`, `t[2] = [3, 6]`. Three rows of two, which is what the result table shows.
+
+### Validation at both stages
+
+Stage one accepts only whole numbers from 1 to 10. The upper bound is a design choice: 100 boxes still fit a screen, 10,000 do not. A regular expression `^\d+$` rejects blanks, decimals, signs, and letters in one test. Stage two rejects an empty box or a non-numeric value and names the exact cell in the error message so the user can fix it. Errors are written into a `p` element in the page, which is easier to test than an alert.
+
+## Web Page
 
 <Notebook />
 
-Create an HTML, CSS, and JavaScript page with two text boxes for rows and columns and a submit button labelled `Input Elements`. After entering dimensions, generate input boxes for matrix elements and a second button labelled `Compute Transpose`.
+<Preview src="/code/mcs-217/session-9/transpose.html" height="460px" />
 
-## UI Flow
+```html title="transpose.html" file=<rootDir>/public/code/mcs-217/session-9/transpose.html
 
-1. User enters number of rows.
-2. User enters number of columns.
-3. User clicks `Input Elements`.
-4. Page generates matrix input boxes.
-5. User enters matrix values.
-6. User clicks `Compute Transpose`.
-7. Page displays transposed matrix.
-
-## Transpose Logic
-
-For matrix `A` with `r` rows and `c` columns:
-
-```text
-transpose[j][i] = A[i][j]
 ```
 
-The transpose has `c` rows and `r` columns.
+### Run
 
-## Submission Checklist
+Save the file as `transpose.html` and open it in any browser with File then Open, or double-click it. No server is needed. To see the script errors while testing, open the browser console with F12.
+
+### Expected Output
+
+Test input: a 2 x 3 matrix with elements 1 2 3 in the first row and 4 5 6 in the second. The three screen states are:
+
+```text
+State 1: page loaded
++------------------------------------------+
+| Matrix Transpose                         |
+| Rows:     [    ]                         |
+| Columns:  [    ]                         |
+| [Input Elements]                         |
++------------------------------------------+
+
+State 2: after typing 2 and 3 and clicking Input Elements
++------------------------------------------+
+| Matrix Transpose                         |
+| Rows:     [ 2  ]                         |
+| Columns:  [ 3  ]                         |
+| [Input Elements]                         |
+| Enter 2 x 3 elements                     |
+|   [ 1 ] [ 2 ] [ 3 ]                      |
+|   [ 4 ] [ 5 ] [ 6 ]                      |
+| [Compute Transpose]                      |
++------------------------------------------+
+
+State 3: after clicking Compute Transpose
++------------------------------------------+
+| ... (everything from state 2) ...        |
+| Transpose (3 x 2)                        |
+|   +---+---+                              |
+|   | 1 | 4 |                              |
+|   | 2 | 5 |                              |
+|   | 3 | 6 |                              |
+|   +---+---+                              |
++------------------------------------------+
+```
+
+Error states:
+
+```text
+Rows = 0, click Input Elements:
+  "Rows and columns must be whole numbers from 1 to 10."   (no grid appears)
+
+Rows = 2, Columns = 3, box (1,2) left blank, click Compute Transpose:
+  "Element (1,2) must be a number."                          (no result table)
+
+Rows = 11, click Input Elements:
+  "Rows and columns must be whole numbers from 1 to 10."   (no grid appears)
+```
+
+Clicking Input Elements again with new dimensions clears the old grid, the old result, and both error messages before building the new grid.
+
+## Viva Questions
+
+<Explain />
+
+- **Q:** Why is there no `form` element? **A:** Nothing is sent to a server. A form would reload the page on submit and lose the generated boxes.
+- **Q:** How does the Compute Transpose handler know the dimensions? **A:** It is created inside the Input Elements handler and closes over `r` and `c`.
+- **Q:** Why give each box an id like `a1_2`? **A:** So `computeTranspose` can locate any cell with `getElementById` using the row and column numbers.
+- **Q:** What are the dimensions of the transpose of an r x c matrix? **A:** c x r.
+- **Q:** Why limit rows and columns to 10? **A:** Larger grids do not fit on screen; the limit is a usability decision and is stated in the error message.
+- **Q:** Why does `readDim` use a regular expression instead of `parseInt` alone? **A:** `parseInt("2.5")` returns 2 silently; the regular expression rejects anything that is not a plain whole number.
+- **Q:** Why clear `elements.innerHTML` before building a new grid? **A:** Otherwise a second click appends a second grid below the first.
+- **Q:** Where does the error text appear and why not `alert`? **A:** In a `p` element with class `error`; page text can be checked by a test and does not block the browser.
+
+## Common Mistakes
+
+<Explain />
+
+- Using a `form` with a submit button, so the page reloads and the generated grid vanishes.
+- Building the grid as one long row of boxes; the user cannot tell where a row ends. Use a table.
+- Reading dimensions with `parseInt` alone, which accepts `2.5` and `3abc`.
+- Keeping `r` and `c` in globals set by the first handler; if the user changes the dimension boxes without clicking Input Elements again, the second handler reads the wrong grid.
+- Displaying the transpose with `alert` or `console.log` instead of in the page.
+- Labelling the buttons differently from the manual. The examiner looks for Input Elements and Compute Transpose.
+
+## Session Summary
 
 <Notebook />
 
-- Include HTML structure.
-- Include JavaScript for dynamic input generation.
-- Include validation for positive dimensions.
-- Include sample input and output.
+- The complete `transpose.html` listing
+- A drawing of the three screen states for a 2 x 3 example, with the transpose result
+- The error messages and when each one appears
+- A note of the browser used to run the page

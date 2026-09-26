@@ -1,54 +1,174 @@
 ---
 title: Session 7
-description: Matrix Multiplication in C Using Pointers
+description: C program for matrix multiplication using pointers
 sidebar:
   order: 7
 ---
-This session moves from documentation to implementation. The task is to write a C program for matrix multiplication using pointers, which helps practice memory access and pointer notation in C.
+
+This session produces a working C program: it reads two matrices, checks that they can be multiplied, multiplies them using pointer arithmetic only, and prints the product. It is the first coding session in MCS-217 and the program you write here is the thing you test in Session 8. Write it cleanly, because every test case in the next session refers to a function in this file by name. The manual places this under Testing for a reason: a program with clear functions and validation is a program you can test.
+
+## Objectives
+
+<Explain />
+
+- Store a two-dimensional matrix in one contiguous block and reach any element with pointer arithmetic
+- Allocate matrices at run time with `malloc` and release them with `free`
+- Validate dimensions before reading elements, so the program never multiplies incompatible matrices
+- Split the program into small functions (`read_matrix`, `multiply`, `print_matrix`, `free_matrix`) that Session 8 can test one at a time
+- Compile with `gcc -Wall -Wextra` and get zero warnings
 
 ## Problem Statement
 
 <Notebook />
 
-Write a program in C language for multiplication of two matrices using pointers.
+Write a program in 'C' language for the multiplication of two matrices using pointers.
 
-## Expected Deliverable
-
-<Notebook />
-
-Submit a C program that accepts two compatible matrices, multiplies them using pointer-based access, and prints the result matrix.
-
-## Algorithm
-
-<Notebook />
-
-1. Read matrix dimensions.
-2. Check whether columns of first matrix equal rows of second matrix.
-3. Read matrix elements.
-4. Use three nested loops to compute multiplication.
-5. Access elements using pointer arithmetic.
-6. Print the output matrix.
-
-## Pointer Access Pattern
-
-```c
-*(*(matrix + i) + j)
-```
-
-## Complexity
+## Concept
 
 <Explain />
 
-| Metric | Value |
-| ------ | ----- |
-| Time complexity | `O(r1 * c2 * c1)` |
-| Space complexity | `O(r1 * c2)` for result matrix |
+### Row-major layout
 
-## Submission Checklist
+C stores a two-dimensional array row after row in memory. A 2 x 3 matrix occupies six consecutive integers: row 0 first, then row 1.
+
+```text
+ index:   0    1    2    3    4    5
+ value: a00  a01  a02  a10  a11  a12
+        |--- row 0 ---| |--- row 1 ---|
+```
+
+If `m` points to the first element and the matrix has `cols` columns, element `(i, j)` is at offset `i * cols + j`. So `*(m + i * cols + j)` is the same value as `m[i][j]` would be in a static array. The program never writes `m[i][j]`; it only moves pointers.
+
+### Why one block and not an array of row pointers
+
+Two layouts are common: one `malloc` of `rows * cols` ints, or an array of `rows` pointers each pointing to its own `malloc`. The single block is simpler to allocate, simpler to free (one call), and matches how the compiler lays out a static `int a[2][3]`. It also makes the inner loop of multiplication a plain pointer walk, which is the point of this session.
+
+### Walking a column with a stride
+
+The product `C = A x B` needs, for each `C(i, j)`, the dot product of row `i` of `A` with column `j` of `B`. Row `i` of `A` is contiguous, so a pointer that starts at `a + i * c1` and increments by 1 walks it. Column `j` of `B` is not contiguous: consecutive elements are `c2` apart. A pointer that starts at `b + j` and increments by `c2` walks down the column. That stride is the only non-obvious piece of pointer arithmetic in the program.
+
+### Why the dimension check comes first
+
+`A` (r1 x c1) times `B` (r2 x c2) is defined only when `c1 == r2`. The result is r1 x c2. If you skip the check, the pointer walk reads past the end of the block and the output is garbage or a crash. The program therefore reads the four dimensions, checks them, and only then asks for elements. Each dimension is also limited to 1 to 100, which rules out zero, negative, and absurdly large sizes.
+
+### malloc and free in pairs
+
+Every `malloc` needs exactly one `free` on every path out of `main`, including the error paths. The program frees `a` when reading `b` fails, and frees `a` and `b` when allocating `c` fails. `free_matrix` is a thin wrapper so the test cases in Session 8 have a named function to call.
+
+## Program
 
 <Notebook />
 
-- Include source code.
-- Include sample input and output.
-- Explain pointer notation.
-- Handle incompatible matrix dimensions.
+```c title="matrix_multiply.c" file=<rootDir>/public/code/mcs-217/session-7/matrix_multiply.c
+
+```
+
+### Build
+
+```text
+gcc -Wall -Wextra -o matrix_multiply matrix_multiply.c
+./matrix_multiply
+```
+
+### Sample Output
+
+Input: A is 2 x 3, B is 3 x 2. Elements typed row by row.
+
+```text
+Rows of A: 2
+Columns of A: 3
+Rows of B: 3
+Columns of B: 2
+Enter 2 x 3 elements of matrix A, row by row:
+1 2 3
+4 5 6
+Enter 3 x 2 elements of matrix B, row by row:
+7 8
+9 10
+11 12
+Matrix A (2 x 3):
+     1     2     3
+     4     5     6
+Matrix B (3 x 2):
+     7     8
+     9    10
+    11    12
+Product A x B (2 x 2):
+    58    64
+   139   154
+```
+
+Check by hand: `C(0,0) = 1*7 + 2*9 + 3*11 = 58`, `C(1,1) = 4*8 + 5*10 + 6*12 = 154`.
+
+Incompatible dimensions (A is 2 x 3, B is 2 x 2):
+
+```text
+Rows of A: 2
+Columns of A: 3
+Rows of B: 2
+Columns of B: 2
+Error: columns of A (3) must equal rows of B (2). Multiplication not possible.
+```
+
+Zero size:
+
+```text
+Rows of A: 0
+Error: dimension must be between 1 and 100.
+```
+
+### Explanation of the key lines
+
+| Line | What it does |
+| ---- | ------------ |
+| `int *m = malloc((size_t)rows * (size_t)cols * sizeof(int));` | One contiguous block for the whole matrix. The casts to `size_t` stop the multiplication overflowing before it reaches `malloc`. |
+| `if (scanf("%d", p) != 1)` then `p++` | `scanf` writes straight into the block through `p`; `p++` moves to the next element in row-major order. No index variable is used to address memory. |
+| `arow = a + i * c1;` | Start of row `i` of `A`. |
+| `bp = b + j;` then `bp += c2;` | Start at `B(0, j)` and step one full row each time, which walks down column `j`. |
+| `sum += (long)*(arow + k) * *bp;` | `A(i,k) * B(k,j)` accumulated in a `long` so intermediate sums do not overflow for typical inputs. |
+| `*cp = (int)sum; cp++;` | Store `C(i,j)` and advance to the next output cell. `cp` walks `C` in the same row-major order the loops produce. |
+| `printf("%6d", *p); p++;` | Print with a fixed width so columns line up, then advance. |
+| `free_matrix(a); free_matrix(b); free_matrix(c);` | One free per malloc. |
+
+### Complexity
+
+| Metric | Value | Reason |
+| ------ | ----- | ------ |
+| Time | O(r1 x c1 x c2) | Three nested loops; for square n x n matrices this is O(n cubed). |
+| Space | O(r1 x c1 + r2 x c2 + r1 x c2) | The two inputs and the product. No extra buffers. |
+| Input | O(r1 x c1 + r2 x c2) | Every element is read exactly once. |
+
+## Viva Questions
+
+<Explain />
+
+- **Q:** Why is `*(m + i * cols + j)` equal to `m[i][j]`? **A:** Because C stores rows consecutively, so row `i` starts `i * cols` elements after the base pointer and column `j` is `j` more.
+- **Q:** Why does `bp` increase by `c2` and not by 1? **A:** It walks down a column of `B`; consecutive elements in a column are one full row, `c2` ints, apart.
+- **Q:** What happens if `c1` is not equal to `r2` and you skip the check? **A:** The pointer walk reads beyond the allocated block: undefined behaviour, usually garbage or a crash.
+- **Q:** Why accumulate `sum` in a `long`? **A:** Products of two ints can exceed the int range; a wider accumulator delays overflow. The final cast to `int` can still truncate for very large values.
+- **Q:** Why is `free_matrix` a separate function when it just calls `free`? **A:** It names the operation so it can be tested and replaced, and it keeps `main` symmetrical with `read_matrix`.
+- **Q:** What does `scanf("%d", p) != 1` detect? **A:** Non-numeric input or end of input; both mean the element could not be read.
+- **Q:** Why cast to `size_t` inside `malloc`? **A:** `rows * cols * sizeof(int)` must be computed in an unsigned type wide enough for the result; multiplying two ints first could overflow.
+- **Q:** What is the time complexity for square n x n matrices? **A:** O(n cubed).
+
+## Common Mistakes
+
+<Explain />
+
+- Writing `a[i][j]` inside `multiply` and calling it a pointer program. The manual asks for pointers; use pointer arithmetic throughout.
+- Reading elements before checking `c1 == r2`, so the user types a whole matrix and only then sees the error.
+- Forgetting to `free` on the error paths. Every `return 1` after a `malloc` must release what was allocated.
+- Using `int` for `rows * cols * sizeof(int)`, which can overflow before `malloc` sees it.
+- Printing with `%d` and no width, so columns do not line up and the examiner cannot read the result.
+- Leaving compiler warnings. `gcc -Wall -Wextra` must be clean; an unused variable or a signed/unsigned comparison is a defect you fix, not ignore.
+
+## Session Summary
+
+<Notebook />
+
+- Source listing of `matrix_multiply.c` with the file header comment
+- The build command and a note that it compiles with no warnings
+- Sample run for a compatible pair (2 x 3 times 3 x 2) with the input and the full output
+- Sample run showing the dimension mismatch error
+- The table explaining the pointer arithmetic lines
+- The complexity table

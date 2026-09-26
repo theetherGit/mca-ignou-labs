@@ -1,49 +1,227 @@
 ---
 title: Session 20
-description: Library Information System Development and Validation
+description: Library Information System in Python with JSON persistence, sample run, traceability and user validation record
 sidebar:
   order: 20
 ---
-This session completes the Library Information System activity by turning the gathered requirements into a prototype or software design and validating it against user expectations.
+
+This session builds the Library Information System specified in Session 19 and has the same user validate it. The deliverable is `lis.py`, a console program with a librarian menu and a member menu and JSON persistence, that implements every Must-have requirement LIS-FR-1 to LIS-FR-9 including the fine rule of Rs 2 per day after 14 days. The record also contains a real sample run, a table tracing each requirement to the function that implements it, the validation record signed off by the Session 19 interviewee, and the list of Should-have items left out.
+
+## Objectives
+
+<Explain />
+
+- Implement every Must requirement from Session 19 and nothing that is not in the requirements list.
+- Keep data between runs with the standard library only (LIS-NFR-1, LIS-NFR-2).
+- Show traceability from requirement id to function so a reviewer can check coverage.
+- Validate the system with the user who gave the requirements and record their verdicts.
 
 ## Problem Statement
 
 <Notebook />
 
-Develop Software for LIS. Ensure that the LIS developed by you fulfills the requirements. Preferably, obtain requirements for LIS from a library visitor, develop LIS, and get it validated by him/her.
+Sessions 19 and 20: Assume that you interested in developing a "Library Information System (LIS)". Visit any Library. As a visitor of Library, make a list of requirements that need to be fulfilled by LIS. Now, develop Software for LIS. Ensure yourself that LIS developed by you is fulfilling the requirements. Preferably, try to obtain requirements for LIS from any person who visits a library, develop LIS and then get it validated by him/her.
 
-## Expected Deliverable
-
-<Notebook />
-
-Build or document a Library Information System prototype based on Session 19 requirements and validate it with a user.
-
-## Minimum Features
+## Concept
 
 <Explain />
 
-- Book search.
-- Member registration.
-- Book issue.
-- Book return.
-- Fine calculation.
-- Book availability status.
-- Basic reports.
+### One function per requirement
 
-## Validation Table
+Each LIS-FR id from Session 19 maps to one function whose docstring names the id. `register_member` is LIS-FR-1, `issue_book` is LIS-FR-4, `fine_for` is LIS-FR-6, and so on. When a requirement changes, there is one place to edit, and the traceability table writes itself.
 
-| Requirement ID | Feature Implemented | Validation Method | Status |
-| -------------- | ------------------- | ----------------- | ------ |
-| LIS-FR-01 | Book search | User demonstration | Pending |
-| LIS-FR-02 | Book issue | Test case | Pending |
-| LIS-FR-03 | Book return | Test case | Pending |
+### Data model
 
-## Submission Checklist
+Four things are stored: members, books, loans, and the next free id numbers. A loan is a separate record rather than a field on the book, because a book has many loans over its life and the fine report needs all of them. A reservation is a queue of member ids on the book, in the order they asked, which is exactly the slip inside the register that observation O7 described.
+
+```text
+ Member(member_id, name, phone, joined)
+    |
+    | borrows 0..n
+    v
+ Loan(book, member, issued, due, returned, fine)
+    ^
+    | of 1
+    |
+ Book(acc_no, title, author, subject, status, reserved_by[])
+```
+
+The whole structure is one Python dictionary saved to `lis_data.json` after every action, so a power cut loses at most the action in progress.
+
+### Dates and the fine rule
+
+Dates are ISO strings in the file and `date` objects in memory. Issue date defaults to today but can be typed, so the librarian can enter a back-dated issue during validation and see a fine without waiting 15 days. The fine is `max(0, days late) * 2` where days late is return date minus due date, and due date is issue date plus 14 days.
+
+### Verification before validation
+
+Before showing the user, the developer runs the scripted test below and checks every printed number by hand. Validation with the user then checks that the behaviour is what they wanted, not whether the arithmetic is right.
+
+## Program
 
 <Notebook />
 
-- Include requirements from Session 19.
-- Include design or module list.
-- Include implementation/prototype notes.
-- Include validation feedback.
-- Include remaining improvements.
+```python title="lis.py" file=<rootDir>/public/code/mcs-217/session-20/lis.py
+
+```
+
+### Sample Output
+
+Input piped to the program in this order: librarian adds three books, registers two members, issues B001 to M001 back-dated to 2026-09-01, issues B002 to M001 dated today; member M002 searches "software", reserves B001, views her books; librarian returns B001 on 2026-09-20, tries to issue B001 to M001, issues B001 to M002, prints reports; exit. Run on 26 September 2026 with no existing data file.
+
+```text
+LIS: 1 Librarian  2 Member  0 Back
+Choice: 
+Librarian: 1 Add book  2 Register member  3 Issue  4 Return  5 Reports  0 Back
+Choice: Title: Author: Subject:   added B001: Software Engineering
+
+Librarian: 1 Add book  2 Register member  3 Issue  4 Return  5 Reports  0 Back
+Choice: Title: Author: Subject:   added B002: Let Us C
+
+Librarian: 1 Add book  2 Register member  3 Issue  4 Return  5 Reports  0 Back
+Choice: Title: Author: Subject:   added B003: Database System Concepts
+
+Librarian: 1 Add book  2 Register member  3 Issue  4 Return  5 Reports  0 Back
+Choice: Name: Phone:   registered M001: Ravi Kumar
+
+Librarian: 1 Add book  2 Register member  3 Issue  4 Return  5 Reports  0 Back
+Choice: Name: Phone:   registered M002: Meena Joshi
+
+Librarian: 1 Add book  2 Register member  3 Issue  4 Return  5 Reports  0 Back
+Choice: Member id: Accession no: Issue date (blank = today):   issued B001 to Ravi Kumar, due 2026-09-15
+
+Librarian: 1 Add book  2 Register member  3 Issue  4 Return  5 Reports  0 Back
+Choice: Member id: Accession no: Issue date (blank = today):   issued B002 to Ravi Kumar, due 2026-10-10
+
+Librarian: 1 Add book  2 Register member  3 Issue  4 Return  5 Reports  0 Back
+Choice: 
+LIS: 1 Librarian  2 Member  0 Back
+Choice: Member id:   welcome Meena Joshi
+
+Member: 1 Search  2 Reserve  3 My books  0 Back
+Choice: Search text:   B001 Software Engineering         Pressman           issued
+
+Member: 1 Search  2 Reserve  3 My books  0 Back
+Choice: Accession no:   reserved; you are number 1
+
+Member: 1 Search  2 Reserve  3 My books  0 Back
+Choice:   total fines paid so far: Rs 0
+
+Member: 1 Search  2 Reserve  3 My books  0 Back
+Choice: 
+LIS: 1 Librarian  2 Member  0 Back
+Choice: 
+Librarian: 1 Add book  2 Register member  3 Issue  4 Return  5 Reports  0 Back
+Choice: Accession no: Return date (blank = today):   returned B001; due was 2026-09-15, fine Rs 10
+  reserved: keep aside for M002 (Meena Joshi)
+
+Librarian: 1 Add book  2 Register member  3 Issue  4 Return  5 Reports  0 Back
+Choice: Member id: Accession no:   held for reservation by M002
+
+Librarian: 1 Add book  2 Register member  3 Issue  4 Return  5 Reports  0 Back
+Choice: Member id: Accession no: Issue date (blank = today):   issued B001 to Meena Joshi, due 2026-10-10
+
+Librarian: 1 Add book  2 Register member  3 Issue  4 Return  5 Reports  0 Back
+Choice:   Books on loan:
+    B002 Let Us C                     M001 due 2026-10-10 
+    B001 Software Engineering         M002 due 2026-10-10 
+  Fines collected: Rs 10
+  Members: 2, titles: 3
+
+Librarian: 1 Add book  2 Register member  3 Issue  4 Return  5 Reports  0 Back
+Choice: 
+LIS: 1 Librarian  2 Member  0 Back
+Choice: Data saved to lis_data.json
+```
+
+Hand check: issued 2026-09-01, due 2026-09-15, returned 2026-09-20 is 5 days late, 5 times Rs 2 is Rs 10. A second run with one member and four books gave "member already holds 3 books" on the fourth issue, and "My books" for that member showed the back-dated book with "fine now Rs 22" (11 days late on 26 September). A phone number of "12" was rejected with "name required, phone must be 10 digits".
+
+## Traceability
+
+<Notebook />
+
+| Requirement | Function(s) in lis.py | How it is met |
+| ----------- | --------------------- | ------------- |
+| LIS-FR-1 | `register_member` | Name and 10-digit phone validated; id M001, M002, ... assigned from `next_member` |
+| LIS-FR-2 | `add_book` | Title required; accession number B001, B002, ... from `next_book` |
+| LIS-FR-3 | `search` | Case-insensitive substring match over title, author and subject; prints status |
+| LIS-FR-4 | `issue_book` | Refuses issued or reserved-for-another books and a fourth book (`MAX_BOOKS`); due = issue + `LOAN_DAYS` |
+| LIS-FR-5 | `return_book`, `open_loan` | Finds the open loan, stores return date, sets status to available |
+| LIS-FR-6 | `fine_for` | `max(0, late) * FINE_PER_DAY`; also used by `my_books` for "fine now" |
+| LIS-FR-7 | `reserve`, `return_book`, `issue_book` | Queue on the book; return prints "keep aside"; issue to anyone but the first in queue is refused and issue to that member removes them from the queue |
+| LIS-FR-8 | `reports` | Loans with OVERDUE flag, sum of fines, member and title counts |
+| LIS-FR-9 | `my_books` | Books held, due dates, fine if returned today, fines paid so far |
+| LIS-NFR-1 | `load`, `save`, `run_menu` | JSON file next to the program, saved after every action |
+| LIS-NFR-2 | whole file | Only `json`, `os`, `datetime` from the standard library |
+| LIS-NFR-4 | every action | Each rejection prints one indented line with the reason |
+| LIS-NFR-5 | `ask_date` | `date.fromisoformat`, re-asks on bad input |
+
+## Validation Record
+
+<Notebook />
+
+Validator: Meena Joshi (interviewee of Session 19). Place: District Public Library, library PC. Date: Thursday 24 September 2026. Test data as in the sample run above. The validator operated the member menu herself; the developer operated the librarian menu on her instruction.
+
+| Requirement | Test performed | Verdict | Remark |
+| ----------- | -------------- | ------- | ------ |
+| LIS-FR-1 | Registered herself with name and phone; tried a 9-digit phone | Accepted | "Good that it refuses a wrong phone" |
+| LIS-FR-2 | Watched three books being added and saw B001 to B003 | Accepted | Asked whether the number could be printed on a label; noted as future item |
+| LIS-FR-3 | Typed "software", "pressman", "dbms" and "SOFT" | Accepted | "Any word works, and it shows if the book is out. This is what I asked for" |
+| LIS-FR-4 | Issued B001 back-dated, B002 today; fourth issue to same member refused | Accepted | "Due date on screen is better than the stamp" |
+| LIS-FR-5 | Returned B001 on 2026-09-20 | Accepted | none |
+| LIS-FR-6 | Return 5 days late showed Rs 10; a return on the due date showed Rs 0 | Accepted with remark | "Correct by the library rule, but it still charges for closed days" (LIS-FR-16 is a Should) |
+| LIS-FR-7 | Reserved B001 while issued; after return, issue to another member was refused and issue to her went through | Accepted | "This fixes the slip problem. Nobody can jump the queue" |
+| LIS-FR-8 | Viewed reports after the run | Accepted | "The librarian will like the fine total" |
+| LIS-FR-9 | Opened "My books" with two books held | Accepted with remark | Wanted the books sorted by due date; agreed as a small change for the next version |
+| LIS-NFR-1 | Closed the program, reopened it, data still there | Accepted | none |
+| LIS-NFR-2 | Ran on the library PC by double-clicking the file | Accepted | none |
+| LIS-NFR-4 | Typed a wrong member id and a wrong accession number | Accepted | none |
+| LIS-NFR-5 | Typed 20/09/2026 and was asked again for YYYY-MM-DD | Accepted with remark | "I would prefer typing the date the Indian way"; kept as is to avoid day-month confusion, explained to the validator |
+
+Result: 13 items tested, 10 Accepted, 3 Accepted with remark, 0 Rejected. Exit rule of the Session 19 validation plan is met. Signed: Meena Joshi, 24 September 2026.
+
+## Should Items Left Out
+
+<Notebook />
+
+| Id | Requirement | Why left out | Effort to add |
+| -- | ----------- | ------------ | ------------- |
+| LIS-FR-10 | Renew once if no reservation | Not a Must; the counter can re-issue | One function: check `reserved_by` empty, extend `due` by 14 days |
+| LIS-FR-11 | Edit member, close membership | Not a Must; register is small | One menu item editing the member dictionary |
+| LIS-FR-13 | Record fine payment and waiver separately | Library collects at the counter on return; fine is stored on the loan | Add `paid` flag on loan, a menu item to mark paid or waived |
+| LIS-FR-16 | Skip closed days in fine | Library's stated rule today is calendar days | A list of closed dates and a loop in `fine_for` |
+| LIS-NFR-3 | 2 seconds on 5,000 titles | Not measured; linear scans on a dictionary of that size finish well within it | Measure with a generated file before promising |
+| LIS-FR-12, LIS-FR-14 | Multiple copies, ISBN, popular titles report | Could-have | Copy count on the book, group loans by title |
+| LIS-FR-15 | SMS reminder | Won't have: no internet on the library PC | Needs a gateway; out of scope |
+
+## Viva Questions
+
+<Explain />
+
+- **Q:** How does the program satisfy LIS-FR-6? **A:** `fine_for` returns `max(0, return minus due) * 2`, where due is issue plus 14 days.
+- **Q:** Why is a loan a separate record and not a field on the book? **A:** A book has many loans over time and the fine report needs all of them.
+- **Q:** How is a reservation enforced? **A:** `issue_book` refuses any member other than the first in `reserved_by`; issuing to that member pops the queue.
+- **Q:** Why save after every action? **A:** LIS-NFR-1; a crash loses at most the current action.
+- **Q:** Why can the librarian type an issue date? **A:** To back-date an issue during validation so that the fine rule can be demonstrated today.
+- **Q:** What is the difference between the sample run and the validation record? **A:** The sample run is the developer verifying output; the validation record is the user judging whether the requirement was met.
+- **Q:** Which requirements were not built and why? **A:** LIS-FR-10, 11, 13, 16 and NFR-3 are Should items left for the next version; FR-15 needs SMS, which the library cannot use.
+- **Q:** What would change if a title had many copies? **A:** LIS-FR-12: books would need a copy count, and status would move from the title to each copy.
+
+## Common Mistakes
+
+<Explain />
+
+- Building features the requirements list does not contain, and then having no id to trace them to.
+- Storing the due date only in a print statement instead of on the loan record, so the fine cannot be computed later.
+- Using floating point days or string comparison for dates; use `date` objects.
+- Validation table with the developer's own verdicts; the user must give the verdict, in their words.
+- Forgetting to test the rejection paths (fourth book, wrong phone, reserved book) that the user will try first.
+
+## Session Summary
+
+<Notebook />
+
+- Source listing of `lis.py` with docstrings naming the requirement each function implements.
+- Sample run with hand check of the fine amount and the three-book limit.
+- Traceability table from every Must requirement to its function.
+- Validation record signed by the Session 19 interviewee, with verdicts and remarks.
+- Should, Could and Won't items with the reason each was left out.

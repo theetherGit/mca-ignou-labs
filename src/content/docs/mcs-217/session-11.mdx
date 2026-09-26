@@ -1,42 +1,177 @@
 ---
 title: Session 11
-description: Correct Program with Poor Quality
+description: A correct program of poor quality, and the same program rewritten to a coding standard
 sidebar:
   order: 11
 ---
-This session explains the difference between a program that merely works and a program that is well written. A program may produce the correct answer but still be poor quality if it is difficult to read, maintain, test, or extend.
+
+This session produces two versions of one small C program. The first computes the right answer but is written badly on purpose. The second computes the same answer and follows a coding standard. The point is that "it works" is the lowest bar a program can clear: a reviewer, a tester, or the person who maintains the code next year needs far more than correct output. You will justify, attribute by attribute, why the first version is poor quality even though every test passes.
+
+## Objectives
+
+<Explain />
+
+- Separate the idea of correctness (right output) from quality (readable, maintainable, standard-conforming code).
+- Write a program that passes its tests but fails a code review, and name the exact lines that fail.
+- Rewrite the same program to a stated coding standard without changing its behaviour.
+- Defend the quality attributes (readability, maintainability, modularity, naming, comments, robustness) in a viva.
 
 ## Problem Statement
 
 <Notebook />
 
-Write a program that is correct but not of good quality. Justify your answer. Make necessary assumptions.
+Session 11: Write a Program that is correct but of not good quality. Justify your answer. Make necessary assumptions.
 
-## Expected Deliverable
+## Concept
+
+<Explain />
+
+### Correctness is not quality
+
+A program is correct when it produces the specified output for every valid input. Quality is everything else a reader cares about: can someone understand it in five minutes, change one rule without breaking another, test one piece in isolation, and trust it with bad input. The manual (section 1.6) lists comments, validation checks, error handling, and coding standards as the things an implementation "must contain". None of them changes the output for a valid run, which is exactly why students skip them.
+
+### What a coding standard covers
+
+The manual gives one sample clause: "A consistent naming pattern is one of the most important elements of predictability and discoverability". A usable standard for a C lab program covers at least:
+
+- Naming: constants in UPPER_CASE, functions and variables as descriptive lower_snake_case, no single letters except loop counters.
+- Layout: one statement per line, fixed indentation (four spaces), braces on every block.
+- Structure: one job per function, `main()` only coordinates, no duplicated logic.
+- Constants: no magic numbers; every threshold is a named constant defined once.
+- Comments: a header comment per file and per function saying what it does and returns.
+- Robustness: check what you read before you use it.
+
+### The quality attributes you will be asked about
+
+| Attribute | Question the reviewer asks |
+| --- | --- |
+| Readability | Can a new reader follow the flow without running it? |
+| Maintainability | If the grade boundary for B changes from 75 to 70, how many lines change? |
+| Modularity | Is each task in its own function with a clear input and output? |
+| Naming | Does every identifier say what it holds or does? |
+| Comments | Is the intent written down where the code is not obvious? |
+| Robustness | What happens on N = 0, N = 200, or a letter instead of a number? |
+| Adherence to standard | Does it follow the named rules above, consistently? |
+
+## Assumptions
 
 <Notebook />
 
-Provide a working program and explain why it is poor quality even though it gives correct output.
+1. The program grades a class: it reads N (at most 100) and then N integer marks out of 100, and prints the average, the highest marks, a letter grade per student, and the grade of the class average.
+2. Grade rule: A for 90 and above, B for 75 to 89, C for 60 to 74, D for 40 to 59, F below 40. The same rule applies to the class average.
+3. "Correct" means: for every valid input (1 to 100 students, marks 0 to 100) both versions print exactly the same output. This was checked by running both with the same input and comparing with `diff`.
+4. The coding standard is the one listed under Concept. The poor version violates it on purpose; it was not written carelessly by accident.
 
-## Example Quality Problems
-
-- Unclear variable names.
-- Duplicated code.
-- No input validation.
-- No comments for complex logic.
-- Hard-coded values.
-- Poor formatting.
-- No separation into functions.
-
-## Evaluation Notes
-
-A program can be correct for a sample input but still have poor maintainability, readability, testability, and extensibility.
-
-## Submission Checklist
+## Program A: Correct but Poor Quality
 
 <Notebook />
 
-- Include the program.
-- Show sample output proving it works.
-- List quality issues.
-- Suggest improvements.
+```c title="poor_quality.c" file=<rootDir>/public/code/mcs-217/session-11/poor_quality.c
+
+```
+
+It compiles with `gcc -Wall poor_quality.c` with no warnings, which is the first lesson: the compiler measures syntax, not quality. The unused globals `t` and `u` on line 2 are not even reported.
+
+## Program B: Same Behaviour, Coding Standard Applied
+
+<Notebook />
+
+```c title="good_quality.c" file=<rootDir>/public/code/mcs-217/session-11/good_quality.c
+
+```
+
+## Justification
+
+<Notebook />
+
+Every row cites a line of `poor_quality.c` as evidence, then says how `good_quality.c` fixes it. This table is the answer to "justify".
+
+| Attribute | Evidence in poor_quality.c | Why it is a defect | Fix in good_quality.c |
+| --- | --- | --- | --- |
+| Readability | Line 3 declares seven variables and opens `main` on one line; lines 5 to 8 mix tabs, two spaces and no indentation | The eye cannot find where a loop starts or ends; the reader must count braces | Four-space indentation, one declaration per line, braces on every block |
+| Maintainability | The thresholds 90, 75, 60, 40 appear twice (lines 11 to 14 and 16 to 19) | Changing the B boundary means editing two places; missing one produces a silent inconsistency | `GRADE_A_MIN` to `GRADE_D_MIN` defined once; `grade_of()` is the single place the rule lives |
+| Modularity | Everything is inside `main` (lines 3 to 21); reading, summing, maximum and grading are interleaved | Nothing can be tested or reused on its own | `read_marks()`, `average_marks()`, `highest_marks()`, `grade_of()`; `main` only calls them |
+| Naming | `n`, `a`, `s`, `h`, `v`, `t`, `u` (lines 2 and 3) | The names carry no meaning; `h` could be "hours" or "highest"; `t` and `u` are never used at all | `count`, `marks`, `total`, `highest`, `average`; unused variables removed |
+| Comments | None in 21 lines | The grade rule and the meaning of `v` exist only in the author's head | File header states purpose and the standard; each function has a one-line contract |
+| Duplicated code | The five-way if chain is written out twice (lines 11 to 19) | Two copies of one rule always drift apart eventually | One function `grade_of()` called for each student and for the average |
+| Magic numbers | `a[100]` on line 3, and the thresholds on lines 11 to 19 | The reader does not know if 100 is a limit, a percentage, or a coincidence | `MAX_STUDENTS` and the `GRADE_*_MIN` constants have names |
+| Robustness | Line 4 ignores the return value of `scanf` and never checks `n`; line 7 divides by `n` | N = 0 divides by zero; N = 200 writes past the array; a letter leaves `n` uninitialised | `main` checks the `scanf` result and the 1 to `MAX_STUDENTS` range before reading marks |
+| Adherence to standard | No rule from the standard is followed consistently | A team cannot review or merge code that has no shared shape | Header comment names the standard and the body follows it throughout |
+
+### What did not change
+
+The output. Both programs print the same prompts, the same numbers and the same grades for every valid input. Quality was improved without touching behaviour, which is what refactoring means.
+
+## Sample Output
+
+<Notebook />
+
+Compile and run both with the same input and compare:
+
+```text
+$ gcc -Wall -o poor poor_quality.c
+$ gcc -Wall -o good good_quality.c
+$ printf '5\n85\n92\n38\n67\n74\n' | ./poor > poor.out
+$ printf '5\n85\n92\n38\n67\n74\n' | ./good > good.out
+$ diff poor.out good.out && echo IDENTICAL
+IDENTICAL
+```
+
+Interactive run of either program with five students:
+
+```text
+Enter number of students: 5
+Marks of student 1: 85
+Marks of student 2: 92
+Marks of student 3: 38
+Marks of student 4: 67
+Marks of student 5: 74
+Average marks: 71.20
+Highest marks: 92
+Student 1: 85 -> B
+Student 2: 92 -> A
+Student 3: 38 -> F
+Student 4: 67 -> C
+Student 5: 74 -> C
+Class average grade: C
+```
+
+The good version differs only on invalid input, which the poor version does not handle:
+
+```text
+Enter number of students: 0
+Number of students must be between 1 and 100
+```
+
+## Viva Questions
+
+<Explain />
+
+- **Q:** The poor program gives the correct answer. Why is it still a problem? **A:** Correctness is checked once; the code is read, changed and tested many times, and every one of those costs more when the code is unreadable.
+- **Q:** Name one quality defect the compiler cannot detect. **A:** Duplicated logic (the grade rule written twice); `-Wall` is silent about it.
+- **Q:** What is a magic number? **A:** A literal such as 75 whose meaning is not stated; the fix is a named constant defined in one place.
+- **Q:** Why is putting everything in `main` bad if the program is only 20 lines? **A:** Nothing can be unit tested or reused, and the 20 lines become 200 the moment a feature is added.
+- **Q:** How does the good version prove it has the same behaviour? **A:** Both binaries were run on the same input and their outputs compared with `diff`.
+- **Q:** Which attribute did `grade_of()` improve most? **A:** Maintainability: the grade rule exists once, so a boundary change is a one-line edit.
+- **Q:** Is `good_quality.c` fully robust? **A:** No; it validates the count but not each mark, and `scanf` on a non-number still leaves the value unset. Robustness is a scale, not a switch.
+- **Q:** What part of the manual asks for this? **A:** Section 1.6 Implementation: comments, validation checks, error handling and coding standards.
+
+## Common Mistakes
+
+<Explain />
+
+- Writing a program that is wrong and calling it "poor quality". The problem asks for a correct program; check the output before you argue about style.
+- Listing defects without line numbers. "No comments" is an opinion; "lines 1 to 21 contain no comment" is evidence.
+- Making the poor version so bad it does not compile, or so mild that a reviewer cannot see the difference. Aim for clearly wrong style, clearly right output.
+- Changing behaviour in the rewrite (different prompts, different rounding). Then it is a new program, not a quality improvement.
+- Forgetting the assumptions. The examiner needs to know what "correct" was measured against.
+
+## Session Summary
+
+<Notebook />
+
+- Assumptions: the task, the grade rule, and the coding standard used.
+- Program A (`poor_quality.c`) with its output.
+- Program B (`good_quality.c`) with the same output.
+- The justification table with line references for every attribute.
+- The `diff` evidence that both programs behave identically on valid input.

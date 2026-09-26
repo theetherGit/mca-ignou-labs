@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Matrix Transpose</title>
+    <style>
+      body { font-family: sans-serif; padding: 16px; max-width: 640px; }
+      label { display: inline-block; width: 90px; }
+      input[type="number"] { width: 70px; padding: 4px; margin: 4px 0; }
+      button { padding: 6px 14px; margin-top: 8px; }
+      .grid { border-collapse: collapse; margin-top: 8px; }
+      .grid td { padding: 2px; }
+      .grid input { width: 50px; }
+      .error { color: #b00020; margin-top: 8px; }
+      #result td { border: 1px solid #333; padding: 4px 10px; text-align: right; }
+      h3 { margin: 12px 0 4px; }
+    </style>
+  </head>
+  <body>
+    <h2>Matrix Transpose</h2>
+
+    <div>
+      <label for="rows">Rows:</label>
+      <input id="rows" type="number" min="1" max="10" />
+    </div>
+    <div>
+      <label for="cols">Columns:</label>
+      <input id="cols" type="number" min="1" max="10" />
+    </div>
+    <button id="inputBtn">Input Elements</button>
+    <p id="dimError" class="error"></p>
+
+    <div id="elements"></div>
+    <p id="elemError" class="error"></p>
+    <div id="output"></div>
+
+    <script>
+      var rowsBox = document.getElementById("rows");
+      var colsBox = document.getElementById("cols");
+      var elements = document.getElementById("elements");
+      var output = document.getElementById("output");
+      var dimError = document.getElementById("dimError");
+      var elemError = document.getElementById("elemError");
+
+      // Returns the integer value of a text box, or null if it is not an
+      // integer between 1 and 10 (the limit keeps the grid readable).
+      function readDim(box) {
+        var s = box.value.trim();
+        if (!/^\d+$/.test(s)) return null;
+        var n = parseInt(s, 10);
+        return n >= 1 && n <= 10 ? n : null;
+      }
+
+      // Step 1: build an r x c grid of text boxes and the second button.
+      document.getElementById("inputBtn").addEventListener("click", function () {
+        dimError.textContent = "";
+        elemError.textContent = "";
+        elements.innerHTML = "";
+        output.innerHTML = "";
+
+        var r = readDim(rowsBox);
+        var c = readDim(colsBox);
+        if (r === null || c === null) {
+          dimError.textContent = "Rows and columns must be whole numbers from 1 to 10.";
+          return;
+        }
+
+        var table = document.createElement("table");
+        table.className = "grid";
+        for (var i = 0; i < r; i++) {
+          var tr = document.createElement("tr");
+          for (var j = 0; j < c; j++) {
+            var td = document.createElement("td");
+            var box = document.createElement("input");
+            box.type = "number";
+            box.id = "a" + i + "_" + j;
+            box.title = "Element (" + (i + 1) + "," + (j + 1) + ")";
+            td.appendChild(box);
+            tr.appendChild(td);
+          }
+          table.appendChild(tr);
+        }
+        var title = document.createElement("h3");
+        title.textContent = "Enter " + r + " x " + c + " elements";
+        elements.appendChild(title);
+        elements.appendChild(table);
+
+        var btn = document.createElement("button");
+        btn.id = "transposeBtn";
+        btn.textContent = "Compute Transpose";
+        btn.addEventListener("click", function () { computeTranspose(r, c); });
+        elements.appendChild(btn);
+      });
+
+      // Step 2: read the grid, swap rows and columns, display the result.
+      function computeTranspose(r, c) {
+        elemError.textContent = "";
+        output.innerHTML = "";
+
+        var a = [];
+        for (var i = 0; i < r; i++) {
+          a.push([]);
+          for (var j = 0; j < c; j++) {
+            var v = document.getElementById("a" + i + "_" + j).value.trim();
+            if (v === "" || isNaN(Number(v))) {
+              elemError.textContent = "Element (" + (i + 1) + "," + (j + 1) + ") must be a number.";
+              return;
+            }
+            a[i].push(Number(v));
+          }
+        }
+
+        // t[j][i] = a[i][j]; the transpose is c rows by r columns.
+        var t = [];
+        for (var j2 = 0; j2 < c; j2++) {
+          t.push([]);
+          for (var i2 = 0; i2 < r; i2++) t[j2].push(a[i2][j2]);
+        }
+
+        var title = document.createElement("h3");
+        title.textContent = "Transpose (" + c + " x " + r + ")";
+        output.appendChild(title);
+        var table = document.createElement("table");
+        table.id = "result";
+        for (var p = 0; p < c; p++) {
+          var tr = document.createElement("tr");
+          for (var q = 0; q < r; q++) {
+            var td = document.createElement("td");
+            td.textContent = t[p][q];
+            tr.appendChild(td);
+          }
+          table.appendChild(tr);
+        }
+        output.appendChild(table);
+      }
+    </script>
+  </body>
+</html>

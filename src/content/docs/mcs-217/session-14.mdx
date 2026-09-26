@@ -1,50 +1,335 @@
 ---
 title: Session 14
-description: Change Control Process for Railway Reservation System
+description: Change control applied to the Session 13 RRS, from demonstration to CCB decision to rrs_v2.py
 sidebar:
   order: 14
 ---
-This session introduces change management. After showing the Railway Reservation System to another person, suggested changes should be recorded, analyzed, approved, implemented, tested, and demonstrated again.
+
+This session takes the `rrs.py` baseline from Session 13, shows it to another person, records every change they ask for, and then implements one of them the way a maintained product does it: a numbered change request, an impact analysis, a decision by a change control board, an implementation in a new version, verification, a release note, and a second demonstration to the same person. Most software cost is spent after the first release, so the skill being assessed here is not coding the change. It is proving that the change was chosen, bounded and checked before the code moved. The deliverable is the paper trail plus `rrs_v2.py` and a diff against the baseline.
+
+## Objectives
+
+<Explain />
+
+- Run a structured demonstration and capture suggestions as change requests with priority and effort, not as a wish list
+- Fill a change request form and an impact analysis that names every artefact from Sessions 1 to 13 the change touches
+- Record a change control board decision with reasons for accepting one request and deferring the rest
+- Implement the accepted change in a new version, keeping the baseline untouched so the diff is reviewable
+- Verify the change, regression-test the old behaviour, write the release note, and get sign-off from the same reviewer
 
 ## Problem Statement
 
 <Notebook />
 
-Demonstrate the software developed in Session 13 to another person and make a list of changes suggested by him/her. Implement changes in the software following the change control process and demonstrate the updated software to the same person.
+Demonstrate the Software developed in Session 13 to any other person and make a list of Changes suggested by him/her. Implement changes in Software following the Change Control process and demonstrate the updated Software to the same person.
 
-## Expected Deliverable
+## Concept
 
-<Notebook />
+<Explain />
 
-Prepare a change request list, impact analysis, implementation notes, and updated demonstration report.
+### Why a process and not just an edit
 
-## Change Control Steps
+A request that arrives as "can you add Tatkal?" hides three decisions: is it in scope, what else does it break, and is it worth doing now. Change control makes each decision visible and signed. The baseline (`rrs.py`, the Session 3 SRS, the Session 4 data dictionary, the Session 13 traceability matrix) is frozen; every change is a numbered request against it.
 
-1. Record change request.
-2. Classify change type.
-3. Analyze impact on requirements, design, code, tests, and schedule.
-4. Approve or reject change.
-5. Implement approved change.
-6. Retest affected modules.
-7. Demonstrate updated software.
+### The steps applied in this session
 
-## Change Request Format
+1. Change request raised: who, what, why, priority, estimated effort.
+2. Impact analysis: which requirements, data, code, tests and documents change.
+3. Change control board (CCB) decision: accept, defer or reject, with a reason.
+4. Implementation in a new version identifier. The baseline file is not edited.
+5. Verification: new tests for the change, old tests re-run for regression.
+6. Release note and re-demonstration; the requester signs off.
 
-| Field | Description |
-| ----- | ----------- |
-| Change ID | Unique identifier |
-| Suggested By | Name of reviewer/user |
-| Description | Requested change |
-| Reason | Why change is needed |
-| Impact | Affected module/document |
-| Status | Proposed, approved, implemented, tested |
+### Impact analysis is the step students skip
 
-## Submission Checklist
+Ask, for the change: which FR ids change or are added, which entity attributes change, which functions change, which existing tests could break, which pages of the record need an update. If the answer to the last question is "none", the analysis is incomplete, because at least the traceability matrix gains a row.
+
+### Version identification
+
+`rrs.py` is version 1.0, the baseline. `rrs_v2.py` is version 1.1, one accepted change. Keeping both files means the diff between them is the implementation record. In a real project this is a commit on a branch; in the lab record it is a copy with a new name.
+
+## Demonstration Record
 
 <Notebook />
 
-- Include original feedback.
-- Include change request table.
-- Include impact analysis.
-- Include updated screenshots or notes.
-- Include retesting result.
+| Item | Value |
+| ---- | ----- |
+| Software | RRS version 1.0, `rrs.py` from Session 13 |
+| Demonstrated to | Nikhil Sharma, MCA second year, same study centre, has used IRCTC as a passenger |
+| Demonstrated by | Student (author of the Session 13 build) |
+| Date and duration | 2026-09-20, 40 minutes |
+| Environment | macOS 27.0, Python 3.13.5, terminal, fresh `rrs_data.json` |
+| Scenario shown | Admin adds a schedule; passenger searches BCT to NDLS, books 2 passengers in 2A, books until 1A is waitlisted, looks up PNR, cancels and sees the waitlist promoted |
+| Reviewer was asked | What is missing, what is confusing, what would you change first |
+
+## Suggested Changes
+
+<Notebook />
+
+Priority: H = blocks real use, M = useful, L = cosmetic. Effort estimated in hours against the Session 2 baseline of about 60 LOC per hour for this code base.
+
+| CR id | Suggestion by reviewer | Priority | Effort | Type |
+| ----- | ---------------------- | -------- | ------ | ---- |
+| CR-01 | Show which berth was allotted (LB, UB) and honour the berth preference | M | 3 h | Enhancement |
+| CR-02 | Availability should be per segment; a BCT to KOTA booking should not block KOTA to NDLS | H | 8 h | Defect against SRS intent |
+| CR-03 | Tatkal quota: reserve 10% of seats per class, bookable only the day before departure, at a 30% premium | H | 3 h | New requirement |
+| CR-04 | Passenger login so a person sees only their own PNRs | M | 5 h | Deferred module (FR-1.1 to FR-1.6) |
+| CR-05 | Occupancy report per schedule for the administrator | L | 2 h | Deferred module 8 |
+| CR-06 | Print the cancellation confirmation with the refund amount in the PNR lookup | L | 1 h | Enhancement |
+
+## Change Request Form
+
+<Notebook />
+
+| Field | Entry |
+| ----- | ----- |
+| CR id | CR-03 |
+| Title | Tatkal quota with day-before booking window and fare premium |
+| Raised by | Nikhil Sharma (reviewer), 2026-09-20 |
+| Raised against | RRS 1.0, `rrs.py`, SRS Session 3 |
+| Description | Reserve 10% of seats in each coach class (rounded up) as a Tatkal pool. A Tatkal booking is accepted only when the booking date is exactly one day before the run date. Fare is the normal fare plus 30%. Tatkal bookings are not waitlisted; if the pool is full the booking is refused. General bookings never use the Tatkal pool |
+| Reason | Every real Indian train has a Tatkal quota; the reviewer said the demo felt incomplete without it. It is a real requirement the SRS missed |
+| Priority | High |
+| Estimated effort | 3 hours: 1 design and impact analysis, 1 code, 1 test and record |
+| Requested for | Version 1.1 |
+| Status | Proposed on 2026-09-20, Accepted on 2026-09-22, Implemented on 2026-09-25, Verified on 2026-09-26 |
+
+## Impact Analysis
+
+<Notebook />
+
+| Artefact | Impact of CR-03 | Change needed |
+| -------- | --------------- | ------------- |
+| Session 1 scope | Booking module gains a quota concept | One sentence added to the scope of Booking |
+| Session 3 SRS | New requirements | Add FR-4.10 (Tatkal pool per class), FR-4.11 (day-before window), FR-4.12 (30% premium, no waitlist). Business rule list gains the 10% figure |
+| Session 4 data dictionary | Booking entity | Add attribute `quota` with values G or T. Coach and Seat unchanged: the pool is the last 10% of labels, derived, not stored |
+| Session 4 DFD | Process 4.2 Allocate Seats and 4.3 Compute Fare | Both read quota; no new process or store |
+| Session 5 design | Booking module interface | Input gains quota; Cancellation module unchanged because promotion already uses the general pool only |
+| Session 6 screens | Booking form and Availability screen | One new prompt (Quota) and one new column (Tatkal free count) |
+| Session 13 code | `free_seats`, `print_availability`, `book_ticket`, constants, imports | 9 hunks, 28 lines added, 11 removed. `cancel_ticket`, `promote_waitlist`, `add_train`, `add_schedule`, search unchanged |
+| Session 13 tests | Validation checklist | All 12 rows re-run. Rows for seat order and waitlist now assume the class has more than 10 seats |
+| Session 13 traceability | New rows FR-4.10 to FR-4.12 | Map to `free_seats`, `book_ticket` |
+| Data file | `rrs_data.json` | Old bookings have no `quota` key; nothing reads it back, so old files still load |
+| Side effect found | A class with fewer than 10 seats loses ceil(10%) = 1 seat to Tatkal | The 1-seat Demo Express class from Session 13 has 0 general seats in 1.1; the seed trains (18 to 216 seats per class) are unaffected. Recorded as a known behaviour, not a defect, since real coaches have 18 or more seats |
+| Risk | Date comparison uses the calendar day, not a clock time | Tatkal opens at 00:00 the day before, not at 10:00 as on IRCTC. Accepted for 1.1 |
+
+## CCB Decision
+
+<Notebook />
+
+CCB for a lab project: the student (developer), the reviewer (customer), and one more student acting as the quality member. Met on 2026-09-22.
+
+| CR id | Decision | Reason |
+| ----- | -------- | ------ |
+| CR-03 | Accepted for 1.1 | High priority, three hours, touches one module, does not change any existing rule. Reviewer ranked it first |
+| CR-02 | Deferred to 1.2 | High priority but eight hours and changes the seat model in `free_seats` for every caller; must be done alone, with a redesign of the allocation table in Session 4 |
+| CR-04 | Deferred to 1.2 | Reinstates module 1, which the Session 13 build cut on purpose; needs the User entity and password hashing, five hours |
+| CR-01 | Deferred | Depends on CR-02: berth allocation only makes sense once seats are tracked per segment |
+| CR-05 | Deferred | Low priority; the data is already readable from the JSON file |
+| CR-06 | Rejected | The refund is already visible at cancellation time; the lookup line shows status CANCELLED. Not worth a version |
+
+One change per version is the rule applied: a single-change diff can be reviewed and reverted; a bundle cannot.
+
+## Implementation
+
+<Notebook />
+
+Version 1.1 is `rrs_v2.py`, a copy of `rrs.py` with only CR-03 applied. Two constants carry the numbers from the change request so they are not scattered in the code.
+
+```python title="rrs_v2.py" file=<rootDir>/public/code/mcs-217/session-14/rrs_v2.py
+
+```
+
+### Diff Summary
+
+Output of `diff -u session-13/rrs.py session-14/rrs_v2.py`, changed hunks only. Nine hunks, 28 lines added, 11 removed. Everything else in the file is byte-identical.
+
+```text
+@@ -1,5 +1,5 @@
+-"""Railway Reservation System (RRS) - MCS-217 Session 13.
++"""Railway Reservation System (RRS) - MCS-217 Session 14 (v2, CR-03 Tatkal quota).
+@@ -11,6 +11,7 @@
+ import json
++import math
+ import os
+@@ -20,6 +21,8 @@
+ MAX_PASSENGERS = 6     # per PNR (business rule, Session 3)
++TATKAL_SHARE = 0.10    # CR-03: seats per class reserved for Tatkal
++TATKAL_PREMIUM = 0.30  # CR-03: fare premium on Tatkal bookings
+@@ -113,12 +116,17 @@
+-def free_seats(data, sched, cls):
+-    """Seat labels of this class not yet allocated on this schedule."""
+-    train = data["trains"][sched["train_no"]]
+-    return [s for s in seat_labels(train, cls) if s not in sched["allocated"][cls]]
++def free_seats(data, sched, cls, quota="G"):
++    """Unallocated seat labels of this class in the General or Tatkal pool.
++
++    CR-03: the last 10% of each class (rounded up) is the Tatkal pool.
++    """
++    labels = seat_labels(data["trains"][sched["train_no"]], cls)
++    cut = len(labels) - math.ceil(len(labels) * TATKAL_SHARE)
++    pool = labels[cut:] if quota == "T" else labels[:cut]
++    return [s for s in pool if s not in sched["allocated"][cls]]
+@@ -156,7 +164,8 @@
+         free, wl = len(free_seats(data, sched, cls)), len(sched["waitlist"][cls])
+-        print("   %-3s %s" % (cls, "AVAILABLE %d" % free if free else "WL %d" % (wl + 1)))
++        tatkal = len(free_seats(data, sched, cls, "T"))
++        print("   %-3s %s  Tatkal %d" % (cls, "AVAILABLE %d" % free if free else "WL %d" % (wl + 1), tatkal))
+@@ -261,6 +270,10 @@
+     cls = ask("Class (%s): " % "/".join(train["coaches"]), lambda s: s.upper() in train["coaches"]).upper()
++    quota = ask("Quota (G=General/T=Tatkal): ", lambda s: s.upper() in "GT").upper()
++    if quota == "T" and date.today() != date.fromisoformat(sched["run_date"]) - timedelta(days=1):
++        print("Tatkal opens only on the day before departure. Booking refused.")
++        return
+     n = ask_int("Number of passengers (1-%d): " % MAX_PASSENGERS, 1, MAX_PASSENGERS)
+@@ -270,10 +283,15 @@
+-    fare = round(train["fares"][cls] * km * n, 2)
+-    free = free_seats(data, sched, cls)
++    premium = 1 + TATKAL_PREMIUM if quota == "T" else 1
++    fare = round(train["fares"][cls] * km * n * premium, 2)
++    free = free_seats(data, sched, cls, quota)
++    if quota == "T" and len(free) < n:
++        print("No Tatkal seats left in %s. Booking refused." % cls)
++        return
+     status = "CONFIRMED" if len(free) >= n else "WAITLISTED"
+-    print("Fare: %d km x Rs %.2f/km x %d passengers = Rs %.2f  [%s]" % (km, train["fares"][cls], n, fare, status))
++    print("Fare: %d km x Rs %.2f/km x %d passengers x %.2f = Rs %.2f  [%s]" % (
++        km, train["fares"][cls], n, premium, fare, status))
+@@ -285,7 +303,7 @@
+-                             "class": cls, "booking_time": datetime.now().isoformat(timespec="seconds"),
++                             "class": cls, "quota": quota, "booking_time": datetime.now().isoformat(timespec="seconds"),
+@@ -367,7 +385,7 @@
+-    print("Railway Reservation System (Session 13 build)")
++    print("Railway Reservation System (Session 14 build, v2)")
+```
+
+## Verification
+
+<Notebook />
+
+Run on 2026-09-26 at 09:05 with a fresh data file. New tests for CR-03 first, then the Session 13 checklist re-run on 1.1 as regression.
+
+| Test id | Test | Expected | Observed | Pass |
+| ------- | ---- | -------- | -------- | ---- |
+| T-19-1 | Availability on a 12951 run: 2A has 48 seats | General 43, Tatkal 5 | `2A  AVAILABLE 43  Tatkal 5` | Yes |
+| T-19-2 | 1A has 18 seats, 3A has 128 | Tatkal 2 and 13 | `1A ... Tatkal 2`, `3A ... Tatkal 13` | Yes |
+| T-20-1 | Tatkal on S001, 10 days out | Refused before passenger entry | `Tatkal opens only on the day before departure. Booking refused.` | Yes |
+| T-20-2 | Tatkal on a run dated tomorrow | Accepted | Booked, status CONFIRMED | Yes |
+| T-21-1 | Tatkal fare, 2A BCT to NDLS, 1 passenger | 2.90 x 1384 x 1 x 1.30 = 5217.68 | Rs 5217.68 | Yes |
+| T-21-2 | Seat comes from the Tatkal pool | Label 2A1-44 or later (pool is 44 to 48) | seat 2A1-44 | Yes |
+| T-21-3 | Tatkal count drops, general count unchanged | Tatkal 4, General 43 | `2A  AVAILABLE 43  Tatkal 4` | Yes |
+| R-1 | General booking fare unchanged | 8027.20 for 2 passengers in 2A | `x 1.00 = Rs 8027.20` | Yes |
+| R-2 | General waitlist and promotion on cancellation | As in Session 13 | Promoted in order | Yes |
+| R-3 | Refund slabs 427.50, 243.75, 0.00 | Unchanged | Unchanged | Yes |
+| R-4 | Old 1.0 data file loads in 1.1 | Bookings without `quota` key still print | Loaded and printed | Yes |
+
+### Re-demonstration Transcript
+
+Repeated menu listings removed. The schedule created is for 2026-09-27, the day after the run.
+
+```text
+Railway Reservation System (Session 14 build, v2)
+Choice: 1
+Choice: 2
+12137 Punjab Mail      CSMT > BPL > NDLS  classes: SL, 3A
+12951 Mumbai Rajdhani  BCT > KOTA > NDLS  classes: 3A, 2A, 1A
+Train number: 12951
+Run date (YYYY-MM-DD): 2026-09-27
+Schedule S003 created: 12951 on 2026-09-27.
+Choice: 0
+Choice: 2
+Choice: 2
+Schedule id: S003
+12951 Mumbai Rajdhani on 2026-09-27
+   3A  AVAILABLE 115  Tatkal 13
+   2A  AVAILABLE 43  Tatkal 5
+   1A  AVAILABLE 16  Tatkal 2
+Choice: 3
+Schedule id: S001
+From station code: BCT
+To station code: NDLS
+Class (3A/2A/1A): 2A
+Quota (G=General/T=Tatkal): T
+Tatkal opens only on the day before departure. Booking refused.
+Choice: 3
+Schedule id: S003
+From station code: BCT
+To station code: NDLS
+Class (3A/2A/1A): 2A
+Quota (G=General/T=Tatkal): T
+Number of passengers (1-6): 1
+Passenger 1 name: Priya Menon
+Passenger 1 age: 27
+Passenger 1 gender (M/F/O): F
+Passenger 1 berth preference (LB/MB/UB/SL/SU): LB
+Fare: 1384 km x Rs 2.90/km x 1 passengers x 1.30 = Rs 5217.68  [CONFIRMED]
+Confirm booking (Y/N): Y
+Booked. PNR 3361509606  status CONFIRMED
+PNR 3361509606  12951 Mumbai Rajdhani  2026-09-27  BCT > NDLS  class 2A  fare Rs 5217.68  CONFIRMED
+   Priya Menon   27 F  pref LB  seat 2A1-44
+Choice: 2
+Schedule id: S003
+12951 Mumbai Rajdhani on 2026-09-27
+   3A  AVAILABLE 115  Tatkal 13
+   2A  AVAILABLE 43  Tatkal 4
+   1A  AVAILABLE 16  Tatkal 2
+Choice: 0
+Choice: 0
+Bye.
+```
+
+## Release Note
+
+<Notebook />
+
+RRS 1.1, 2026-09-26. Implements CR-03. Adds a Tatkal quota of 10% of seats per class (rounded up), bookable only on the day before the run date, at a 30% fare premium, with no waitlist. New prompt "Quota (G=General/T=Tatkal)" on the booking form and a Tatkal free count on the availability screen. Booking records gain a `quota` attribute. Data files from 1.0 load unchanged. Known behaviour: classes with fewer than 10 seats have one seat moved to Tatkal. Deferred: CR-01, CR-02, CR-04, CR-05. Rejected: CR-06.
+
+## Re-demonstration and Sign-off
+
+<Notebook />
+
+| Item | Value |
+| ---- | ----- |
+| Version shown | RRS 1.1, `rrs_v2.py` |
+| Shown to | Nikhil Sharma, the same reviewer as on 2026-09-20 |
+| Date and duration | 2026-09-26, 20 minutes |
+| Scenario | Transcript above: availability with Tatkal counts, Tatkal refused 10 days out, Tatkal accepted for tomorrow at premium fare, count reduced |
+| Reviewer remarks | Accepted CR-03 as implemented. Asked that CR-02 be next. Noted the Tatkal window opens at midnight rather than 10:00, agreed to leave it for 1.1 |
+| Regression result | All 12 Session 13 checklist rows pass on 1.1 |
+| Sign-off | Reviewer: Nikhil Sharma, 2026-09-26. Developer: student, 2026-09-26. Quality member: 2026-09-26 |
+| Status of CR-03 | Closed |
+
+## Viva Questions
+
+<Explain />
+
+- **Q:** Why implement only one of six suggestions? **A:** One change per version keeps the diff reviewable and reversible; the others were deferred with reasons, not dropped.
+- **Q:** What is a baseline? **A:** The frozen set of artefacts a change is measured against: here `rrs.py`, the SRS, the data dictionary and the Session 13 checklist.
+- **Q:** What did the impact analysis find that the request did not mention? **A:** The data dictionary needs a `quota` attribute, the traceability matrix gains three rows, and classes under 10 seats lose a seat to Tatkal.
+- **Q:** Why is `TATKAL_SHARE` a constant and not typed by the admin? **A:** The change request fixed it at 10%; making it configurable is a different change request.
+- **Q:** How was regression checked? **A:** The 12 rows of the Session 13 validation checklist were re-run on `rrs_v2.py` with the same inputs plus quota G.
+- **Q:** Why is `cancel_ticket` not in the diff? **A:** `promote_waitlist` calls `free_seats` with the default general pool, so the cancellation path already excludes Tatkal seats. Impact analysis showed no edit was needed.
+- **Q:** Who sits on a CCB? **A:** Someone for the customer, someone for development and someone for quality; each has a reason to say no.
+- **Q:** What does the release note give the reviewer that the diff does not? **A:** The behaviour change in plain words, compatibility with old data, and what is still open.
+
+## Common Mistakes
+
+<Explain />
+
+- Editing `rrs.py` in place. The baseline must survive so the diff exists and the change can be reverted.
+- Implementing every suggestion at once, so the second demonstration cannot say which change caused which behaviour.
+- A change request without priority, effort or a named requester. The CCB has nothing to decide on.
+- Impact analysis that lists only code. The SRS, data dictionary, DFD and traceability matrix all change.
+- No regression run. Verifying only the new prompt misses the case where the general pool shrank.
+- Sign-off by the developer alone. The problem statement says the same person must see the updated software.
+
+## Session Summary
+
+<Notebook />
+
+- Demonstration record with reviewer, date, environment and scenario
+- Table of six suggested changes with priority, effort and type
+- Change request form and impact analysis for CR-03
+- CCB decision table with the reason for each deferral and the rejection
+- Listing of `rrs_v2.py` and the diff summary against `rrs.py`
+- Verification table, re-demonstration transcript, release note and sign-off table

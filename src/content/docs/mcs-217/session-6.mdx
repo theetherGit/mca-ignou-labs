@@ -1,49 +1,348 @@
 ---
 title: Session 6
-description: User Interface Design for the Railway Reservation System
+description: User interface design of the Railway Reservation System with screen inventory, navigation map, wireframes, and field validation
 sidebar:
   order: 6
 ---
-This session is about designing the screens and user interaction flow for the Railway Reservation System. The aim is to decide what users see, what data they enter, what validations are required, and how the system responds.
+This session designs what the Passenger, Reservation Clerk and Administrator of the Railway Reservation System (RRS) actually see: which screens exist, how a user moves between them, what each screen shows and asks for, and what the system says when the input is wrong. The manual asks for an easy-to-follow interface with no hidden buttons, little graphics, and proper error messages, and every screen here is drawn to those rules. The business rules of Session 1 (max 6 passengers per PNR, no booking after departure, refund by hours before departure) become validation rules on specific fields, so the interface enforces the same rules the design in Session 5 enforces in code.
+
+## Objectives
+
+<Explain />
+
+- List every screen of the RRS with its actor, purpose and entry point.
+- Draw a navigation map showing how a user moves from login to booking, cancellation and admin tasks.
+- Draw text wireframes for the seven main screens.
+- Specify every input field with type, validation rule and exact error message.
+- Apply the manual's interface rules (easy to follow, no hidden buttons, proper error messages) and show where each one is used.
 
 ## Problem Statement
 
 <Notebook />
 
-Develop user interface design for RRS.
+Session 6: Develop user interface design for RRS.
 
-## Expected Deliverable
+## Concept
 
-<Notebook />
+<Explain />
 
-Design the main screens, navigation flow, form fields, validation rules, and output messages for the Railway Reservation System.
+### Screen inventory and navigation map
 
-## Screens Required
+Start by listing screens, not drawing them. A screen is one page the user sees with one purpose. If a page has two purposes (search and book), split it. The inventory gives each screen an id (S1, S2, ...) that the navigation map and field tables refer to. A navigation map is then a graph: screens are nodes, user actions are edges. It shows the happy path (login, search, select, enter passengers, pay, see PNR) and the side paths (cancel, admin). The rule from the manual is "no hidden buttons": every edge in the map must be a visible button or link on the source screen.
 
-| Screen | Purpose |
-| ------ | ------- |
-| Login / Register | User authentication |
-| Train Search | Source, destination, date, class |
-| Train Results | Available trains and seat availability |
-| Passenger Details | Passenger information entry |
-| Payment | Payment mode and transaction confirmation |
-| Booking Confirmation | PNR, train, seat, journey details |
-| Cancellation | PNR lookup and cancellation request |
-| Admin Dashboard | Train, schedule, and report management |
+### Wireframes, validation and error messages
 
-## Validation Rules
+A wireframe is a box drawing of a screen with labels, input fields, buttons and messages, and no colours or graphics. Draw fields as underlined blanks, buttons in square brackets, and the error message area as a fixed line so the student knows where feedback appears. The manual says "proper error messages" and "you must do the type checking". For each field write three things: the type, the rule, and the exact text the user reads. A message must say what is wrong and what to do: "Journey date cannot be in the past" is proper; "Invalid input" is not.
 
-- Required fields must not be empty.
-- Email and phone number must follow valid formats.
-- Journey date must not be in the past.
-- Number of passengers must stay within allowed limit.
-- Payment confirmation must be received before confirmed booking.
-
-## Submission Checklist
+## Screen Inventory
 
 <Notebook />
 
-- Include rough sketches or wireframes.
-- Include input fields and buttons for every screen.
-- Mention error messages.
-- Mention success messages.
+| Screen id | Name | Actor | Purpose | Reached from |
+| --- | --- | --- | --- | --- |
+| S1 | Login | All | Verify email and password; route to the role's home | Application start, S2 Register |
+| S2 | Register | Passenger | Create a Passenger account | S1 link "New user? Register" |
+| S3 | Passenger Home | Passenger, Reservation Clerk | Menu: Search Trains, Cancel by PNR, My Bookings, Logout | S1 after login |
+| S4 | Search Trains | Passenger, Reservation Clerk | Enter source, destination, date | S3 button "Search Trains" |
+| S5 | Availability and Fare | Passenger, Reservation Clerk | Show matching trains, seats per class, fare; pick one | S4 button "Search" |
+| S6 | Passenger Details | Passenger, Reservation Clerk | Enter 1 to 6 passengers with berth preference | S5 button "Book" on a row |
+| S7 | Payment and Confirmation | Passenger, Reservation Clerk | Choose payment mode, pay, see PNR and status | S6 button "Proceed to Pay" |
+| S8 | Cancel by PNR | Passenger, Reservation Clerk | Look up PNR, show refund amount, confirm cancellation | S3 button "Cancel by PNR" |
+| S9 | My Bookings | Passenger | List own bookings with status | S3 button "My Bookings" |
+| S10 | Admin Home | Administrator | Menu: Add Train, Add Schedule, Set Fare, Reports, Logout | S1 after admin login |
+| S11 | Admin Add Train | Administrator | Enter train number, name, type, coaches | S10 button "Add Train" |
+| S12 | Admin Add Schedule | Administrator | Create a run of a train on a date | S10 button "Add Schedule" |
+| S13 | Admin Reports | Administrator | Occupancy, revenue, cancellation report for a date range | S10 button "Reports" |
+
+## Navigation Map
+
+<Notebook />
+
+```text
+              Register        +-----------+     Administrator
+   +-------------------------| S1 Login  |---------------------+
+   |                          +-----+-----+                     |
+   v            Passenger/Clerk     |                           v
++-------------+                     v                  +----------------+
+| S2 Register |--Register-->(S1)    |                  | S10 Admin Home |
++-------------+           +---------+-------+          +--+----+-----+--+
+                          | S3 Passenger    |             |    |     |
+                          |      Home       |         Add |Add |Reports
+                          +--+-----+-----+--+       Train |Sch.|
+              Search Trains  |     |     |  My Bookings  v    v     v
+                             v     |     v            +----+ +----+ +----+
+                     +-----------+ |  +----------+    |S11 | |S12 | |S13 |
+                     | S4 Search | |  | S9 My    |    +--+-+ +-+--+ +----+
+                     +-----+-----+ |  | Bookings |       |     |
+                    Search |       |  +----------+       +--Save-->(S10)
+                           v       | Cancel by PNR
+                 +-----------------+-+      |
+                 | S5 Availability   |      v
+                 |    and Fare       |  +----------------+
+                 +--------+----------+  | S8 Cancel by   |
+               Book (row) |             |     PNR        |
+                          v             +-------+--------+
+                 +------------------+           | Confirm Cancel -> refund shown -> (S3)
+                 | S6 Passenger     |
+                 |    Details       |
+                 +--------+---------+
+           Proceed to Pay |
+                          v
+                 +------------------+-- Pay OK: PNR shown, Done -> (S3)
+                 | S7 Payment and   |
+                 |  Confirmation    |-- Pay FAILED: Retry, stays on S7
+                 +------------------+
+   Logout in the top bar of every screen returns to S1.
+```
+
+| Edge (from, to) | Trigger on source screen | Guard |
+| --- | --- | --- |
+| S1 to S3 or S10 | Button "Login" | S3 for Passenger or Reservation Clerk; S10 for Administrator |
+| S1 to S2 | Link "New user? Register" | none |
+| S2 to S1 | Button "Register" | All fields valid; account created |
+| S3 to S4, S8, S9 | Buttons "Search Trains", "Cancel by PNR", "My Bookings" | none |
+| S4 to S5 | Button "Search" | All three fields valid |
+| S5 to S6 | Button "Book" on a train row | Departure time is in the future |
+| S6 to S7 | Button "Proceed to Pay" | 1 to 6 valid passengers |
+| S7 to S3 | Button "Done" after PNR shown | Payment SUCCESS |
+| S7 to S7 | Button "Retry" | Payment FAILED; booking not created |
+| S8 to S3 | Button "Done" after refund shown | Cancellation saved |
+| S10 to S11, S12, S13 | Buttons "Add Train", "Add Schedule", "Reports" | none |
+| S11, S12 to S10 | Button "Save" | Record saved |
+
+## Wireframes
+
+<Notebook />
+
+Conventions: `______` is a text field, `[ Button ]` is a button, `( ) item` is a radio option, `[v]` is a drop-down. The line starting with `!` is the fixed message area where errors and confirmations appear.
+
+### S1 Login
+
+```text
+┌──────────────────────────────────────────────────────────┐
+│ Railway Reservation System                               │
+├──────────────────────────────────────────────────────────┤
+│   Email     ____________________________                 │
+│   Password  ____________________________                 │
+│             [ Login ]                                    │
+│   New user? Register                                     │
+│ ! ______________________________________________________ │
+└──────────────────────────────────────────────────────────┘
+```
+
+| Field | Type | Validation rule | Error message |
+| --- | --- | --- | --- |
+| Email | text, max 100 | Required; must contain one @ and a dot after it | Enter a valid email address such as name@example.com |
+| Password | password, 8 to 32 | Required | Enter your password |
+| Login (action) | button | Email and password must match a User row; 3 attempts, then 5 minute lock | Email or password is incorrect. Attempts left: 2 |
+
+### S4 Search Trains
+
+```text
+┌──────────────────────────────────────────────────────────┐
+│ RRS  |  Home  |  Logged in: Asha Verma (Passenger)  [ Logout ] │
+├──────────────────────────────────────────────────────────┤
+│  Search Trains                                           │
+│   From station   [v] NDLS - New Delhi                    │
+│   To station     [v] BCT  - Mumbai Central               │
+│   Journey date   ____/____/________  (DD/MM/YYYY)        │
+│                  [ Search ]        [ Clear ]             │
+│ ! ______________________________________________________ │
+└──────────────────────────────────────────────────────────┘
+```
+
+| Field | Type | Validation rule | Error message |
+| --- | --- | --- | --- |
+| From station | drop-down of Station | Required | Select a source station |
+| To station | drop-down of Station | Required; not equal to From station | Source and destination cannot be the same |
+| Journey date | date DD/MM/YYYY | Required; today or later; at most 120 days ahead | Journey date must be between today and 120 days from today |
+| Search (action) | button | At least one Schedule matches | No trains found between these stations on this date. Try another date |
+
+### S5 Availability and Fare
+
+```text
+┌────────────────────────────────────────────────────────────────────┐
+│ RRS  |  Home  |  Asha Verma (Passenger)                 [ Logout ] │
+├────────────────────────────────────────────────────────────────────┤
+│  NDLS -> BCT on 14/10/2026                      [ Change search ]  │
+│  Train  Name             Dep    Arr    Class  Avail   Fare         │
+│  ─────  ───────────────  ─────  ─────  ─────  ──────  ──────       │
+│  12952  Mumbai Rajdhani  16:25  08:15  3A     AVL 42  Rs 3,055     │
+│                                        2A     AVL 6   Rs 4,270     │
+│                                        1A     WL 3    Rs 5,480     │
+│                                                        [ Book ]    │
+│  12138  Punjab Mail      05:10  07:35  SL     AVL 118  Rs 745      │
+│                                                        [ Book ]    │
+│  Class to book  ( ) SL  (o) 3A  ( ) 2A  ( ) 1A                     │
+│ ! ________________________________________________________________ │
+└────────────────────────────────────────────────────────────────────┘
+```
+
+| Field | Type | Validation rule | Error message |
+| --- | --- | --- | --- |
+| Train row | read-only list | One row per Schedule from search_trains | none |
+| Avail | read-only, AVL n or WL n | From check_availability; WL shown when 0 seats free | none |
+| Class to book | radio SL, 3A, 2A, 1A | Required; class must exist on the chosen train | Select a class available on this train |
+| Book (action) | button per row | Departure time must be later than now (no booking after departure) | This train has already departed and cannot be booked |
+
+### S6 Passenger Details
+
+```text
+┌────────────────────────────────────────────────────────────────────┐
+│ RRS  |  Home  |  Asha Verma (Passenger)                 [ Logout ] │
+├────────────────────────────────────────────────────────────────────┤
+│  12952 Mumbai Rajdhani  NDLS -> BCT  14/10/2026  Class 3A          │
+│  #  Name                    Age   Gender   Berth preference        │
+│  1  ______________________  ___   [v] F    [v] LOWER               │
+│  2  ______________________  ___   [v] M    [v] NONE                │
+│                                                  [ + Add passenger ] │
+│  Passengers: 2 of 6                                                │
+│  Contact mobile  __________      Contact email  __________________ │
+│  Fare: 2 x Rs 3,055 = Rs 6,110                                     │
+│            [ Back ]                     [ Proceed to Pay ]         │
+│ ! ________________________________________________________________ │
+└────────────────────────────────────────────────────────────────────┘
+```
+
+| Field | Type | Validation rule | Error message |
+| --- | --- | --- | --- |
+| Name | text, 2 to 50 letters and spaces | Required for every row | Passenger 2: enter the name as on ID proof |
+| Age | integer, 1 to 120 | Required | Passenger 2: age must be between 1 and 120 |
+| Gender | drop-down M, F, O | Required | Passenger 2: select a gender |
+| Berth preference | drop-down LOWER, MIDDLE, UPPER, SIDE_LOWER, SIDE_UPPER, NONE | Optional, default NONE | none |
+| Add passenger (action) | button | Disabled when 6 rows exist (max 6 passengers per PNR) | Maximum 6 passengers are allowed on one PNR |
+| Contact mobile | text, 10 digits | Required; starts with 6 to 9 | Enter a 10-digit mobile number |
+| Contact email | text, max 100 | Required; valid email format | Enter a valid email address |
+| Proceed to Pay (action) | button | At least 1 passenger; every row valid; departure still in the future | Add at least one passenger before proceeding |
+
+### S7 Payment and Confirmation
+
+```text
+┌────────────────────────────────────────────────────────────────────┐
+│ RRS  |  Home  |  Asha Verma (Passenger)                 [ Logout ] │
+├────────────────────────────────────────────────────────────────────┤
+│  Payment                                                           │
+│  Amount payable   Rs 6,110                                         │
+│  Mode   (o) UPI   ( ) Card   ( ) Net banking                       │
+│  UPI ID  ____________________                                      │
+│                   [ Pay Rs 6,110 ]         [ Cancel booking ]      │
+├────────────────────────────────────────────────────────────────────┤
+│  Booking Confirmed                                                 │
+│  PNR            4521098763                                         │
+│  Train          12952 Mumbai Rajdhani   14/10/2026  Dep 16:25      │
+│  From / To      NDLS New Delhi -> BCT Mumbai Central               │
+│  1. Asha Verma     34 F   B2 / 21  LOWER   CONFIRMED               │
+│  2. Rohan Verma    36 M   B2 / 22  MIDDLE  CONFIRMED               │
+│  Paid            Rs 6,110 by UPI   Txn UPI2026101416251234         │
+│  SMS and email sent to 98xxxxxx21 and as**@gmail.com               │
+│                   [ Print ticket ]        [ Done ]                 │
+│ ! ________________________________________________________________ │
+└────────────────────────────────────────────────────────────────────┘
+```
+
+| Field | Type | Validation rule | Error message |
+| --- | --- | --- | --- |
+| Mode | radio UPI, Card, Net banking (Cash shown only to Reservation Clerk) | Required | Select a payment mode |
+| UPI ID | text, max 50 | Required when mode is UPI; must contain one @ | Enter a valid UPI ID such as name@bank |
+| Card number | text, 16 digits | Required when mode is Card; passes Luhn check | Enter a valid 16-digit card number |
+| Pay (action) | button | Gateway returns SUCCESS; on FAILED no booking is saved | Payment failed. No amount was deducted. Press Retry or choose another mode |
+| PNR (output) | read-only, 10 digits | Shown only after SUCCESS | none |
+| Status (output) | read-only CONFIRMED or WAITLISTED per passenger | From book_ticket | none |
+
+### S8 Cancel by PNR
+
+```text
+┌────────────────────────────────────────────────────────────────────┐
+│ RRS  |  Home  |  Asha Verma (Passenger)                 [ Logout ] │
+├────────────────────────────────────────────────────────────────────┤
+│  Cancel Ticket                                                     │
+│  PNR   __________            [ Look up ]                           │
+│  Booking found                                                     │
+│  12952 Mumbai Rajdhani  14/10/2026  Dep 16:25  Class 3A            │
+│  1. Asha Verma   CONFIRMED  B2/21                                  │
+│  2. Rohan Verma  CONFIRMED  B2/22                                  │
+│  Total fare       Rs 6,110                                         │
+│  Time to departure  72 h 10 m   (more than 48 h: 100% less Rs 60)  │
+│  Refund amount    Rs 6,050                                         │
+│  Reason (optional) ________________________________                │
+│            [ Back ]                    [ Confirm Cancel ]          │
+│ ! ________________________________________________________________ │
+└────────────────────────────────────────────────────────────────────┘
+```
+
+| Field | Type | Validation rule | Error message |
+| --- | --- | --- | --- |
+| PNR | text, exactly 10 digits | Required; digits only | PNR must be a 10-digit number |
+| Look up (action) | button | PNR exists; belongs to logged-in user or user is Reservation Clerk; status not CANCELLED | No booking found for this PNR, or: This PNR is already cancelled |
+| Refund amount (output) | read-only | 100% minus flat clerkage if more than 48 h before departure; 50% between 48 and 12 h; 0 under 12 h | none |
+| Reason | text, max 100 | Optional | none |
+| Confirm Cancel (action) | button | Second confirmation dialog: "Cancel PNR 4521098763? Refund Rs 6,050. This cannot be undone." | Cancellation could not be saved. Try again |
+
+### S12 Admin Add Schedule
+
+```text
+┌────────────────────────────────────────────────────────────────────┐
+│ RRS  |  Admin Home  |  Suresh Nair (Administrator)      [ Logout ] │
+├────────────────────────────────────────────────────────────────────┤
+│  Add Schedule                                                      │
+│  Train          [v] 12952 Mumbai Rajdhani                          │
+│  Run date       ____/____/________  (DD/MM/YYYY)                   │
+│  Status         (o) ACTIVE   ( ) CANCELLED                         │
+│  Route preview (read-only, from Route table)                       │
+│   Seq  Station  Arr    Dep    Km                                   │
+│   1    NDLS     --     16:25  0                                    │
+│   2    KOTA     21:00  21:05  465     ...  4  BCT  08:15  --  1384 │
+│            [ Back ]                        [ Save ]                │
+│ ! ________________________________________________________________ │
+└────────────────────────────────────────────────────────────────────┘
+```
+
+| Field | Type | Validation rule | Error message |
+| --- | --- | --- | --- |
+| Train | drop-down of Train | Required; train must have at least one Route row and one Coach | Train 12952 has no route defined. Add the route first |
+| Run date | date DD/MM/YYYY | Required; today or later; no existing Schedule for same train and date | A schedule for 12952 on 14/10/2026 already exists |
+| Status | radio ACTIVE, CANCELLED | Required; default ACTIVE | none |
+| Save (action) | button | All rules pass; on success message "Schedule 3107 created" and Seat rows generated from Coach | Schedule could not be saved. Check the fields marked in red |
+
+## UI Design Principles Applied
+
+<Notebook />
+
+| Principle | Rule from the manual | Where it is applied in the RRS |
+| --- | --- | --- |
+| Consistency | Easy to follow interface | Every screen has the same top bar (system name, Home, logged-in user, Logout), the same message line at the bottom, and the primary button always at the bottom right (Search, Proceed to Pay, Pay, Confirm Cancel, Save) |
+| Feedback | Proper error messages | S7 prints the PNR, seat numbers and transaction reference on the same screen after payment; S8 shows the computed refund amount before the user confirms; every action button reports success or failure in the message line |
+| Error prevention | Type checking, field overrun | S4 stations are drop-downs so a code cannot be misspelt; S6 "Add passenger" is disabled at 6 rows; S5 "Book" is hidden for departed trains; S8 asks a second confirmation before an irreversible cancellation |
+| Visibility | No hidden buttons | Every edge in the navigation map is a labelled button or link on the source screen; there are no keyboard-only or menu-only actions |
+| Accessibility | Easy to follow | Every field has a text label to its left, not a placeholder that disappears; error messages name the field and row ("Passenger 2: age must be between 1 and 120"); colour is never the only signal, the message line carries the text |
+| Mobile | Easy to follow | Fields stack in one column under 600 px width; the S5 table collapses to one card per train with class rows below it; buttons are full width and at least 44 px tall |
+
+## Viva Questions
+
+<Explain />
+
+- **Q:** Why is the PNR shown on the Payment screen instead of a separate screen? **A:** The user has just waited for the gateway; showing the PNR immediately, with the transaction reference, is direct feedback and avoids a page where the PNR could be lost if the connection drops.
+- **Q:** How does the interface enforce the six-passenger limit? **A:** The "Add passenger" button is disabled at six rows and the counter reads "6 of 6"; the server checks again in book_ticket.
+- **Q:** How does the interface stop a booking after departure? **A:** S5 hides the "Book" button when departure time has passed, and S6 "Proceed to Pay" re-checks it, because the user may have kept the page open.
+- **Q:** What makes an error message "proper"? **A:** It names the field, says what is wrong, and says what to do, such as "Journey date must be between today and 120 days from today".
+- **Q:** Why are stations drop-downs and not text boxes? **A:** Error prevention: the user cannot type a code that is not in the Station table, so search_trains never raises UnknownStationError from the UI.
+- **Q:** Where does the Reservation Clerk's interface differ from the Passenger's? **A:** Only on S7, where Cash appears as a payment mode, and on S8, where the clerk can look up any PNR, not only their own.
+
+## Common Mistakes
+
+<Explain />
+
+- Drawing screens with logos, colours and icons. The manual asks for zero or very little graphics; marks go to fields, buttons and messages.
+- Writing "Invalid input" as the error message for every field. Each message must name the field and the fix.
+- Putting a validation rule in the table without a matching element on the wireframe, or a button on the wireframe that has no edge in the navigation map.
+- Showing a booking as confirmed before payment succeeds. The PNR appears only after the gateway returns SUCCESS.
+- Copying the passenger limit or departure rule into prose only. Put them on the specific field and button where they are enforced.
+
+## Session Summary
+
+<Notebook />
+
+- Screen inventory table with 13 screens, navigation map diagram and its edge table.
+- Seven wireframes: Login, Search Trains, Availability and Fare, Passenger Details, Payment and Confirmation with PNR, Cancel by PNR, Admin Add Schedule.
+- One field table per wireframe with type, validation rule and error message, including the six-passenger limit and the no-booking-after-departure rule.
+- Principles table tying consistency, feedback, error prevention, accessibility and mobile to named screen elements.

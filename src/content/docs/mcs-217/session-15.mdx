@@ -1,49 +1,279 @@
 ---
 title: Session 15
-description: Usage Scenarios for Regularly Used Software
+description: A set of usage scenarios for Gmail in a fixed scenario table format
 sidebar:
   order: 15
 ---
-This session practices writing usage scenarios for software that is already familiar. A usage scenario describes how a user interacts with software to complete a goal, including normal and alternate flows.
+
+This session produces a set of usage scenarios for Gmail. A usage scenario is a short story of one actor using the software to reach one goal, written step by step, with the things that can go wrong along the way. Scenarios are the raw material for use cases (Session 3 style) and for test cases (Session 8 and 10 style), so writing them well is the cheapest requirements work you will do. Gmail is chosen because every student has an account and can verify each step by doing it.
+
+## Objectives
+
+<Explain />
+
+- Write usage scenarios in a fixed table format that another person can read and reproduce.
+- Distinguish preconditions, main flow, alternate flows and postconditions, and fill each one with real detail.
+- Cover the everyday goals of a mail user, including one recovery scenario (undo send).
+- Explain how a scenario becomes a use case and a set of test cases.
 
 ## Problem Statement
 
 <Notebook />
 
-Select a software that you use regularly such as MS Office, Gmail, MS Excel, etc. Create a set of usage scenarios for the software.
+Session 15: Select a software that you use regularly such as MS-office, Gmail, MS-Excel etc. Create a set of usage scenarios for the software.
 
-## Expected Deliverable
-
-<Notebook />
-
-Choose one software product and write realistic usage scenarios that describe user goals, preconditions, main flow, alternate flow, and expected outcome.
-
-## Scenario Format
+## Concept
 
 <Explain />
 
-| Field | Description |
-| ----- | ----------- |
-| Scenario ID | Unique id |
-| Actor | User or system interacting with software |
-| Goal | What the actor wants to achieve |
-| Preconditions | What must be true before starting |
-| Main Flow | Normal successful steps |
-| Alternate Flow | Exception or variation |
-| Postcondition | Final state |
+### What a usage scenario is
 
-## Example Topics
+A scenario is one concrete path through the software: one actor, one goal, one sequence of steps, one outcome. It is not a feature list ("Gmail supports labels") and not a requirement ("the system shall allow labels"). It reads like a record of what someone did. Because it is concrete, two readers cannot disagree about what it means, and a tester can execute it line by line.
 
-- Sending an email in Gmail.
-- Creating a spreadsheet in Excel.
-- Sharing a document in Google Docs.
-- Creating a presentation in PowerPoint.
+### The fields, and what goes in each
 
-## Submission Checklist
+| Field | Content | Test it with |
+| --- | --- | --- |
+| Scenario ID | Short unique key, `GM-01` and so on | Can another scenario refer to it? |
+| Actor | The person or system acting; here always a Gmail user unless stated | Who presses the buttons? |
+| Goal | One sentence, starts with a verb | Does the last step of the main flow achieve it? |
+| Preconditions | What must already be true before step 1 | Would step 1 fail without it? |
+| Main flow | Numbered steps, alternating actor action and system response | Can a tester perform it exactly? |
+| Alternate flows | Where the main flow can branch, keyed to a step number, and what happens | Does each one end in a defined state? |
+| Postconditions | What is true after the last step, in the mailbox or the account | Can it be observed? |
+
+### Scenario versus use case versus test case
+
+A use case is the general form: all the ways a goal can be reached, grouped under one name. A scenario is one instance of a use case. A test case is a scenario with exact input values and an expected result. So the chain is: collect scenarios, group them into use cases, then turn each scenario (main and alternate) into at least one test case.
+
+## Software Selected
 
 <Notebook />
 
-- Select one software.
-- Write at least five scenarios.
-- Include alternate flows.
-- Keep each scenario testable.
+Gmail (web version at mail.google.com, accessed from a desktop browser). Assumptions: the user has an existing Google account, is signed in, has a working internet connection unless a scenario says otherwise, and uses the default Gmail settings except where a scenario changes them.
+
+## Usage Scenarios
+
+<Notebook />
+
+### GM-01: Compose and send an email
+
+| Field | Value |
+| --- | --- |
+| Scenario ID | GM-01 |
+| Actor | Gmail user (student) |
+| Goal | Send a new email to the course coordinator asking for the lab schedule |
+| Preconditions | User is signed in; the Inbox is displayed; the recipient's address is known |
+| Postconditions | The message appears in Sent with the current time; the recipient receives it; the compose window is closed |
+
+Main flow:
+
+1. User clicks Compose. Gmail opens a new message window in the lower right.
+2. User types `coordinator@ignou.ac.in` in the To field. Gmail shows the address as a chip.
+3. User types "Lab schedule for MCS-217" in the Subject field.
+4. User types the message body.
+5. User clicks Send. Gmail closes the window and shows "Message sent" with an Undo link at the bottom left.
+6. After the undo period (5 seconds by default) the notice disappears. The message is in Sent.
+
+Alternate flows:
+
+| At step | Condition | What happens |
+| --- | --- | --- |
+| 2 | Address is malformed (no `@`) | Gmail marks the chip red; Send at step 5 shows "The address is not valid" and the message stays open |
+| 5 | Subject and body are both empty | Gmail asks "Send this message without a subject or text?" with Cancel and OK |
+| 5 | No internet connection | Gmail shows "Trying to send" and keeps the message in Outbox until the connection returns |
+| Any | User clicks the X in the compose window | Gmail saves the message to Drafts and closes the window |
+
+### GM-02: Reply with an attachment
+
+| Field | Value |
+| --- | --- |
+| Scenario ID | GM-02 |
+| Actor | Gmail user |
+| Goal | Reply to the coordinator's email with the lab record PDF attached |
+| Preconditions | The coordinator's email is open in the reading pane; the file `lab-record.pdf` (2 MB) exists on the user's disk |
+| Postconditions | The reply is in Sent, quoted below the new text, with `lab-record.pdf` attached; the conversation shows both messages |
+
+Main flow:
+
+1. User clicks Reply below the open message. Gmail opens an inline reply box with To already filled with the sender's address and the Subject prefixed "Re:".
+2. User types "Please find the record attached." in the body.
+3. User clicks the paperclip icon. The browser file dialog opens.
+4. User selects `lab-record.pdf` and clicks Open. Gmail shows a progress bar, then the file name and size under the body.
+5. User clicks Send. Gmail shows "Message sent" and the reply appears in the conversation thread.
+
+Alternate flows:
+
+| At step | Condition | What happens |
+| --- | --- | --- |
+| 4 | File is larger than 25 MB | Gmail uploads it to Google Drive instead and inserts a Drive link; the user is told this |
+| 4 | File type is blocked (for example `.exe`) | Gmail shows "Blocked for security reasons" and does not attach it |
+| 5 | Body mentions "attached" but no file is attached | Gmail asks "Did you mean to attach files?" with Cancel and Send anyway |
+| 1 | Message has several recipients | User picks Reply all instead; To and Cc are filled with all recipients except the user |
+
+### GM-03: Search for an email
+
+| Field | Value |
+| --- | --- |
+| Scenario ID | GM-03 |
+| Actor | Gmail user |
+| Goal | Find the email from the coordinator that contained the viva date, received about a month ago |
+| Preconditions | User is signed in; the message exists somewhere in the mailbox (Inbox, Archive or a label) |
+| Postconditions | The message is open in the reading pane; the mailbox itself is unchanged |
+
+Main flow:
+
+1. User clicks in the search box at the top and types `from:coordinator@ignou.ac.in viva`.
+2. User presses Enter. Gmail shows a result list with matching messages, newest first, with the matching words highlighted in the snippet.
+3. User clicks the result whose snippet shows the date. Gmail opens the conversation.
+4. User reads the viva date.
+
+Alternate flows:
+
+| At step | Condition | What happens |
+| --- | --- | --- |
+| 2 | No message matches | Gmail shows "No messages matched your search" and offers to search in Spam and Trash |
+| 1 | User does not remember the sender | User clicks the filter icon in the search box, sets Date within 1 month and Has the words `viva`, and clicks Search |
+| 2 | Too many results | User adds `has:attachment` or `after:2026/08/01` to narrow the list |
+
+### GM-04: Label and archive a conversation
+
+| Field | Value |
+| --- | --- |
+| Scenario ID | GM-04 |
+| Actor | Gmail user |
+| Goal | File a completed conversation under the label MCS-217 and remove it from the Inbox |
+| Preconditions | The conversation is in the Inbox; the label MCS-217 may or may not exist yet |
+| Postconditions | The conversation carries the label MCS-217, is no longer in the Inbox, and is visible under All Mail and under the label in the left panel |
+
+Main flow:
+
+1. User ticks the checkbox next to the conversation in the Inbox list. The toolbar changes to show the action icons.
+2. User clicks the Label icon (tag shape). A drop-down lists existing labels with checkboxes.
+3. User ticks MCS-217 and clicks Apply. The conversation row now shows the label chip.
+4. User clicks the Archive icon (box with a down arrow). The row disappears from the Inbox and Gmail shows "Conversation archived" with an Undo link.
+5. User clicks MCS-217 in the left panel. The conversation is listed there.
+
+Alternate flows:
+
+| At step | Condition | What happens |
+| --- | --- | --- |
+| 2 | Label MCS-217 does not exist | User clicks Create new, types `MCS-217`, clicks Create; Gmail creates and applies it in one step |
+| 4 | User archived the wrong conversation | User clicks Undo in the notice within a few seconds; the conversation returns to the Inbox |
+| 1 | User wants to file many conversations | User ticks several rows or uses Select all; steps 2 to 4 apply to all of them at once |
+
+### GM-05: Recover from sending to the wrong recipient (undo send)
+
+| Field | Value |
+| --- | --- |
+| Scenario ID | GM-05 |
+| Actor | Gmail user |
+| Goal | Stop an email that was just sent to the wrong address before it leaves the account |
+| Preconditions | Undo send is enabled (it is on by default with a 5 second window; the user may have set 10, 20 or 30 seconds in Settings); the user has just clicked Send |
+| Postconditions | The message is not delivered; it is reopened in the compose window as a draft with the wrong address still in To, ready to correct |
+
+Main flow:
+
+1. User clicks Send on a message addressed to `cordinator@ignou.ac.in` (typo).
+2. Gmail shows "Message sent" with Undo and View message at the bottom left.
+3. User notices the typo and clicks Undo within the window.
+4. Gmail shows "Sending undone" and reopens the message in the compose window.
+5. User corrects the address to `coordinator@ignou.ac.in` and clicks Send again.
+
+Alternate flows:
+
+| At step | Condition | What happens |
+| --- | --- | --- |
+| 3 | The undo window has expired | The notice is gone; the message is in Sent and has been delivered. Recovery is now a follow-up email, not an undo |
+| 3 | User has not seen the notice because they navigated away | The notice stays visible on any Gmail screen until the window expires, so Undo still works if clicked in time |
+| 5 | User decides not to send at all | User clicks the X; the corrected message is saved to Drafts |
+
+Note for the record: the undo window is set at Settings, General, "Undo Send", "Send cancellation period". Set it to 30 seconds before running this scenario in a test.
+
+### GM-06: Set up a filter
+
+| Field | Value |
+| --- | --- |
+| Scenario ID | GM-06 |
+| Actor | Gmail user |
+| Goal | Make every future email from the coordinator skip the Inbox and get the label MCS-217 automatically |
+| Preconditions | User is signed in; the label MCS-217 exists (see GM-04) |
+| Postconditions | A filter exists under Settings, Filters and Blocked Addresses; new mail from that address is labelled and archived on arrival; existing matching mail is also labelled if the user chose so |
+
+Main flow:
+
+1. User clicks the filter icon (sliders) at the right end of the search box. The search options panel opens.
+2. User types `coordinator@ignou.ac.in` in the From field.
+3. User clicks Create filter. Gmail shows a list of actions with checkboxes.
+4. User ticks Skip the Inbox (Archive it) and Apply the label, then chooses MCS-217 from the label drop-down.
+5. User ticks Also apply filter to matching conversations.
+6. User clicks Create filter. Gmail shows "Your filter was created" and returns to the Inbox; matching conversations have moved out of the Inbox.
+
+Alternate flows:
+
+| At step | Condition | What happens |
+| --- | --- | --- |
+| 2 | User wants to catch a whole domain | User enters `@ignou.ac.in` instead of the full address; the filter matches every sender in that domain |
+| 4 | Label MCS-217 does not exist | The label drop-down offers New label; user creates it inline |
+| 6 | A filter with identical criteria already exists | Gmail creates a second one anyway; the user should check the filter list and delete the duplicate |
+| After 6 | An important email is now missed because it skipped the Inbox | User opens Settings, Filters and Blocked Addresses, clicks edit on the filter, unticks Skip the Inbox, and clicks Update filter |
+
+## Scenario Index
+
+<Notebook />
+
+| ID | Goal | Steps in main flow | Alternate flows |
+| --- | --- | --- | --- |
+| GM-01 | Compose and send an email | 6 | 4 |
+| GM-02 | Reply with an attachment | 5 | 4 |
+| GM-03 | Search for an email | 4 | 3 |
+| GM-04 | Label and archive a conversation | 5 | 3 |
+| GM-05 | Recover from sending to the wrong recipient | 5 | 3 |
+| GM-06 | Set up a filter | 6 | 4 |
+
+## From Scenarios to Use Cases and Test Cases
+
+<Notebook />
+
+The six scenarios group into four use cases: Send Mail (GM-01, GM-02, GM-05), Find Mail (GM-03), Organise Mail (GM-04) and Automate Mail Handling (GM-06). A use case description takes the shared preconditions and postconditions from its scenarios, uses the most common scenario as its main flow, and lists the others as extensions. GM-05 is an extension of Send Mail at the step "user clicks Send".
+
+Each scenario row, main or alternate, becomes one test case by fixing the data and stating the expected result. Two examples in the Session 8 format:
+
+| Test ID | From scenario | Input | Expected result | Actual result | Status |
+| --- | --- | --- | --- | --- | --- |
+| TC-GM-01-03 | GM-01, alternate at step 5, no subject or body | To = `coordinator@ignou.ac.in`, subject empty, body empty, click Send | Dialog "Send this message without a subject or text?" appears | | |
+| TC-GM-05-01 | GM-05 main flow, undo window 30 s | Send to `cordinator@ignou.ac.in`, click Undo after 5 s | "Sending undone" shown; message reopens as draft; nothing in Sent | | |
+
+The Actual result and Status columns stay empty until the test is run; this is what Session 10 filled in for the transpose page.
+
+## Viva Questions
+
+<Explain />
+
+- **Q:** What is the difference between a usage scenario and a use case? **A:** A scenario is one concrete path to a goal; a use case groups all paths to that goal under one name.
+- **Q:** Why must every step name both the actor action and the system response? **A:** So a tester can check the response after each action instead of only at the end.
+- **Q:** What is a precondition, with an example? **A:** Something true before step 1; for GM-02 the message must already be open, otherwise Reply does not exist.
+- **Q:** Why is GM-05 written as its own scenario rather than an alternate flow of GM-01? **A:** It has its own goal (stop a wrong message) and its own postcondition (message not delivered); a scenario is defined by its goal.
+- **Q:** How does a scenario become a test case? **A:** Fix the input values, state the expected result for the last step, and add columns for actual result and status.
+- **Q:** Which scenario has a timing precondition, and why does that matter for testing? **A:** GM-05; the undo window must be set to a known value or the test is not repeatable.
+- **Q:** Why keep alternate flows keyed to step numbers? **A:** So the reader knows exactly where the branch happens and can return to the main flow at the right place.
+- **Q:** What is a postcondition for GM-04? **A:** The conversation has the label and is out of the Inbox; both can be observed by the user, which is the test.
+
+## Common Mistakes
+
+<Explain />
+
+- Writing feature descriptions ("Gmail has labels") instead of a sequence of actions and responses.
+- Skipping alternate flows, or writing only "error occurs". Say which step, what condition, and what the software does.
+- Preconditions that are really steps ("user opens the browser") or postconditions that are not observable ("user is satisfied").
+- Steps that bundle three actions into one line. One action, one response, one step.
+- Choosing software you do not actually use, so the steps are guessed rather than verified. Do each scenario once in the real product before writing it.
+
+## Session Summary
+
+<Notebook />
+
+- Software selected, with the assumptions about account and settings.
+- Six scenarios GM-01 to GM-06, each with all seven fields filled.
+- The scenario index table.
+- The paragraph on how the scenarios map to use cases and the two sample test cases.

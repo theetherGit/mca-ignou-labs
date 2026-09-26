@@ -1,46 +1,188 @@
 ---
 title: Session 16
-description: Structured Programming Review
+description: Find structured-programming violations in a small program and rewrite it with sequence, selection and iteration only
 sidebar:
   order: 16
 ---
-This session is about reviewing code against structured programming principles. The goal is to identify confusing control flow or poor structure and rewrite the code using clear sequence, selection, iteration, and functions.
+
+This session takes a small program written earlier (a menu-driven bank balance in C), checks it against the structured programming paradigm, lists every construct that breaks the paradigm with a line reference, and rewrites it so that only sequence, selection and iteration remain. The rewritten program produces byte-for-byte the same output on the same input, which is how you prove the rewrite changed structure and not behaviour. Structured programming is the reason code from Session 13 can be reviewed, tested and changed at all.
+
+## Objectives
+
+<Explain />
+
+- State the three control structures of structured programming and the single-entry, single-exit rule.
+- Recognise `goto`, jumps out of nested loops, mid-function `return`, and flag variables as violations, and say which rule each one breaks.
+- Rewrite a working program using `while`, `switch` and `if` only, one entry and one exit per function.
+- Prove behaviour is unchanged by running both versions on the same input.
 
 ## Problem Statement
 
 <Notebook />
 
-Select a small portion of any program written by you. Check if the selected portion has constructs that violate the structured programming paradigm. If yes, rewrite the code to conform to structured programming. If no, check another portion of code.
+Session 16: Select a small portion of any program written by you. Check if the portion of code selected by you is having constructs that violate the structured programming paradigm. If yes, then rewrite the code to conform to structured programming paradigm. If no, check another portion of code.
 
-## Expected Deliverable
+## Concept
+
+<Explain />
+
+### The three structures
+
+Bohm and Jacopini showed that any computable program can be written with only three control structures, each with one entry point and one exit point:
+
+- Sequence: statements executed one after another.
+- Selection: `if`, `if-else`, `switch`; choose one of several blocks, then continue after the block.
+- Iteration: `while`, `for`, `do-while`; repeat a block while a condition holds, then continue after the loop.
+
+A block built from these can be read top to bottom, and the state at any line depends only on the lines above it in that block. That property is what a code reviewer relies on.
+
+### What breaks the paradigm
+
+| Construct | Why it violates the rule |
+| --- | --- |
+| `goto` and labels | Control enters a block from anywhere; the block has many entries |
+| `goto` out of nested loops | The loop has a second exit; the code after the loop cannot assume the loop condition became false |
+| `return` in the middle of a function | The function has many exits; cleanup and postconditions are scattered |
+| Flag variable set in one block and tested in another | Turns a selection into a hidden jump; the reader must trace every assignment to know what the test means |
+| Falling through `if` chains where each branch jumps away | Selection without a join point; there is no line where "after the choice" begins |
+
+`break` inside a `switch` and a loop-controlling boolean in the `while` condition are accepted in practice because they keep one exit per structure. The pure form avoids even those; this session uses them because C has no other way to leave a `switch`.
+
+### How to rewrite
+
+1. Every `goto` loop becomes a `while` with a condition variable.
+2. Every `goto` out of a nested loop becomes a loop condition that includes "not yet found".
+3. Every early `return` becomes an assignment to a status variable inside an `if-else` chain, with one `return` at the end.
+4. Every flag tested far from where it was set is either deleted (the test moves next to the condition) or becomes the loop condition.
+5. Repeated blocks under different labels become functions with one job each.
+
+## Code Selected for Review
 
 <Notebook />
 
-Submit the original code, review observations, rewritten structured version, and justification.
+The portion is the complete `unstructured.c` (86 lines): a bank balance program with a menu for deposit, withdraw, show balance and exit. Withdrawals are paid out in 500 and 200 rupee notes, so an amount that cannot be formed from those notes is refused. The program works; it was written quickly and never reviewed.
 
-## Structured Programming Principles
+```c title="unstructured.c" file=<rootDir>/public/code/mcs-217/session-16/unstructured.c
 
-- Use sequence, selection, and iteration.
-- Avoid unnecessary `goto`.
-- Keep functions focused.
-- Avoid deeply tangled control flow.
-- Use meaningful function boundaries.
+```
 
-## Review Checklist
-
-| Check | Question |
-| ----- | -------- |
-| Flow | Is control flow clear? |
-| Functions | Can repeated logic be extracted? |
-| Branching | Are conditions readable? |
-| Loops | Are loop boundaries clear? |
-| Data | Are variables scoped properly? |
-
-## Submission Checklist
+## Violations Found
 
 <Notebook />
 
-- Include original code.
-- Mark violations.
-- Include rewritten code.
-- Explain how the rewrite improves structure.
+| Line(s) | Construct | Which rule it breaks | How it was rewritten |
+| --- | --- | --- | --- |
+| 10 | Global `flag` with three meanings (0 nothing, 1 notes found, 2 error printed), set in `withdraw()` and in `main` | Flag variable spaghetti: a selection made in one place is tested in another; the reader must trace every write to know what `flag == 2` means | Deleted. `split_notes()` uses a local `found` as its loop condition (structured.c line 23); the deposit check is a plain `if-else` in `deposit()` (line 56) |
+| 16 to 19 | Two `return` statements before the main work of `withdraw()` | Multiple exits from a function; the postcondition "balance was reduced" is true on one path and false on two others with no single place to see that | `withdraw()` (line 36) sets `status` in an `if-else` chain and has one `return status` on line 53 |
+| 21 to 28 | Nested `for` loops searching note combinations, left with `goto found` on line 25 | Iteration with two exits: the loop ends either when the condition fails or when the jump fires, and lines 30 to 33 use `fives` and `twos` whose values depend on which exit was taken | `split_notes()` (line 18) has one `while` whose condition is `!found && fives >= 0`; the inner loop is replaced by an arithmetic test (`rest % 200 == 0`), so there is nothing to jump out of |
+| 29 | Label `found:` inside a function body | A second entry point into the block after the loop | Removed with the `goto` |
+| 30 to 31 | Third `return` in the middle of `withdraw()` | Same as lines 16 to 19 | Same `status` variable, single exit |
+| 40, 54, 68, 80, 83 | Labels `menu`, `deposit`, `withdraw`, `show`, `quit` in `main` | The whole of `main` is a set of blocks with multiple entries; there is no loop, so the reader cannot see that the menu repeats | `main` (line 83) is one `while (running)` loop (line 89) containing one `switch (choice)` (line 94); the menu repeats until `running` becomes 0 |
+| 44 to 51 | Chain of `if (choice == n) goto label` | Selection without a join point: each branch jumps away, so there is no line where "after the choice" begins | `switch (choice)` with `case 1` to `case 4` and `default`; every case ends with `break` and control joins at the bottom of the loop body |
+| 43, 51, 57, 71 | `goto quit` from four places | Four exits from the main loop scattered through the body | `running = 0` at lines 92, 98, 106 and 115; the loop condition is the single exit and `printf("Bye")` runs exactly once after it |
+| 53, 64, 67, 79, 82 | `goto menu` to restart the loop | Iteration built by hand with jumps; the loop has five back-edges instead of one | The `while` loop has one back-edge at its closing brace |
+| 58 to 64 | `flag = 0; if (bad) flag = 2; if (flag == 2) goto menu;` | A flag used to delay a decision by three lines; the value 2 has no meaning outside this block | `deposit()` line 56: `if (amount <= 0) error else deposit`, no flag |
+| 73 to 78 | Three independent `if (result == n)` tests on one variable | Selection written as three sequences; a reader cannot tell at a glance that the cases are exclusive | `report_withdraw()` line 66 uses one `switch (result)` |
+
+Every violation is one of four kinds: `goto`, jump out of a loop, mid-function `return`, or a flag carried across blocks. The rewrite has none of them.
+
+## Rewritten Program
+
+<Notebook />
+
+```c title="structured.c" file=<rootDir>/public/code/mcs-217/session-16/structured.c
+
+```
+
+### What changed and what did not
+
+The prompts, messages, note-splitting rule and balance arithmetic are unchanged. The program is longer (125 lines against 86) because each job now lives in a named function with a comment, and because the `switch` has explicit `break` lines. Every function has exactly one `return`. There is no `goto` and no label. The only flags are `running` and `found`, and each is tested only in the `while` condition of the loop it controls.
+
+## Sample Run
+
+<Notebook />
+
+Both programs were compiled with `gcc -Wall` (no warnings) and run on the same input sequence: deposit 1500, withdraw 300, withdraw 700, show balance, withdraw 900, deposit -50, choice 5, exit.
+
+```text
+$ gcc -Wall -o unstructured unstructured.c
+$ gcc -Wall -o structured structured.c
+$ printf '1\n1500\n2\n300\n2\n700\n3\n2\n900\n1\n-50\n5\n4\n' > input.txt
+$ ./unstructured < input.txt > a.out
+$ ./structured < input.txt > b.out
+$ diff a.out b.out && echo IDENTICAL
+IDENTICAL
+```
+
+Interactive run of either program with the same choices:
+
+```text
+1 Deposit  2 Withdraw  3 Balance  4 Exit
+Choice: 1
+Amount: 1500
+Deposited 1500
+
+1 Deposit  2 Withdraw  3 Balance  4 Exit
+Choice: 2
+Amount: 300
+Amount cannot be paid in 500 and 200 notes
+
+1 Deposit  2 Withdraw  3 Balance  4 Exit
+Choice: 2
+Amount: 700
+Paid 700 as 1 x 500 and 1 x 200
+
+1 Deposit  2 Withdraw  3 Balance  4 Exit
+Choice: 3
+Balance: 800
+
+1 Deposit  2 Withdraw  3 Balance  4 Exit
+Choice: 2
+Amount: 900
+Insufficient balance
+
+1 Deposit  2 Withdraw  3 Balance  4 Exit
+Choice: 1
+Amount: -50
+Invalid amount
+
+1 Deposit  2 Withdraw  3 Balance  4 Exit
+Choice: 5
+Invalid choice
+
+1 Deposit  2 Withdraw  3 Balance  4 Exit
+Choice: 4
+Bye
+```
+
+## Viva Questions
+
+<Explain />
+
+- **Q:** Name the three control structures of structured programming. **A:** Sequence, selection and iteration, each with one entry and one exit.
+- **Q:** Who proved that these three are enough? **A:** Bohm and Jacopini (1966); Dijkstra's "Go To Statement Considered Harmful" (1968) argued for applying it.
+- **Q:** Why is a `goto` out of a nested loop worse than a `goto` to the next line? **A:** It gives the loop a second exit, so the code after the loop cannot assume the loop condition became false, and the loop variables have two possible meanings.
+- **Q:** Is `break` inside a `switch` a violation? **A:** Strictly it is a jump, but it is the only way to end a case in C and it always lands at the same join point, so it is accepted.
+- **Q:** How did you remove the early returns from `withdraw()`? **A:** An `if-else` chain assigns a `status` variable and the function returns it once at the end.
+- **Q:** How did you prove the rewrite is equivalent? **A:** Same compiler flags, same input file, `diff` of the two outputs is empty.
+- **Q:** The structured version is 40 lines longer. Is that a cost? **A:** In line count yes; in reading time no, because each function can be understood alone and the menu loop is visible as a loop.
+- **Q:** What is a flag variable and when is it acceptable? **A:** A variable whose only job is to steer control flow; it is acceptable when it is the condition of the loop it controls and is set nowhere else.
+
+## Common Mistakes
+
+<Explain />
+
+- Choosing code that has no violations and inventing some in the write-up. The manual says: if there are none, pick another portion.
+- Listing "uses goto" as one violation. Each label and each jump breaks a specific rule; the table needs one row per construct with a line number.
+- Rewriting by deleting the `goto` and leaving the logic broken. Run both versions on the same input and compare; if the outputs differ, the rewrite is wrong.
+- Replacing `goto` with a flag that is set in five places and tested in one. That moves the spaghetti into data instead of removing it.
+- Forgetting to explain why each construct violates sequence, selection or iteration. The table's third column is the marks.
+
+## Session Summary
+
+<Notebook />
+
+- The original code (`unstructured.c`) with line numbers.
+- The violations table with line reference, construct, rule broken and rewrite for each row.
+- The rewritten code (`structured.c`).
+- The sample run showing identical output from both versions on the same input.

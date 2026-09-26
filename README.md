@@ -54,6 +54,13 @@ pnpm deploy     # Cloudflare Workers via wrangler
 - `public/code/` — solution files (C/Python/Rust, HTML/CSS/JS). Imported into pages with ` ```c file=<rootDir>/public/code/... ` and served as-is for iframe previews.
 - `src/components/demo/` — interactive demos (Svelte islands).
 
+### Authoring conventions
+
+- Put `<Notebook />` under headings students copy into the lab record and `<Explain />` under headings that are for understanding only. Every section gets one.
+- Multi-language solutions go in `<Tabs syncKey="lang">` with one `<TabItem label="C">` per language.
+- HTML solutions get `<Preview src="/code/..." height="300px" />` above the code fence.
+- `pnpm lint:docs` enforces frontmatter, internal links and heading hierarchy. MCS-217 pages follow `docs-plan/mcs-217-brief.md`.
+
 ## ⚠️ Important Notice for Students
 
 1. **Academic Integrity**: Use these resources to understand logic. Do not copy-paste code directly into lab journals.
