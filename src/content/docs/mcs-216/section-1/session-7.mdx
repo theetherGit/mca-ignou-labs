@@ -1,0 +1,187 @@
+---
+title: Session 7
+description: Minimum Cost Spanning Tree
+sidebar:
+  order: 7
+---
+
+
+
+<PrintButton />
+
+This session is about building a minimum cost spanning tree from a connected, undirected weighted graph. A spanning tree connects all vertices without forming a cycle, and the minimum cost spanning tree chooses the set of edges whose total weight is as small as possible.
+
+## Objectives
+
+- Understand the minimum cost spanning tree problem.
+- Implement Prim's algorithm and Kruskal's algorithm.
+- Compare both algorithms on different graph instances.
+
+## Concept
+
+A spanning tree connects all vertices of a connected, undirected graph without cycles. A minimum cost spanning tree chooses the set of edges with the lowest possible total weight.
+
+## Prim's Algorithm
+
+Prim's algorithm grows one tree. It starts from any vertex and repeatedly adds the minimum-weight edge that connects a visited vertex to an unvisited vertex.
+
+## Kruskal's Algorithm
+
+Kruskal's algorithm sorts all edges by weight and repeatedly picks the smallest edge that does not form a cycle.
+
+## Question 1
+
+### Problem Statement
+
+Implement Prim's algorithm to find a minimum cost spanning tree(MCST) in the given graph. Show all the processes.
+
+<img src="/216-sc1-ss7-1.png" class="mt-5 rounded-xl" />
+
+### Explanation / Approach
+
+Start from any vertex and repeatedly choose the minimum-weight edge that connects the current tree to an unvisited vertex. Keep a table of selected edges and running total cost.
+
+### Algorithm
+
+Prim's algorithm is a greedy algorithm that builds the MST incrementally:
+- Start with an arbitrary vertex and add it to the MST set.
+- Maintain a `key` array storing the minimum weight edge connecting each vertex to the current MST.
+- Repeatedly select the vertex with the smallest `key` not yet in MST.
+- Add the connecting edge to MST, update keys of adjacent vertices.
+- Repeat until all vertices are included.
+
+### Space & Time Complexity
+
+Space Complexity: O(V + E)
+Time Complexity: O(E log V) with priority queue, O(V²) with array scan.
+
+
+### Execution Steps
+| Step | Added | Edge     | Weight | Cumulative Cost | MST Edges |
+|------|-------|----------|--------|-----------------|-----------|
+| 0    | V1    | -        | 0      | 0               | `{}` |
+| 1    | V4    | V1-V4    | 20     | 20              | V1-V4 |
+| 2    | V8    | V4-V8    | 5      | 25              | V1-V4, V4-V8 |
+| 3    | V9    | V8-V9    | 8      | 33              | V1-V4, V4-V8, V8-V9 |
+| 4    | V2    | V4-V2    | 10     | 43              | V1-V4, V4-V8, V8-V9, V4-V2 |
+| 5    | V5    | V4-V5    | 12     | 55              | V1-V4, V4-V8, V8-V9, V4-V2, V4-V5 |
+| 6    | V10   | V9-V10   | 16     | 71              | V1-V4, V4-V8, V8-V9, V4-V2, V4-V5, V9-V10 |
+| 7    | V6    | V10-V6   | 9      | 80              | V1-V4, V4-V8, V8-V9, V4-V2, V4-V5, V9-V10, V10-V6 |
+| 8    | V3    | V4-V3    | 22     | 102             | V1-V4, V4-V8, V8-V9, V4-V2, V4-V5, V9-V10, V10-V6, V4-V3 |
+| 9    | V7    | V3-V7    | 8      | 110             | V1-V4, V4-V8, V8-V9, V4-V2, V4-V5, V9-V10, V10-V6, V4-V3, V3-V7 |
+
+#### Final MCST Cost: 110
+#### MST Edges: `V1 -> V4 -> V8 -> V9 -> V2 -> V5 -> V10 -> V6 -> V3 -> V7`
+
+### Implementation
+
+### Python
+```python title="prims-algo.py" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-7/1/1.py 
+
+```
+
+### C Language
+```c title="prims-algo.c" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-7/1/1.c 
+
+```
+
+### Rust
+```rust title="prims-algo.rs" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-7/1/1.rs
+
+```
+
+
+## Question 2
+
+### Problem Statement
+
+Implement Kruskal's algorithm to find a minimum cost spanning tree for the given graph. Show all the processes.
+
+### Explanation
+
+Kruskal’s algorithm is a classic greedy algorithm used to discover an MCST. It focuses directly on the edges of the graph. The algorithm operates by selecting the absolute shortest edges from anywhere in the graph, one by one, and placing them into a growing forest.
+
+The Greedy Choice Strategy:
+- Maintain a set of edges that form a forest (where each vertex starts as its own tree).
+- Sort all edges in the graph in ascending order of their weights.
+- Iterate through the sorted edges and pick the smallest edge.
+- Check if adding this edge forms a cycle with the edges already selected.
+  - If no cycle is formed, include this edge in the MCST.
+  - If a cycle is formed, discard it.
+- Terminate when the MCST contains exactly `V - 1` edges (where `V` is the total number of vertices).
+
+#### Cycle Detection via Disjoint-Set (Union-Find)
+To efficiently check for cycles, the Disjoint-Set Data Structure is utilized.
+
+- **Find**: Determines which subset a particular element belongs to. If two vertices share the same subset root, connecting them will create a cycle.
+
+- **Union**: Joins two distinct subsets into a single subset when a valid edge is added.
+
+### Complexity Analysis
+- **Time Complexity**: `O(Elog(E))` or `O(Elog(V))`, where `E` is the number of edges and `V` is the number of vertices. Sorting the edges dominates the computational execution time.
+- **Space Complexity**: `O(V + E)` to maintain the graph data structures and the tracking arrays (`parent` and `rank`) for Union-Find operations.
+
+
+### Implementation
+
+### Python
+```python title="kruskal-algo.py" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-7/2/2.py 
+
+```
+
+### C Language
+```c title="kruskal-algo.c" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-7/2/2.c 
+
+```
+
+### Rust
+```rust title="kruskal-algo.rs" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-7/2/2.rs
+
+```
+
+### Sample Output 
+
+```sh
+Edges in the constructed MCST:
+V4 -- V8 == 5
+V3 -- V7 == 8
+V8 -- V9 == 8
+V6 -- V10 == 9
+V2 -- V4 == 10
+V4 -- V5 == 12
+V9 -- V10 == 16
+V1 -- V4 == 20
+V3 -- V4 == 22
+Minimum Spanning Tree Cost: 110
+```
+
+## Question 3
+
+### Problem Statement
+
+Analyze the performance of both algorithms on different problem instances and write a brief report.
+
+### Explanation / Approach
+
+This report provides an analytical comparison of Kruskal’s and Prim’s algorithms for finding a Minimum Cost Spanning Tree (MCST). While both guarantee an optimal minimum spanning tree, their architectural designs perform differently depending on the structural density and representation of the input graph.
+
+### Algorithmic Approaches & Data Structures
+
+The core performance differences stem from how each algorithm traverses the graph and what data structures manage its state.
+
+#### Kruskal’s Algorithm
+
+- **Strategy**: Edge-centric greedy approach. It processes the entire graph globally, selecting the lightest available edges regardless of connectivity.
+- **Core Mechanisms**: 
+  - Array sorting or a min-heap to order the edges.
+  - **Disjoint-Set (Union-Find)** data structure with path compression and union-by-rank to prevent cycle formation.
+
+#### Prim’s Algorithm
+- **Strategy**: Vertex-centric greedy approach. It starts at a single root vertex and grows the tree continuously outward like a single component.
+- **Core Mechanisms**:
+  - Tracking of structural weights via a fringe/distance array.
+  - **Priority Queue (Min-Heap or Fibonacci Heap)** to continually discover the closest unvisited neighbor.
+
+### Recommendations
+- **Choose Kruskal’s Algorithm when**: The problem involves a sparse graph, edge information is already sorted or easily structured, or you are reading from an edge-list representation. It is highly intuitive to implement and has a small memory footprint for standard workloads.
+- **Choose Prim’s Algorithm when**: The problem involves a dense graph, or you are handling a map matrix layout where vertex boundaries dictate constraints. When optimized with advanced heaps, Prim's offers unparalleled performance metrics for dense network topographies.

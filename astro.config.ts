@@ -3,6 +3,7 @@ import svelte from "@astrojs/svelte";
 import tailwindcss from "@tailwindcss/vite";
 import nimbus, { defineConfig as defineNimbusConfig } from "@cloudflare/nimbus-docs";
 import { tableScroll } from "@cloudflare/nimbus-docs/markdown";
+import { unified } from "@astrojs/markdown-remark";
 import codeImport from "remark-code-import";
 import remarkMath from "remark-math";
 import rehypeMathML from "@daiji256/rehype-mathml";
@@ -51,10 +52,18 @@ export default defineConfig({
         "nimbus/frontmatter-shape": "error",
         "nimbus/internal-link": "error",
       },
+      // `:::note` directives need the Sätteri processor; content uses <Aside> directly.
+      admonitions: false,
       markdown: { hastPlugins: [tableScroll()] },
+      // Nimbus installs its own Sätteri processor for .md output and MDX would inherit
+      // it. Sätteri has no math syntax and lets the MDX parser swallow `{n}` inside
+      // `$\binom{n}{k}$`, so .mdx runs through the unified pipeline where remark-math
+      // wins before expression parsing and remark-code-import / rehype-mathml apply.
       mdx: {
-        remarkPlugins: [[codeImport, { rootDir: process.cwd() }], remarkMath],
-        rehypePlugins: [rehypeMathML],
+        processor: unified({
+          remarkPlugins: [[codeImport, { rootDir: process.cwd() }], remarkMath],
+          rehypePlugins: [rehypeMathML],
+        }),
       },
     }),
   ],
