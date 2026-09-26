@@ -61,6 +61,7 @@ export default defineConfig({
       // wins before expression parsing and remark-code-import / rehype-mathml apply.
       mdx: {
         processor: unified({
+          // @ts-expect-error remark-code-import's transformer type is looser than Astro's RemarkPlugin; runtime-compatible.
           remarkPlugins: [[codeImport, { rootDir: process.cwd() }], remarkMath],
           rehypePlugins: [rehypeMathML],
         }),
