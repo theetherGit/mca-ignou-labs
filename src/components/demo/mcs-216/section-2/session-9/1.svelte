@@ -1,5 +1,7 @@
 <script lang="ts">
-    let time = $state("00:00:00");
+    // Placeholder until the browser takes over: server-rendered (and printed) output must
+    // not contain the build time, or every build would produce a different page.
+    let time = $state("--:--:--");
 
     function formatTime(date: Date) {
         return [date.getHours(), date.getMinutes(), date.getSeconds()]
@@ -7,11 +9,14 @@
             .join(":");
     }
 
-    // Initialize interval
-    setInterval(() => {
+    // Browser only; the returned cleanup stops the timer when the demo unmounts.
+    $effect(() => {
         time = formatTime(new Date());
-    }, 1000);
-    time = formatTime(new Date());
+        const id = setInterval(() => {
+            time = formatTime(new Date());
+        }, 1000);
+        return () => clearInterval(id);
+    });
 </script>
 
 <div

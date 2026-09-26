@@ -1,0 +1,2 @@
+# Old SvelteKit URLs lived under /docs; send them to the same page at the root.
+/docs/* /:splat 301

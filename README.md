@@ -43,10 +43,10 @@ This site is built with [Nimbus](https://nimbus-docs.com) on Astro.
 ```bash
 pnpm install
 pnpm dev        # local server
-pnpm build      # static site in dist/ plus PDFs and ZIPs in dist/downloads/ (needs Chromium: pnpm exec playwright install chromium)
-pnpm build:site # site only, fast
+pnpm build      # site + ZIPs of the committed PDFs (what Cloudflare runs)
+pnpm run build:pdf  # re-render changed session PDFs into public/downloads (needs: pnpm exec playwright install chromium)
 pnpm lint:docs  # content lint (frontmatter, internal links)
-pnpm deploy     # Cloudflare Workers via wrangler
+pnpm run deploy # manual deploy; pushes to main deploy through Cloudflare Workers Builds
 ```
 
 ### Layout
@@ -63,7 +63,7 @@ pnpm deploy     # Cloudflare Workers via wrangler
 - `pnpm lint:docs` enforces frontmatter, internal links and heading hierarchy. MCS-217 pages follow `docs-plan/mcs-217-brief.md`.
 - Question papers: `python3 scripts/gen-question-papers.py` regenerates `src/content/docs/question-papers/*.mdx` from the verbatim Problem Statements on the session pages; the PDF step renders them to `dist/downloads/<section>/<section>-questions.pdf`. Re-run after editing any problem statement.
 - Home page: `src/pages/index.astro` + `src/styles/home.css`, Hallmark-stamped (Marquee Hero + bento). Design tokens in `tokens.css` alias the Nimbus `--nb-*` palette (Ledger: warm cream, burnt orange). Display face Bricolage Grotesque is loaded on the home page only.
-- Downloads: `scripts/build-pdfs.mjs` prints every session page to A4 PDF and zips them. Names: `<course>-<section>-session-NN.pdf`, `<course>-<section>.zip`, `<course>.zip`, `semester-N.zip`; each ZIP holds one folder per section plus the manual's question sheet. Links are rendered by `src/components/PageTools.astro`.
+- Downloads: PDFs are rendered on your machine by the pre-commit hook (`.githooks/pre-commit`, enabled by `pnpm install`) into `public/downloads/` and committed, because Cloudflare's build image cannot run Chromium. Only pages whose printed content changed are re-rendered (hashes in `scripts/pdf-manifest.json`). Cloudflare then zips them with `scripts/build-zips.mjs`. `scripts/build-pdfs.mjs` prints every session page to A4 PDF. Names: `<course>-<section>-session-NN.pdf`, `<course>-<section>.zip`, `<course>.zip`, `semester-N.zip`; each ZIP holds one folder per section plus the manual's question sheet. Links are rendered by `src/components/PageTools.astro`.
 - Math: plain `$x^2$` works for simple inline LaTeX. Anything with braces that is not a valid JS expression (`\text{...}`, `\frac{a}{b}`) must use `<Math tex="..." />` or `<Math display tex="..." />`, because Nimbus pre-parses MDX and rejects those braces. Formula sheets on the MCSL-223 pages are the reference.
 
 ## ⚠️ Important Notice for Students

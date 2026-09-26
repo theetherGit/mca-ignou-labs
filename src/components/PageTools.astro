@@ -1,7 +1,8 @@
 ---
 /**
  * Print and download row shown at the top of every docs page.
- * Download targets are produced by scripts/build-pdfs.mjs after `astro build`:
+ * PDFs are rendered by scripts/build-pdfs.mjs (pre-commit hook) into public/downloads;
+ * ZIPs are built from them by scripts/build-zips.mjs after `astro build`:
  *   /downloads/<section-key>/<section-key>-session-NN.pdf
  *   /downloads/<section-key>.zip · /downloads/<course>.zip · /downloads/semester-N.zip
  */

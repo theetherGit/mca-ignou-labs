@@ -5,17 +5,17 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && node scripts/build-pdfs.mjs",
+    "build": "astro build && node scripts/build-zips.mjs",
     "preview": "astro preview",
     "typecheck": "astro check",
     "lint:docs": "nimbus-docs lint",
     "lint:docs:fix": "nimbus-docs lint --fix",
     "prepreview:cf": "astro build",
     "preview:cf": "wrangler dev",
-    "predeploy": "astro check && astro build && node scripts/build-pdfs.mjs",
-    "deploy": "wrangler deploy",
+    "deploy": "pnpm build && wrangler deploy",
     "build:site": "astro build",
-    "build:pdf": "node scripts/build-pdfs.mjs"
+    "build:pdf": "astro build && node scripts/build-pdfs.mjs",
+    "prepare": "git rev-parse --git-dir >/dev/null 2>&1 && git config core.hooksPath .githooks || true"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "7.3.1",
@@ -47,5 +47,6 @@
     "tailwindcss": "^4.1.4",
     "typescript": "^5.8.3",
     "wrangler": "^4.95.0"
-  }
+  },
+  "packageManager": "pnpm@10.30.3"
 }

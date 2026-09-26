@@ -1,0 +1,31 @@
+#!/bin/sh
+# Re-render session PDFs before a commit that can change them, and commit them too.
+#
+# Cloudflare's build image cannot run Chromium, so PDFs are rendered on the developer
+# machine into public/downloads/ and committed; Cloudflare only zips them
+# (scripts/build-zips.mjs). Rendering is incremental: unchanged pages are skipped.
+#
+# Skip once with:  SKIP_PDF=1 git commit ...
+# Note: renders the working tree, so unstaged edits to content also end up in the PDFs.
+
+changed=$(git diff --cached --name-only --diff-filter=ACMRD \
+  | grep -E '^(src/|public/code/|public/[^/]+\.(png|jpe?g|svg)$|astro\.config\.ts$|tokens\.css$|scripts/build-pdfs\.mjs$|pnpm-lock\.yaml$)' || true)
+[ -z "$changed" ] && exit 0
+
+if [ -n "$SKIP_PDF" ]; then
+  echo "pre-commit: SKIP_PDF set, PDFs not refreshed"
+  exit 0
+fi
+
+# Pick up the repo's Node version when fnm is installed (git GUIs don't load shell rc files).
+if command -v fnm >/dev/null 2>&1; then
+  eval "$(fnm env)" && fnm use --silent-if-unchanged >/dev/null 2>&1
+fi
+
+echo "pre-commit: refreshing session PDFs (only changed pages render)..."
+if ! pnpm run --silent build:pdf; then
+  echo "pre-commit: PDF build failed. First time on this machine? Run: pnpm exec playwright install chromium"
+  echo "pre-commit: to commit anyway: SKIP_PDF=1 git commit ..."
+  exit 1
+fi
+git add -A public/downloads scripts/pdf-manifest.json
