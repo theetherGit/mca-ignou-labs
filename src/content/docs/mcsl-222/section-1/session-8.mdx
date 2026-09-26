@@ -29,7 +29,7 @@ Sessions 8 to 10 turn diagrams into code and tables. The mapping is mechanical o
 <Explain />
 
 - The manual asks for a problem description of 300 to 500 words and a list of assumptions before every diagram. Write both first; they fix the scope the evaluator marks you against.
-- The manual says C++ or Java. Every program here is given in C++, Rust, Python and Node.js, and any of the four is acceptable in the lab; pick one and keep it for all three sessions.
+- The manual says C++ or Java. Every program here is given in C++, Rust, Python and TypeScript, and any of the four is acceptable in the lab; pick one and keep it for all three sessions.
 - Map multiplicity: `1` becomes a single reference, `*` becomes a `List` (Java) or `std::vector` (C++).
 - Write a small `main` that creates a few objects and exercises every operation so the program actually runs.
 
@@ -53,7 +53,7 @@ Figure 1.15: Class Diagram for Student Registration
 
 The system keeps the academic structure of one university. A university has a name, an address and a phone number and is made up of one or more schools. Each school is named and is responsible for a set of faculty members and a set of programmes. A faculty member has an ID, a name and the name of the school that employs them; at most one other faculty member is their head of department. Faculty members teach courses. A programme has an ID and a name, and a course has a code and a name. Students register with the university; each student has a roll number, a name and an address and enrols in a programme. The program must let an administrator add and remove schools and students at university level, add and remove faculty and programmes at school level, keep a searchable catalogue of courses, and look up a school by name, a student by roll number and a course by name or code. Every relationship in the figure must be navigable from the code in the direction the figure shows.
 
-- The reference listing is C++17, compiled with `clang++ -std=c++17 -Wall -Wextra`; the same classes, links and `main` are given in Rust, Python and Node.js, and all four print the same output.
+- The reference listing is C++17, compiled with `clang++ -std=c++17 -Wall -Wextra`; the same classes, links and `main` are given in Rust, Python and TypeScript, and all four print the same output.
 - Objects are created in `main` and linked with pointers; no object owns another, so there is no `new` or `delete`.
 - A `1` or `0..1` end is a pointer; a `*` or `1..*` end is a `std::vector` of pointers.
 - The four operations shown inside `Course` (`addCourse`, `removeCourse`, `getCoursebyName`, `getCoursebyCode`) manage the list of all courses, so they are `static` and work on one shared catalogue.
@@ -78,7 +78,7 @@ The system keeps the academic structure of one university. A university has a na
 1. Create the folder `session-8` and save the listing below as `student_registration.cpp`.
 2. Compile: `clang++ -std=c++17 -Wall -Wextra -o student_registration student_registration.cpp`. The build must print nothing.
 3. Run `./student_registration` and paste the output into the record.
-4. For another language, save the matching tab and run it: `rustc -O --edition 2021 student_registration.rs && ./student_registration`, `python3 student_registration.py`, or `node student_registration.js` (Node 22 or later).
+4. For another language, save the matching tab and run it: `rustc -O --edition 2021 student_registration.rs && ./student_registration`, `python3 student_registration.py`, or `node student_registration.ts` (Node 22.18 or later strips the types natively, no compiler needed).
 
 #### Program
 
@@ -98,8 +98,8 @@ The system keeps the academic structure of one university. A university has a na
 
 ```
 </TabItem>
-<TabItem label="Node.js">
-```js title="student_registration.js" file=<rootDir>/public/code/mcsl-222/section-1/session-8/student_registration.js
+<TabItem label="TypeScript">
+```ts title="student_registration.ts" file=<rootDir>/public/code/mcsl-222/section-1/session-8/student_registration.ts
 
 ```
 </TabItem>
@@ -158,14 +158,15 @@ IGNOU, Maidan Garhi, New Delhi, phone 29572514
 
 Diagram element to code, where the four languages differ:
 
-| Element | C++ | Rust | Python | Node.js |
+| Element | C++ | Rust | Python | TypeScript |
 | --- | --- | --- | --- | --- |
-| Object and its links | Locals in `main`, links are raw pointers | Every object is an `Rc<RefCell<T>>`; a link is an `Rc` clone, read with `borrow()` and changed with `borrow_mut()` | Objects, links are plain references | Objects, links are plain references |
-| `1` or `0..1` end (`hod`, `programme`) | `Faculty* hod = nullptr` | `Option<Rc<RefCell<Faculty>>>`, `None` when empty | `Optional[Faculty] = None` | `this.hod = null` |
-| `*` or `1..*` end (`schools`, `courses`) | `std::vector<School*>` | `Vec<Rc<RefCell<School>>>` | `list[School]` with `field(default_factory=list)` | array `[]` |
-| Back end of the two-way School to Programme link | `std::vector<School*>` in `Programme` | `Vec<Weak<RefCell<School>>>`; `Weak` so the two `Rc` lists do not form a cycle, and `addProgramme` takes the school's `Rc` as `this` to make it | plain list | plain array |
-| Course catalogue and its four operations | `inline static std::vector<Course*>` and `static` member functions | `thread_local!` static `CATALOGUE: RefCell<Vec<..>>` and associated functions called as `Course::addCourse(&c1)` | `catalogue: ClassVar[list[Course]]` and `@staticmethod` | `static catalogue = []` and `static` methods |
-| Removing one link | `unlink`: `std::remove` then `erase` | `Vec::retain` with `Rc::ptr_eq` | `list.remove`, identity based because every class is `@dataclass(eq=False)` | `indexOf` then `splice` |
+| Object and its links | Locals in `main`, links are raw pointers | Every object is an `Rc<RefCell<T>>`; a link is an `Rc` clone, read with `borrow()` and changed with `borrow_mut()` | Objects, links are plain references | Objects, links are typed references; every field, parameter and return carries a type and `tsc --strict` checks them |
+| `1` or `0..1` end (`hod`, `programme`) | `Faculty* hod = nullptr` | `Option<Rc<RefCell<Faculty>>>`, `None` when empty | `Optional[Faculty] = None` | union field `hod: Faculty` or `null`, starting as `null`; a lookup hit in `main` needs `!` before `.name` because `getSchool` returns the same union |
+| `*` or `1..*` end (`schools`, `courses`) | `std::vector<School*>` | `Vec<Rc<RefCell<School>>>` | `list[School]` with `field(default_factory=list)` | typed array `readonly schools: School[] = []`; `readonly` because the array is never replaced, only pushed to |
+| Back end of the two-way School to Programme link | `std::vector<School*>` in `Programme` | `Vec<Weak<RefCell<School>>>`; `Weak` so the two `Rc` lists do not form a cycle, and `addProgramme` takes the school's `Rc` as `this` to make it | plain list | `readonly schools: School[]` in `Programme` |
+| Course catalogue and its four operations | `inline static std::vector<Course*>` and `static` member functions | `thread_local!` static `CATALOGUE: RefCell<Vec<..>>` and associated functions called as `Course::addCourse(&c1)` | `catalogue: ClassVar[list[Course]]` and `@staticmethod` | `static readonly catalogue: Course[]` and `static` methods; the two getters return `Course` or `null` |
+| Removing one link | `unlink`: `std::remove` then `erase` | `Vec::retain` with `Rc::ptr_eq` | `list.remove`, identity based because every class is `@dataclass(eq=False)` | generic `unlink<T>(arr: T[], p: T)`: `indexOf` then `splice` |
+| Attributes shared by two classes (`name`, `address` in Student and University) | Nothing special | Nothing special | Nothing special | `interface Addressed` implemented by both, so one `where()` helper prints either |
 | Figure names such as `getCoursebyName` | As drawn | As drawn, under `#![allow(non_snake_case)]` | As drawn | As drawn |
 
 ## Question 20
@@ -209,7 +210,7 @@ A stationery shop records what its customers buy. A customer is identified by na
 1. Save the listing below as `customer_order.cpp` in the same `session-8` folder.
 2. Compile: `clang++ -std=c++17 -Wall -Wextra -o customer_order customer_order.cpp`.
 3. Run `./customer_order` and paste the output.
-4. For another language, save the matching tab and run it: `rustc -O --edition 2021 customer_order.rs && ./customer_order`, `python3 customer_order.py`, or `node customer_order.js`.
+4. For another language, save the matching tab and run it: `rustc -O --edition 2021 customer_order.rs && ./customer_order`, `python3 customer_order.py`, or `node customer_order.ts`.
 
 #### Program
 
@@ -229,8 +230,8 @@ A stationery shop records what its customers buy. A customer is identified by na
 
 ```
 </TabItem>
-<TabItem label="Node.js">
-```js title="customer_order.js" file=<rootDir>/public/code/mcsl-222/section-1/session-8/customer_order.js
+<TabItem label="TypeScript">
+```ts title="customer_order.ts" file=<rootDir>/public/code/mcsl-222/section-1/session-8/customer_order.ts
 
 ```
 </TabItem>
@@ -268,12 +269,12 @@ Check by hand: `20 x 9.50 + 5 x 45.00 = 415.00`; stock of pens `500 - 20 = 480`;
 
 Diagram element to code, where the four languages differ:
 
-| Element | C++ | Rust | Python | Node.js |
+| Element | C++ | Rust | Python | TypeScript |
 | --- | --- | --- | --- | --- |
-| OrderLine's two links | `Order* order`, `Product* product` | `Weak<RefCell<Order>>` back to the order, `Rc<RefCell<Product>>` to the product | `order: Order`, `product: Product` fields of a `@dataclass(eq=False)` | two properties set in the constructor |
-| Order contains 1..* Product | `std::vector<OrderLine>` by value | `Vec<OrderLine>` by value | `list[OrderLine]` | array |
-| places, two-way | `std::vector<Order*>` plus `Customer* customer` | `Vec<Rc<..>>` plus `Option<Weak<RefCell<Customer>>>`; `places` and `contains` are associated functions taking `this: &Rc<..>` because the back link needs the `Rc` | list plus `Optional[Customer]` | array plus `null` |
-| Stock and cost updates through a link | write through the pointer | `p.borrow_mut().Units_in_Stock -= qty` | attribute assignment | property assignment |
+| OrderLine's two links | `Order* order`, `Product* product` | `Weak<RefCell<Order>>` back to the order, `Rc<RefCell<Product>>` to the product | `order: Order`, `product: Product` fields of a `@dataclass(eq=False)` | `readonly order: Order` and `readonly product: Product`, set once in the constructor |
+| Order contains 1..* Product | `std::vector<OrderLine>` by value | `Vec<OrderLine>` by value | `list[OrderLine]` | typed array `readonly lines: OrderLine[] = []` |
+| places, two-way | `std::vector<Order*>` plus `Customer* customer` | `Vec<Rc<..>>` plus `Option<Weak<RefCell<Customer>>>`; `places` and `contains` are associated functions taking `this: &Rc<..>` because the back link needs the `Rc` | list plus `Optional[Customer]` | `readonly orders: Order[]` plus the union field `customer: Customer` or `null` |
+| Stock and cost updates through a link | write through the pointer | `p.borrow_mut().Units_in_Stock -= qty` | attribute assignment | field assignment; `Units_in_Stock` and `ProductOrderCost` are the only fields without `readonly`, which is exactly the set `contains` changes |
 | Money columns | `std::fixed`, `setprecision(2)`, `setw(9)` | `{:>9.2}` | `f"{x:>9.2f}"` | `x.toFixed(2).padStart(9)` |
 | Attributes the figure lists but `main` never reads (`C_Phone`, `P_Manufacturer`) | No warning | `#![allow(dead_code)]`, otherwise `rustc` warns about unread fields | No warning | No warning |
 
@@ -312,6 +313,6 @@ Diagram element to code, where the four languages differ:
 
 <Notebook />
 
-- Question 19: `student_registration.cpp`, `.rs`, `.py` and `.js`, six classes of figure 1.15 with every attribute, operation and association end, the enrol constraint enforced, run output attached (identical in all four languages)
-- Question 20: `customer_order.cpp`, `.rs`, `.py` and `.js`, Customer, Order, Product and the `OrderLine` association class of figure 1.18, run output attached (identical in all four languages)
+- Question 19: `student_registration.cpp`, `.rs`, `.py` and `.ts`, six classes of figure 1.15 with every attribute, operation and association end, the enrol constraint enforced, run output attached (identical in all four languages)
+- Question 20: `customer_order.cpp`, `.rs`, `.py` and `.ts`, Customer, Order, Product and the `OrderLine` association class of figure 1.18, run output attached (identical in all four languages)
 - Problem description and assumptions for both figures, plus a diagram-element table for each

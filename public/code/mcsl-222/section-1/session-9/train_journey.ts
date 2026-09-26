@@ -1,45 +1,60 @@
-// train_journey.js -- MCSL-222 Session 9, Q21
-// Figure 1.16 (Train Journey -- Train) in Node.js, no dependencies, as a
+// train_journey.ts -- MCSL-222 Session 9, Q21
+// Figure 1.16 (Train Journey -- Train) in TypeScript, no dependencies, as a
 // TWO-WAY association: TrainJourney.assignedTrain (0..1) and Train.assignedJourny (0..*).
-// Run: node train_journey.js
+// Run: node train_journey.ts   (Node 22.18 or later strips the types itself)
 "use strict";
 
+// Both boxes in the figure carry a Train_No; the getters compare against it.
+interface TrainNumbered {
+  readonly Train_No: number;
+}
+
+function isTrain(x: TrainNumbered, train_no: number): boolean { return train_no === x.Train_No; }
+
 // -------------------------------------------------------- TrainJourney
-class TrainJourney {
-  constructor(src, dst, hours) {
-    this.Train_No = 0;
+class TrainJourney implements TrainNumbered {
+  Train_No: number = 0;
+  Source_St: string;
+  Destination_St: string;
+  readonly Journy_Time: number;
+  assignedTrain: Train | null = null; // role assignedTrain, multiplicity 0..1
+
+  constructor(src: string, dst: string, hours: number) {
     this.Source_St = src;
     this.Destination_St = dst;
     this.Journy_Time = hours;
-    this.assignedTrain = null; // role assignedTrain, multiplicity 0..1
   }
 
-  Set_Source_St(source) { this.Source_St = source; }
-  Set_Dastination_St(destination) { this.Destination_St = destination; }
+  Set_Source_St(source: string): void { this.Source_St = source; }
+  Set_Dastination_St(destination: string): void { this.Destination_St = destination; }
   // The figure passes Train_No to the getters, so they answer only for
   // the train this journey is assigned to.
-  Get_Source_St(train_no) { return train_no === this.Train_No ? this.Source_St : "(not this train)"; }
-  Get_Journy_Time(train_no) { return train_no === this.Train_No ? this.Journy_Time : -1; }
+  Get_Source_St(train_no: number): string { return isTrain(this, train_no) ? this.Source_St : "(not this train)"; }
+  Get_Journy_Time(train_no: number): number { return isTrain(this, train_no) ? this.Journy_Time : -1; }
 }
 
 // --------------------------------------------------------------- Train
-class Train {
-  constructor(no, type, speed) {
+class Train implements TrainNumbered {
+  readonly Train_No: number;
+  Train_Type: string;
+  readonly Max_Speed: number;
+  readonly assignedJourny: TrainJourney[] = []; // role assignedJourny, multiplicity 0..*
+
+  constructor(no: number, type: string, speed: number) {
     this.Train_No = no;
     this.Train_Type = type;
     this.Max_Speed = speed;
-    this.assignedJourny = []; // role assignedJourny, multiplicity 0..*
   }
 
-  Get_Train_No() { return this.Train_No; }
-  Set_Train_Type(trtype) { this.Train_Type = trtype; }
-  Get_Train_Speed(train_no) { return train_no === this.Train_No ? this.Max_Speed : -1; }
+  Get_Train_No(): number { return this.Train_No; }
+  Set_Train_Type(trtype: string): void { this.Train_Type = trtype; }
+  Get_Train_Speed(train_no: number): number { return isTrain(this, train_no) ? this.Max_Speed : -1; }
 }
 
 // ---------------------------------------------- keeping both ends in step
 // Both ends change in one place, so a journey can never point at a train
 // that does not list it, and vice versa.
-function unassign(j) {
+function unassign(j: TrainJourney): void {
   const t = j.assignedTrain;
   if (t !== null) {
     t.assignedJourny.splice(t.assignedJourny.indexOf(j), 1);
@@ -48,7 +63,7 @@ function unassign(j) {
   }
 }
 
-function assign(t, j) {
+function assign(t: Train, j: TrainJourney): void {
   unassign(j); // a journey has at most one train (0..1)
   j.assignedTrain = t;
   j.Train_No = t.Train_No;
@@ -56,14 +71,14 @@ function assign(t, j) {
 }
 
 // ---------------------------------------------------------------- main
-function printTrain(t) {
+function printTrain(t: Train): void {
   console.log(`Train ${t.Get_Train_No()} (${t.Train_Type}, ${t.Max_Speed} km/h) runs ${t.assignedJourny.length} journey(s)`);
   for (const j of t.assignedJourny) {
     console.log(`  ${j.Source_St} -> ${j.Destination_St}, ${j.Journy_Time} h, Train_No stored in journey = ${j.Train_No}`);
   }
 }
 
-function main() {
+function main(): void {
   const rajdhani = new Train(12951, "Rajdhani", 130.0);
   const shatabdi = new Train(12009, "Shatabdi", 150.0);
 
@@ -87,7 +102,8 @@ function main() {
   console.log(`j3.Get_Source_St(12951) = ${j3.Get_Source_St(12951)}`);
   console.log(`j3.Get_Journy_Time(12009) = ${j3.Get_Journy_Time(12009)}`);
   console.log(`shatabdi.Get_Train_Speed(12009) = ${shatabdi.Get_Train_Speed(12009)}`);
-  console.log(`j1.assignedTrain->Train_Type = ${j1.assignedTrain.Train_Type}`);
+  // assignedTrain is `Train | null`; `!` tells the checker j1 is assigned here.
+  console.log(`j1.assignedTrain->Train_Type = ${j1.assignedTrain!.Train_Type}`);
 
   console.log("--- move j2 to the Shatabdi (0..1 keeps only one train) ---");
   assign(shatabdi, j2);

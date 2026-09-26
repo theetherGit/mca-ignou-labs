@@ -29,7 +29,7 @@ Associations carry the interesting decisions: which side holds the reference, wh
 <Explain />
 
 - The manual asks for a problem description of 300 to 500 words and a list of assumptions before every diagram. Write both first; they fix the scope the evaluator marks you against.
-- The manual says C++ or Java. Every program here is given in C++, Rust, Python and Node.js, and any of the four is acceptable in the lab; use the language you chose in Session 8.
+- The manual says C++ or Java. Every program here is given in C++, Rust, Python and TypeScript, and any of the four is acceptable in the lab; use the language you chose in Session 8.
 - Decide navigability: one-way associations need a reference on one side only; two-way ones need both plus code to keep them consistent.
 - An association class (OrderLine style) becomes its own class holding references to both ends.
 
@@ -87,7 +87,7 @@ Every journey in a train's vector points back at that train, and no journey is i
 1. Save the listing below as `train_journey.cpp` in a `session-9` folder.
 2. Compile: `clang++ -std=c++17 -Wall -Wextra -o train_journey train_journey.cpp`.
 3. Run `./train_journey` and paste the output.
-4. For another language, save the matching tab and run it: `rustc -O --edition 2021 train_journey.rs && ./train_journey`, `python3 train_journey.py`, or `node train_journey.js` (Node 22 or later).
+4. For another language, save the matching tab and run it: `rustc -O --edition 2021 train_journey.rs && ./train_journey`, `python3 train_journey.py`, or `node train_journey.ts` (Node 22.18 or later strips the types natively, no compiler needed).
 
 #### Program
 
@@ -107,8 +107,8 @@ Every journey in a train's vector points back at that train, and no journey is i
 
 ```
 </TabItem>
-<TabItem label="Node.js">
-```js title="train_journey.js" file=<rootDir>/public/code/mcsl-222/section-1/session-9/train_journey.js
+<TabItem label="TypeScript">
+```ts title="train_journey.ts" file=<rootDir>/public/code/mcsl-222/section-1/session-9/train_journey.ts
 
 ```
 </TabItem>
@@ -155,11 +155,12 @@ j3.assignedTrain is nullptr, shatabdi lists 1 journey(s)
 
 Diagram element to code, where the four languages differ:
 
-| Element | C++ | Rust | Python | Node.js |
+| Element | C++ | Rust | Python | TypeScript |
 | --- | --- | --- | --- | --- |
-| assignedTrain, `0..1` | `Train* assignedTrain = nullptr` | `Option<Weak<RefCell<Train>>>`; `Weak` because the train already holds an `Rc` to the journey, and a `train()` helper upgrades it | `Optional[Train] = None` | `this.assignedTrain = null` |
-| assignedJourny, `0..*` | `std::vector<TrainJourney*>` | `Vec<Rc<RefCell<TrainJourney>>>` | `list[TrainJourney]` | array |
-| `assign` and `unassign` | free functions writing through pointers | free functions taking `&Rc<..>` and using `borrow_mut()` on both ends | free functions | free functions |
+| assignedTrain, `0..1` | `Train* assignedTrain = nullptr` | `Option<Weak<RefCell<Train>>>`; `Weak` because the train already holds an `Rc` to the journey, and a `train()` helper upgrades it | `Optional[Train] = None` | union field `assignedTrain: Train` or `null`, starting as `null`; `main` writes `j1.assignedTrain!` where it knows the link is set |
+| assignedJourny, `0..*` | `std::vector<TrainJourney*>` | `Vec<Rc<RefCell<TrainJourney>>>` | `list[TrainJourney]` | typed array `readonly assignedJourny: TrainJourney[] = []` |
+| `assign` and `unassign` | free functions writing through pointers | free functions taking `&Rc<..>` and using `borrow_mut()` on both ends | free functions | typed free functions, `assign(t: Train, j: TrainJourney): void` |
+| `Train_No` drawn in both boxes | plain member in each class | plain field in each struct | plain field in each class | `interface TrainNumbered` implemented by both classes; the `isTrain` helper the getters call accepts either |
 | Removing the journey in `unassign` | `std::remove` then `erase` | `retain` with `Rc::ptr_eq` | `list.remove` (identity, `eq=False`) | `splice(indexOf(j), 1)` |
 | Printing `Max_Speed` and `Journy_Time` as `130` and `15.5` | default stream format | `{}` prints `130` and `15.5` | `print(130.0)` would give `130.0`, so a one-line helper `g(x)` returns `f"{x:g}"` | template literal prints `130` |
 
@@ -213,7 +214,7 @@ Pointers after the two `addAccount` calls in `main`:
 1. Save the listing below as `person_account.cpp` in the `session-9` folder.
 2. Compile: `clang++ -std=c++17 -Wall -Wextra -o person_account person_account.cpp`.
 3. Run `./person_account` and paste the output.
-4. For another language, save the matching tab and run it: `rustc -O --edition 2021 person_account.rs && ./person_account`, `python3 person_account.py`, or `node person_account.js`.
+4. For another language, save the matching tab and run it: `rustc -O --edition 2021 person_account.rs && ./person_account`, `python3 person_account.py`, or `node person_account.ts`.
 
 #### Program
 
@@ -233,8 +234,8 @@ Pointers after the two `addAccount` calls in `main`:
 
 ```
 </TabItem>
-<TabItem label="Node.js">
-```js title="person_account.js" file=<rootDir>/public/code/mcsl-222/section-1/session-9/person_account.js
+<TabItem label="TypeScript">
+```ts title="person_account.ts" file=<rootDir>/public/code/mcsl-222/section-1/session-9/person_account.ts
 
 ```
 </TabItem>
@@ -273,11 +274,11 @@ Check by hand: `5000 + 1500 = 6500` on the savings account, `12000 - 2000 = 1000
 
 Diagram element to code, where the four languages differ:
 
-| Element | C++ | Rust | Python | Node.js |
+| Element | C++ | Rust | Python | TypeScript |
 | --- | --- | --- | --- | --- |
-| Person has `*` BankAccount | `std::vector<BankAccount*>` | `Vec<Rc<RefCell<BankAccount>>>`; `Person` itself is a plain struct because nothing links back to it | `list[BankAccount]` | array |
-| Credit and Withdraw changing the balance | member function on the object | `savings.borrow_mut().Credit(1500.0)`: the account is shared with `Person`, so mutation goes through the `RefCell` | method | method |
-| What the commented `savings.owner` line would do | compile error | compile error | `AttributeError` at run time | `TypeError` at run time, `owner` is `undefined` |
+| Person has `*` BankAccount | `std::vector<BankAccount*>` | `Vec<Rc<RefCell<BankAccount>>>`; `Person` itself is a plain struct because nothing links back to it | `list[BankAccount]` | typed array `readonly accounts: BankAccount[] = []` |
+| Credit and Withdraw changing the balance | member function on the object | `savings.borrow_mut().Credit(1500.0)`: the account is shared with `Person`, so mutation goes through the `RefCell` | method | typed method `Credit(amount: number): void`; `Acc_Balance` is the one field without `readonly` |
+| What the commented `savings.owner` line would do | compile error | compile error | `AttributeError` at run time | `tsc` error, `owner` is not a property of `BankAccount`; a bare `node` run strips types without checking and throws `TypeError` at run time |
 | `totalBalance` | loop | `iter().map(..).sum()` | `sum(generator)` | `reduce` |
 | Money format | `std::fixed`, `setprecision(2)` | `{:.2}` | `f"{x:.2f}"` | `toFixed(2)` |
 
@@ -313,6 +314,6 @@ Diagram element to code, where the four languages differ:
 
 <Notebook />
 
-- Question 21: `train_journey.cpp`, `.rs`, `.py` and `.js`, two-way TrainJourney to Train association with `assign` and `unassign` keeping both ends in step, run output attached (identical in all four languages)
-- Question 22: `person_account.cpp`, `.rs`, `.py` and `.js`, one-way Person to BankAccount association with guarded `Credit` and `Withdraw`, run output attached (identical in all four languages)
+- Question 21: `train_journey.cpp`, `.rs`, `.py` and `.ts`, two-way TrainJourney to Train association with `assign` and `unassign` keeping both ends in step, run output attached (identical in all four languages)
+- Question 22: `person_account.cpp`, `.rs`, `.py` and `.ts`, one-way Person to BankAccount association with guarded `Credit` and `Withdraw`, run output attached (identical in all four languages)
 - Problem description and assumptions for both figures, plus a diagram-element table for each
