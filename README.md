@@ -31,30 +31,28 @@ To run the lab exercises locally, ensure you have the following installed:
 
 ## 💻 Site Development
 
-This site is built with SvelteKit and Velite.
+This site is built with [Nimbus](https://nimbus-docs.com) on Astro.
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) (Latest LTS)
+- [Node.js](https://nodejs.org/) 24 (see `.node-version`; `fnm use` picks it up)
 - [pnpm](https://pnpm.io/)
 
-### Installation
+### Commands
 
 ```bash
 pnpm install
+pnpm dev        # local server
+pnpm build      # static output in dist/
+pnpm lint:docs  # content lint (frontmatter, internal links)
+pnpm deploy     # Cloudflare Workers via wrangler
 ```
 
-### Development Server
+### Layout
 
-```bash
-pnpm dev
-```
-
-### Building for Production
-
-```bash
-pnpm build
-```
+- `src/content/docs/` — lab pages (MDX). Folder tree drives URLs and sidebar.
+- `public/code/` — solution files (C/Python/Rust, HTML/CSS/JS). Imported into pages with ` ```c file=<rootDir>/public/code/... ` and served as-is for iframe previews.
+- `src/components/demo/` — interactive demos (Svelte islands).
 
 ## ⚠️ Important Notice for Students
 
