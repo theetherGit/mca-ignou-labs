@@ -1,10 +1,10 @@
 /* Hallmark · macrostructure: Marquee Hero · tone: utilitarian · anchor hue: 75 (warm) · theme: custom "Ledger"
- * paper oklch(97.5% 0.012 75) · accent oklch(62% 0.19 45) · display Inter + body Inter · outlier JetBrains Mono
+ * paper oklch(97.5% 0.012 75) · accent oklch(62% 0.19 45) · display Bricolage Grotesque + body Inter · outlier JetBrains Mono
  * H1 marquee knobs: size=xxl · alignment=left-bias · underlay=single rule below
  * F1 bento knobs: tiles=9 · spans=irregular · border=hairline all
  * nav: N9 edge-aligned minimal (outlined CTA · sans wordmark · default padding) · footer: Ft5 statement (38ch · wordmark under)
  * enrichment: none · audience: IGNOU MCA distance learners · use: one idea, then every entry point
- * Hallmark · pre-emit critique: P5 H4 E4 S4 R4 V5 */
+ * promoted to / on 2026-09-26 · Hallmark · pre-emit critique: P5 H4 E5 S4 R5 V5 */
 html,
 body {
 	overflow-x: clip;
@@ -39,7 +39,8 @@ body {
 	padding: var(--space-md) 0;
 }
 .mq-brand {
-	font-weight: 650;
+	font-family: var(--font-display);
+	font-weight: 700;
 	letter-spacing: -0.01em;
 	white-space: nowrap;
 }
@@ -79,9 +80,11 @@ body {
 }
 .mq-hero h1 {
 	margin: 0;
+	font-family: var(--font-display);
 	font-size: var(--text-display-xxl);
-	font-weight: 750;
-	letter-spacing: -0.04em;
+	font-weight: 800;
+	font-variation-settings: "opsz" 96, "wdth" 90;
+	letter-spacing: -0.035em;
 	line-height: 0.92;
 	max-width: 9ch;
 	overflow-wrap: anywhere;
@@ -126,8 +129,25 @@ body {
 	min-width: 0;
 	background: var(--color-card);
 }
-.mq-cell.is-link:hover {
+.mq-cell.is-link {
+	transition: border-color var(--dur-micro) var(--ease-out);
+}
+.mq-cell.is-link:hover,
+.mq-cell.is-link:focus-visible {
 	border-color: var(--color-ink);
+}
+.mq-cell.is-link:active {
+	transform: translateY(1px);
+}
+@media (prefers-reduced-motion: reduce) {
+	.mq-cell.is-link,
+	.mq-cta {
+		transition-duration: 150ms;
+	}
+	.mq-cell.is-link:active,
+	.mq-cta:active {
+		transform: none;
+	}
 }
 .mq-cell.is-link:hover .mq-cell-title {
 	color: var(--color-accent-hover);
@@ -139,8 +159,10 @@ body {
 	margin: 0;
 }
 .mq-cell-title {
-	font-size: var(--text-lg);
-	font-weight: 650;
+	font-family: var(--font-display);
+	font-size: var(--text-xl);
+	font-weight: 700;
+	font-variation-settings: "opsz" 24;
 	letter-spacing: -0.01em;
 	line-height: var(--leading-snug);
 	margin: 0;
@@ -210,8 +232,10 @@ body {
 }
 .mq-foot-line {
 	margin: 0;
+	font-family: var(--font-display);
 	font-size: var(--text-3xl);
-	font-weight: 700;
+	font-weight: 800;
+	font-variation-settings: "opsz" 96;
 	letter-spacing: -0.03em;
 	line-height: 1.05;
 	max-width: 22ch;
