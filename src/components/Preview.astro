@@ -1,0 +1,27 @@
+---
+/**
+ * Live preview of a solution HTML file served from public/code, with an
+ * escape hatch to open it full-size in a new tab.
+ *
+ *   <Preview src="/code/mcs-216/section-2/session-7/1.html" height="300px" />
+ */
+interface Props {
+  src: string;
+  height?: string;
+  title?: string;
+}
+const { src, height = "300px", title = "Working preview" } = Astro.props;
+---
+<figure class="my-5 no-print">
+  <iframe
+    src={src}
+    title={title}
+    width="100%"
+    height={height}
+    loading="lazy"
+    class="rounded-xl border border-border bg-white"
+  ></iframe>
+  <figcaption class="mt-1 flex justify-end text-xs text-muted-foreground">
+    <a href={src} target="_blank" rel="noopener" class="hover:text-foreground">Open in new tab ↗</a>
+  </figcaption>
+</figure>

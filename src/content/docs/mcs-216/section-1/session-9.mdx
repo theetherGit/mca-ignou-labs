@@ -4,11 +4,6 @@ description: Floyd and Warshall's Algorithm for All Pair Shortest Path Algorithm
 sidebar:
   order: 9
 ---
-
-
-
-<PrintButton />
-
 This session is about finding shortest paths between every pair of vertices in a graph. Unlike Dijkstra's algorithm, which starts from one source, Floyd-Warshall works with a distance matrix and gradually improves every source-destination pair.
 
 ## Objectives
@@ -184,21 +179,23 @@ The shortest path from Node 1 to Node 4 is 1.
 
 ### Implementation
 
-### Python
-```python title="floud-warshall-algorithm.py" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-9/1/1.py 
+<Tabs syncKey="lang">
+<TabItem label="Python">
+```python title="floyd-warshall-algorithm.py" file=<rootDir>/public/code/mcs-216/section-1/session-9/1/1.py 
 
 ```
-
-### C Language
-```c title="floud-warshall-algorithm.c" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-9/1/1.c 
-
-```
-
-### Rust
-```rust title="floud-warshall-algorithm.rs" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-9/1/1.rs
+</TabItem>
+<TabItem label="C">
+```c title="floyd-warshall-algorithm.c" file=<rootDir>/public/code/mcs-216/section-1/session-9/1/1.c 
 
 ```
+</TabItem>
+<TabItem label="Rust">
+```rust title="floyd-warshall-algorithm.rs" file=<rootDir>/public/code/mcs-216/section-1/session-9/1/1.rs
 
+```
+</TabItem>
+</Tabs>
 
 ## Question 2
 
@@ -239,7 +236,6 @@ D^{(0)} = \begin{bmatrix}
 \infty & \infty & 16 & 8 & 0
 \end{bmatrix}
 $$
-
 
 ### Floyd-Warshall Iterations
 
@@ -355,20 +351,23 @@ $$
 
 ### Implementation
 
-### Python
-```python title="floud-warshall-algorithm.py" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-9/2/2.py 
+<Tabs syncKey="lang">
+<TabItem label="Python">
+```python title="floyd-warshall-algorithm.py" file=<rootDir>/public/code/mcs-216/section-1/session-9/2/2.py 
 
 ```
-
-### C Language
-```c title="floud-warshall-algorithm.c" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-9/2/2.c 
-
-```
-
-### Rust
-```rust title="floud-warshall-algorithm.rs" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-9/2/2.rs
+</TabItem>
+<TabItem label="C">
+```c title="floyd-warshall-algorithm.c" file=<rootDir>/public/code/mcs-216/section-1/session-9/2/2.c 
 
 ```
+</TabItem>
+<TabItem label="Rust">
+```rust title="floyd-warshall-algorithm.rs" file=<rootDir>/public/code/mcs-216/section-1/session-9/2/2.rs
+
+```
+</TabItem>
+</Tabs>
 
 ## Question 3
 
@@ -387,19 +386,21 @@ This algorithm works by iteratively improving the estimate of the shortest path 
 - For every pair of nodes `(i, j)`, check if the path` i -> k -> j` is shorter than the current known path `i -> j`.
 - Update `dist[i][j]` if a shorter path is found.
 
-### Python
-```python title="floud-warshall-algorithm.py" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-9/3/3.py 
+<Tabs syncKey="lang">
+<TabItem label="Python">
+```python title="floyd-warshall-algorithm.py" file=<rootDir>/public/code/mcs-216/section-1/session-9/3/3.py 
 
 ```
-
-### C Language
-```c title="floud-warshall-algorithm.c" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-9/3/3.c 
-
-```
-
-### Rust
-```rust title="floud-warshall-algorithm.rs" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-9/3/3.rs
+</TabItem>
+<TabItem label="C">
+```c title="floyd-warshall-algorithm.c" file=<rootDir>/public/code/mcs-216/section-1/session-9/3/3.c 
 
 ```
+</TabItem>
+<TabItem label="Rust">
+```rust title="floyd-warshall-algorithm.rs" file=<rootDir>/public/code/mcs-216/section-1/session-9/3/3.rs
 
+```
+</TabItem>
+</Tabs>
 

@@ -10,14 +10,9 @@ import Question2 from "../../../../components/demo/mcs-216/section-2/session-5/2
 import Question3 from "../../../../components/demo/mcs-216/section-2/session-5/3.svelte";
 import Question4 from "../../../../components/demo/mcs-216/section-2/session-5/4.svelte";
 
-
-
-<PrintButton />
-
 In Session 4, you learned how to access and manipulate HTML elements using the DOM. Session 5 builds upon this foundation by introducing DOM Events, which enable web pages to react dynamically to user actions and browser occurrences. Events are the bridge between static HTML and interactive JavaScript, allowing scripts to execute in response to triggers like mouse clicks, page loads, keyboard input, or form submissions.
 
 This session shifts focus from inline event attributes (e.g., `onclick="func()"`) to the modern, standardized Event Listener API. You will learn how to attach, manage, and remove event handlers using `addEventListener()` and `removeEventListener()`, understand event propagation (bubbling vs. capturing), and implement multiple independent listeners on a single element. By the end of this session, you will be able to design responsive, event-driven web interfaces while maintaining clean separation between HTML structure and JavaScript behavior.
-
 
 ## Objectives
 
@@ -137,7 +132,6 @@ el.addEventListener("submit", function(e) { e.preventDefault(); });
     See Examples in Lab manual. It covers all the main methods mentioned above.
 </Aside>
 
-
 <Aside type="caution" title="Alert">
     If you see a alert message on screen after a scroll to question 2 please ignore that. It's part of it.
 </Aside>
@@ -160,7 +154,7 @@ Figure 2: _Show Date & Time below submit button_
 
 ### Code
 
-```html title="date.html" showLineNumbers file=<rootDir>/public/code/mcs-216/section-2/session-5/1.html
+```html title="date.html" file=<rootDir>/public/code/mcs-216/section-2/session-5/1.html
 
 ```
 
@@ -176,7 +170,7 @@ Design an HTML page to shown that, when this page is loaded it must check the co
 
 ### Code
 
-```html title="color-change.html" showLineNumbers file=<rootDir>/public/code/mcs-216/section-2/session-5/2.html
+```html title="color-change.html" file=<rootDir>/public/code/mcs-216/section-2/session-5/2.html
 
 ```
 
@@ -192,7 +186,7 @@ Whenever user input a text in the text box in any case (i.e. upper or lower case
 
 ### Code
 
-```html title="onchange.html" showLineNumbers file=<rootDir>/public/code/mcs-216/section-2/session-5/3.html
+```html title="onchange.html" file=<rootDir>/public/code/mcs-216/section-2/session-5/3.html
 
 ```
 
@@ -208,6 +202,6 @@ Design HTML page to implement HTML DOM events by changing an image on the follow
 
 ### Code
 
-```html title="image-mouse-event.html" showLineNumbers file=<rootDir>/public/code/mcs-216/section-2/session-5/4.html
+```html title="image-mouse-event.html" file=<rootDir>/public/code/mcs-216/section-2/session-5/4.html
 
 ```

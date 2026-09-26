@@ -556,8 +556,42 @@ body:not(:has([data-mobile-sidebar])) [data-menu-btn] {
 	}
 }
 
+/* Print: only the page content, full width, code wrapped. */
 @media print {
-	.no-print {
+	header,
+	#desktop-sidebar,
+	[data-nb-toc-scroll-host],
+	[data-mobile-sidebar-panel],
+	nav[aria-label="Breadcrumb"],
+	nav[aria-label="Breadcrumbs"],
+	.no-print,
+	.aside-card[data-ai-agent-directive] {
 		display: none !important;
 	}
+	main#main-content > div {
+		max-width: none !important;
+		padding: 0 !important;
+	}
+	pre.astro-code {
+		white-space: pre-wrap !important;
+		word-break: break-word;
+	}
+	a[href]::after {
+		content: none !important;
+	}
+}
+
+/* Line numbers on every code block (solution files are long; students cite lines). */
+.docs-content pre.astro-code code {
+	counter-reset: line;
+}
+.docs-content pre.astro-code .line::before {
+	counter-increment: line;
+	content: counter(line);
+	display: inline-block;
+	width: 2.5ch;
+	margin-right: 1.5ch;
+	text-align: right;
+	color: var(--nb-muted-foreground);
+	user-select: none;
 }

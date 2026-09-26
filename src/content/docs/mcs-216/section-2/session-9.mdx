@@ -10,10 +10,6 @@ import Question1 from "../../../../components/demo/mcs-216/section-2/session-9/1
 import Question2 from "../../../../components/demo/mcs-216/section-2/session-9/2.svelte";
 import Question3 from "../../../../components/demo/mcs-216/section-2/session-9/3.svelte";
 
-
-
-<PrintButton />
-
 JavaScript is inherently a **single-threaded, synchronous language**, meaning it executes code line-by-line from top to bottom. However, modern web applications frequently require tasks that take time to complete (e.g., fetching data from a server, waiting for user input, or running timers). If JavaScript waited for these tasks to finish before moving to the next line, the entire browser UI would freeze. This session introduces **Asynchronous Programming**, which allows JavaScript to initiate a long-running task, continue executing other code, and handle the result later using **callbacks**. This session covers the foundational async patterns required for responsive, non-blocking web applications.
 
 ## Objectives
@@ -128,22 +124,13 @@ Implement a clock in HTML which shows the live time in the format `HH:MM:SS`. Us
 
 ### Code
 
-```html title="time.html" showLineNumbers file=<rootDir>/public/code/mcs-216/section-2/session-9/1.html
+```html title="time.html" file=<rootDir>/public/code/mcs-216/section-2/session-9/1.html
 
 ```
 
-
 #### HTML View
 
-<iframe
-  id="preview-1"
-  title="demo-q-1"
-  width="100%"
-  height="300px"
-  class="mt-5 rounded-xl"
-  src="/code/mcs-216/section-2/session-9/1.html">
-</iframe>
-
+<Preview src="/code/mcs-216/section-2/session-9/1.html" height="300px" />
 
 ## Question 2
 
@@ -157,27 +144,17 @@ Sometimes we use external resource files in our HTML page. The content of an ext
 
 ### Code
 
-```html title="request.html" showLineNumbers file=<rootDir>/public/code/mcs-216/section-2/session-9/2.html
+```html title="request.html" file=<rootDir>/public/code/mcs-216/section-2/session-9/2.html
 
 ```
 
-
-```html title="external.html" showLineNumbers file=<rootDir>/public/code/mcs-216/section-2/session-9/external.html
+```html title="external.html" file=<rootDir>/public/code/mcs-216/section-2/session-9/external.html
 
 ```
-
 
 #### HTML View
 
-<iframe
-  id="preview-2"
-  title="demo-q-2"
-  width="100%"
-  height="300px"
-  class="mt-5 rounded-xl"
-  src="/code/mcs-216/section-2/session-9/2.html">
-</iframe>
-
+<Preview src="/code/mcs-216/section-2/session-9/2.html" height="300px" />
 
 ## Question 3
 
@@ -194,18 +171,10 @@ Write an async function locateScalpel that does this, starting at the nest on wh
 
 ### Code
 
-```html title="scalpel.html" showLineNumbers file=<rootDir>/public/code/mcs-216/section-2/session-9/3.html
+```html title="scalpel.html" file=<rootDir>/public/code/mcs-216/section-2/session-9/3.html
 
 ```
 
-
 #### HTML View
 
-<iframe
-  id="preview-3"
-  title="demo-q-3"
-  width="100%"
-  height="250px"
-  class="mt-5 rounded-xl"
-  src="/code/mcs-216/section-2/session-9/3.html">
-</iframe>
+<Preview src="/code/mcs-216/section-2/session-9/3.html" height="250px" />

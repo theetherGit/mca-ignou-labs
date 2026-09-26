@@ -4,11 +4,6 @@ description: Task Scheduling Algorithms
 sidebar:
   order: 3
 ---
-
-
-
-<PrintButton />
-
 A task scheduling problem is formulated as an optimization problem which in which we need to determine the set of tasks from the given tasks that can ve accomplished withintheir deadlines along with their order of scheduling such that the profilt is maximum. So, this is a maximixation optimization problem with a constraint that tasks must be completed within their deadlines.
 
 ## Objective 
@@ -38,20 +33,23 @@ The total time spent in jobs by the system is the sum of the finishing times of 
 
 ### Implementation
 
-### Python
-```python title="task-scheduling.py" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-3/1/1.py 
+<Tabs syncKey="lang">
+<TabItem label="Python">
+```python title="task-scheduling.py" file=<rootDir>/public/code/mcs-216/section-1/session-3/1/1.py 
 
 ```
-
-### C Language
-```c title="task-scheduling.c" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-3/1/1.c 
-
-```
-
-### Rust
-```rust title="task-scheduling.rs" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-3/1/1.rs
+</TabItem>
+<TabItem label="C">
+```c title="task-scheduling.c" file=<rootDir>/public/code/mcs-216/section-1/session-3/1/1.c 
 
 ```
+</TabItem>
+<TabItem label="Rust">
+```rust title="task-scheduling.rs" file=<rootDir>/public/code/mcs-216/section-1/session-3/1/1.rs
+
+```
+</TabItem>
+</Tabs>
 
 ## Question 2
 
@@ -80,20 +78,23 @@ The total time spent in the system can be calculated as follows:
 
 ### Implementation
 
-### Python
-```python title="task-scheduling.py" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-3/2/2.py 
+<Tabs syncKey="lang">
+<TabItem label="Python">
+```python title="task-scheduling.py" file=<rootDir>/public/code/mcs-216/section-1/session-3/2/2.py 
 
 ``` 
-
-### C Language
-```c title="task-scheduling.c" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-3/2/2.c 
-
-```
-
-### Rust
-```rust title="task-scheduling.rs" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-3/2/2.rs
+</TabItem>
+<TabItem label="C">
+```c title="task-scheduling.c" file=<rootDir>/public/code/mcs-216/section-1/session-3/2/2.c 
 
 ```
+</TabItem>
+<TabItem label="Rust">
+```rust title="task-scheduling.rs" file=<rootDir>/public/code/mcs-216/section-1/session-3/2/2.rs
+
+```
+</TabItem>
+</Tabs>
 
 ## Question 3
 
@@ -126,20 +127,23 @@ To maximize the total profits while scheduling jobs with deadlines, we can use a
 
 ### Implementation
 
-### Python
-```python title="task-scheduling.py" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-3/3/3.py 
+<Tabs syncKey="lang">
+<TabItem label="Python">
+```python title="task-scheduling.py" file=<rootDir>/public/code/mcs-216/section-1/session-3/3/3.py 
 
 ```
-
-### C Language
-```c title="task-scheduling.c" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-3/3/3.c 
-
-```
-
-### Rust
-```rust title="task-scheduling.rs" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-3/3/3.rs
+</TabItem>
+<TabItem label="C">
+```c title="task-scheduling.c" file=<rootDir>/public/code/mcs-216/section-1/session-3/3/3.c 
 
 ```
+</TabItem>
+<TabItem label="Rust">
+```rust title="task-scheduling.rs" file=<rootDir>/public/code/mcs-216/section-1/session-3/3/3.rs
+
+```
+</TabItem>
+</Tabs>
 
 ## Conclusion
 In this session, we have explored various task scheduling algorithms and their implementations. We have seen how to apply a brute force approach to schedule jobs and calculate the total time spent in the system. We also implemented the Shortest Job First (SJF) algorithm to minimize the total time spent in the system and a greedy approach to maximize profits while scheduling jobs with deadlines. These algorithms are fundamental in understanding how to efficiently manage tasks in various applications, such as operating systems, project management, and manufacturing processes.

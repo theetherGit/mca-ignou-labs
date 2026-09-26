@@ -4,11 +4,6 @@ description: Chained Matrix Multiplication
 sidebar:
   order: 10
 ---
-
-
-
-<PrintButton />
-
 This session explains why the order of multiplying matrices matters. Matrix multiplication is associative, so the final result is the same for any valid parenthesization, but the number of scalar multiplications can change drastically.
 
 ## Objectives
@@ -113,7 +108,6 @@ Minimum scalar multiplication cost: 1,320
 
 Any other parenthesization forces a larger inner dimension to be multiplied earlier, drastically increasing the total operation count (the worst valid order requires **13,200** operations, exactly `10×` more).
 
-
 ## Question 3
 
 ### Problem Statement
@@ -131,29 +125,32 @@ Implement chained matrix multiplication and print the optimal parentheses. Study
 
 ### Implementation
 
-### Python
-```python title="floud-warshall-algorithm.py" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-10/3/3.py 
+<Tabs syncKey="lang">
+<TabItem label="Python">
+```python title="matrix-chain-multiplication.py" file=<rootDir>/public/code/mcs-216/section-1/session-10/3/3.py 
 
 ```
 
 #### Practical Limits
 - Overhead of list-of-lists and interpreter slows n > 300. Use numpy arrays or lru_cache for memoization if recursion is preferred.
-
-### C Language
-```c title="floud-warshall-algorithm.c" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-10/3/3.c 
+</TabItem>
+<TabItem label="C">
+```c title="matrix-chain-multiplication.c" file=<rootDir>/public/code/mcs-216/section-1/session-10/3/3.c 
 
 ```
 
 #### Practical Limits
 - Manual allocation is fastest. For n > 1000, consider 1D flattened arrays m[i*n + j] to improve cache locality.
-
-### Rust
-```rust title="floud-warshall-algorithm.rs" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-10/3/3.rs
+</TabItem>
+<TabItem label="Rust">
+```rust title="matrix-chain-multiplication.rs" file=<rootDir>/public/code/mcs-216/section-1/session-10/3/3.rs
 
 ```
 
 #### Practical Limits
 - Zero-cost abstractions make it ~2-5× faster than Python. For extreme n, replace `Vec<Vec<>>` with vec![0u64; n*n] and compute index i*n + j.
+</TabItem>
+</Tabs>
 
 #### Sample Output
 

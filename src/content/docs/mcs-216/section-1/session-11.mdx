@@ -4,11 +4,6 @@ description: Optimal Binary Search Tree
 sidebar:
   order: 11
 ---
-
-
-
-<PrintButton />
-
 This session covers the optimal binary search tree problem. A normal binary search tree only depends on key order, but an optimal BST also considers how frequently each key is searched so that the expected search cost is minimized.
 
 ## Objectives
@@ -41,7 +36,6 @@ Determine the cost and structure of an optimal binary search tree for a set of `
 |---|---|---|---|---|---|---|---|---|
 | $p_i$ | | 0.04 | 0.06 | 0.08 | 0.02 | 0.10 | 0.12 | 0.14 |
 | $q_i$ | 0.06 | 0.06 | 0.06 | 0.06 | 0.05 | 0.05 | 0.05 | 0.05 |
-
 
 ### Explanation
 
@@ -104,20 +98,23 @@ Starting from root[1][7] = 5, we recursively find subtrees:
 
 ### Implementation
 
-### Python
-```python title="binary-search.py" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-11/1/1.py 
+<Tabs syncKey="lang">
+<TabItem label="Python">
+```python title="binary-search.py" file=<rootDir>/public/code/mcs-216/section-1/session-11/1/1.py 
 
 ```
-
-### C Language
-```c title="binary-search.c" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-11/1/1.c 
-
-```
-
-### Rust
-```rust title="binary-search.rs" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-11/1/1.rs
+</TabItem>
+<TabItem label="C">
+```c title="binary-search.c" file=<rootDir>/public/code/mcs-216/section-1/session-11/1/1.c 
 
 ```
+</TabItem>
+<TabItem label="Rust">
+```rust title="binary-search.rs" file=<rootDir>/public/code/mcs-216/section-1/session-11/1/1.rs
+
+```
+</TabItem>
+</Tabs>
 
 ### Sample Output
 
@@ -242,20 +239,23 @@ We use three $O(n^2)$ tables:
 
 ### Implementation
 
-### Python
-```python title="binary-search.py" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-11/2/2.py 
+<Tabs syncKey="lang">
+<TabItem label="Python">
+```python title="binary-search.py" file=<rootDir>/public/code/mcs-216/section-1/session-11/2/2.py 
 
 ```
-
-### C Language
-```c title="binary-search.c" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-11/2/2.c 
-
-```
-
-### Rust
-```rust title="binary-search.rs" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-11/2/2.rs
+</TabItem>
+<TabItem label="C">
+```c title="binary-search.c" file=<rootDir>/public/code/mcs-216/section-1/session-11/2/2.c 
 
 ```
+</TabItem>
+<TabItem label="Rust">
+```rust title="binary-search.rs" file=<rootDir>/public/code/mcs-216/section-1/session-11/2/2.rs
+
+```
+</TabItem>
+</Tabs>
 
 ### Sample Output
 
@@ -275,7 +275,6 @@ R -> k2 (p=0.10)
             R -> d4 (q=0.05)
         R -> d5 (q=0.10)
 ```
-
 
 ## Question 3
 

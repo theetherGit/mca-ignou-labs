@@ -4,11 +4,6 @@ description: Minimum Cost Spanning Tree
 sidebar:
   order: 7
 ---
-
-
-
-<PrintButton />
-
 This session is about building a minimum cost spanning tree from a connected, undirected weighted graph. A spanning tree connects all vertices without forming a cycle, and the minimum cost spanning tree chooses the set of edges whose total weight is as small as possible.
 
 ## Objectives
@@ -55,7 +50,6 @@ Prim's algorithm is a greedy algorithm that builds the MST incrementally:
 Space Complexity: O(V + E)
 Time Complexity: O(E log V) with priority queue, O(V²) with array scan.
 
-
 ### Execution Steps
 | Step | Added | Edge     | Weight | Cumulative Cost | MST Edges |
 |------|-------|----------|--------|-----------------|-----------|
@@ -75,21 +69,23 @@ Time Complexity: O(E log V) with priority queue, O(V²) with array scan.
 
 ### Implementation
 
-### Python
-```python title="prims-algo.py" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-7/1/1.py 
+<Tabs syncKey="lang">
+<TabItem label="Python">
+```python title="prims-algo.py" file=<rootDir>/public/code/mcs-216/section-1/session-7/1/1.py 
 
 ```
-
-### C Language
-```c title="prims-algo.c" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-7/1/1.c 
-
-```
-
-### Rust
-```rust title="prims-algo.rs" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-7/1/1.rs
+</TabItem>
+<TabItem label="C">
+```c title="prims-algo.c" file=<rootDir>/public/code/mcs-216/section-1/session-7/1/1.c 
 
 ```
+</TabItem>
+<TabItem label="Rust">
+```rust title="prims-algo.rs" file=<rootDir>/public/code/mcs-216/section-1/session-7/1/1.rs
 
+```
+</TabItem>
+</Tabs>
 
 ## Question 2
 
@@ -121,23 +117,25 @@ To efficiently check for cycles, the Disjoint-Set Data Structure is utilized.
 - **Time Complexity**: `O(Elog(E))` or `O(Elog(V))`, where `E` is the number of edges and `V` is the number of vertices. Sorting the edges dominates the computational execution time.
 - **Space Complexity**: `O(V + E)` to maintain the graph data structures and the tracking arrays (`parent` and `rank`) for Union-Find operations.
 
-
 ### Implementation
 
-### Python
-```python title="kruskal-algo.py" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-7/2/2.py 
+<Tabs syncKey="lang">
+<TabItem label="Python">
+```python title="kruskal-algo.py" file=<rootDir>/public/code/mcs-216/section-1/session-7/2/2.py 
 
 ```
-
-### C Language
-```c title="kruskal-algo.c" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-7/2/2.c 
-
-```
-
-### Rust
-```rust title="kruskal-algo.rs" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-7/2/2.rs
+</TabItem>
+<TabItem label="C">
+```c title="kruskal-algo.c" file=<rootDir>/public/code/mcs-216/section-1/session-7/2/2.c 
 
 ```
+</TabItem>
+<TabItem label="Rust">
+```rust title="kruskal-algo.rs" file=<rootDir>/public/code/mcs-216/section-1/session-7/2/2.rs
+
+```
+</TabItem>
+</Tabs>
 
 ### Sample Output 
 

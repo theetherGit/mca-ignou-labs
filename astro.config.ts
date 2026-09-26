@@ -17,15 +17,10 @@ const nimbusConfig = defineNimbusConfig({
   editPattern: "https://github.com/theetherGit/mca-ignou-labs/edit/main/{path}",
   socialImage: "/og.png",
   socialImageAlt: "Syntax Lab — IGNOU MCA lab companion",
-  head: [
-    { tag: "link", attrs: { rel: "manifest", href: "/manifest.json" } },
-    {
-      tag: "script",
-      content:
-        "if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('/sw.js'))}",
-    },
-  ],
+  head: [{ tag: "link", attrs: { rel: "manifest", href: "/manifest.json" } }],
   sidebar: {
+    // Three course groups collapsed by default; the group holding the current page opens.
+    defaultCollapsed: true,
     items: [
       "introduction",
       "important-notice",
@@ -51,6 +46,7 @@ export default defineConfig({
       rules: {
         "nimbus/frontmatter-shape": "error",
         "nimbus/internal-link": "error",
+        "nimbus/heading-hierarchy": "error",
       },
       // `:::note` directives need the Sätteri processor; content uses <Aside> directly.
       admonitions: false,

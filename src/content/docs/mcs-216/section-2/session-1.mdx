@@ -4,11 +4,6 @@ description: Preliminaries
 sidebar:
   order: 1
 ---
-
-
-
-<PrintButton />
-
 Javascript is a high-level, interpreted programming language that is widely used for web development. It was created by Brendan Eich in 1995 and has since become one of the most popular programming languages in the world. JavaScript is primarily used for client-side scripting, allowing developers to create interactive and dynamic web pages. It can also be used on the server-side with environments like Node.js, Deno, Bun and Cloudflare Workers (don't mix with web workers).
 
 In this session, we will introduce the basic JavaScript constructs, conditional statements and control flow statements. The lab manual includes good examples and exercises to practice these concepts.
@@ -38,7 +33,7 @@ To perform arithmetic operations on two digits, we can follow these steps:
 
 ### Code Implementation
 
-```js title="arithmetic-operation.js" showLineNumbers file=<rootDir>/public/code/mcs-216/section-2/session-1/arithmetic-operation.js
+```js title="arithmetic-operation.js" file=<rootDir>/public/code/mcs-216/section-2/session-1/arithmetic-operation.js
 
 ```
 
@@ -69,7 +64,7 @@ The goal is to create a visual pattern where each number `n` repeats itself `n` 
 
 ### Code Implementation
 
-```js title="pattern-printing.js" showLineNumbers file=<rootDir>/public/code/mcs-216/section-2/session-1/pattern-printing.js
+```js title="pattern-printing.js" file=<rootDir>/public/code/mcs-216/section-2/session-1/pattern-printing.js
 
 ```
 
@@ -82,7 +77,6 @@ The goal is to create a visual pattern where each number `n` repeats itself `n` 
 - **String Accumulation**: In JavaScript, `console.log()` automatically adds a new line. To get numbers like `2 2` on the same line, we must first build a string (`rowOutput`) and print it once the inner loop finishes its work for that row.
 
 - **trim() Method**: We use `.trim()` at the end to remove the very last space of each row, ensuring the output is clean for your lab record.
-
 
 ## Portfolio Exercise
 

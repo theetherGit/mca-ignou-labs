@@ -9,10 +9,6 @@ import Question1Preview from "../../../../components/demo/mcs-216/section-2/sess
 import Question2Preview from "../../../../components/demo/mcs-216/section-2/session-2-2.svelte";
 import Question3Preview from "../../../../components/demo/mcs-216/section-2/session-2-3.svelte";
 
-
-
-<PrintButton />
-
 HTML Forms are a fundamental building block of interactive web development, designed to collect user input dynamically at runtime. In this session, you will gain a foundational understanding of how to create, structure, and implement HTML forms to gather information from users. The data entered through these forms is typically transmitted to a web server for processing, validation, and storage.
 
 Forms are widely used to collect essential information such as usernames, passwords, contact details (e-mail IDs, mobile numbers), and other user preferences. This session introduces the core `<form>` container element and explores the various input controls it can hold, including:
@@ -42,15 +38,31 @@ After Completing this session, one should be able to:
 
 Create an HTML webpage, as shown in the figure [2.1]. The user can specify any expression as input. Use form element to collect the user data.
 
-##### Figure 2.1 (Demo)
+#### Figure 2.1 (Demo)
 - Reference by question
 - Working demo for preview
 
 <Question1Preview client:visible />
 
+<Aside type="note" title="How the demo evaluates the expression">
+  The lab manual solution uses `eval()`, and so does this demo. `eval` runs any string as JavaScript with access to everything in scope, which is why real applications avoid it. The `Function` constructor is the usual replacement: it still parses a string, but it runs in its own scope and cannot touch local variables.
+
+  ```js title="eval.js"
+  const expr = document.getElementById("expression-1").value; // e.g. "1+1*2"
+  const result = eval(expr); // 3 — sees every local variable, runs anything
+  ```
+
+  ```js title="function-constructor.js"
+  const expr = document.getElementById("expression-1").value;
+  const result = new Function(`return (${expr})`)(); // 3 — isolated scope, still not safe for untrusted input
+  ```
+
+  For a calculator that only needs numbers and `+ - * /`, the safest option is to validate the string first: `/^[\d\s+\-*/().]+$/.test(expr)`. Write whichever the lab manual asks for in your record; mention the alternative in the viva.
+</Aside>
+
 ### Code
 
-```html title="form.html" showLineNumbers file=<rootDir>/public/code/mcs-216/section-2/session-2/1.html
+```html title="form.html" file=<rootDir>/public/code/mcs-216/section-2/session-2/1.html
 
 ```
 
@@ -66,7 +78,7 @@ Create a scrolling list that shows five items from the following list of PC proc
 
 ### Code
 
-```html title="list-scroller.html" showLineNumbers file=<rootDir>/public/code/mcs-216/section-2/session-2/2.html
+```html title="list-scroller.html" file=<rootDir>/public/code/mcs-216/section-2/session-2/2.html
 
 ```
 
@@ -90,6 +102,6 @@ auto picker), address (in a text area), telephone number and email (required).
 
 ### Code
 
-```html title="job-portal.html" showLineNumbers file=<rootDir>/public/code/mcs-216/section-2/session-2/3.html
+```html title="job-portal.html" file=<rootDir>/public/code/mcs-216/section-2/session-2/3.html
 
 ```

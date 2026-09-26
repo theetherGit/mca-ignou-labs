@@ -4,11 +4,6 @@ description: Fractional Knapsack Problem
 sidebar:
   order: 2
 ---
-
-
-
-<PrintButton />
-
 The fractional knapsack problem is a variation of the classic knapsack problem where you are allowed to take fractions of items rather than having to take whole items. The goal is to maximize the total value of the items you can carry in a knapsack with a given weight capacity. It's a greedy algorithm problem that can be solved efficiently by following a specific approach.
 
 ### Solution Approach
@@ -61,37 +56,40 @@ The main objectives of this session are to:
 
 Implement Fractional Knapsack Algorithm and find out optimal result for the following problem instances:
 
-#### Question 1 
+### Question 1 
 (P1, P2, P3, P4, P5, P6, P7) = (15, 5, 20, 8, 7, 20, 6) <br />
 (W1, W2, W3, W4, W5, W6, W7) = (3, 4, 6, 8, 2, 2, 3) <br />
 Maximum Knapsack Capacity = 18 <br />
 
-#### Question 2
+### Question 2
 (P1, P2, P3, P4, P5) = (20, 30, 40, 32, 55) <br />
 (W1, W2, W3, W4, W5) = (5, 8, 10, 12, 15) <br />
 Maximum Knapsack Capacity = 20 <br />
 
-#### Question 3
+### Question 3
 (P1, P2, P3, P4, P5, P6, P7) = (12, 10, 8, 11, 14, 7, 9) <br />
 (W1, W2, W3, W4, W5, W6, W7) = (4, 6, 5, 7, 3, 1, 6) <br />
 Maximum Knapsack Capacity = 15 <br />
 
 ## Implementation
 
-### Python
-```python title="Knapsack.py" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-2/knapsack.py 
+<Tabs syncKey="lang">
+<TabItem label="Python">
+```python title="Knapsack.py" file=<rootDir>/public/code/mcs-216/section-1/session-2/knapsack.py 
 
 ```
-
-### C Language
-```c title="Knapsack.c" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-2/knapsack.c 
-
-```
-
-### Rust
-```rust title="Knapsack.rs" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-2/knapsack.rs
+</TabItem>
+<TabItem label="C">
+```c title="Knapsack.c" file=<rootDir>/public/code/mcs-216/section-1/session-2/knapsack.c 
 
 ```
+</TabItem>
+<TabItem label="Rust">
+```rust title="Knapsack.rs" file=<rootDir>/public/code/mcs-216/section-1/session-2/knapsack.rs
+
+```
+</TabItem>
+</Tabs>
 
 ## Conclusion
 The fractional knapsack problem is a fundamental problem in combinatorial optimization that can be efficiently solved using a greedy algorithm. By calculating the value-to-weight ratio and sorting the items accordingly, we can maximize the total value of the items in the knapsack while respecting the weight capacity. This problem has practical applications in various fields such as resource allocation, budgeting, and logistics. Understanding the fractional knapsack problem and its solution approach is essential for solving more complex optimization problems in computer science and operations research.

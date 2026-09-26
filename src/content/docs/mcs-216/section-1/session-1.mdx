@@ -4,11 +4,6 @@ description: Implementation of Simple Algorithms
 sidebar:
   order: 1
 ---
-
-
-
-<PrintButton />
-
 This session is to implement small problems such as Euclid's Algorithm for GCD, polynomial expression evaluation through Horner's method, algorithms for evaluation of exponentiation and simple sorting algorithms. Selection sort begins by finding the least element in the array, which is moved to the first position. Then the second least element is searched for and moved to the second position in the array. This process continues until the entire array is sorted.
 
 ## Objective
@@ -48,20 +43,23 @@ The algorithm follows a simple recursive process:
 
 The GCD is 6.
 
-### Python Implementation
-```python title="Euclid.py" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-1/1/1.py 
+<Tabs syncKey="lang">
+<TabItem label="Python">
+```python title="Euclid.py" file=<rootDir>/public/code/mcs-216/section-1/session-1/1/1.py 
 
 ```
-
-### C Implementation
-```c title="Euclid.c" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-1/1/1.c 
-
-```
-
-### Rust Implementation
-```rust title="Euclid.rs" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-1/1/1.rs
+</TabItem>
+<TabItem label="C">
+```c title="Euclid.c" file=<rootDir>/public/code/mcs-216/section-1/session-1/1/1.c 
 
 ```
+</TabItem>
+<TabItem label="Rust">
+```rust title="Euclid.rs" file=<rootDir>/public/code/mcs-216/section-1/session-1/1/1.rs
+
+```
+</TabItem>
+</Tabs>
 
 ## 2. (i) Horner's Rule
 
@@ -72,7 +70,6 @@ Q2 (i): Implement Horner's rule for evaluating polynomials P(x) = 6x^(6)+5x^(5)+
 ### What is Horner's Rule?
 
 Horner’s Rule is an efficient algorithm for evaluating polynomials that reduces the number of multiplications required by nesting the terms. Instead of calculating each power of `x` individually, it rewrites the polynomial in a recursive format.
-
 
 ### Mathematical Logic
 
@@ -115,20 +112,23 @@ P(3) = (((((6 * 3 + 5) * 3 + 4) * 3 - 3) * 3 + 2) * 3 + 8) * 3 - 7
 | 2 | (14×2)+5 | 33 |
 | 3 | (33×2)+(−7) | 59 |
 
-### Python Implementation
-```python title="horners-method.py" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-1/2/2-horner.py 
+<Tabs syncKey="lang">
+<TabItem label="Python">
+```python title="horners-method.py" file=<rootDir>/public/code/mcs-216/section-1/session-1/2/2-horner.py 
 
 ```
-
-### C Implementation
-```c title="horners-method.c" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-1/2/2-horner.c 
-
-```
-
-### Rust Implementation
-```rust title="horners-method.rs" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-1/2/2-horner.rs
+</TabItem>
+<TabItem label="C">
+```c title="horners-method.c" file=<rootDir>/public/code/mcs-216/section-1/session-1/2/2-horner.c 
 
 ```
+</TabItem>
+<TabItem label="Rust">
+```rust title="horners-method.rs" file=<rootDir>/public/code/mcs-216/section-1/session-1/2/2-horner.rs
+
+```
+</TabItem>
+</Tabs>
 
 ## 2. (ii) Brute Force Method
 
@@ -158,20 +158,23 @@ In Brute Force, for each term `a_k * x^k`, you calculate `x` multiplied by itsel
 
 Total Multiplications: `2 + 1 = 3`. (Horner would only use 2).
 
-### Python Implementation
-```python title="horners-method.py" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-1/2/2-brute.py 
+<Tabs syncKey="lang">
+<TabItem label="Python">
+```python title="horners-method.py" file=<rootDir>/public/code/mcs-216/section-1/session-1/2/2-brute.py 
 
 ```
-
-### C Implementation
-```c title="horners-method.c" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-1/2/2-brute.c 
-
-```
-
-### Rust Implementation
-```rust title="horners-method.rs" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-1/2/2-brute.rs
+</TabItem>
+<TabItem label="C">
+```c title="horners-method.c" file=<rootDir>/public/code/mcs-216/section-1/session-1/2/2-brute.c 
 
 ```
+</TabItem>
+<TabItem label="Rust">
+```rust title="horners-method.rs" file=<rootDir>/public/code/mcs-216/section-1/session-1/2/2-brute.rs
+
+```
+</TabItem>
+</Tabs>
 
 ### Complexity Comparison
 
@@ -193,7 +196,6 @@ Total Multiplications: `2 + 1 = 3`. (Horner would only use 2).
 
 **Horner's Method Multiplications**: 
 - As shown previously, this only requires 6 multiplications.
-
 
 ## 3. Matrix Multiplication
 
@@ -217,7 +219,7 @@ Each inner iteration performs **one multiplication** `(A[i][k] * B[k][j])` and o
 
 ### Algorithm & Pseudocode
 
-```py showLineNumbers
+```py
 INPUT: A[4][4], B[4][4]
 OUTPUT: C[4][4]
 
@@ -244,7 +246,6 @@ Return C
 | Multiplications | `64` | `1` per inner iteration → `n³ = 4³ = 64` |
 | Additions | `64` | Each `C[i][j] += ...` performs 1 accumulation addition per inner step |
 
-
 ### Execution Trace (Conceptual)
 
 For `n=4`:
@@ -256,21 +257,23 @@ For `n=4`:
 - **Total inner executions** = `16 × 4 = 64`
 - Each inner step: `1 mul + 1 add` → `64 mul + 64 add`
 
-
-### Python Implementation
-```python title="matrix-multiplation.py" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-1/3/3.py 
-
-```
-
-### C Implementation
-```c title="matrix-multiplation.c" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-1/3/3.c 
+<Tabs syncKey="lang">
+<TabItem label="Python">
+```python title="matrix-multiplation.py" file=<rootDir>/public/code/mcs-216/section-1/session-1/3/3.py 
 
 ```
-
-### Rust Implementation
-```rust title="matrix-multiplation.rs" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-1/3/3.rs
+</TabItem>
+<TabItem label="C">
+```c title="matrix-multiplation.c" file=<rootDir>/public/code/mcs-216/section-1/session-1/3/3.c 
 
 ```
+</TabItem>
+<TabItem label="Rust">
+```rust title="matrix-multiplation.rs" file=<rootDir>/public/code/mcs-216/section-1/session-1/3/3.rs
+
+```
+</TabItem>
+</Tabs>
 
 ## 4. Binary Exponentiation
 
@@ -291,17 +294,22 @@ The algorithm can be implemented in two ways: left-to-right and right-to-left.
 - The number of multiplications depends on the number of bits in the exponent and the number of 1s in the binary representation of the exponent.
 - For example, for `4^512`, the exponent `512` in binary is `1000000000`, which has 1 bit set to 1. For `3^31`, the exponent `31` in binary is `11111`, which has 5 bits set to 1.
 
-### Python Implementation
-```python title="binary-exponentiation.py" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-1/4/4.py 
+<Tabs syncKey="lang">
+<TabItem label="Python">
+```python title="binary-exponentiation.py" file=<rootDir>/public/code/mcs-216/section-1/session-1/4/4.py 
 
 ```
-### C Implementation
-```c title="binary-exponentiation.c" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-1/4/4.c 
+</TabItem>
+<TabItem label="C">
+```c title="binary-exponentiation.c" file=<rootDir>/public/code/mcs-216/section-1/session-1/4/4.c 
 
 ```
-### Rust Implementation
-```rust title="binary-exponentiation.rs" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-1/4/4.rs
+</TabItem>
+<TabItem label="Rust">
+```rust title="binary-exponentiation.rs" file=<rootDir>/public/code/mcs-216/section-1/session-1/4/4.rs
 ```
+</TabItem>
+</Tabs>
 
 ## 5. Bubble Sort
 
@@ -319,19 +327,22 @@ Bubble Sort is a simple sorting algorithm that repeatedly steps through the list
 - The number of comparisons is the sum of the inner loop iterations, which is `n(n-1)/2` in the worst case.
 - The number of exchanges depends on the initial order of the elements. In the worst case (when the list is in reverse order), the number of exchanges is also `n(n-1)/2`.
 
-### Python Implementation
-```python title="bubble-sort.py" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-1/5/5.py 
+<Tabs syncKey="lang">
+<TabItem label="Python">
+```python title="bubble-sort.py" file=<rootDir>/public/code/mcs-216/section-1/session-1/5/5.py 
 
 ```
-
-### C Implementation
-```c title="bubble-sort.c" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-1/5/5.c
+</TabItem>
+<TabItem label="C">
+```c title="bubble-sort.c" file=<rootDir>/public/code/mcs-216/section-1/session-1/5/5.c
 ```
-
-### Rust Implementation
-```rust title="bubble-sort.rs" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-1/5/5.rs
+</TabItem>
+<TabItem label="Rust">
+```rust title="bubble-sort.rs" file=<rootDir>/public/code/mcs-216/section-1/session-1/5/5.rs
 
 ```
+</TabItem>
+</Tabs>
 
 ## 6. Selection Sort
 
@@ -346,20 +357,23 @@ Selection Sort is a simple comparison-based sorting algorithm. It divides the in
 - The number of comparisons is the same as Bubble Sort, which is `n(n-1)/2` in the worst case.
 - The number of exchanges is `n-1` in the worst case, as each element is moved at most once.
 
-### Python Implementation
-```python title="selection-sort.py" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-1/6/6.py 
+<Tabs syncKey="lang">
+<TabItem label="Python">
+```python title="selection-sort.py" file=<rootDir>/public/code/mcs-216/section-1/session-1/6/6.py 
 
 ```
-
-### C Implementation
-```c title="selection-sort.c" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-1/6/6.c
-
-```
-
-### Rust Implementation
-```rust title="selection-sort.rs" showLineNumbers file=<rootDir>/public/code/mcs-216/section-1/session-1/6/6.rs
+</TabItem>
+<TabItem label="C">
+```c title="selection-sort.c" file=<rootDir>/public/code/mcs-216/section-1/session-1/6/6.c
 
 ```
+</TabItem>
+<TabItem label="Rust">
+```rust title="selection-sort.rs" file=<rootDir>/public/code/mcs-216/section-1/session-1/6/6.rs
+
+```
+</TabItem>
+</Tabs>
 
 ### Comparison of Bubble Sort and Selection Sort
 | Metric | Bubble Sort | Selection Sort |

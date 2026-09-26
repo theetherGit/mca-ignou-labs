@@ -10,10 +10,6 @@ import Question2 from "../../../../components/demo/mcs-216/section-2/session-10/
 import Question3 from "../../../../components/demo/mcs-216/section-2/session-10/3.svelte";
 import Question4 from "../../../../components/demo/mcs-216/section-2/session-10/4.svelte";
 
-
-
-<PrintButton />
-
 Cookies are small text files stored on the user's client-side computer that allow web applications to "remember" information across page reloads or future visits. While modern web development often uses `localStorage` or `sessionStorage` for client-side persistence, cookies remain essential for session tracking, authentication tokens, and server-side state management because they are automatically sent with every HTTP request to the matching domain. Session 10 covers the complete lifecycle of cookies using the native `document.cookie` API, teaching you how to create, read, parse, modify, and delete them programmatically.
 
 ## Objectives
@@ -52,7 +48,7 @@ document.cookie = "username=JohnDoe; expires=Fri, 31 Dec 2026 23:59:59 GMT; path
 
 > Important: `document.cookie` does not return an object or array. You must manually parse the string to extract specific values.
 
-#### Parsing the Cookie String
+### Parsing the Cookie String
 
 ```js
 function getCookie(name) {
@@ -110,22 +106,13 @@ Create an HTML web page, as shown below. The cookie will be set on pressing setC
 
 ### Code
 
-```html title="time.html" showLineNumbers file=<rootDir>/public/code/mcs-216/section-2/session-10/1.html
+```html title="time.html" file=<rootDir>/public/code/mcs-216/section-2/session-10/1.html
 
 ```
 
-
 #### HTML View
 
-<iframe
-  id="preview-1"
-  title="demo-q-1"
-  width="100%"
-  height="300px"
-  class="mt-5 rounded-xl"
-  loading="lazy"
-  src="/code/mcs-216/section-2/session-10/1.html">
-</iframe>
+<Preview src="/code/mcs-216/section-2/session-10/1.html" height="300px" />
 
 ## Question 2
 
@@ -141,22 +128,13 @@ Considering exercise 1, modify the web page to display the cookie's name-value p
 
 ### Code
 
-```html title="time.html" showLineNumbers file=<rootDir>/public/code/mcs-216/section-2/session-10/2.html
+```html title="time.html" file=<rootDir>/public/code/mcs-216/section-2/session-10/2.html
 
 ```
 
-
 #### HTML View
 
-<iframe
-  id="preview-2"
-  title="demo-q-2"
-  width="100%"
-  height="300px"
-  class="mt-5 rounded-xl"
-  loading="lazy"
-  src="/code/mcs-216/section-2/session-10/2.html">
-</iframe>
+<Preview src="/code/mcs-216/section-2/session-10/2.html" height="300px" />
 
 ## Question 3
 
@@ -172,22 +150,13 @@ A list of color is provided in the form of drop down list. The background color 
 
 ### Code
 
-```html title="time.html" showLineNumbers file=<rootDir>/public/code/mcs-216/section-2/session-10/3.html
+```html title="time.html" file=<rootDir>/public/code/mcs-216/section-2/session-10/3.html
 
 ```
 
-
 #### HTML View
 
-<iframe
-  id="preview-3"
-  title="demo-q-3"
-  width="100%"
-  height="300px"
-  class="mt-5 rounded-xl"
-  loading="lazy"
-  src="/code/mcs-216/section-2/session-10/3.html">
-</iframe>
+<Preview src="/code/mcs-216/section-2/session-10/3.html" height="300px" />
 
 ## Question 4
 
@@ -203,18 +172,10 @@ Create an HTML web page, as shown below. The cookie1 and cookie2 will be set on 
 
 ### Code
 
-```html title="time.html" showLineNumbers file=<rootDir>/public/code/mcs-216/section-2/session-10/4.html
+```html title="time.html" file=<rootDir>/public/code/mcs-216/section-2/session-10/4.html
 
 ```
 
 #### HTML View
 
-<iframe
-  id="preview-4"
-  title="demo-q-4"
-  width="100%"
-  height="400px"
-  class="mt-5 rounded-xl"
-  loading="lazy"
-  src="/code/mcs-216/section-2/session-10/4.html">
-</iframe>
+<Preview src="/code/mcs-216/section-2/session-10/4.html" height="400px" />
