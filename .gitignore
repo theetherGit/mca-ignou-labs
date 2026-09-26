@@ -22,3 +22,4 @@ pnpm-debug.log*
 !.vscode/extensions.json
 **/__pycache__
 output/
+.hallmark/

@@ -22,29 +22,31 @@
 :root {
 	color-scheme: light;
 
-	/* Surfaces (paired with foregrounds for contrast) */
-	--nb-background: oklch(0.99 0 0);
-	--nb-foreground: oklch(0.21 0 0);
+	/* Surfaces (paired with foregrounds for contrast).
+	   Ledger palette: warm cream paper, warm-tinted neutrals, burnt-orange accent.
+	   Every neutral carries a trace of the anchor hue (75) so greys read warm. */
+	--nb-background: oklch(0.975 0.012 75);
+	--nb-foreground: oklch(0.2 0.012 60);
 
-	--nb-card: oklch(1 0 0);
+	--nb-card: oklch(0.99 0.008 80);
 	--nb-card-foreground: var(--nb-foreground);
 
-	--nb-muted: oklch(0.967 0 0);
-	--nb-muted-foreground: oklch(0.556 0 0);
+	--nb-muted: oklch(0.945 0.012 75);
+	--nb-muted-foreground: oklch(0.47 0.012 70);
 
-	--nb-accent: oklch(0.967 0 0);
+	--nb-accent: oklch(0.935 0.014 75);
 	--nb-accent-foreground: var(--nb-foreground);
 
 	/* Primary action / brand */
-	--nb-primary: oklch(0.7 0.19 45);
-	--nb-primary-foreground: oklch(0.99 0 0);
-	--nb-primary-hover: oklch(0.62 0.19 45);
+	--nb-primary: oklch(0.62 0.19 45);
+	--nb-primary-foreground: oklch(0.99 0.01 80);
+	--nb-primary-hover: oklch(0.54 0.19 45);
 
 	/* Borders / focus */
-	--nb-border: oklch(0.935 0 0);
-	--nb-border-strong: oklch(0.87 0 0);
-	--nb-selected: oklch(0.89 0 0);
-	--nb-ring: oklch(0.145 0 0 / 0.35);
+	--nb-border: oklch(0.88 0.012 75);
+	--nb-border-strong: oklch(0.79 0.012 75);
+	--nb-selected: oklch(0.9 0.014 75);
+	--nb-ring: oklch(0.62 0.19 45 / 0.45);
 
 	/* Status colors — paired (saturated for text/border + muted for bg) */
 	--nb-info: oklch(0.45 0.18 255);
@@ -115,26 +117,26 @@
 [data-mode="dark"] {
 	color-scheme: dark;
 
-	--nb-background: oklch(0.085 0 0);
-	--nb-foreground: oklch(0.97 0 0);
+	--nb-background: oklch(0.16 0.01 60);
+	--nb-foreground: oklch(0.93 0.008 80);
 
-	--nb-card: #0F0F0F;
+	--nb-card: oklch(0.19 0.01 60);
 	--nb-card-foreground: var(--nb-foreground);
 
-	--nb-muted: #060606;
-	--nb-muted-foreground: oklch(0.65 0 0);
+	--nb-muted: oklch(0.13 0.008 60);
+	--nb-muted-foreground: oklch(0.7 0.01 70);
 
-	--nb-accent: oklch(0.269 0 0);
+	--nb-accent: oklch(0.25 0.01 60);
 	--nb-accent-foreground: var(--nb-foreground);
 
-	--nb-primary: oklch(0.75 0.18 50);
-	--nb-primary-foreground: oklch(0.15 0 0);
-	--nb-primary-hover: oklch(0.8 0.18 50);
+	--nb-primary: oklch(0.74 0.17 50);
+	--nb-primary-foreground: oklch(0.15 0.01 60);
+	--nb-primary-hover: oklch(0.8 0.17 50);
 
-	--nb-border: oklch(0.269 0 0);
-	--nb-border-strong: oklch(0.371 0 0);
-	--nb-selected: oklch(0.371 0 0);
-	--nb-ring: oklch(0.9 0 0 / 0.35);
+	--nb-border: oklch(0.28 0.01 60);
+	--nb-border-strong: oklch(0.38 0.01 60);
+	--nb-selected: oklch(0.34 0.012 60);
+	--nb-ring: oklch(0.74 0.17 50 / 0.45);
 
 	--nb-info: oklch(0.75 0.12 255);
 	--nb-info-foreground: oklch(0.75 0.12 255);

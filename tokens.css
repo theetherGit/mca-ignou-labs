@@ -1,0 +1,64 @@
+/* Hallmark tokens · Syntax Lab · theme: custom "Ledger" (light / grotesk-sans / warm)
+ * Colour tokens alias the site's Nimbus --nb-* variables (src/styles/globals.css) so the
+ * docs pages and the landing page share one palette and one dark mode.
+ */
+:root {
+	/* Colour (aliases) */
+	--color-paper: var(--nb-background);
+	--color-paper-2: var(--nb-muted);
+	--color-card: var(--nb-card);
+	--color-ink: var(--nb-foreground);
+	--color-neutral: var(--nb-muted-foreground);
+	--color-rule: var(--nb-border);
+	--color-rule-2: var(--nb-border-strong);
+	--color-accent: var(--nb-primary);
+	--color-accent-hover: var(--nb-primary-hover);
+	--color-accent-ink: var(--nb-primary-foreground);
+	--color-focus: var(--nb-ring);
+	--color-danger: var(--nb-danger);
+
+	/* Type */
+	--font-body: var(--nb-font-sans);
+	--font-display: var(--nb-font-sans);
+	--font-mono: var(--nb-font-mono);
+	--text-xs: 0.75rem;
+	--text-sm: 0.875rem;
+	--text-md: 1rem;
+	--text-lg: 1.125rem;
+	--text-xl: 1.333rem;
+	--text-2xl: 1.777rem;
+	--text-3xl: 2.369rem;
+	--text-4xl: 3.157rem;
+	--text-display-s: clamp(2.25rem, 5vw + 0.5rem, 4.2rem);
+	--text-display: clamp(2.75rem, 7vw + 0.5rem, 6.5rem);
+	--text-display-xxl: clamp(3.25rem, 11vw, 11rem);
+	--leading-tight: 1.05;
+	--leading-snug: 1.25;
+	--leading-body: 1.55;
+
+	/* Space, 4 pt */
+	--space-2xs: 0.25rem;
+	--space-xs: 0.5rem;
+	--space-sm: 0.75rem;
+	--space-md: 1rem;
+	--space-lg: 1.5rem;
+	--space-xl: 2rem;
+	--space-2xl: 3rem;
+	--space-3xl: 4.5rem;
+	--page-gutter: clamp(1rem, 4vw, 3rem);
+	--page-max: 72rem;
+
+	/* Rules, radius */
+	--rule-hair: 1px;
+	--rule-thick: 3px;
+	--radius-sm: 0.25rem;
+	--radius-md: 0.5rem;
+
+	/* Motion */
+	--ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+	--ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+	--ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+	--dur-micro: 120ms;
+	--dur-short: 220ms;
+	--dur-long: 420ms;
+}

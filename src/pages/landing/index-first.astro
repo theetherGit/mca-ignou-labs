@@ -1,0 +1,93 @@
+---
+import "../../../tokens.css";
+import "../../styles/landing/index-first.css";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SearchTrigger from "../../components/ui/search/SearchTrigger.astro";
+import { ThemeToggle } from "../../components/ui/theme-toggle";
+import Notebook from "../../components/Notebook.astro";
+import Explain from "../../components/Explain.astro";
+import { loadCatalog, totals } from "../../lib/catalog";
+import { withBase } from "@cloudflare/nimbus-docs/runtime";
+
+export const prerender = true;
+const href = (p: string) => withBase(p, import.meta.env.BASE_URL);
+const cat = await loadCatalog();
+const t = totals(cat);
+const semesters = [1, 2].map((n) => ({ n, sections: cat.filter((c) => c.semester === n) }));
+---
+
+<BaseLayout title="Syntax Lab" description="Every IGNOU MCA lab session, worked out and marked for the lab record.">
+  <div class="ix">
+    <div class="ix-wrap">
+      <header class="ix-nav">
+        <a class="ix-brand" href={href("/")}><img src={href("/logo-ethercorps.png")} alt="" width="20" height="20" />Syntax Lab</a>
+        <SearchTrigger />
+        <nav class="ix-nav-right" aria-label="Primary">
+          <a class="ix-nav-link" href={href("/getting-started")}>Getting started</a>
+          <ThemeToggle />
+        </nav>
+      </header>
+
+      <section class="ix-head">
+        <h1>Index of lab sessions, IGNOU MCA, semesters 1 and 2.</h1>
+        <p>Each session: the problem as set in the manual, the reasoning, the program, the output. Parts are marked for what goes in the record.</p>
+        <p class="ix-counts">{t.sections} sections · {t.sessions} sessions · {t.questions} exercises</p>
+      </section>
+
+      {semesters.map((sem) => (
+        <section class="ix-sem" aria-labelledby={`sem-${sem.n}`}>
+          <h2 class="ix-sem-title" id={`sem-${sem.n}`}>Semester {sem.n}</h2>
+          {sem.sections.map((s) => (
+            <article class="ix-sec">
+              <div class="ix-sec-head">
+                <span class="ix-sec-code">{s.course}{s.section ? ` · ${s.section}` : ""} · {s.sessions.length} sessions</span>
+                <h3 class="ix-sec-title"><a href={href(s.index)}>{s.title}</a></h3>
+                <p class="ix-sec-blurb">{s.blurb}</p>
+                <div class="ix-sec-links">
+                  <a href={href(`/downloads/${s.key}.zip`)} download>All as PDF (ZIP)</a>
+                  {s.key.startsWith("mcsl") && <a href={href(`/question-papers/${s.key}`)}>Question paper</a>}
+                </div>
+              </div>
+              <ol class="ix-sessions">
+                {s.sessions.map((x) => (
+                  <li>
+                    <a href={href(x.href)}>
+                      <span class="ix-s-n">{String(x.n).padStart(2, "0")}</span>
+                      <span class="ix-s-title">{x.title}</span>
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </article>
+          ))}
+        </section>
+      ))}
+
+      <section class="ix-sem" aria-labelledby="util">
+        <h2 class="ix-sem-title" id="util">Using the pages</h2>
+        <div class="ix-util">
+          <h2>What goes in the record</h2>
+          <div class="ix-legend">
+            <div><Notebook /><span>Problem statement, algorithm, program, sample output. Copy these.</span></div>
+            <div><Explain /><span>Explanations, complexity, demos. Read for the viva; do not copy.</span></div>
+          </div>
+        </div>
+        <div class="ix-util">
+          <h2>Downloads</h2>
+          <ul>
+            <li><a href={href("/downloads/semester-1.zip")} download>Semester 1, every session as PDF (ZIP)</a></li>
+            <li><a href={href("/downloads/semester-2.zip")} download>Semester 2, every session as PDF (ZIP)</a></li>
+          </ul>
+        </div>
+        <div class="ix-util">
+          <h2>Run the programs</h2>
+          <p>Every solution is a plain file, linked on its page. <a href={href("/getting-started")}>Getting started</a> has the compiler commands and online playgrounds.</p>
+        </div>
+      </section>
+
+      <footer class="ix-foot">
+        Syntax Lab. Lab record companion for IGNOU MCA: MCS-216, MCS-217, MCSL-222, MCSL-223. Session and exercise numbers follow the official lab manuals. Programs are compiled or run before publishing; where a tool could not run here, the page says so. Built with Nimbus on Astro; set in Inter and JetBrains Mono. <a href={href("/important-notice")}>Notice on using this material</a>. MIT licensed, <a href="https://github.com/theetherGit/mca-ignou-labs">source on GitHub</a>. 2026.
+      </footer>
+    </div>
+  </div>
+</BaseLayout>

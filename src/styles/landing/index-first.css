@@ -1,0 +1,266 @@
+/* Hallmark · macrostructure: Index-First · tone: utilitarian · anchor hue: 75 (warm) · theme: custom "Ledger"
+ * paper oklch(97.5% 0.012 75) · accent oklch(62% 0.19 45) · display Inter + body Inter · outlier JetBrains Mono
+ * nav: N13 inline search pill (right-of-brand · flat) · footer: Ft4 dense colophon (monospace · single block)
+ * enrichment: none · audience: IGNOU MCA distance learners · use: reach the right session
+ * Hallmark · pre-emit critique: P4 H5 E4 S5 R5 V4 */
+html,
+body {
+	overflow-x: clip;
+}
+.ix {
+	font-family: var(--font-body);
+	color: var(--color-ink);
+	background: var(--color-paper);
+	line-height: var(--leading-body);
+}
+.ix a {
+	color: inherit;
+	text-decoration: none;
+}
+.ix a:focus-visible,
+.ix button:focus-visible {
+	outline: 2px solid var(--color-accent);
+	outline-offset: 2px;
+}
+.ix-wrap {
+	max-width: var(--page-max);
+	margin: 0 auto;
+	padding: 0 var(--page-gutter);
+}
+
+/* N13 · brand + inline search pill + theme toggle */
+.ix-nav {
+	display: flex;
+	align-items: center;
+	gap: var(--space-md);
+	padding: var(--space-sm) 0;
+	border-bottom: var(--rule-hair) solid var(--color-rule);
+}
+.ix-brand {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--space-xs);
+	font-weight: 650;
+	letter-spacing: -0.01em;
+	white-space: nowrap;
+}
+.ix-brand img {
+	width: 1.25rem;
+	height: 1.25rem;
+	border-radius: var(--radius-sm);
+}
+.ix-nav-right {
+	margin-left: auto;
+	display: flex;
+	align-items: center;
+	gap: var(--space-xs);
+}
+.ix-nav-link {
+	font-size: var(--text-sm);
+	color: var(--color-neutral);
+	white-space: nowrap;
+	padding: var(--space-2xs) var(--space-xs);
+}
+.ix-nav-link:hover {
+	color: var(--color-ink);
+}
+
+/* Head: one short paragraph, no display type */
+.ix-head {
+	padding: var(--space-xl) 0 var(--space-lg);
+	display: grid;
+	gap: var(--space-xs);
+	max-width: 62ch;
+}
+.ix-head h1 {
+	font-size: var(--text-lg);
+	font-weight: 650;
+	letter-spacing: -0.01em;
+	margin: 0;
+}
+.ix-head p {
+	margin: 0;
+	color: var(--color-neutral);
+	font-size: var(--text-md);
+}
+.ix-head .ix-counts {
+	font-family: var(--font-mono);
+	font-size: var(--text-sm);
+	color: var(--color-ink);
+	font-variant-numeric: tabular-nums;
+}
+
+/* Semester bands */
+.ix-sem {
+	padding: var(--space-lg) 0 var(--space-md);
+	border-top: var(--rule-thick) solid var(--color-ink);
+}
+.ix-sem-title {
+	font-size: var(--text-sm);
+	font-weight: 600;
+	color: var(--color-neutral);
+	margin: 0 0 var(--space-sm);
+}
+
+/* Section rows */
+.ix-sec {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: var(--space-sm) var(--space-xl);
+	padding: var(--space-md) 0;
+	border-top: var(--rule-hair) solid var(--color-rule);
+}
+@media (min-width: 60rem) {
+	.ix-sec {
+		grid-template-columns: 17rem minmax(0, 1fr);
+	}
+}
+.ix-sec-head {
+	display: grid;
+	align-content: start;
+	gap: var(--space-2xs);
+}
+.ix-sec-code {
+	font-family: var(--font-mono);
+	font-size: var(--text-sm);
+	color: var(--color-neutral);
+}
+.ix-sec-title {
+	font-size: var(--text-lg);
+	font-weight: 650;
+	letter-spacing: -0.01em;
+	margin: 0;
+	line-height: var(--leading-snug);
+}
+.ix-sec-title a:hover {
+	color: var(--color-accent-hover);
+}
+.ix-sec-blurb {
+	margin: 0;
+	font-size: var(--text-sm);
+	color: var(--color-neutral);
+	max-width: 34ch;
+}
+.ix-sec-links {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-2xs) var(--space-sm);
+	font-size: var(--text-sm);
+	margin-top: var(--space-2xs);
+}
+.ix-sec-links a {
+	color: var(--color-accent-hover);
+	border-bottom: var(--rule-hair) solid currentColor;
+	white-space: nowrap;
+}
+.ix-sec-links a:hover {
+	border-bottom-width: 2px;
+}
+
+/* Session list: dense, multi-column, numbered in mono */
+.ix-sessions {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	columns: 1;
+	column-gap: var(--space-xl);
+}
+@media (min-width: 40rem) {
+	.ix-sessions {
+		columns: 2;
+	}
+}
+@media (min-width: 75rem) {
+	.ix-sessions {
+		columns: 3;
+	}
+}
+.ix-sessions li {
+	break-inside: avoid;
+}
+.ix-sessions a {
+	display: grid;
+	grid-template-columns: 2.25rem minmax(0, 1fr);
+	gap: var(--space-xs);
+	padding: var(--space-2xs) 0;
+	border-bottom: var(--rule-hair) solid var(--color-rule);
+	font-size: var(--text-sm);
+	line-height: 1.35;
+}
+.ix-sessions a:hover .ix-s-title {
+	color: var(--color-accent-hover);
+}
+.ix-s-n {
+	font-family: var(--font-mono);
+	color: var(--color-neutral);
+	font-variant-numeric: tabular-nums;
+}
+.ix-s-title {
+	overflow-wrap: anywhere;
+	min-width: 0;
+}
+
+/* Utility rows: marks legend, downloads, papers */
+.ix-util {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: var(--space-sm) var(--space-xl);
+	padding: var(--space-md) 0;
+	border-top: var(--rule-hair) solid var(--color-rule);
+}
+@media (min-width: 60rem) {
+	.ix-util {
+		grid-template-columns: 17rem minmax(0, 1fr);
+	}
+}
+.ix-util h2 {
+	font-size: var(--text-md);
+	font-weight: 650;
+	margin: 0;
+}
+.ix-util p {
+	margin: 0;
+	font-size: var(--text-sm);
+	color: var(--color-neutral);
+	max-width: 62ch;
+}
+.ix-util ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: grid;
+	gap: var(--space-2xs);
+	font-size: var(--text-sm);
+}
+.ix-util li a {
+	color: var(--color-accent-hover);
+	border-bottom: var(--rule-hair) solid currentColor;
+}
+.ix-legend {
+	display: grid;
+	gap: var(--space-xs);
+}
+.ix-legend div {
+	display: grid;
+	grid-template-columns: max-content minmax(0, 1fr);
+	gap: var(--space-sm);
+	align-items: start;
+	font-size: var(--text-sm);
+	color: var(--color-neutral);
+}
+
+/* Ft4 · dense colophon */
+.ix-foot {
+	margin-top: var(--space-2xl);
+	padding: var(--space-lg) 0 var(--space-2xl);
+	border-top: var(--rule-thick) solid var(--color-ink);
+	font-family: var(--font-mono);
+	font-size: var(--text-xs);
+	line-height: 1.6;
+	color: var(--color-neutral);
+	max-width: 80ch;
+}
+.ix-foot a {
+	color: var(--color-ink);
+	border-bottom: var(--rule-hair) solid var(--color-rule-2);
+}

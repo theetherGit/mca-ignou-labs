@@ -1,0 +1,232 @@
+/* Hallmark · macrostructure: Marquee Hero · tone: utilitarian · anchor hue: 75 (warm) · theme: custom "Ledger"
+ * paper oklch(97.5% 0.012 75) · accent oklch(62% 0.19 45) · display Inter + body Inter · outlier JetBrains Mono
+ * H1 marquee knobs: size=xxl · alignment=left-bias · underlay=single rule below
+ * F1 bento knobs: tiles=9 · spans=irregular · border=hairline all
+ * nav: N9 edge-aligned minimal (outlined CTA · sans wordmark · default padding) · footer: Ft5 statement (38ch · wordmark under)
+ * enrichment: none · audience: IGNOU MCA distance learners · use: one idea, then every entry point
+ * Hallmark · pre-emit critique: P5 H4 E4 S4 R4 V5 */
+html,
+body {
+	overflow-x: clip;
+}
+.mq {
+	font-family: var(--font-body);
+	color: var(--color-ink);
+	background: var(--color-paper);
+	line-height: var(--leading-body);
+}
+.mq a {
+	color: inherit;
+	text-decoration: none;
+}
+.mq a:focus-visible,
+.mq button:focus-visible {
+	outline: 2px solid var(--color-accent);
+	outline-offset: 2px;
+}
+.mq-wrap {
+	max-width: var(--page-max);
+	margin: 0 auto;
+	padding: 0 var(--page-gutter);
+}
+
+/* N9 · wordmark left, one CTA right, silence between */
+.mq-nav {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: var(--space-md);
+	padding: var(--space-md) 0;
+}
+.mq-brand {
+	font-weight: 650;
+	letter-spacing: -0.01em;
+	white-space: nowrap;
+}
+.mq-nav-right {
+	display: flex;
+	align-items: center;
+	gap: var(--space-sm);
+}
+.mq-cta {
+	display: inline-flex;
+	align-items: center;
+	padding: var(--space-xs) var(--space-md);
+	line-height: 1;
+	border: var(--rule-hair) solid var(--color-ink);
+	border-radius: var(--radius-sm);
+	font-size: var(--text-sm);
+	font-weight: 600;
+	white-space: nowrap;
+	transition:
+		background-color var(--dur-micro) var(--ease-out),
+		color var(--dur-micro) var(--ease-out);
+}
+.mq-cta:hover {
+	background: var(--color-ink);
+	color: var(--color-paper);
+}
+.mq-cta:active {
+	transform: translateY(1px);
+}
+
+/* H1 · the fold */
+.mq-hero {
+	min-height: 60dvh;
+	display: grid;
+	align-content: end;
+	padding: var(--space-2xl) 0 var(--space-xl);
+}
+.mq-hero h1 {
+	margin: 0;
+	font-size: var(--text-display-xxl);
+	font-weight: 750;
+	letter-spacing: -0.04em;
+	line-height: 0.92;
+	max-width: 9ch;
+	overflow-wrap: anywhere;
+	min-width: 0;
+}
+@media (min-width: 60rem) {
+	.mq-hero {
+		min-height: 78dvh;
+	}
+}
+.mq-rule {
+	border: 0;
+	border-top: var(--rule-thick) solid var(--color-ink);
+	margin: 0;
+}
+
+/* F1 · bento */
+.mq-bento {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: var(--space-sm);
+	padding: var(--space-lg) 0 var(--space-2xl);
+}
+@media (min-width: 40rem) {
+	.mq-bento {
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+	}
+}
+@media (min-width: 60rem) {
+	.mq-bento {
+		grid-template-columns: repeat(6, minmax(0, 1fr));
+		gap: var(--space-md);
+	}
+}
+.mq-cell {
+	border: var(--rule-hair) solid var(--color-rule);
+	border-radius: var(--radius-md);
+	padding: var(--space-md);
+	display: grid;
+	align-content: space-between;
+	gap: var(--space-sm);
+	min-width: 0;
+	background: var(--color-card);
+}
+.mq-cell.is-link:hover {
+	border-color: var(--color-ink);
+}
+.mq-cell.is-link:hover .mq-cell-title {
+	color: var(--color-accent-hover);
+}
+.mq-cell-code {
+	font-family: var(--font-mono);
+	font-size: var(--text-xs);
+	color: var(--color-neutral);
+	margin: 0;
+}
+.mq-cell-title {
+	font-size: var(--text-lg);
+	font-weight: 650;
+	letter-spacing: -0.01em;
+	line-height: var(--leading-snug);
+	margin: 0;
+	overflow-wrap: anywhere;
+}
+.mq-cell p {
+	margin: 0;
+	font-size: var(--text-sm);
+	color: var(--color-neutral);
+}
+.mq-cell-count {
+	font-family: var(--font-mono);
+	font-size: var(--text-sm);
+	font-variant-numeric: tabular-nums;
+	color: var(--color-ink);
+}
+.mq-cell ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: grid;
+	gap: var(--space-2xs);
+	font-size: var(--text-sm);
+}
+.mq-cell ul a {
+	color: var(--color-accent-hover);
+	border-bottom: var(--rule-hair) solid currentColor;
+}
+.mq-legend {
+	display: grid;
+	gap: var(--space-xs);
+}
+.mq-legend div {
+	display: grid;
+	gap: var(--space-2xs);
+	font-size: var(--text-sm);
+	color: var(--color-neutral);
+}
+.mq-cell code {
+	font-family: var(--font-mono);
+	font-size: var(--text-xs);
+}
+/* spans */
+.span-2 {
+	grid-column: span 2;
+}
+@media (min-width: 60rem) {
+	.span-3 {
+		grid-column: span 3;
+	}
+	.span-2r {
+		grid-row: span 2;
+	}
+}
+@media (min-width: 40rem) and (max-width: 59.99rem) {
+	.span-3 {
+		grid-column: span 2;
+	}
+}
+
+/* Ft5 · statement */
+.mq-foot {
+	padding: var(--space-2xl) 0 var(--space-xl);
+	border-top: var(--rule-thick) solid var(--color-ink);
+	display: grid;
+	gap: var(--space-lg);
+}
+.mq-foot-line {
+	margin: 0;
+	font-size: var(--text-3xl);
+	font-weight: 700;
+	letter-spacing: -0.03em;
+	line-height: 1.05;
+	max-width: 22ch;
+}
+.mq-foot-meta {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	gap: var(--space-sm);
+	padding-top: var(--space-sm);
+	border-top: var(--rule-hair) solid var(--color-rule);
+	font-size: var(--text-xs);
+	color: var(--color-neutral);
+}
+.mq-foot-meta a {
+	color: var(--color-ink);
+	border-bottom: var(--rule-hair) solid var(--color-rule-2);
+}

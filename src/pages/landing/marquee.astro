@@ -1,0 +1,109 @@
+---
+import "../../../tokens.css";
+import "../../styles/landing/marquee.css";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { ThemeToggle } from "../../components/ui/theme-toggle";
+import Notebook from "../../components/Notebook.astro";
+import Explain from "../../components/Explain.astro";
+import { loadCatalog, totals } from "../../lib/catalog";
+import { withBase } from "@cloudflare/nimbus-docs/runtime";
+
+export const prerender = true;
+const href = (p: string) => withBase(p, import.meta.env.BASE_URL);
+const cat = await loadCatalog();
+const t = totals(cat);
+const by = (k: string) => cat.find((c) => c.key === k)!;
+// Irregular spans: the biggest course gets the biggest tile.
+const tiles = [
+  { s: by("mcs-217"), span: "span-3 span-2r" },
+  { s: by("mcs-216-section-1"), span: "span-3" },
+  { s: by("mcs-216-section-2"), span: "span-3" },
+  { s: by("mcsl-222-section-1"), span: "span-2" },
+  { s: by("mcsl-222-section-2"), span: "span-2" },
+  { s: by("mcsl-223-section-1"), span: "span-2" },
+  { s: by("mcsl-223-section-2"), span: "span-2" },
+];
+---
+
+<BaseLayout title="Syntax Lab" description="Your lab record, worked out. Every IGNOU MCA lab session with the problem, the reasoning, the program and the output.">
+  <div class="mq">
+    <div class="mq-wrap">
+      <header class="mq-nav">
+        <a class="mq-brand" href={href("/")}>Syntax Lab</a>
+        <div class="mq-nav-right">
+          <ThemeToggle />
+          <a class="mq-cta" href="#index">Open the index</a>
+        </div>
+      </header>
+
+      <section class="mq-hero">
+        <h1>Your lab record, worked out.</h1>
+      </section>
+      <hr class="mq-rule" aria-hidden="true" />
+
+      <section class="mq-bento" id="index" aria-label="Courses and tools">
+        {tiles.map(({ s, span }) => (
+          <a class={`mq-cell is-link ${span}`} href={href(s.index)}>
+            <div>
+              <p class="mq-cell-code">{s.course}{s.section ? ` · ${s.section}` : ""} · Semester {s.semester}</p>
+              <h2 class="mq-cell-title">{s.title}</h2>
+              <p>{s.blurb}</p>
+            </div>
+            <span class="mq-cell-count">{s.sessions.length} sessions · {s.questions} exercises</span>
+          </a>
+        ))}
+        <div class="mq-cell span-2">
+          <div>
+            <p class="mq-cell-code">Question papers</p>
+            <ul>
+              <li><a href={href("/question-papers/mcsl-222-section-1")}>MCSL-222 Section 1</a></li>
+              <li><a href={href("/question-papers/mcsl-222-section-2")}>MCSL-222 Section 2</a></li>
+              <li><a href={href("/question-papers/mcsl-223-section-1")}>MCSL-223 Section 1</a></li>
+              <li><a href={href("/question-papers/mcsl-223-section-2")}>MCSL-223 Section 2</a></li>
+            </ul>
+          </div>
+          <p>Typed from the manuals, same numbering as the pages.</p>
+        </div>
+        <div class="mq-cell span-2">
+          <div>
+            <p class="mq-cell-code">What goes in the record</p>
+            <div class="mq-legend">
+              <div><Notebook /><span>Problem, algorithm, program, output. Copy.</span></div>
+              <div><Explain /><span>Explanations and demos. Read for the viva.</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="mq-cell span-3">
+          <div>
+            <p class="mq-cell-code">Download and print</p>
+            <ul>
+              <li><a href={href("/downloads/semester-1.zip")} download>Semester 1 as PDF (ZIP)</a></li>
+              <li><a href={href("/downloads/semester-2.zip")} download>Semester 2 as PDF (ZIP)</a></li>
+            </ul>
+          </div>
+          <p>{t.sessions} sessions, one PDF each, in ZIPs per section, course and semester.</p>
+        </div>
+        <div class="mq-cell span-3">
+          <div>
+            <p class="mq-cell-code">Run it yourself</p>
+            <ul>
+              <li><code>gcc 1.c -o 1 && ./1</code></li>
+              <li><code>python3 1.py</code></li>
+              <li><code>rustc 1.rs && ./1</code></li>
+              <li><code>node 1.ts</code></li>
+            </ul>
+          </div>
+          <p><a href={href("/getting-started")}>Getting started</a> lists online playgrounds too.</p>
+        </div>
+      </section>
+
+      <footer class="mq-foot">
+        <p class="mq-foot-line">Copy what is marked. Understand the rest.</p>
+        <div class="mq-foot-meta">
+          <span>Syntax Lab · IGNOU MCA lab record companion</span>
+          <span><a href={href("/important-notice")}>Notice on use</a> · <a href="https://github.com/theetherGit/mca-ignou-labs">Source</a> · MIT · 2026</span>
+        </div>
+      </footer>
+    </div>
+  </div>
+</BaseLayout>
