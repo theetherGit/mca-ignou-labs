@@ -1,0 +1,215 @@
+---
+title: "MCSL-222 Section 2 Question Paper"
+description: "Typed question paper for MCSL-222 Section 2, Web Technologies: all 46 lab exercises, session by session."
+mode: custom
+sidebar: false
+searchable: false
+noindex: true
+tableOfContents: false
+---
+
+<article class="qp docs-content">
+
+<header class="qp-head">
+  <p class="qp-uni">Indira Gandhi National Open University</p>
+  <p class="qp-prog">Master of Computer Applications (MCA)</p>
+  <h1 class="qp-title">MCSL-222: Object Oriented Analysis and Design and Web Technologies Lab</h1>
+  <p class="qp-sec">Section 2: Web Technologies</p>
+  <dl class="qp-meta">
+    <div><dt>Semester</dt><dd>II</dd></div>
+    <div><dt>Sessions</dt><dd>10</dd></div>
+    <div><dt>Exercises</dt><dd>46</dd></div>
+    <div><dt>Source</dt><dd>IGNOU lab manual, list of lab exercises</dd></div>
+  </dl>
+</header>
+
+## Instructions
+
+1. Use Apache NetBeans IDE or Eclipse IDE with JDK 17 or later and Apache Tomcat 10.
+2. The database named IGNOU with a Student table created in Session 1, Exercise 5 is reused in later sessions; keep its schema in your record.
+3. Sessions 3 onward extend one Maven project. Keep the project after every session.
+4. Make and state any assumptions the exercise leaves open.
+
+<section class="qp-session">
+
+## Session 1: Basics of Servlet
+
+<p class="qp-q"><strong>Q1.</strong> Write a Servlet Programme to print the current date and time along with the timestamp.</p>
+
+<p class="qp-q"><strong>Q2.</strong> Create an HTML form with the input of student information using HTTP Protocol and method, then display the input information using Servlet.</p>
+
+<p class="qp-q"><strong>Q3.</strong> Write a servlet program to capture client IPs and display it.</p>
+
+<p class="qp-q"><strong>Q4.</strong> Write a servlet program for session management using HTTP Session along with tracking and also use a cookie for session tracking.</p>
+
+<p class="qp-q"><strong>Q5.</strong> Write a CRUD (Create/Save, Read, Edit/Update, Delete) application using servlet. Create a Database named IGNOU, create a table named Student which must capture the student information (basics, contact, enrollment details along with courses). Make necessary assumptions required.</p>
+
+</section>
+
+<section class="qp-session">
+
+## Session 2: JSP
+
+<p class="qp-q"><strong>Q6.</strong> Write JSP Programme to print current date and time along with timestamp, implement auto-refresh of a page.</p>
+
+<p class="qp-q"><strong>Q7.</strong> Create a JSP page and implement a Scripting Tag, Expression tag and Declaration tag.</p>
+
+<p class="qp-q"><strong>Q8.</strong> Import JSTL library in JSP Page and use its following tags:</p>
+
+1. out
+2. if
+3. forEach
+4. choice, when and otherwise
+5. url and redirect
+
+<p class="qp-q"><strong>Q9.</strong> Create a JSP Page for database connectivity using JDBC and show the students details from the database created during exercise no 5 in session 1.</p>
+
+<p class="qp-q"><strong>Q10.</strong> Write a JSP application using following Action Elements</p>
+
+1. jsp:forward
+2. jsp:include
+3. set and getProperty
+4. jsp:useBean
+
+<p class="qp-q"><strong>Q11.</strong> Write a JSP program using the following implicit objects with an example:</p>
+
+1. out
+2. request
+3. response
+4. session
+5. pageContext
+6. exception
+
+<p class="qp-q"><strong>Q12.</strong> Create a JSP Project implementing all the above (Session 1 and Session 2) concepts. Login Form, CRUD operation of Student details, Session Management with exception handling using Servlet and JSP. Make necessary assumptions required.</p>
+
+</section>
+
+<section class="qp-session">
+
+## Session 3: Maven and frameworks for J2EE
+
+<p class="qp-q"><strong>Q13.</strong> Create a Maven-based project using Spring Initializr.</p>
+
+<p class="qp-q"><strong>Q14.</strong> Create a Maven-based J2EE application for Spring MVC.</p>
+
+<p class="qp-q"><strong>Q15.</strong> Create a Maven-based J2EE application for Hibernate and JPA. Use the same database created in Exercise no. 5 of Session 1.</p>
+
+<p class="qp-q"><strong>Q16.</strong> Define a new implementation of Teacher Interface for his/her favourite Course in Spring using Inversion of Control and retrieving the information from the new teacher implementation.</p>
+
+</section>
+
+<section class="qp-session">
+
+## Session 4: Dependency injection and controllers
+
+<p class="qp-q"><strong>Q17.</strong> Write a class and implement it using dependency injection.</p>
+
+<p class="qp-q"><strong>Q18.</strong> Write the service interface with the getRandom() method, define 3 courses in an array, and inject using dependency injection into the teacher Interface (exercise no 4 in session 3). Test the application and verify the retrieving of random courses.</p>
+
+<p class="qp-q"><strong>Q19.</strong> Write a programme using Spring Framework to create a controller and display response in view using @GetMapping() annotation.</p>
+
+<p class="qp-q"><strong>Q20.</strong> Create a Form to capture Student Admission information (make usual assumptions about the attributes) using Spring Form tags (must use Text, textarea, dropdown, date picker, true/false and checkbox) and write a controller using @PostMapping() to display the form information.</p>
+
+</section>
+
+<section class="qp-session">
+
+## Session 5: Form validation, Bootstrap and CSS
+
+<p class="qp-q"><strong>Q21.</strong> Apply the client validation in the form created in the above exercise 4 of session 4, along with server-side validation.</p>
+
+<p class="qp-q"><strong>Q22.</strong> Write a programme to bind form objects with entity bean in Spring MVC.</p>
+
+<p class="qp-q"><strong>Q23.</strong> Configure Bootstrap in Spring MVC and use default styling classes in the form and view created in the above exercises.</p>
+
+<p class="qp-q"><strong>Q24.</strong> Apply custom Styling to your pages in Spring MVC.</p>
+
+</section>
+
+<section class="qp-session">
+
+## Session 6: Hibernate and JPA
+
+<p class="qp-q"><strong>Q25.</strong> Create a database for the student admission lifecycle and configure Hibernate and JPA with the Spring MVC Project along with all table entities.</p>
+
+<p class="qp-q"><strong>Q26.</strong> Retrieve Student information using Hibernate and printing the value in the console.</p>
+
+<p class="qp-q"><strong>Q27.</strong> Create CRUD (Create/Save, Read/Fetch, Edit/Update, Delete) using Spring MVC and Hibernation.</p>
+
+<p class="qp-q"><strong>Q28.</strong> Apply batch update for student's admission approval using Spring MVC and Hibernate.</p>
+
+</section>
+
+<section class="qp-session">
+
+## Session 7: Spring Boot and REST controllers
+
+<p class="qp-q"><strong>Q29.</strong> Create a Spring Boot application using Spring Initializer. Add the following dependencies manually:</p>
+
+1. Spring MVC
+2. Hibernate
+3. JPA
+4. Thymeleaf
+5. DevTool
+6. Actuator
+7. MySQL/MSSQL/Oracle/MongoDB (as per your choice) driver.
+
+<p class="qp-q"><strong>Q30.</strong> Configure Database settings through the property file in Spring Boot.</p>
+
+<p class="qp-q"><strong>Q31.</strong> Create JPA Repositories for all entities used in the Student Admission lifecycle.</p>
+
+<p class="qp-q"><strong>Q32.</strong> Create Rest Controller to fetch Student Information using JPA Repository; the response should display in JSON format.</p>
+
+</section>
+
+<section class="qp-session">
+
+## Session 8: REST API, Spring Security and Actuator
+
+<p class="qp-q"><strong>Q33.</strong> Add actuator dependency in Spring boot and Test Actuator (all available Endpoints).</p>
+
+<p class="qp-q"><strong>Q34.</strong> Create REST API for CRUD operation using Spring Boot and Hibernate/JPA using annotation.</p>
+
+<p class="qp-q"><strong>Q35.</strong> Create a REST API for CRUD operation using Spring Boot and Hibernate/JPA using XML configuration.</p>
+
+<p class="qp-q"><strong>Q36.</strong> Add Spring Security dependency in the existing spring boot application created in Exercise 2 of Session 8 and configure it as the default login.</p>
+
+</section>
+
+<section class="qp-session">
+
+## Session 9: Spring Security
+
+<p class="qp-q"><strong>Q37.</strong> Create a User table into the database and bind the user entity with Spring Security for Login.</p>
+
+<p class="qp-q"><strong>Q38.</strong> Create a Custom Login Page in HTML and authenticate using Spring Security in Spring Boot.</p>
+
+<p class="qp-q"><strong>Q39.</strong> Implement logout functionality in Spring Security.</p>
+
+<p class="qp-q"><strong>Q40.</strong> Create a User registration form and validate the form. Once information is validated and saved, write functionality to auto-login using Spring Security.</p>
+
+</section>
+
+<section class="qp-session">
+
+## Session 10: Bootstrap, role based authentication and CSRF
+
+<p class="qp-q"><strong>Q41.</strong> Add Bootstrap styling in the Login and registration page in the above exercises in session 9.</p>
+
+<p class="qp-q"><strong>Q42.</strong> Create a Role Table in the database and configure it with Spring Boot, Security and Hibernate.</p>
+
+<p class="qp-q"><strong>Q43.</strong> Write code for role-based authentication using Spring Security.</p>
+
+<p class="qp-q"><strong>Q44.</strong> Display current logged in User details on the dashboard along with client IP, data time and user's current role.</p>
+
+<p class="qp-q"><strong>Q45.</strong> Add CSRF functionality in the authentication.</p>
+
+<p class="qp-q"><strong>Q46.</strong> Restrict role-based access to views in Spring Boot Security.</p>
+
+</section>
+
+<footer class="qp-foot">
+  <p>End of question paper. Worked solutions for every exercise: syntax.theether.in/mcsl-222/section-2/</p>
+</footer>
+
+</article>

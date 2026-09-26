@@ -1,0 +1,154 @@
+---
+title: "MCSL-223 Section 1 Question Paper"
+description: "Typed question paper for MCSL-223 Section 1, Computer Networks: all 25 lab exercises, session by session."
+mode: custom
+sidebar: false
+searchable: false
+noindex: true
+tableOfContents: false
+---
+
+<article class="qp docs-content">
+
+<header class="qp-head">
+  <p class="qp-uni">Indira Gandhi National Open University</p>
+  <p class="qp-prog">Master of Computer Applications (MCA)</p>
+  <h1 class="qp-title">MCSL-223: Computer Networks and Data Mining Lab</h1>
+  <p class="qp-sec">Section 1: Computer Networks</p>
+  <dl class="qp-meta">
+    <div><dt>Semester</dt><dd>II</dd></div>
+    <div><dt>Sessions</dt><dd>10</dd></div>
+    <div><dt>Exercises</dt><dd>25</dd></div>
+    <div><dt>Source</dt><dd>IGNOU lab manual, list of lab exercises</dd></div>
+  </dl>
+</header>
+
+## Instructions
+
+1. Implement every exercise with the NS-3 network simulator (version 3.36 or later).
+2. Submit the simulation script, the console output, the trace or pcap summary and the plot for every exercise that asks for one.
+3. Show the throughput, delay and window calculations alongside the simulated values.
+
+<section class="qp-session">
+
+## Session 1: Point-to-point topology and UDP echo
+
+<p class="qp-q"><strong>Q1.</strong> Create a simple point to point network topology using two nodes.</p>
+
+<p class="qp-q"><strong>Q2.</strong> Create a UdpClient and UdpServer nodes and communicate at a fixed data rate.</p>
+
+</section>
+
+<section class="qp-session">
+
+## Session 2: Throughput versus latency and the dumbbell topology
+
+<p class="qp-q"><strong>Q3.</strong> Measure the throughput (end to end) while varying latency in the network created in Session 1.</p>
+
+<p class="qp-q"><strong>Q4.</strong> Create a simple network topology having two client node on left side and two server nodes on the right side. Both clients are connected with another node n1. Similarly, both server node connecting to node n2. Also connect node n1 and n2 thus forming a dumbbell shape topology. Use point to point link only.</p>
+
+</section>
+
+<section class="qp-session">
+
+## Session 3: TCP sockets on the dumbbell
+
+<p class="qp-q"><strong>Q5.</strong> Install a TCP socket instance connecting either of the client node with either of the server node in session 2's network topology.</p>
+
+<p class="qp-q"><strong>Q6.</strong> Install a TCP socket instance connecting other remaining client node with the remaining server node in session 2's network topology.</p>
+
+<p class="qp-q"><strong>Q7.</strong> Start TCP application and monitor the packet flow.</p>
+
+</section>
+
+<section class="qp-session">
+
+## Session 4: Wireless ad-hoc network with OLSR
+
+<p class="qp-q"><strong>Q8.</strong> Take three nodes n1, n2 and n3 and create a wireless mobile ad-hoc network.</p>
+
+<p class="qp-q"><strong>Q9.</strong> Install the optimized Link State Routing protocol on these nodes.</p>
+
+</section>
+
+<section class="qp-session">
+
+## Session 5: UDP over Wi-Fi with tracing and pcap
+
+<p class="qp-q"><strong>Q10.</strong> Create a UDP client on a node n1 and a UDP server on a node n2.</p>
+
+<p class="qp-q"><strong>Q11.</strong> Send packets to node n2 from node n1 and plot the number of bytes received with respect to time at node n2.</p>
+
+<p class="qp-q"><strong>Q12.</strong> Show the pcap traces at node n2's Wi-Fi interface.</p>
+
+</section>
+
+<section class="qp-session">
+
+## Session 6: Fixed-distance ad-hoc nodes and CBR traffic
+
+<p class="qp-q"><strong>Q13.</strong> Use 2 nodes to setup a wireless ad-hoc network where nodes are placed at a fixed distance in a 3D plane.</p>
+
+<p class="qp-q"><strong>Q14.</strong> Install UDP server and Client at these two nodes.</p>
+
+<p class="qp-q"><strong>Q15.</strong> Setup a CBR transmission between these nodes.</p>
+
+</section>
+
+<section class="qp-session">
+
+## Session 7: Mixed TCP and UDP pairs
+
+<p class="qp-q"><strong>Q16.</strong> Setup 4 nodes, two TCP client and server pair and two UDP client and server pair.</p>
+
+<p class="qp-q"><strong>Q17.</strong> Send packets to respective clients from both the servers.</p>
+
+<p class="qp-q"><strong>Q18.</strong> Monitor the traffic for both the pair and plot the no. of bytes received.</p>
+
+</section>
+
+<section class="qp-session">
+
+## Session 8: TCP under UDP interference: congestion window tracing
+
+<p class="qp-q"><strong>Q19.</strong> Use the setup made in session 2 and monitor the traffic flow, plot the packets received.</p>
+
+<p class="qp-q"><strong>Q20.</strong> Start the TCP application at Time 1 second.</p>
+
+<p class="qp-q"><strong>Q21.</strong> After 20 seconds, start the UDP application at Rate1 which clogs the half of the dumbbell bridge capacity.</p>
+
+<p class="qp-q"><strong>Q22.</strong> Using ns-3 tracing mechanism, plot the changes in the TCP window size over the time.</p>
+
+</section>
+
+<section class="qp-session">
+
+## Session 9: Saturating the bottleneck and plotting cwnd
+
+<p class="qp-q"><strong>Q23.</strong> In the last session 8, Increase the UDP rate at 30 second to Rate2 such that it clogs whole of the dumbbell bridge capacity.</p>
+
+<p class="qp-q"><strong>Q24.</strong> Use MatPlotlLib or GNUPlot to visualize cwnd vs time, also mention Rate1 and Rate2.</p>
+
+</section>
+
+<section class="qp-session">
+
+## Session 10: Parameterised point-to-point link and TCP throughput in Wireshark
+
+<p class="qp-q"><strong>Q25.</strong> Create a point to pint network between two nodes with the following parameters.</p>
+
+- Link bandwidth between the two nodes. Default is 5 Mbps.
+- One way delay of the link. Default is 5 milliseconds.
+- Loss rate of packets on the link. Default is 0.000001. (This covers losses other than those that occur due to buffer drops at node0.)
+- Queue size of the buffer at node 0. Default is 10 packets.
+- Simulation time. Default is 10 seconds.
+
+Calculate the average TCP throughput at the receiver using Wireshark application for packet capturing.
+
+</section>
+
+<footer class="qp-foot">
+  <p>End of question paper. Worked solutions for every exercise: syntax.theether.in/mcsl-223/section-1/</p>
+</footer>
+
+</article>

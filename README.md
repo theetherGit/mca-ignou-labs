@@ -61,6 +61,7 @@ pnpm deploy     # Cloudflare Workers via wrangler
 - Multi-language solutions go in `<Tabs syncKey="lang">` with one `<TabItem label="C">` per language.
 - HTML solutions get `<Preview src="/code/..." height="300px" />` above the code fence.
 - `pnpm lint:docs` enforces frontmatter, internal links and heading hierarchy. MCS-217 pages follow `docs-plan/mcs-217-brief.md`.
+- Question papers: `python3 scripts/gen-question-papers.py` regenerates `src/content/docs/question-papers/*.mdx` from the verbatim Problem Statements on the session pages; the PDF step renders them to `dist/downloads/<section>/<section>-questions.pdf`. Re-run after editing any problem statement.
 - Downloads: `scripts/build-pdfs.mjs` prints every session page to A4 PDF and zips them. Names: `<course>-<section>-session-NN.pdf`, `<course>-<section>.zip`, `<course>.zip`, `semester-N.zip`; each ZIP holds one folder per section plus the manual's question sheet. Links are rendered by `src/components/PageTools.astro`.
 - Math: plain `$x^2$` works for simple inline LaTeX. Anything with braces that is not a valid JS expression (`\text{...}`, `\frac{a}{b}`) must use `<Math tex="..." />` or `<Math display tex="..." />`, because Nimbus pre-parses MDX and rejects those braces. Formula sheets on the MCSL-223 pages are the reference.
 

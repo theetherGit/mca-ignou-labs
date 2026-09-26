@@ -1,0 +1,206 @@
+---
+title: "MCSL-223 Section 2 Question Paper"
+description: "Typed question paper for MCSL-223 Section 2, Data Mining: all 23 lab exercises, session by session."
+mode: custom
+sidebar: false
+searchable: false
+noindex: true
+tableOfContents: false
+---
+
+<article class="qp docs-content">
+
+<header class="qp-head">
+  <p class="qp-uni">Indira Gandhi National Open University</p>
+  <p class="qp-prog">Master of Computer Applications (MCA)</p>
+  <h1 class="qp-title">MCSL-223: Computer Networks and Data Mining Lab</h1>
+  <p class="qp-sec">Section 2: Data Mining</p>
+  <dl class="qp-meta">
+    <div><dt>Semester</dt><dd>II</dd></div>
+    <div><dt>Sessions</dt><dd>10</dd></div>
+    <div><dt>Exercises</dt><dd>23</dd></div>
+    <div><dt>Source</dt><dd>IGNOU lab manual, list of lab exercises</dd></div>
+  </dl>
+</header>
+
+## Instructions
+
+1. Use the open source WEKA toolkit (version 3.8 or later). The sample datasets are in the data folder of the installation.
+2. For every run, record the exact parameter values, the run information block and the numbers you can verify by hand (support, confidence, entropy, accuracy, kappa, sum of squared errors).
+3. Interpret every output; a screenshot alone does not answer an exercise.
+
+<section class="qp-session">
+
+## Session 1: WEKA, datasets and ARFF files
+
+<p class="qp-q"><strong>Q1.</strong> Download and install WEKA. Navigate the various options available in WEKA. Explore the available datasets in WEKA. Load various datasets and observe the following:</p>
+
+1. List the attribute names and their types
+2. No. of records in each dataset
+3. Identify the class attribute (if any)
+4. Plot Histogram
+5. Determine the no. of records for each class.
+6. Visualize the data in different dimensions.
+
+<p class="qp-q"><strong>Q2.</strong> Create your own EXCEL file. Convert the EXCEL file to .csv format and prepare it as .arff file.</p>
+
+<p class="qp-q"><strong>Q3.</strong> Try to create your own datasets.</p>
+
+<p class="qp-q"><strong>Q4.</strong> Preprocess and classify Customer, Agriculture, Weather, Whole-sale Customers or the datasets of your own choice from the [UCI Machine Learning Repository](https://archive.ics.uci.edu/ml/datasets.php).</p>
+
+</section>
+
+<section class="qp-session">
+
+## Session 2: Basic preprocessing
+
+<p class="qp-q"><strong>Q5.</strong> Perform the basic pre-processing operations on data relation such as removing an attribute and filter attribute bank data.</p>
+
+<p class="qp-q"><strong>Q6.</strong> Demonstrate the preprocessing mechanism on the following datasets:</p>
+
+1. `student.arff`
+2. `labor.arff`
+3. `contactlenses.arff`
+
+</section>
+
+<section class="qp-session">
+
+## Session 3: Unsupervised filters and Apriori
+
+<p class="qp-q"><strong>Q7.</strong> Perform the following:</p>
+
+- Explore various options available in WEKA for preprocessing data and apply unsupervised filters like Discretization, Resample-filter etc. on various datasets.
+- Load weather, nominal, Iris, Glass datasets into WEKA and run Apriori algorithms with different support and confidence values.
+- Study the rules generated.
+- Apply different discretization filters on numerical attributes and run the Apriori association rule algorithm. Study the rules generated.
+- Derive interesting insights and observe the effect of discretization in the rule generation process.
+
+<p class="qp-q"><strong>Q8.</strong> Implement the Apriori Algorithm to find the association rules in contactlenses.arff dataset.</p>
+
+</section>
+
+<section class="qp-session">
+
+## Session 4: FP-Growth and Apriori parameter studies
+
+<p class="qp-q"><strong>Q9.</strong> Find the frequent patterns using FP-Growth algorithm on contactlenses.arff and test.arff datasets.</p>
+
+<p class="qp-q"><strong>Q10.</strong> Generate association rules using Apriori algorithm with Bank.arff relation</p>
+
+1. Set minimum support range as 20% to 100%, incremental decrease factor as 5% and confidence factor as 80% and generate 5 rules.
+2. Set minimum support as 10%, delta 5%, minimum lift as 150% and generate 4 rules.
+
+<p class="qp-q"><strong>Q11.</strong> Generate association rule for the credit card promotion dataset using Apriori algorithm with the support range 40% to 100%, confidence as 10%, incremental decrease as 5% and generate 6 rules.</p>
+
+</section>
+
+<section class="qp-session">
+
+## Session 5: Reading Apriori output
+
+<p class="qp-q"><strong>Q12.</strong> Perform the following:</p>
+
+- Use contactlenses.arff and load it into WEKA. Check that all attributes are nominal (categorical).
+- Change to the Associate Panel. Select Apriori as associator. After pressing the start button, Apriori starts to build its model and writes its output into the output field. The first part of the output (Run information) describes the options that have been set and the data set used. Make sure you understand all the data reported.
+- The rules that have been generated are listed at the end of the output. By default, only the 10 most valuable rules according to their confidence level are shown. Each rule consists of some attribute values on a left hand side of the arrow, the arrow sign and the right hand side list of attribute values. Right of the arrow sign are the predicted attribute values. Rules have certain support and confidence values. The number before the arrow sign is the number of instances the rule applies to. The number after the arrow sign is the number of instances predicted correctly. The number in brackets after conf: is the confidence of the rule. Analyse the rules mined from the data set. What are their confidence and support values? Examine the number of large itemsets and make sure you understand how this data has been calculated (check that the values you would get manually are correct).
+
+</section>
+
+<section class="qp-session">
+
+## Session 6: Apriori on the zoo dataset and regression
+
+<p class="qp-q"><strong>Q13.</strong> Perform the following:</p>
+
+- Use zoo.arff dataset and load it into WEKA. Examine the attributes and make sure you understand their meaning. Are all attributes nominal?
+- In the preprocess area, deselect the animal and legs attributes. The animal attribute is the name of the animal, and is not useful for mining. The legs attribute is numeric and cannot be used directly with Apriori. Alternatively, you can try to use the Discretize Filter to discretize the legs attribute.
+- After deselecting the attributes, use the Apply Filters button to generate a working relation that removes those attributes. Notice how the working relation changes, and has fewer attributes than the base relation.
+- First, try using the Apriori algorithm with the default parameters. Record the generated rules.
+- Vary the number of rules generated (click on the command that you are running). Try 20, 30, and so on. Record how many rules you have to generate before generating a rule containing type=mammal.
+- Vary the maximum support until a rule containing type=mammal is the top rule generated. Record the maximum support needed.
+- Select one generated rule that was interesting to you. Why was it interesting? What does it mean? Check its confidence and support: are they high enough?
+- Suggest one improvement to the Apriori implementation in WEKA that would have made this data mining lab easier to accomplish.
+
+<p class="qp-q"><strong>Q14.</strong> Demonstrate to predict the Numerical Values in the given Data Set is using Regression Methods.</p>
+
+</section>
+
+<section class="qp-session">
+
+## Session 7: Classification: logistic regression, decision tree, Naive Bayes, k-NN, SVM
+
+<p class="qp-q"><strong>Q15.</strong> Demonstrate the classification rule process on the student.arff, employee.arff and labor.arff datasets using the following algorithms:</p>
+
+1. Logistic Regression
+2. Decision Tree
+3. Naive Bayes
+
+<p class="qp-q"><strong>Q16.</strong> Demonstrate the classification rule process on the student.arff, employee.arff and labor.arff datasets using the following algorithms:</p>
+
+1. K-Nearest Neighbour
+2. SVM
+
+</section>
+
+<section class="qp-session">
+
+## Session 8: Decision trees, rules, entropy, kappa and ROC
+
+<p class="qp-q"><strong>Q17.</strong> Perform the following:</p>
+
+- Demonstrate performing classification on various data sets.
+- Load each dataset into WEKA and run ID3, J48 classification algorithm.
+- Study the classifier output. Compute entropy values, Kappa statistic.
+- Extract if-then rules from the decision tree generated by the classifier.
+- Observe the confusion matrix.
+
+<p class="qp-q"><strong>Q18.</strong> Perform the following:</p>
+
+- Load each dataset into WEKA and perform Naive Bayes classification and k-Nearest Neighbour classification.
+- Interpret the results obtained.
+- Plot ROC Curves.
+- Compare classification results of ID3, J48, Naive Bayes and k-NN classifiers for each dataset, and deduce which classifier is performing best and poor for each dataset and justify.
+
+</section>
+
+<section class="qp-session">
+
+## Session 9: k-means clustering
+
+<p class="qp-q"><strong>Q19.</strong> Demonstrate Clustering features in Large Databases with noise.</p>
+
+<p class="qp-q"><strong>Q20.</strong> Implement simple K-Means Algorithm to demonstrate the clustering rule on the following datasets:</p>
+
+1. `iris.arff`
+2. `student.arff`
+
+<p class="qp-q"><strong>Q21.</strong> Perform the following:</p>
+
+- Load each dataset into WEKA and run simple k-means clustering algorithm with different values of k (number of desired clusters).
+- Study the clusters formed.
+- Observe the sum of squared errors and centroids, and derive insights.
+- Explore other clustering techniques available in WEKA.
+- Explore visualization features of WEKA to visualize the clusters.
+- Derive interesting insights and explain.
+
+</section>
+
+<section class="qp-session">
+
+## Session 10: Hierarchical and density-based clustering
+
+<p class="qp-q"><strong>Q22.</strong> Implement Hierarchical Clustering Algorithm to demonstrate the clustering rule process in the following datasets:</p>
+
+1. `employee.arff`
+2. `student.arff`
+
+<p class="qp-q"><strong>Q23.</strong> Implement Density based Clustering Algorithm to demonstrate the clustering rule process on dataset employee.arff.</p>
+
+</section>
+
+<footer class="qp-foot">
+  <p>End of question paper. Worked solutions for every exercise: syntax.theether.in/mcsl-223/section-2/</p>
+</footer>
+
+</article>
