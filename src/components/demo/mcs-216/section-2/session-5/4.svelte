@@ -6,7 +6,7 @@
 </script>
 
 <div
-    class="p-8 bg-gray-50 min-h-auto text-black mt-5 rounded-xl flex flex-col items-center justify-center gap-4"
+    class="p-4 sm:p-8 bg-gray-50 min-h-auto text-black mt-5 rounded-xl flex flex-col items-center justify-center gap-4"
 >
     <h2 class="text-xl font-semibold text-gray-800">
         Exercise 4: Image Mouse Events

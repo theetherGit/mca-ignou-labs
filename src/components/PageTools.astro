@@ -36,11 +36,25 @@ if (known && (sessionMatch || parts.length >= 2)) {
   links.push({ href: dl(`semester-${SEMESTER[course]}.zip`), text: `Semester ${SEMESTER[course]} (ZIP)` });
 }
 const btn =
-  "inline-flex items-center rounded-md border border-border bg-card px-3 py-1.5 text-sm font-medium text-foreground no-underline hover:bg-accent";
+  "nb-pt-btn inline-flex items-center whitespace-nowrap rounded-md border border-border bg-card px-3 py-1.5 text-sm font-medium text-foreground no-underline hover:bg-accent";
+const first = sessionMatch ? links[0] : undefined;
+const zips = sessionMatch ? links.slice(1) : links;
 ---
-<div class="no-print my-3 flex flex-wrap items-center gap-2">
+<div class="nb-pagetools no-print my-3 flex flex-wrap items-center gap-2">
   <button type="button" class={btn} onclick="window.print()">Print</button>
-  {links.map((l) => (
-    <a href={l.href} class={btn} download>{l.text}</a>
-  ))}
+  {first && <a href={first.href} class={btn} download>{first.text}</a>}
+  {zips.length > 0 && (
+    <>
+      {/* Wide screens: every ZIP inline. Phones: behind one disclosure so the row stays one line. */}
+      <span class="nb-pt-inline">
+        {zips.map((l) => <a href={l.href} class={btn} download>{l.text}</a>)}
+      </span>
+      <details class="nb-pt-more">
+        <summary class={btn}>More downloads</summary>
+        <div class="nb-pt-more-list">
+          {zips.map((l) => <a href={l.href} class={btn} download>{l.text}</a>)}
+        </div>
+      </details>
+    </>
+  )}
 </div>

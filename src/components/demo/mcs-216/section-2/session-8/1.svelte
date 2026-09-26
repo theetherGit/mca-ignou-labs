@@ -94,13 +94,13 @@
 </script>
 
 <div
-    class="p-8 bg-gray-50 min-h-auto text-black rounded-xl mt-5 flex flex-col items-center justify-center gap-6"
+    class="p-4 sm:p-8 bg-gray-50 min-h-auto text-black rounded-xl mt-5 flex flex-col items-center justify-center gap-6"
 >
     <h2 class="text-2xl font-bold text-gray-800">📖 Library Book Management</h2>
 
     <button
         onclick={runSimulation}
-        class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium shadow-md"
+        class="whitespace-nowrap px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium shadow-md"
     >
         Run Simulation
     </button>

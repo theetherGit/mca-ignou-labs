@@ -40,12 +40,12 @@
 </script>
 
 <div
-    class="p-8 bg-gray-50 min-h-auto text-black rounded-xl mt-5 flex flex-col items-center justify-center gap-4"
+    class="p-4 sm:p-8 bg-gray-50 min-h-auto text-black rounded-xl mt-5 flex flex-col items-center justify-center gap-4"
 >
     <h2 class="text-xl font-semibold text-gray-800">Auto-Grader</h2>
     <button
         onclick={gradeLabs}
-        class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+        class="whitespace-nowrap px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
     >
         Run gradeLabs()
     </button>

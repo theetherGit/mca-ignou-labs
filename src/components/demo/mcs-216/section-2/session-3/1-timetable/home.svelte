@@ -6,7 +6,7 @@
         n === 1 ? "st" : n === 2 ? "nd" : n === 3 ? "rd" : "th";
 </script>
 
-<section class="p-6 max-w-4xl mx-auto">
+<section class="p-4 sm:p-6 max-w-4xl mx-auto">
     <header class="text-center mb-10">
         <h1 class="text-3xl font-bold tracking-tight text-gray-900">
             B.Tech Even Semester Timetables

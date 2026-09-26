@@ -82,7 +82,7 @@
     let config = $derived(yearConfig[year] ?? yearConfig[1]);
 </script>
 
-<section class="p-6 max-w-5xl mx-auto">
+<section class="p-4 sm:p-6 max-w-5xl mx-auto">
     <header class="text-center mb-6">
         <h1 class="text-2xl font-bold text-gray-900">
             {year}{getSuffix(year)} Year B.Tech Timetable

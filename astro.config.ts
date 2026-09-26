@@ -7,6 +7,7 @@ import { unified } from "@astrojs/markdown-remark";
 import codeImport from "remark-code-import";
 import remarkMath from "remark-math";
 import rehypeMathML from "@daiji256/rehype-mathml";
+import rehypeResponsive from "./src/lib/rehype-responsive";
 
 const nimbusConfig = defineNimbusConfig({
   site: "https://syntax.theether.in",
@@ -21,6 +22,8 @@ const nimbusConfig = defineNimbusConfig({
   sidebar: {
     // Three course groups collapsed by default; the group holding the current page opens.
     defaultCollapsed: true,
+    // Section landing pages have long titles; label them "Overview" so sidebar links stay one line.
+    overviewLabel: "Overview",
     items: [
       "introduction",
       "important-notice",
@@ -73,7 +76,7 @@ export default defineConfig({
         processor: unified({
           // @ts-expect-error remark-code-import's transformer type is looser than Astro's RemarkPlugin; runtime-compatible.
           remarkPlugins: [[codeImport, { rootDir: process.cwd() }], remarkMath],
-          rehypePlugins: [rehypeMathML],
+          rehypePlugins: [rehypeMathML, rehypeResponsive],
         }),
       },
     }),

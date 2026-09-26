@@ -4,12 +4,12 @@
 
 <!-- Requirement: Set college logo as background image to the web page -->
 <main
-    class="min-h-auto bg-[url('/college-logo.jpg')] text-black bg-cover bg-no-repeat bg-fixed bg-center p-6 mt-5 rounded-xl"
+    class="min-h-auto bg-[url('/college-logo.jpg')] text-black bg-cover bg-no-repeat bg-fixed bg-center p-4 sm:p-6 mt-5 rounded-xl"
 >
     <!-- Semi-transparent overlay for content readability -->
     <div class="min-h-auto flex items-center justify-center">
         <div
-            class="w-full max-w-2xl bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-6"
+            class="w-full max-w-2xl bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-4 sm:p-6"
         >
             <!-- Requirement: Heading in Arial font, 18px -->
             <h1

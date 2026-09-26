@@ -4,11 +4,8 @@
  * F1 bento knobs: tiles=9 · spans=irregular · border=hairline all
  * nav: N9 edge-aligned minimal (outlined CTA · sans wordmark · default padding) · footer: Ft5 statement (38ch · wordmark under)
  * enrichment: none · audience: IGNOU MCA distance learners · use: one idea, then every entry point
- * promoted to / on 2026-09-26 · Hallmark · pre-emit critique: P5 H4 E5 S4 R5 V5 */
-html,
-body {
-	overflow-x: clip;
-}
+ * promoted to / on 2026-09-26 · responsive pass: verified 320–2560 px, touch targets ≥ 44 px
+ * Hallmark · pre-emit critique: P5 H4 E5 S4 R5 V5 */
 .mq {
 	font-family: var(--font-body);
 	color: var(--color-ink);
@@ -73,15 +70,15 @@ body {
 
 /* H1 · the fold */
 .mq-hero {
-	min-height: 60dvh;
+	min-height: 46svh;
 	display: grid;
 	align-content: end;
-	padding: var(--space-2xl) 0 var(--space-xl);
+	padding: var(--space-xl) 0 var(--space-2xl);
 }
 .mq-hero h1 {
 	margin: 0;
 	font-family: var(--font-display);
-	font-size: var(--text-display-xxl);
+	font-size: clamp(3rem, 14.5vw, 4.5rem);
 	font-weight: 800;
 	font-variation-settings: "opsz" 96, "wdth" 90;
 	letter-spacing: -0.035em;
@@ -90,9 +87,17 @@ body {
 	overflow-wrap: anywhere;
 	min-width: 0;
 }
+@media (min-width: 40rem) {
+	.mq-hero {
+		min-height: 60svh;
+	}
+	.mq-hero h1 {
+		font-size: var(--text-display-xxl);
+	}
+}
 @media (min-width: 60rem) {
 	.mq-hero {
-		min-height: 78dvh;
+		min-height: 78svh;
 	}
 }
 .mq-rule {
@@ -104,7 +109,7 @@ body {
 /* F1 · bento */
 .mq-bento {
 	display: grid;
-	grid-template-columns: repeat(2, minmax(0, 1fr));
+	grid-template-columns: minmax(0, 1fr);
 	gap: var(--space-sm);
 	padding: var(--space-lg) 0 var(--space-2xl);
 }
@@ -205,9 +210,18 @@ body {
 	font-family: var(--font-mono);
 	font-size: var(--text-xs);
 }
-/* spans */
-.span-2 {
-	grid-column: span 2;
+/* spans: one column on phones, pairs on tablets, the irregular 6-column mosaic on desktop */
+@media (min-width: 40rem) {
+	.span-2,
+	.span-3 {
+		grid-column: span 2;
+	}
+}
+@media (min-width: 40rem) and (max-width: 59.99rem) {
+	/* nine tiles in pairs leave one alone; let it take the whole row */
+	.mq-bento > :last-child:nth-child(odd) {
+		grid-column: 1 / -1;
+	}
 }
 @media (min-width: 60rem) {
 	.span-3 {
@@ -217,9 +231,19 @@ body {
 		grid-row: span 2;
 	}
 }
-@media (min-width: 40rem) and (max-width: 59.99rem) {
-	.span-3 {
-		grid-column: span 2;
+
+/* Touch screens: 44 px CTA, link rows tall enough to hit */
+@media (pointer: coarse) {
+	.mq-cta {
+		min-height: 2.75rem;
+	}
+	.mq-cell ul a,
+	.mq-foot-meta a {
+		display: inline-block;
+		padding-block: var(--space-xs);
+	}
+	.mq-cell ul {
+		gap: 0;
 	}
 }
 

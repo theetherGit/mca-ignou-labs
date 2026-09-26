@@ -15,7 +15,7 @@
 </script>
 
 <div
-    class="max-w-2xl mx-auto p-6 bg-gray-50 min-h-auto text-black rounded-xl mt-5"
+    class="max-w-2xl mx-auto p-4 sm:p-6 bg-gray-50 min-h-auto text-black rounded-xl mt-5"
 >
     <h2 class="text-xl font-semibold mb-4 text-gray-800">Product Details</h2>
 
@@ -27,16 +27,16 @@
         {/each}
     </div>
 
-    <div class="flex gap-3">
+    <div class="flex flex-wrap gap-3">
         <button
             onclick={addTV}
-            class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
+            class="whitespace-nowrap px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
         >
             Add TV
         </button>
         <button
             onclick={deleteCellPhone}
-            class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
+            class="whitespace-nowrap px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
         >
             Delete Cell Phone
         </button>

@@ -17,4 +17,10 @@ interface Props {
 const { tex, display = false } = Astro.props;
 const html = temml.renderToString(tex, { displayMode: display, throwOnError: false });
 ---
-{display ? <div class="my-4 overflow-x-auto" set:html={html} /> : <Fragment set:html={html} />}
+{display ? (
+  <div class="nb-math-block my-4" set:html={html} />
+) : tex.length > 24 ? (
+  <span class="nb-math-scroll" set:html={html} />
+) : (
+  <Fragment set:html={html} />
+)}

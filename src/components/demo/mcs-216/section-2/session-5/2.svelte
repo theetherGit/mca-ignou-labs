@@ -32,9 +32,9 @@
 
 <div
     bind:this={questionContainer}
-    class="p-8 bg-gray-50 min-h-auto text-black mt-5 rounded-xl flex items-center justify-center"
+    class="p-4 sm:p-8 bg-gray-50 min-h-auto text-black mt-5 rounded-xl flex items-center justify-center"
 >
-    <div class="bg-white p-6 rounded-xl shadow-lg text-center max-w-md w-full">
+    <div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg text-center max-w-md w-full">
         <h2 class="text-xl font-semibold mb-4 text-gray-800">
             Exercise 2: Cookie Status
         </h2>

@@ -31,13 +31,13 @@
 </script>
 
 <div
-    class="p-8 bg-gray-50 min-h-auto text-black mt-5 rounded-xl flex flex-col items-center justify-center gap-6"
+    class="p-4 sm:p-8 bg-gray-50 min-h-auto text-black mt-5 rounded-xl flex flex-col items-center justify-center gap-6"
 >
     <h2 class="text-2xl font-bold text-gray-800">
         Product Discount Calculator
     </h2>
 
-    <div class="bg-white p-6 rounded-xl shadow-md w-full max-w-md space-y-4">
+    <div class="bg-white p-4 sm:p-6 rounded-xl shadow-md w-full max-w-md space-y-4">
         <div>
             <label
                 for="discountInput"
@@ -54,7 +54,7 @@
 
         <button
             onclick={calculate}
-            class="w-full py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-medium shadow"
+            class="whitespace-nowrap w-full py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-medium shadow"
         >
             Calculate & Display Details
         </button>

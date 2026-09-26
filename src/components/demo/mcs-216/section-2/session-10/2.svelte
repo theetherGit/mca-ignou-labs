@@ -15,14 +15,14 @@
 </script>
 
 <div
-    class="p-8 bg-gray-50 min-h-auto text-black rounded-xl mt-5 flex flex-col items-center justify-center gap-4"
+    class="p-4 sm:p-8 bg-gray-50 min-h-auto text-black rounded-xl mt-5 flex flex-col items-center justify-center gap-4"
 >
     <h3 class="text-lg font-semibold text-gray-800">
         All Cookies (Name-Value Pairs)
     </h3>
     <button
         onclick={parseCookies}
-        class="px-5 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition"
+        class="whitespace-nowrap px-5 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition"
         >Parse & Display</button
     >
 

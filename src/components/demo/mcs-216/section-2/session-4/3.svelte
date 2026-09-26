@@ -3,7 +3,7 @@
 </script>
 
 <main
-    class="min-h-auto rounded-xl text-black mt-5 bg-gray-100 p-6 font-sans space-y-6 max-w-3xl mx-auto"
+    class="min-h-auto rounded-xl text-black mt-5 bg-gray-100 p-4 sm:p-6 font-sans space-y-6 max-w-3xl mx-auto"
 >
     <section class="bg-white p-5 rounded-lg shadow-md">
         <h2 class="text-xl font-semibold mb-3 text-gray-700">

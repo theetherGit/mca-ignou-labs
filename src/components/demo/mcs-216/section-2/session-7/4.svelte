@@ -39,7 +39,7 @@
 </script>
 
 <div
-    class="p-8 bg-gray-50 min-h-auto text-black mt-5 rounded-xl flex flex-col items-center justify-center gap-4"
+    class="p-4 sm:p-8 bg-gray-50 min-h-auto text-black mt-5 rounded-xl flex flex-col items-center justify-center gap-4"
 >
     <h2 class="text-xl font-semibold text-gray-800">Reliable Multiply</h2>
     <p class="text-gray-600">
@@ -49,7 +49,7 @@
     <button
         onclick={runWrapper}
         disabled={isLoading}
-        class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:opacity-50"
+        class="whitespace-nowrap px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:opacity-50"
     >
         {isLoading ? "Retrying..." : "Run Wrapper"}
     </button>

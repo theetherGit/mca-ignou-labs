@@ -27,9 +27,9 @@
 </script>
 
 <div
-    class="p-8 bg-gray-50 min-h-auto text-black rounded-xl mt-5 flex items-center justify-center"
+    class="p-4 sm:p-8 bg-gray-50 min-h-auto text-black rounded-xl mt-5 flex items-center justify-center"
 >
-    <div class="bg-white p-6 rounded-xl shadow-lg w-full max-w-sm space-y-4">
+    <div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg w-full max-w-sm space-y-4">
         <h3 class="text-lg font-semibold text-gray-800">Set & Get Cookie</h3>
         <input
             bind:value={inputVal}
@@ -40,12 +40,12 @@
         <div class="grid grid-cols-2 gap-3">
             <button
                 onclick={handleSet}
-                class="py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                class="whitespace-nowrap py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
                 >Set Cookie</button
             >
             <button
                 onclick={handleGet}
-                class="py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
+                class="whitespace-nowrap py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
                 >Get Cookie</button
             >
         </div>

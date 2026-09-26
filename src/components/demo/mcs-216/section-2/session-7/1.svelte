@@ -19,9 +19,9 @@
 </script>
 
 <div
-    class="p-8 bg-gray-50 min-h-auto mt-5 rounded-xl text-black flex items-center justify-center"
+    class="p-4 sm:p-8 bg-gray-50 min-h-auto mt-5 rounded-xl text-black flex items-center justify-center"
 >
-    <div class="bg-white p-6 rounded-xl shadow-lg w-full max-w-md">
+    <div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg w-full max-w-md">
         <h2 class="text-xl font-semibold mb-4 text-gray-800">Divide a / b</h2>
         <input
             bind:value={a}
@@ -38,7 +38,7 @@
 
         <button
             onclick={calculate}
-            class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition font-medium"
+            class="whitespace-nowrap w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition font-medium"
         >
             Calculate
         </button>

@@ -15,11 +15,11 @@
 </script>
 
 <div
-    class="min-h-auto text-black mt-5 rounded-xl bg-gray-900 flex flex-col items-center justify-center gap-4"
+    class="min-h-auto text-black mt-5 rounded-xl bg-gray-900 p-6 flex flex-col items-center justify-center gap-4"
 >
     <h1 class="text-2xl font-semibold text-gray-200">Live Clock</h1>
     <div
-        class="text-6xl font-mono font-bold tracking-widest text-cyan-400 drop-shadow-lg"
+        class="text-4xl sm:text-6xl font-mono font-bold tracking-wider sm:tracking-widest text-cyan-400 drop-shadow-lg"
     >
         {time}
     </div>

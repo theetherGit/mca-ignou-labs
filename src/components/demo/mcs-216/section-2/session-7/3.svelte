@@ -26,10 +26,10 @@
 </script>
 
 <div
-    class="p-8 bg-gray-50 min-h-auto text-black mt-5 rounded-xl flex flex-col items-center justify-center gap-4"
+    class="p-4 sm:p-8 bg-gray-50 min-h-auto text-black mt-5 rounded-xl flex flex-col items-center justify-center gap-4"
 >
     <h2 class="text-xl font-semibold text-gray-800">Animal Lookup</h2>
-    <div class="flex gap-2">
+    <div class="flex flex-wrap gap-2">
         <input
             bind:value={idxInput}
             type="number"
@@ -38,7 +38,7 @@
         />
         <button
             onclick={lookupAnimal}
-            class="px-5 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition"
+            class="whitespace-nowrap px-5 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition"
             >Find</button
         >
     </div>

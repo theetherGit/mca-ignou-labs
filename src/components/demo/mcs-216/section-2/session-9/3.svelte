@@ -36,14 +36,14 @@
 </script>
 
 <div
-    class="p-8 bg-gray-50 min-h-auto text-black rounded-xl mt-5 flex flex-col items-center justify-center gap-6"
+    class="p-4 sm:p-8 bg-gray-50 min-h-auto text-black rounded-xl mt-5 flex flex-col items-center justify-center gap-6"
 >
     <h2 class="text-2xl font-bold text-gray-800">🦅 Scalpel Tracker</h2>
 
     <button
         onclick={findScalpel}
         disabled={isLoading}
-        class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:opacity-50 font-medium shadow"
+        class="whitespace-nowrap px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:opacity-50 font-medium shadow"
     >
         {isLoading ? "🔍 Tracing..." : "Find Scalpel"}
     </button>

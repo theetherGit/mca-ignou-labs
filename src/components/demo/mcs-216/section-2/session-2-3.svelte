@@ -76,7 +76,7 @@
         <form
             bind:this={formEl}
             onsubmit={handleSubmit}
-            class="p-6 sm:p-8 space-y-6"
+            class="p-4 sm:p-6 sm:p-8 space-y-6"
             novalidate
         >
             <!-- Personal & Contact -->
@@ -383,7 +383,7 @@
                 <button
                     type="submit"
                     disabled={status.submitting}
-                    class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-8 rounded-lg transition shadow-md disabled:opacity-60 disabled:cursor-not-allowed w-full sm:w-auto"
+                    class="whitespace-nowrap bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-8 rounded-lg transition shadow-md disabled:opacity-60 disabled:cursor-not-allowed w-full sm:w-auto"
                 >
                     {status.submitting ? "Submitting..." : "Submit Application"}
                 </button>

@@ -22,7 +22,7 @@
 
 <div
     bind:this={demoContainer}
-    class="p-8 min-h-auto text-black rounded-xl mt-5 flex flex-col items-center justify-center gap-4 transition-colors duration-300"
+    class="p-4 sm:p-8 min-h-auto text-black rounded-xl mt-5 flex flex-col items-center justify-center gap-4 transition-colors duration-300"
 >
     <h3
         class="text-lg font-semibold text-gray-800 bg-white/80 px-4 py-2 rounded-lg backdrop-blur-sm"

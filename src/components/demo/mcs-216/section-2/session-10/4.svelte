@@ -22,18 +22,18 @@
 </script>
 
 <div
-    class="p-8 bg-gray-50 min-h-auto text-black rounded-xl mt-5 flex flex-col items-center justify-center gap-4"
+    class="p-4 sm:p-8 bg-gray-50 min-h-auto text-black rounded-xl mt-5 flex flex-col items-center justify-center gap-4"
 >
     <h3 class="text-lg font-semibold text-gray-800">Cookie Manager</h3>
 
     <div class="w-full max-w-md bg-white p-5 rounded-xl shadow-md space-y-4">
         <!-- Cookie 1 -->
-        <div class="flex gap-2">
+        <div class="flex flex-wrap gap-2">
             <input
                 bind:value={val1}
                 type="text"
                 placeholder="Cookie1 Value"
-                class="flex-1 p-2 border rounded"
+                class="flex-1 min-w-0 basis-40 p-2 border rounded"
             />
             <button
                 onclick={() => setCookie("cookie1", val1)}
@@ -52,12 +52,12 @@
             >
         </div>
         <!-- Cookie 2 -->
-        <div class="flex gap-2">
+        <div class="flex flex-wrap gap-2">
             <input
                 bind:value={val2}
                 type="text"
                 placeholder="Cookie2 Value"
-                class="flex-1 p-2 border rounded"
+                class="flex-1 min-w-0 basis-40 p-2 border rounded"
             />
             <button
                 onclick={() => setCookie("cookie2", val2)}
@@ -78,7 +78,7 @@
 
         <button
             onclick={showAll}
-            class="w-full py-2 bg-gray-700 text-white rounded hover:bg-gray-800 transition"
+            class="whitespace-nowrap w-full py-2 bg-gray-700 text-white rounded hover:bg-gray-800 transition"
             >Display All Cookies</button
         >
         <div

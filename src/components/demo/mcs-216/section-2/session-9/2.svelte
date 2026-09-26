@@ -23,7 +23,7 @@
 </script>
 
 <div
-    class="p-8 bg-gray-50 min-h-auto text-black mt-5 rounded-xl flex flex-col items-center justify-center gap-6"
+    class="p-4 sm:p-8 bg-gray-50 min-h-auto text-black mt-5 rounded-xl flex flex-col items-center justify-center gap-6"
 >
     <h2 class="text-xl font-semibold text-gray-800">
         External Content Loader (onMount)
@@ -38,7 +38,7 @@
     {/if}
 
     <div
-        class="w-full max-w-2xl border-2 border-dashed border-gray-300 p-6 bg-white rounded-xl shadow-sm min-h-25"
+        class="w-full max-w-2xl border-2 border-dashed border-gray-300 p-4 sm:p-6 bg-white rounded-xl shadow-sm min-h-25"
     >
         {@html content}
     </div>

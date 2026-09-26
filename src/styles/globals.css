@@ -808,3 +808,103 @@ body:not(:has([data-mobile-sidebar])) [data-menu-btn] {
 		break-inside: avoid;
 	}
 }
+
+/* ---- Responsive floor (every page) ----
+ * Root clip is the safety net; the wrappers below fix the actual causes. */
+html,
+body {
+	overflow-x: clip;
+}
+
+/* Wide content scrolls inside its own box (wrappers added by src/lib/rehype-responsive.ts). */
+.docs-content .nb-math-block {
+	max-width: 100%;
+	overflow-x: auto;
+	overflow-y: hidden;
+	overscroll-behavior-x: contain;
+	padding-block: 0.25rem;
+}
+.nb-math-scroll {
+	display: inline-block;
+	max-width: 100%;
+	overflow-x: auto;
+	overflow-y: hidden;
+	vertical-align: middle;
+	overscroll-behavior-x: contain;
+}
+
+/* Tab strips scroll sideways on phones; soft edge shadows show there is more. */
+[data-nb-tabs-list] {
+	background:
+		linear-gradient(to right, var(--nb-background) 40%, transparent) left center / 2rem 100% no-repeat local,
+		linear-gradient(to left, var(--nb-background) 40%, transparent) right center / 2rem 100% no-repeat local,
+		linear-gradient(to right, color-mix(in oklch, var(--nb-foreground) 14%, transparent), transparent) left center / 0.75rem 100% no-repeat scroll,
+		linear-gradient(to left, color-mix(in oklch, var(--nb-foreground) 14%, transparent), transparent) right center / 0.75rem 100% no-repeat scroll;
+}
+
+/* Page tools row: ZIPs inline on wide screens, in a disclosure on phones. */
+.nb-pt-inline {
+	display: none;
+}
+/* Open disclosure takes the full row so its links wrap inside the column. */
+.nb-pt-more[open] {
+	flex-basis: 100%;
+}
+.nb-pt-more > summary {
+	list-style: none;
+	cursor: pointer;
+}
+.nb-pt-more > summary::-webkit-details-marker {
+	display: none;
+}
+.nb-pt-more-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	margin-top: 0.5rem;
+}
+@media (min-width: 40rem) {
+	.nb-pt-inline {
+		display: contents;
+	}
+	.nb-pt-more {
+		display: none;
+	}
+}
+
+/* Touch screens: 44 px targets, and 16 px form text so iOS does not zoom on focus. */
+@media (pointer: coarse) {
+	.nb-pt-btn {
+		min-height: 2.75rem;
+	}
+	input,
+	select,
+	textarea,
+	.nb-tabs-pick select {
+		font-size: 16px;
+	}
+	nav[aria-label="Breadcrumb"] a,
+	a[href*="/edit/main/"] {
+		display: inline-flex;
+		align-items: center;
+		min-height: 1.5rem;
+	}
+}
+
+/* Print: ASCII diagrams keep their columns (smaller type) instead of wrapping. */
+@media print {
+	pre.astro-code[data-print-keep],
+	pre.astro-code[data-print-keep] code,
+	pre.astro-code[data-print-keep] .line {
+		white-space: pre !important;
+		overflow-wrap: normal !important;
+		word-break: normal !important;
+	}
+	pre.astro-code[data-print-keep] {
+		font-size: 7pt;
+		line-height: 1.35;
+	}
+	pre.astro-code[data-print-keep] .line::before {
+		display: none;
+	}
+}
