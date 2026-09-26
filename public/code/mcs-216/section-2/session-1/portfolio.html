@@ -1,0 +1,685 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Personal Profile Matrix</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap"
+            rel="stylesheet"
+        />
+
+        <style>
+            /* All core colors are bound to CSS variables controlled by the central JS CONFIG */
+            :root {
+                --bg-main: #0b0f19;
+                --bg-card: #131a26;
+                --bg-card-hover: #1c2636;
+                --border: #223147;
+                --text-primary: #f3f4f6;
+                --text-secondary: #9ca3af;
+
+                --accent-primary: #ff3e00;
+                --accent-secondary: #00b894;
+                --accent-muted: #3b82f6;
+                --accent-danger: #ef4444;
+
+                --font-sans:
+                    "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont,
+                    sans-serif;
+                --font-mono: "JetBrains Mono", monospace;
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            body {
+                font-family: var(--font-sans);
+                background-color: var(--bg-main);
+                color: var(--text-primary);
+                min-height: 100vh;
+                padding: 40px 20px;
+                line-height: 1.6;
+                background-image:
+                    radial-gradient(
+                        circle at 10% 20%,
+                        rgba(255, 62, 0, 0.03) 0%,
+                        transparent 40%
+                    ),
+                    radial-gradient(
+                        circle at 90% 80%,
+                        rgba(59, 130, 246, 0.03) 0%,
+                        transparent 40%
+                    );
+            }
+
+            .container {
+                max-width: 1100px;
+                margin: 0 auto;
+            }
+            header {
+                text-align: center;
+                margin-bottom: 50px;
+            }
+            h1 {
+                font-size: 3.5rem;
+                font-weight: 800;
+                letter-spacing: -0.03em;
+                margin-bottom: 12px;
+                color: #ffffff;
+            }
+            .subtitle {
+                font-family: var(--font-mono);
+                font-size: 1rem;
+                color: var(--accent-primary);
+                font-weight: 500;
+            }
+
+            .bento-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 24px;
+                margin-bottom: 40px;
+            }
+            .card {
+                background-color: var(--bg-card);
+                border: 1px solid var(--border);
+                border-radius: 16px;
+                padding: 30px;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            .card:hover {
+                border-color: rgba(255, 255, 255, 0.1);
+                transform: translateY(-2px);
+            }
+            h2 {
+                font-size: 1.35rem;
+                font-weight: 700;
+                margin-bottom: 20px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .col-span-2 {
+                grid-column: span 2;
+            }
+            .col-span-3 {
+                grid-column: span 3;
+            }
+
+            .detail-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+            .detail-label {
+                color: var(--text-secondary);
+                font-size: 0.85rem;
+                text-transform: uppercase;
+                font-family: var(--font-mono);
+                display: block;
+                margin-bottom: 2px;
+            }
+
+            .table-container {
+                width: 100%;
+                overflow-x: auto;
+                margin-top: 10px;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 0.9rem;
+                text-align: left;
+            }
+            th {
+                background-color: rgba(255, 255, 255, 0.03);
+                font-family: var(--font-mono);
+                color: var(--accent-muted);
+                font-weight: 600;
+                text-transform: uppercase;
+                padding: 12px 16px;
+                border-bottom: 2px solid var(--border);
+            }
+            td {
+                padding: 14px 16px;
+                border-bottom: 1px solid var(--border);
+            }
+            .course-code {
+                font-family: var(--font-mono);
+                color: var(--accent-primary);
+                font-weight: 600;
+            }
+
+            .favorites-container {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 16px;
+                width: 100%;
+            }
+            .fav-column h3 {
+                font-size: 0.9rem;
+                font-family: var(--font-mono);
+                margin-bottom: 16px;
+                text-transform: uppercase;
+            }
+
+            /* CSS Flex rule handles structural list inversion naturally */
+            .reverse-list {
+                display: flex;
+                flex-direction: column-reverse;
+                gap: 12px;
+            }
+            .favorite-item {
+                background-color: rgba(255, 255, 255, 0.02);
+                border: 1px solid var(--border);
+                padding: 16px;
+                border-radius: 10px;
+            }
+            .favorite-item a {
+                color: var(--text-primary);
+                text-decoration: none;
+                font-weight: 600;
+                font-size: 1rem;
+                display: block;
+                margin-bottom: 4px;
+            }
+            .favorite-item a:hover {
+                color: var(--accent-muted);
+            }
+            .favorite-item p {
+                color: var(--text-secondary);
+                font-size: 0.85rem;
+            }
+
+            .career-split {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+            .career-col {
+                background-color: rgba(255, 255, 255, 0.01);
+                border: 1px dashed var(--border);
+                border-radius: 12px;
+                padding: 20px;
+                position: relative;
+            }
+            .career-title-love {
+                color: var(--accent-secondary);
+                margin-bottom: 16px;
+                font-size: 1.1rem;
+            }
+            .career-title-avoid {
+                color: var(--accent-danger);
+                margin-bottom: 16px;
+                font-size: 1.1rem;
+            }
+            .status-avatar {
+                position: absolute;
+                top: 15px;
+                right: 20px;
+                font-family: var(--font-mono);
+                font-size: 1.4rem;
+                font-weight: bold;
+            }
+            .love .status-avatar {
+                color: var(--accent-secondary);
+            }
+            .avoid .status-avatar {
+                color: var(--accent-danger);
+            }
+
+            .job-node {
+                display: flex;
+                align-items: flex-start;
+                gap: 12px;
+                margin-bottom: 14px;
+                background: rgba(255, 255, 255, 0.02);
+                padding: 12px;
+                border-radius: 8px;
+            }
+            .job-node .dot {
+                margin-top: 6px;
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+            }
+            .career-col.love .dot {
+                background-color: var(--accent-secondary);
+            }
+            .career-col.avoid .dot {
+                background-color: var(--accent-danger);
+            }
+            .job-meta strong {
+                font-size: 0.95rem;
+                display: block;
+            }
+            .job-meta p {
+                font-size: 0.85rem;
+                color: var(--text-secondary);
+            }
+
+            .fun-fact {
+                margin-top: 14px;
+                background-color: rgba(255, 255, 255, 0.02);
+                border-left: 3px solid var(--accent-muted);
+                padding: 12px 16px;
+                border-radius: 0 8px 8px 0;
+                font-size: 0.9rem;
+            }
+            footer {
+                margin-top: 60px;
+                border-top: 1px solid var(--border);
+                padding-top: 30px;
+                text-align: center;
+                font-family: var(--font-mono);
+                font-size: 0.8rem;
+                color: var(--text-secondary);
+            }
+
+            @media (max-width: 900px) {
+                .bento-grid {
+                    grid-template-columns: 1fr;
+                }
+                .col-span-2,
+                .col-span-3 {
+                    grid-column: span 1;
+                }
+                .favorites-container {
+                    grid-template-columns: 1fr;
+                }
+                .career-split {
+                    grid-template-columns: 1fr;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <!-- Structural targets that JavaScript hooks into and populates -->
+            <header id="header-root"></header>
+
+            <div class="bento-grid">
+                <div class="card col-span-3" id="about-root"></div>
+                <div class="card col-span-3">
+                    <h2><span>📋</span> Personal Profile Specifications</h2>
+                    <div class="detail-grid" id="profile-root"></div>
+                </div>
+                <div class="card col-span-3" id="timetable-root"></div>
+                <div class="card col-span-3" id="favorites-root"></div>
+                <div class="card col-span-2" id="careers-root"></div>
+                <div class="card" id="neighbor-root"></div>
+            </div>
+
+            <footer id="footer-root"></footer>
+        </div>
+
+        <!-- CENTRAL CONTROL MATRIX: Change everything below in the CONFIG object -->
+        <script>
+            const CONFIG = {
+                // Theme Customization Engine
+                theme: {
+                    backgroundMain: "#0b0f19",
+                    backgroundCard: "#131a26",
+                    borderLine: "#223147",
+                    textMain: "#f3f4f6",
+                    textMuted: "#9ca3af",
+
+                    accentSvelte: "#ff3e00", // Primary accent (Svelte Orange)
+                    accentGreen: "#00b894", // Success accent
+                    accentBlue: "#3b82f6", // Informational accent
+                    accentRed: "#ef4444", // Warning/Sad accent
+                },
+
+                // Personal Information
+                personal: {
+                    name: "Shivam Meena",
+                    tagline: "~/fullstack-engineer/mca-student-ignou",
+                    aboutHTML: `I'm a seasoned **full-stack software engineer** running over **5+ years of professional experience**. My engineering philosophy prioritizes high-performance architectures, specializing heavily within the **Svelte ecosystem** while building lightweight desktop runtimes using **Rust** and low-latency workflows at the edge.`,
+                    metaDetails: [
+                        { label: "Identity Name", value: "Shivam Meena" },
+                        { label: "Gender Configuration", value: "Male" },
+                        {
+                            label: "Communications Target",
+                            value: "meenashivam823@gmail.com",
+                        },
+                        {
+                            label: "Secure Phone Matrix",
+                            value: "+91 7303043479",
+                        },
+                        {
+                            label: "Academic Location",
+                            value: "IGNOU Matrix Center",
+                        },
+                        {
+                            label: "Academic Track Pipeline",
+                            value: "Master of Computer Applications (MCA) — Semester 1",
+                        },
+                    ],
+                },
+
+                // Live Timetable Data
+                timetable: {
+                    workerURL:
+                        "https://mca-class-notifier.ethercorps.workers.dev/",
+                    slots: [
+                        "Session slot 1 (09:00 - 11:00)",
+                        "Session slot 2 (11:30 - 13:30)",
+                        "Session slot 3 (14:30 - 16:30)",
+                    ],
+                    days: [
+                        {
+                            day: "Monday",
+                            classes: [
+                                '<span class="course-code">MCS-211</span>: C Programming',
+                                '<span class="course-code">MCS-212</span>: Discrete Mathematics',
+                                "🔬 Practical Lab Session I",
+                            ],
+                        },
+                        {
+                            day: "Tuesday",
+                            classes: [
+                                '<span class="course-code">MCS-213</span>: Software Engineering',
+                                '<span class="course-code">MCS-211</span>: C Programming',
+                                "📚 Self-Directed Research",
+                            ],
+                        },
+                        {
+                            day: "Wednesday",
+                            classes: [
+                                '<span class="course-code">MCS-212</span>: Discrete Mathematics',
+                                '<span class="course-code">MCS-214</span>: Data Communication',
+                                "🔬 Practical Lab Session II",
+                            ],
+                        },
+                        {
+                            day: "Thursday",
+                            classes: [
+                                '<span class="course-code">MCS-211</span>: C Programming',
+                                '<span class="course-code">MCS-213</span>: Software Engineering',
+                                "📚 Open Seminar Loop",
+                            ],
+                        },
+                        {
+                            day: "Friday",
+                            classes: [
+                                '<span class="course-code">MCS-214</span>: Data Communication',
+                                '<span class="course-code">MCS-212</span>: Discrete Mathematics',
+                                "🔬 Systems Evaluation Lab",
+                            ],
+                        },
+                    ],
+                },
+
+                // Media Favorites Indices
+                favorites: {
+                    movies: [
+                        {
+                            title: "1. RRR",
+                            desc: "An absolute visual masterpiece of scale and synchronized momentum.",
+                            link: "https://www.imdb.com/title/tt8178634/",
+                        },
+                        {
+                            title: "2. Mission: Impossible",
+                            desc: "High-stakes algorithmic planning and execution structures.",
+                            link: "https://www.imdb.com/title/tt0120755/",
+                        },
+                        {
+                            title: "3. Suzume",
+                            desc: "Spatial thresholds and closure dynamics.",
+                            link: "https://www.imdb.com/title/tt13320662/",
+                        },
+                    ],
+                    books: [
+                        {
+                            title: "1. C For Dummies",
+                            desc: "A foundational structural text for mastering low-level execution paths.",
+                            link: "https://www.amazon.com/C-Dummies-Alan-Simpson/dp/076450620X",
+                        },
+                        {
+                            title: "2. The Rust Book",
+                            desc: "The definitive structural shifts covering memory-safe low-level patterns.",
+                            link: "https://www.rust-lang.org/learn",
+                        },
+                        {
+                            title: "3. Berserk",
+                            desc: "Kentaro Miura's legendary peak dark fantasy epic focusing on grit.",
+                            link: "https://www.goodreads.com/book/show/20527133",
+                        },
+                    ],
+                    shows: [
+                        {
+                            title: "1. Psycho-Pass",
+                            desc: "An intricate psychological deep dive into predictive security frameworks.",
+                            link: "https://www.imdb.com/title/tt1467304/",
+                        },
+                        {
+                            title: "2. Person of Interest",
+                            desc: "A prophetic cyberpunk analysis regarding emergent machine intelligence.",
+                            link: "https://www.imdb.com/title/tt2049116/",
+                        },
+                        {
+                            title: "3. Fullmetal Alchemist: Brotherhood",
+                            desc: "The absolute gold standard highlighting systemic balances.",
+                            link: "https://www.imdb.com/title/tt0421357/",
+                        },
+                    ],
+                },
+
+                // Career Alignment Mapping
+                careers: {
+                    happyEmoji: "^___^",
+                    sadEmoji: "T___T",
+                    interested: [
+                        {
+                            title: "Systems Programmer",
+                            desc: "Compiling highly performant engine tooling natively.",
+                        },
+                        {
+                            title: "Reactive UI Architect",
+                            desc: "Crafting lightning-fast reactivity via Svelte 5 runes.",
+                        },
+                        {
+                            title: "Fullstack Systems Developer",
+                            desc: "Assembling robust, optimized end-to-end cloud platforms.",
+                        },
+                    ],
+                    disinterested: [
+                        {
+                            title: "Outbound Sales Agent",
+                            desc: "Cold pitching generic software layers over cold calling lists.",
+                        },
+                        {
+                            title: "Cold Outreach Specialist",
+                            desc: "Spamming template sequences with near zero architectural intent.",
+                        },
+                        {
+                            title: "Metric-Chasing Sales Roles",
+                            desc: "Prioritizing raw volume metrics over high-quality core development.",
+                        },
+                    ],
+                },
+
+                // Neighbors Node
+                neighbor: {
+                    name: "Dr. [Name]",
+                    role: "Geologist PhD",
+                    context: "Fascinating cross-disciplinary contact point.",
+                    fact: "We are currently discussing techniques to feed massive geological data matrices and deep-earth seismic readings into advanced neural network arrays to map out targeted mineral localization vectors.",
+                },
+            };
+
+            // --- PIPELINE COMPILATION RENDER ENGINE ---
+            function runEngine() {
+                // Apply Theme Palette Colors
+                const root = document.documentElement.style;
+                root.setProperty("--bg-main", CONFIG.theme.backgroundMain);
+                root.setProperty("--bg-card", CONFIG.theme.backgroundCard);
+                root.setProperty("--border", CONFIG.theme.borderLine);
+                root.setProperty("--text-primary", CONFIG.theme.textMain);
+                root.setProperty("--text-secondary", CONFIG.theme.textMuted);
+                root.setProperty("--accent-primary", CONFIG.theme.accentSvelte);
+                root.setProperty(
+                    "--accent-secondary",
+                    CONFIG.theme.accentGreen,
+                );
+                root.setProperty("--accent-muted", CONFIG.theme.accentBlue);
+                root.setProperty("--accent-danger", CONFIG.theme.accentRed);
+
+                // Render Header
+                document.getElementById("header-root").innerHTML = `
+                <h1>${CONFIG.personal.name}</h1>
+                <p class="subtitle">${CONFIG.personal.tagline}</p>
+            `;
+
+                // Render About (and parse Markdown stars dynamically)
+                const parsedAbout = CONFIG.personal.aboutHTML.replace(
+                    /\*\*(.*?)\*\*/g,
+                    "<strong>$1</strong>",
+                );
+                document.getElementById("about-root").innerHTML = `
+                <h2><span>👤</span> About Me</h2>
+                <p style="color: var(--text-secondary); font-size: 1.15rem; line-height: 1.7;">${parsedAbout}</p>
+            `;
+
+                // Render Profile Parameters Matrix
+                document.getElementById("profile-root").innerHTML =
+                    CONFIG.personal.metaDetails
+                        .map(
+                            (d) => `
+                <div class="detail-item">
+                    <span class="detail-label">${d.label}</span>
+                    ${d.value}
+                </div>
+            `,
+                        )
+                        .join("");
+
+                // Render Timetable
+                document.getElementById("timetable-root").innerHTML = `
+                <h2><span>📅</span> Academic Class Timetable (Semester 1)</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Day Sequence</th>
+                                ${CONFIG.timetable.slots.map((s) => `<th>${s}</th>`).join("")}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${CONFIG.timetable.days
+                                .map(
+                                    (d) => `
+                                <tr>
+                                    <td><strong>${d.day}</strong></td>
+                                    ${d.classes.map((c) => `<td>${c}</td>`).join("")}
+                                </tr>
+                            `,
+                                )
+                                .join("")}
+                        </tbody>
+                    </table>
+                </div>
+                <p style="margin-top: 15px; font-size: 0.85rem; color: var(--text-secondary); font-family: var(--font-mono);">
+                    * Sync engines actively handled via edge workers. Source reference endpoint: <a href="${CONFIG.timetable.workerURL}" target="_blank" style="color: var(--accent-muted); text-decoration: none;">${CONFIG.timetable.workerURL.replace("https://", "")} ↗</a>
+                </p>
+            `;
+
+                // Helper for Favorites Column Assemblies
+                const makeFavList = (arr) =>
+                    arr
+                        .map(
+                            (item) => `
+                <div class="favorite-item">
+                    <a href="${item.link}" target="_blank">${item.title}</a>
+                    <p>${item.desc}</p>
+                </div>
+            `,
+                        )
+                        .join("");
+
+                // Render Favorites
+                document.getElementById("favorites-root").innerHTML = `
+                <h2><span>⭐</span> Media & Reference Indices (Rendered in Reverse Order via CSS)</h2>
+                <div class="favorites-container">
+                    <div class="fav-column">
+                        <h3 style="color: var(--accent-danger)">🎬 Motion Pictures</h3>
+                        <div class="reverse-list">${makeFavList(CONFIG.favorites.movies)}</div>
+                    </div>
+                    <div class="fav-column">
+                        <h3 style="color: var(--accent-primary)">📖 Compilations & Manuals</h3>
+                        <div class="reverse-list">${makeFavList(CONFIG.favorites.books)}</div>
+                    </div>
+                    <div class="fav-column">
+                        <h3 style="color: var(--accent-muted)">📺 Broadcast Selections</h3>
+                        <div class="reverse-list">${makeFavList(CONFIG.favorites.shows)}</div>
+                    </div>
+                </div>
+            `;
+
+                // Render Career Alignment Matrices
+                document.getElementById("careers-root").innerHTML = `
+                <h2><span>💼</span> Job Alignment Matrices</h2>
+                <div class="career-split">
+                    <div class="career-col love">
+                        <div class="status-avatar">${CONFIG.careers.happyEmoji}</div>
+                        <h3 class="career-title-love">Target Interests</h3>
+                        ${CONFIG.careers.interested
+                            .map(
+                                (j) => `
+                            <div class="job-node">
+                                <div class="dot"></div>
+                                <div class="job-meta"><strong>${j.title}</strong><p>${j.desc}</p></div>
+                            </div>
+                        `,
+                            )
+                            .join("")}
+                    </div>
+                    <div class="career-col avoid">
+                        <div class="status-avatar">${CONFIG.careers.sadEmoji}</div>
+                        <h3 class="career-title-avoid">Non-Target Paths</h3>
+                        ${CONFIG.careers.disinterested
+                            .map(
+                                (j) => `
+                            <div class="job-node">
+                                <div class="dot"></div>
+                                <div class="job-meta"><strong>${j.title}</strong><p>${j.desc}</p></div>
+                            </div>
+                        `,
+                            )
+                            .join("")}
+                    </div>
+                </div>
+            `;
+
+                // Render Neighbor Node Analytics
+                document.getElementById("neighbor-root").innerHTML = `
+                <h2><span>🏘️</span> Neighbor Node Analytics</h2>
+                <div class="neighbor-card">
+                    <div class="neighbor-info">
+                        <p style="font-size: 0.95rem;"><strong style="color: var(--text-primary)">${CONFIG.neighbor.name}</strong> — ${CONFIG.neighbor.role}</p>
+                        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 4px;">${CONFIG.neighbor.context}</p>
+                        <div class="fun-fact">
+                            <strong>Interdisciplinary Node Connection:</strong> ${CONFIG.neighbor.fact}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+                // Render Footer
+                document.getElementById("footer-root").innerHTML = `
+                <p>© 2026 ${CONFIG.personal.name} | <span style="color: var(--text-primary)">meenashivam823@gmail.com</span></p>
+                <p style="opacity: 0.5; font-style: italic;">"Building the future, one line of code at a time."</p>
+            `;
+            }
+
+            // Initialize Engine Execution
+            runEngine();
+        </script>
+    </body>
+</html>

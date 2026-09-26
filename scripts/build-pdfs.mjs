@@ -4,8 +4,9 @@
 // headless Chromium, which Cloudflare's build image cannot run. Cloudflare then only runs
 // `astro build` (copies public/downloads into dist) and scripts/build-zips.mjs.
 //
-// Incremental: Chromium stamps a creation date into every PDF, so re-rendering an
-// unchanged page still changes its bytes. Each page is hashed on what actually prints
+// Deterministic: Chromium stamps the render time into every PDF (its only non-determinism);
+// those dates are pinned, so re-rendering an unchanged page gives byte-identical output.
+// Incremental: each page is hashed on what actually prints
 // (the <main> markup minus the "last updated" date, its stylesheets and images, and this
 // script) and only re-rendered when that hash changes. Hashes live in scripts/pdf-manifest.json.
 //
@@ -74,6 +75,11 @@ function printHash(url) {
   return h.digest("hex").slice(0, 16);
 }
 
+// Same-length replacement keeps the PDF's cross-reference offsets valid.
+const PINNED = "20260101000000";
+const pinDates = (buf) =>
+  Buffer.from(buf.toString("latin1").replace(/(\/(?:CreationDate|ModDate) ?\(D:)\d{14}/g, `$1${PINNED}`), "latin1");
+
 const manifest = existsSync(MANIFEST) ? JSON.parse(readFileSync(MANIFEST, "utf8")) : {};
 const next = {};
 const todo = [];
@@ -120,8 +126,7 @@ if (todo.length) {
         const file = join(OUT, p.out);
         mkdirSync(dirname(file), { recursive: true });
         const name = p.out.split("/").pop();
-        await page.pdf({
-          path: file,
+        const pdf = await page.pdf({
           format: "A4",
           printBackground: true,
           margin: { top: "16mm", bottom: "16mm", left: "14mm", right: "14mm" },
@@ -129,6 +134,7 @@ if (todo.length) {
           headerTemplate: `<div style="font-size:8px;color:#888;width:100%;padding:0 14mm;display:flex;justify-content:space-between"><span>${p.paper ? "Question paper" : "Syntax Lab · syntax.theether.in"}</span><span>${name}</span></div>`,
           footerTemplate: `<div style="font-size:8px;color:#888;width:100%;text-align:center"><span class="pageNumber"></span> / <span class="totalPages"></span></div>`,
         });
+        writeFileSync(file, pinDates(pdf));
         await page.close();
       }
     }),

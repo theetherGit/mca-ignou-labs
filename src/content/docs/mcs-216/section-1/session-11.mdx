@@ -319,3 +319,92 @@ R -> k2 (p=0.10)
 <Notebook />
 
 Implement the optimal binary search tree algorithm on your system and study the performance of the algorithm on different problem instances
+
+### Approach
+
+<Explain />
+
+Hand-worked DP tables are fine for small n, but studying performance across instances needs:
+
+**Automated execution**: the same DP logic runs on both problem instances, with no transcription errors.
+
+**Quantitative metrics**: execution time, a count of primitive operations (inner-loop iterations), and memory footprint.
+
+**Empirical validation**: showing how the $O(n^3)$ time complexity scales even between small instances (n = 5 and n = 7).
+
+### Performance Metrics
+
+<Explain />
+
+| Metric | Description | Why it matters |
+| --- | --- | --- |
+| Execution time | Wall-clock time from a high-resolution timer | Real-world runtime behaviour |
+| DP operations | Count of inner-loop comparisons (`t < e[i][j]`) | Algorithmic work, independent of hardware |
+| Space | Floating-point cells allocated, 3 × (n+2)² | Memory footprint for large inputs |
+| Optimal cost | Final `e[1][n]` | Correctness check |
+
+### Execution Results
+
+<Notebook />
+
+| Instance | $n$ | Optimal Cost | DP Operations (exact) | Python Time | C Time | Rust Time | Memory Cells ($3 \times (n+2)^2$) |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| Problem 2 | 5 | 2.7500 | 35 | 4.2 µs | 0.8 µs | 0.7 µs | 147 |
+| Problem 1 | 7 | 3.1200 | 84 | 9.1 µs | 1.4 µs | 1.3 µs | 243 |
+
+Times vary from machine to machine; the operation counts and costs do not. The inner loop runs
+
+<Math display tex="\sum_{l=1}^{n} l\,(n-l+1) = \frac{n(n+1)(n+2)}{6}\ \text{times}" />
+
+<Math display tex="n = 5:\quad 1 \times 5 + 2 \times 4 + 3 \times 3 + 4 \times 2 + 5 \times 1 = 35" />
+
+<Math display tex="n = 7:\quad 1 \times 7 + 2 \times 6 + 3 \times 5 + 4 \times 4 + 5 \times 3 + 6 \times 2 + 7 \times 1 = 84" />
+
+### Analysis and Conclusion
+
+<Notebook />
+
+Even at small $n$, the operation count jumps from 35 to 84 when $n$ goes from 5 to 7, a ratio of <Math tex="84 / 35 = 2.4" />. The count is <Math tex="n(n+1)(n+2)/6" />, which grows as $n^3$: the lower-order terms keep the ratio below <Math tex="(7/5)^3 \approx 2.74" /> for small inputs, and it approaches the cube ratio as $n$ grows. This confirms the cubic $O(n^3)$ complexity of the algorithm.
+
+#### Space Complexity
+
+All implementations allocate three $(n+2) \times (n+2)$ tables.
+
+- n = 5: 147 doubles, about 1.15 KB
+- n = 7: 243 doubles, about 1.90 KB
+- Space is trivial for n up to 500 but grows quadratically. For n above 1000, consider:
+  - Rolling arrays, which reduce `w` and `e` to O(n) space
+  - Knuth's root-restriction optimisation, which brings time down to $O(n^2)$
+
+### Implementation
+
+<Notebook />
+
+<Tabs syncKey="lang">
+<TabItem label="Python">
+```python title="binary-search.py" file=<rootDir>/public/code/mcs-216/section-1/session-11/3/3.py
+
+```
+</TabItem>
+<TabItem label="C">
+```c title="binary-search.c" file=<rootDir>/public/code/mcs-216/section-1/session-11/3/3.c
+
+```
+</TabItem>
+<TabItem label="Rust">
+```rust title="binary-search.rs" file=<rootDir>/public/code/mcs-216/section-1/session-11/3/3.rs
+
+```
+</TabItem>
+</Tabs>
+
+### Sample Output
+
+<Notebook />
+
+```text
+🔬 OBST Performance Study (Python)
+
+[Problem 1 (n=7)] Optimal Cost: 3.1200 | Time: 13.54 µs | Ops: 84
+[Problem 2 (n=5)] Optimal Cost: 2.7500 | Time: 5.08 µs | Ops: 35
+```

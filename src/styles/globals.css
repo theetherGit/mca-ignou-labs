@@ -1,4 +1,6 @@
 @import "tailwindcss";
+/* Lab solution files in public/ are not site markup; scanning them only bloats the CSS. */
+@source not "../../public";
 
 /* ============================================================
  * Nimbus Theme — THE file you edit to customize your site.
