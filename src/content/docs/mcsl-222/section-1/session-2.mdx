@@ -99,6 +99,8 @@ Assumptions:
 | Manage Products | Administrator | includes Login |
 | Ship Order | Administrator, Courier Service | includes Login |
 
+<Tabs>
+<TabItem label="Sketch">
 ```text
                  +------------------------------------------------------+
                  |              Online Shopping System                  |
@@ -131,7 +133,8 @@ Assumptions:
                                                        Courier Service   Payment Gateway
                                                         (also Track Order)
 ```
-
+</TabItem>
+<TabItem label="online_shopping_usecase.puml">
 ```text title="online_shopping_usecase.puml"
 @startuml
 left to right direction
@@ -190,6 +193,8 @@ UC13 ..> UC2 : <<include>>
 UC14 ..> UC2 : <<include>>
 @enduml
 ```
+</TabItem>
+</Tabs>
 
 #### Explanation
 
@@ -260,6 +265,8 @@ Assumptions:
 | Manage Librarians | Administrator | none |
 | Set Lending Policy | Administrator | none |
 
+<Tabs>
+<TabItem label="Sketch">
 ```text
               +----------------------------------------------------------+
               |               Library Management System                  |
@@ -288,7 +295,8 @@ Assumptions:
               |  ( Set Lending Policy )---------------------------------------------+
               +----------------------------------------------------------+
 ```
-
+</TabItem>
+<TabItem label="library_usecase.puml">
 ```text title="library_usecase.puml"
 @startuml
 left to right direction
@@ -342,6 +350,8 @@ UC6 ..> UC4 : <<extend>>
 UC7 ..> UC4 : <<extend>>
 @enduml
 ```
+</TabItem>
+</Tabs>
 
 #### Explanation
 

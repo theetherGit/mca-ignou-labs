@@ -1,21 +1,61 @@
 ---
 /**
- * TabItem — single tab panel in the `<Tabs>` component.
- *
- * The `label` prop is read by `tabs.client.ts` to synthesize the matching
- * trigger button. Each TabItem becomes one `[data-nb-tabs-content]` panel.
+ * TabItem — one panel of <Tabs>. The trigger is synthesized client-side from
+ * data-nb-tab-label; data-nb-tab-icon carries an inline SVG chosen from the
+ * label (language name or file extension) so code tabs are recognisable at a glance.
  */
 import { cn } from "@/lib/cn";
 import type { HTMLAttributes } from "astro/types";
+import { icons as vscodeIcons } from "@iconify-json/vscode-icons";
+import { getIconData, iconToHTML, iconToSVG, replaceIDs } from "@iconify/utils";
 
 interface Props extends HTMLAttributes<"div"> {
   label: string;
+  /** Override the auto-detected icon (vscode-icons name without prefix), or "" for none. */
+  icon?: string;
 }
 
-const { label, class: className, ...attrs } = Astro.props;
+const { label, icon, class: className, ...attrs } = Astro.props;
 
 if (!label) {
   throw new Error("Missing required `label` prop on `<TabItem>` component.");
+}
+
+const BY_LABEL: Record<string, string> = {
+  "c++": "file-type-cpp", cpp: "file-type-cpp", c: "file-type-c", rust: "file-type-rust",
+  python: "file-type-python", typescript: "file-type-typescript-official", "node.js": "file-type-js-official",
+  javascript: "file-type-js-official", java: "file-type-java", html: "file-type-html", css: "file-type-css",
+  sql: "file-type-sql", plantuml: "file-type-plantuml", sketch: "file-type-drawio", bash: "file-type-shell",
+  shell: "file-type-shell", xml: "file-type-xml", json: "file-type-json", yaml: "file-type-yaml",
+};
+const BY_EXT: Record<string, string> = {
+  cpp: "file-type-cpp", cc: "file-type-cpp", hpp: "file-type-cpp", c: "file-type-c", h: "file-type-c",
+  rs: "file-type-rust", py: "file-type-python", ts: "file-type-typescript-official", js: "file-type-js-official",
+  mjs: "file-type-js-official", java: "file-type-java", jsp: "file-type-jsp", jspf: "file-type-jsp",
+  html: "file-type-html", css: "file-type-css", sql: "file-type-sql", xml: "file-type-xml",
+  puml: "file-type-plantuml", properties: "file-type-config", ini: "file-type-ini", gp: "file-type-gnuplot",
+  plt: "file-type-gnuplot", arff: "file-type-text", csv: "file-type-text", txt: "file-type-text",
+  dat: "file-type-text", yaml: "file-type-yaml", yml: "file-type-yaml", json: "file-type-json",
+  sh: "file-type-shell", md: "file-type-text",
+};
+
+function iconFor(l: string): string | undefined {
+  const key = l.trim().toLowerCase();
+  if (BY_LABEL[key]) return BY_LABEL[key];
+  const base = key.split(" ")[0];
+  if (base === "pom.xml") return "file-type-maven";
+  const ext = base.includes(".") ? base.split(".").pop()! : "";
+  return BY_EXT[ext];
+}
+
+const name = icon === undefined ? iconFor(label) : icon;
+let iconSvg = "";
+if (name) {
+  const data = getIconData(vscodeIcons, name);
+  if (data) {
+    const r = iconToSVG(data, { height: "1em" });
+    iconSvg = iconToHTML(replaceIDs(r.body), { ...r.attributes, "aria-hidden": "true" });
+  }
 }
 ---
 
@@ -23,6 +63,7 @@ if (!label) {
   role="tabpanel"
   data-nb-tabs-content
   data-nb-tab-label={label}
+  data-nb-tab-icon={iconSvg || undefined}
   class={cn(className)}
   {...attrs}
 >

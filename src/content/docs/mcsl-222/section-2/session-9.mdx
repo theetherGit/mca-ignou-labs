@@ -59,21 +59,28 @@ Create a User table into the database and bind the user entity with Spring Secur
 
 #### Program
 
+<Tabs>
+<TabItem label="User.java">
 ```java title="User.java" file=<rootDir>/public/code/mcsl-222/section-2/session-9/User.java
 
 ```
-
+</TabItem>
+<TabItem label="UserRepository.java">
 ```java title="UserRepository.java" file=<rootDir>/public/code/mcsl-222/section-2/session-9/UserRepository.java
 
 ```
-
+</TabItem>
+<TabItem label="AppUserDetailsService.java">
 ```java title="AppUserDetailsService.java" file=<rootDir>/public/code/mcsl-222/section-2/session-9/AppUserDetailsService.java
 
 ```
-
+</TabItem>
+<TabItem label="DataSeeder.java">
 ```java title="DataSeeder.java" file=<rootDir>/public/code/mcsl-222/section-2/session-9/DataSeeder.java
 
 ```
+</TabItem>
+</Tabs>
 
 The table Hibernate produces, for the record and for anyone running with `ddl-auto=none`:
 
@@ -130,21 +137,28 @@ Create a Custom Login Page in HTML and authenticate using Spring Security in Spr
 
 #### Program
 
+<Tabs>
+<TabItem label="SecurityConfig.java">
 ```java title="SecurityConfig.java" file=<rootDir>/public/code/mcsl-222/section-2/session-9/SecurityConfig.java
 
 ```
-
+</TabItem>
+<TabItem label="PageController.java">
 ```java title="PageController.java" file=<rootDir>/public/code/mcsl-222/section-2/session-9/PageController.java
 
 ```
-
+</TabItem>
+<TabItem label="login.html">
 ```html title="login.html" file=<rootDir>/public/code/mcsl-222/section-2/session-9/login.html
 
 ```
-
+</TabItem>
+<TabItem label="dashboard.html">
 ```html title="dashboard.html" file=<rootDir>/public/code/mcsl-222/section-2/session-9/dashboard.html
 
 ```
+</TabItem>
+</Tabs>
 
 #### Output
 
@@ -292,21 +306,28 @@ Create a User registration form and validate the form. Once information is valid
 
 #### Program
 
+<Tabs>
+<TabItem label="pom.xml fragment">
 ```xml title="pom.xml fragment" file=<rootDir>/public/code/mcsl-222/section-2/session-9/pom-validation.xml
 
 ```
-
+</TabItem>
+<TabItem label="RegistrationForm.java">
 ```java title="RegistrationForm.java" file=<rootDir>/public/code/mcsl-222/section-2/session-9/RegistrationForm.java
 
 ```
-
+</TabItem>
+<TabItem label="RegistrationController.java">
 ```java title="RegistrationController.java" file=<rootDir>/public/code/mcsl-222/section-2/session-9/RegistrationController.java
 
 ```
-
+</TabItem>
+<TabItem label="register.html">
 ```html title="register.html" file=<rootDir>/public/code/mcsl-222/section-2/session-9/register.html
 
 ```
+</TabItem>
+</Tabs>
 
 #### Output
 

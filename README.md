@@ -58,7 +58,7 @@ pnpm deploy     # Cloudflare Workers via wrangler
 ### Authoring conventions
 
 - Put `<Notebook />` under headings students copy into the lab record and `<Explain />` under headings that are for understanding only. Every section gets one.
-- Multi-language solutions go in `<Tabs syncKey="lang">` with one `<TabItem label="C">` per language.
+- Multi-language solutions go in `<Tabs syncKey="lang">` with one `<TabItem label="C">` per language. Multi-file programs go in plain `<Tabs>` with one `<TabItem label="Student.java">` per file. Tab triggers get a file-type icon automatically from the label (language name or extension, via `@iconify-json/vscode-icons`); pass `icon=""` to suppress or `icon="file-type-xyz"` to override.
 - HTML solutions get `<Preview src="/code/..." height="300px" />` above the code fence.
 - `pnpm lint:docs` enforces frontmatter, internal links and heading hierarchy. MCS-217 pages follow `docs-plan/mcs-217-brief.md`.
 - Question papers: `python3 scripts/gen-question-papers.py` regenerates `src/content/docs/question-papers/*.mdx` from the verbatim Problem Statements on the session pages; the PDF step renders them to `dist/downloads/<section>/<section>-questions.pdf`. Re-run after editing any problem statement.

@@ -100,6 +100,8 @@ Assumptions:
 | 2.3 | reg | s1 | addRegistration(reg) |
 | 2.4 | reg | student | registration slip (reply) |
 
+<Tabs>
+<TabItem label="Sketch">
 ```text
                     1: register(semester, courseCodes)
     +---------+  ------------------------------------>  +---------------+  1.1: isEligible(s1, sem)  +------------------+
@@ -124,7 +126,8 @@ Assumptions:
                                                        +---- | enr : Enrolment |
                                           1.5.1: reserveSeat() +-----------------+
 ```
-
+</TabItem>
+<TabItem label="student_registration_collab.puml">
 ```text title="student_registration_collab.puml"
 @startuml
 title Collaboration Diagram - Student Registration (Register for Semester)
@@ -152,6 +155,8 @@ reg -up-> s1 : 2.3: addRegistration(reg)
 reg -left-> student : 2.4: registration slip
 @enduml
 ```
+</TabItem>
+</Tabs>
 
 #### Explanation
 
@@ -222,6 +227,8 @@ Assumptions:
 | 2.5 | sbi | login1 | addToDailyUsage(5000) |
 | 2.6 | sbi | ravi | receipt(ref) (reply) |
 
+<Tabs>
+<TabItem label="Sketch">
 ```text
                                           1.1: verify(password)
                                           2.1: withinDailyLimit(5000)
@@ -249,7 +256,8 @@ Assumptions:
                             | t1 : Transaction |
                             +------------------+
 ```
-
+</TabItem>
+<TabItem label="online_banking_collab.puml">
 ```text title="online_banking_collab.puml"
 @startuml
 title Collaboration Diagram - Online Banking System (Transfer Funds)
@@ -279,6 +287,8 @@ sbi -left-> ravi : 2.6: receipt(ref)
 ben1 -- acc3 : target account
 @enduml
 ```
+</TabItem>
+</Tabs>
 
 #### Explanation
 
@@ -346,6 +356,8 @@ Assumptions:
 | 2.2.1 | emp | bal | [approved] deduct(type, days) |
 | 2.3 | mgr | manager | decision recorded (reply) |
 
+<Tabs>
+<TabItem label="Sketch">
 ```text
               1: applyLeave(from, to, type)                       1.3: forward(req)                      2: approve(requestId)
  +----------+ ------------------------------> +----------------+ -----------------------> +---------------+ <------------------- +---------+
@@ -363,7 +375,8 @@ Assumptions:
                                                                               |
                                                                     (from emp, drawn on the emp to req link)
 ```
-
+</TabItem>
+<TabItem label="employee_leave_collab.puml">
 ```text title="employee_leave_collab.puml"
 @startuml
 title Collaboration Diagram - Employee Management System (Apply for Leave)
@@ -387,6 +400,8 @@ emp -down-> bal : 2.2.1: [approved] deduct(type, days)
 mgr -right-> manager : 2.3: decision recorded
 @enduml
 ```
+</TabItem>
+</Tabs>
 
 #### Explanation
 

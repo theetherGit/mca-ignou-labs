@@ -68,13 +68,18 @@ Create a Spring Boot application using Spring Initializer. Add the following dep
 
 #### Program
 
+<Tabs>
+<TabItem label="pom.xml">
 ```xml title="pom.xml" file=<rootDir>/public/code/mcsl-222/section-2/session-7/pom.xml
 
 ```
-
+</TabItem>
+<TabItem label="AdmissionApiApplication.java">
 ```java title="AdmissionApiApplication.java" file=<rootDir>/public/code/mcsl-222/section-2/session-7/AdmissionApiApplication.java
 
 ```
+</TabItem>
+</Tabs>
 
 #### Output
 
@@ -187,43 +192,58 @@ Create JPA Repositories for all entities used in the Student Admission lifecycle
 
 The life cycle has four entities. A Student applies to a Programme; the application is an Admission whose status moves APPLIED, VERIFIED, APPROVED or REJECTED; a Programme owns Courses.
 
+<Tabs>
+<TabItem label="Student.java">
 ```java title="Student.java" file=<rootDir>/public/code/mcsl-222/section-2/session-7/Student.java
 
 ```
-
+</TabItem>
+<TabItem label="Programme.java">
 ```java title="Programme.java" file=<rootDir>/public/code/mcsl-222/section-2/session-7/Programme.java
 
 ```
-
+</TabItem>
+<TabItem label="Course.java">
 ```java title="Course.java" file=<rootDir>/public/code/mcsl-222/section-2/session-7/Course.java
 
 ```
-
+</TabItem>
+<TabItem label="AdmissionStatus.java">
 ```java title="AdmissionStatus.java" file=<rootDir>/public/code/mcsl-222/section-2/session-7/AdmissionStatus.java
 
 ```
-
+</TabItem>
+<TabItem label="Admission.java">
 ```java title="Admission.java" file=<rootDir>/public/code/mcsl-222/section-2/session-7/Admission.java
 
 ```
+</TabItem>
+</Tabs>
 
 One repository per entity:
 
+<Tabs>
+<TabItem label="StudentRepository.java">
 ```java title="StudentRepository.java" file=<rootDir>/public/code/mcsl-222/section-2/session-7/StudentRepository.java
 
 ```
-
+</TabItem>
+<TabItem label="ProgrammeRepository.java">
 ```java title="ProgrammeRepository.java" file=<rootDir>/public/code/mcsl-222/section-2/session-7/ProgrammeRepository.java
 
 ```
-
+</TabItem>
+<TabItem label="CourseRepository.java">
 ```java title="CourseRepository.java" file=<rootDir>/public/code/mcsl-222/section-2/session-7/CourseRepository.java
 
 ```
-
+</TabItem>
+<TabItem label="AdmissionRepository.java">
 ```java title="AdmissionRepository.java" file=<rootDir>/public/code/mcsl-222/section-2/session-7/AdmissionRepository.java
 
 ```
+</TabItem>
+</Tabs>
 
 #### Output
 
@@ -304,13 +324,18 @@ Create Rest Controller to fetch Student Information using JPA Repository; the re
 
 #### Program
 
+<Tabs>
+<TabItem label="StudentRestController.java">
 ```java title="StudentRestController.java" file=<rootDir>/public/code/mcsl-222/section-2/session-7/StudentRestController.java
 
 ```
-
+</TabItem>
+<TabItem label="data.sql">
 ```sql title="data.sql" file=<rootDir>/public/code/mcsl-222/section-2/session-7/data.sql
 
 ```
+</TabItem>
+</Tabs>
 
 #### Output
 

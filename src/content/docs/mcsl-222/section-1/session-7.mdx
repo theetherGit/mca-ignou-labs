@@ -83,6 +83,8 @@ Each dependency between components is drawn as a named interface. The component 
 | Notification Service | Application | INotify | none |
 | Exam Database | Data | IDataAccess | none |
 
+<Tabs>
+<TabItem label="Sketch">
 ```text
  Legend: O provided interface (lollipop), C required interface (socket)
 
@@ -107,7 +109,8 @@ Each dependency between components is drawn as a named interface. The component 
                                        | Exam Database |
                                        +---------------+
 ```
-
+</TabItem>
+<TabItem label="online_examination_components.puml">
 ```text title="online_examination_components.puml"
 @startuml
 title Component Diagram: Online Examination System
@@ -160,6 +163,8 @@ qbank ..> IDataAccess
 eval ..> IDataAccess
 @enduml
 ```
+</TabItem>
+</Tabs>
 
 #### Explanation
 
@@ -217,6 +222,8 @@ The important design decision that the diagram records is the adapter pattern fo
 | Payment Gateway | External | IGatewayAPI | none |
 | Courier System | External | ICourierAPI | none |
 
+<Tabs>
+<TabItem label="Sketch">
 ```text
  Legend: O provided (lollipop), C required (socket), dashed = uses
 
@@ -245,7 +252,8 @@ The important design decision that the diagram records is the adapter pattern fo
                                                   | Order Database |             | Payment Gateway | | Courier System |
                                                   +----------------+             +-----------------+ +----------------+
 ```
-
+</TabItem>
+<TabItem label="order_processing_components.puml">
 ```text title="order_processing_components.puml"
 @startuml
 title Component Diagram: Order Processing Application
@@ -311,6 +319,8 @@ payad ..> IGatewayAPI
 shipad ..> ICourierAPI
 @enduml
 ```
+</TabItem>
+</Tabs>
 
 #### Explanation
 
@@ -375,6 +385,8 @@ The artefacts follow the component diagram of the same system: the web archive c
 | Application Server | Payment Gateway | HTTPS REST |
 | Application Server | Mail and SMS Gateway | SMTP 587 and HTTPS |
 
+<Tabs>
+<TabItem label="Sketch">
 ```text
  <<device>> Applicant PC or Phone        <<device>> Admission Officer PC
  [ <<exec env>> Web Browser ]            [ <<exec env>> Web Browser ]
@@ -404,7 +416,8 @@ The artefacts follow the component diagram of the same system: the web archive c
  |  admission_db      | +--------------+
  +--------------------+
 ```
-
+</TabItem>
+<TabItem label="admission_deployment.puml">
 ```text title="admission_deployment.puml"
 @startuml
 title Deployment Diagram: Online Student Admission System
@@ -445,6 +458,8 @@ tomcat -- gateway : HTTPS REST
 tomcat -- mail : SMTP 587 and HTTPS
 @enduml
 ```
+</TabItem>
+</Tabs>
 
 #### Explanation
 

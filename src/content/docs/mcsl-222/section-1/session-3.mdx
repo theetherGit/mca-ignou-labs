@@ -100,6 +100,8 @@ Assumptions:
 | 2.4 | order | p | reduceStock(qty) (loop, each line) | none |
 | 2.5 | order | order | setStatus(PaymentFailed) (alt declined) | none |
 
+<Tabs>
+<TabItem label="Sketch">
 ```text
  customer      cart:ShoppingCart   item:CartItem   p:Product   order:Order   pay:Payment   gateway
     |                |                  |              |            |             |            |
@@ -132,7 +134,8 @@ Assumptions:
     |          +-----|------------------|--------------|------------|-------+     |            |
     |<- - orderId, status - - - - - - - - - - - - - - - - - - - - -|             |            |
 ```
-
+</TabItem>
+<TabItem label="online_shopping_sequence.puml">
 ```text title="online_shopping_sequence.puml"
 @startuml
 title Sequence Diagram - Online Shopping System (Place Order)
@@ -188,6 +191,8 @@ order --> customer : orderId, status
 deactivate order
 @enduml
 ```
+</TabItem>
+</Tabs>
 
 #### Explanation
 
@@ -260,6 +265,8 @@ Assumptions:
 | 3.2 | attempt | result | create Result(marks, percentage, status) | result |
 | 3.3 | attempt | student | submitted, result pending publication | none |
 
+<Tabs>
+<TabItem label="Sketch">
 ```text
  student        exam:Exam        attempt:Attempt     ans:Answer     q:Question    result:Result
     |               |                   |                 |              |               |
@@ -294,7 +301,8 @@ Assumptions:
     |               |                   |-3.2 <<create>> Result(marks, pct, status)----->|
     |<- - 3.3 submitted, result pending publication - -|              |               |
 ```
-
+</TabItem>
+<TabItem label="online_examination_sequence.puml">
 ```text title="online_examination_sequence.puml"
 @startuml
 title Sequence Diagram - Online Examination System (Take Exam)
@@ -349,6 +357,8 @@ attempt --> student : 3.3: submitted, result pending publication
 deactivate attempt
 @enduml
 ```
+</TabItem>
+</Tabs>
 
 #### Explanation
 
@@ -418,6 +428,8 @@ Assumptions:
 | 2.2.1 | emp | bal | deduct(type, days) (alt approved) | none |
 | 2.3 | mgr | manager | decision recorded (reply) | none |
 
+<Tabs>
+<TabItem label="Sketch">
 ```text
  employee     emp:Employee     bal:LeaveBalance   req:LeaveRequest    mgr:Manager     manager
     |              |                  |                  |                 |              |
@@ -445,7 +457,8 @@ Assumptions:
   +-|--------------|------------------|------------------|--+              |              |
     |              |                  |                  |                 |- - 2.3 decision recorded ->|
 ```
-
+</TabItem>
+<TabItem label="employee_leave_sequence.puml">
 ```text title="employee_leave_sequence.puml"
 @startuml
 title Sequence Diagram - Employee Management System (Apply for Leave)
@@ -492,6 +505,8 @@ mgr --> manager : 2.3: decision recorded
 deactivate mgr
 @enduml
 ```
+</TabItem>
+</Tabs>
 
 #### Explanation
 

@@ -33,7 +33,16 @@ function initTabContainer(container: HTMLElement): () => void {
       btn.role = "tab";
       btn.type = "button";
       btn.className = TRIGGER_CLASS;
-      btn.textContent = label;
+      const icon = panel.dataset.nbTabIcon;
+      if (icon) {
+        btn.className += " inline-flex items-center gap-1.5";
+        btn.innerHTML = icon;
+        const text = document.createElement("span");
+        text.textContent = label;
+        btn.appendChild(text);
+      } else {
+        btn.textContent = label;
+      }
       btn.setAttribute("data-nb-tabs-trigger", "");
 
       const panelId = `${id}-panel-${i}`;
