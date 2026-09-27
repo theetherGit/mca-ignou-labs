@@ -1,0 +1,41 @@
+@startuml
+skinparam defaultFontSize 16
+skinparam ActivityFontSize 16
+title Activity Diagram: Online Banking System (2 of 2: fund transfer)
+|Customer|
+start
+:Enter beneficiary, amount, remarks;
+|Bank System|
+:Check available balance;
+if (balance sufficient?) then (yes)
+  |Bank System|
+  :Send OTP to registered mobile;
+  |Customer|
+  :Enter OTP;
+  |Bank System|
+  :Check OTP;
+  if (OTP correct?) then (yes)
+    |Bank System|
+    :Debit sender account;
+    :Credit beneficiary account;
+    :Record transaction;
+    |Bank System|
+    fork
+      :Send SMS alert;
+    fork again
+      :Send email receipt;
+    fork again
+      :Update transaction history;
+    end fork
+    :Show transfer confirmation;
+  else (no)
+    :Show OTP error, cancel transfer;
+  endif
+else (no)
+  |Bank System|
+  :Show insufficient balance message;
+endif
+|Customer|
+:Back to service menu;
+stop
+@enduml

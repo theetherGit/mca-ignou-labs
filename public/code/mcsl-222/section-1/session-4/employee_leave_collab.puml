@@ -9,14 +9,14 @@ object "req : LeaveRequest" as req
 object "mgr : Manager" as mgr
 object "manager" as manager <<actor>>
 
-employee -right-> emp : 1: applyLeave(from, to, type)
-emp -down-> bal : 1.1: hasBalance(type, days)
-emp -right-> req : 1.2: [balance sufficient] <<create>> LeaveRequest(from, to, type)
-emp -right-> mgr : 1.3: forward(req)
-emp -left-> employee : 1.4: requestId
-manager -left-> mgr : 2: approve(requestId)
-mgr -down-> req : 2.1: setStatus(Approved)
-req -left-> emp : 2.2: notify(status)
-emp -down-> bal : 2.2.1: [approved] deduct(type, days)
-mgr -right-> manager : 2.3: decision recorded
+employee -down-> emp : 1: applyLeave(from, to, type)
+emp -left-> bal : 1.1: hasBalance(type, days)
+emp -down-> req : 1.2: [balance sufficient] <<create>> LeaveRequest(from, to, type)
+emp -down-> mgr : 1.3: forward(req)
+emp -up-> employee : 1.4: requestId
+manager -down-> mgr : 2: approve(requestId)
+mgr -left-> req : 2.1: setStatus(Approved)
+req -up-> emp : 2.2: notify(status)
+emp -left-> bal : 2.2.1: [approved] deduct(type, days)
+mgr -up-> manager : 2.3: decision recorded
 @enduml

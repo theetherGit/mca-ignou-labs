@@ -1,33 +1,33 @@
 @startuml
 title State Chart: ExamAttempt (Online Examination System)
 [*] --> Registered : student enrols / create attempt record
-Registered : entry / create attempt record
-InProgress : entry / start timer
-InProgress : do / accept and save answers
-InProgress : exit / stop timer
-Disconnected : do / keep timer running
-Submitted : entry / lock answers
-Evaluating : entry / auto-grade objective answers
-Evaluated : entry / compute total, set pass or fail
-Published : entry / notify student
-UnderReview : do / re-mark disputed answers
-Terminated : entry / flag attempt
+Registered : entry\n/ create attempt record
+InProgress : entry\n/ start timer
+InProgress : do\n/ accept and save answers
+InProgress : exit\n/ stop timer
+Disconnected : do\n/ keep timer running
+Submitted : entry\n/ lock answers
+Evaluating : entry\n/ auto-grade objective answers
+Evaluated : entry\n/ compute total, set pass or fail
+Published : entry\n/ notify student
+UnderReview : do\n/ re-mark disputed answers
+Terminated : entry\n/ flag attempt
 
-Registered --> InProgress : startExam [window open] / load paper
-Registered --> Expired : windowClosed [not started]
-InProgress --> InProgress : answerSaved / save answer
+Registered --> InProgress : startExam\n[window open]\n/ load paper
+Registered --> Expired : windowClosed\n[not started]
+InProgress --> InProgress : answerSaved\n/ save answer
 InProgress --> Disconnected : connectionLost
-Disconnected --> InProgress : reconnect [time left] / resume
-Disconnected --> Submitted : timeUp / auto-submit saved answers
-InProgress --> Submitted : submit / lock answers
-InProgress --> Submitted : timeUp / auto-submit saved answers
-InProgress --> Terminated : malpracticeDetected / lock answers, flag attempt
-Submitted --> Evaluating : evaluationStarted / auto-grade objective
-Evaluating --> Evaluated : allMarksEntered [objective and descriptive done] / compute total, set pass or fail
-Evaluated --> Published : resultReleased / notify student
-Published --> UnderReview : recheckRequested [within 7 days]
-UnderReview --> Published : recheckCompleted / update marks, notify student
-Published --> [*] : archived [retention period over]
+Disconnected --> InProgress : reconnect\n[time left]\n/ resume
+Disconnected --> Submitted : timeUp\n/ auto-submit saved answers
+InProgress --> Submitted : submit\n/ lock answers
+InProgress --> Submitted : timeUp\n/ auto-submit saved answers
+InProgress --> Terminated : malpracticeDetected\n/ lock answers, flag attempt
+Submitted --> Evaluating : evaluationStarted\n/ auto-grade objective
+Evaluating --> Evaluated : allMarksEntered\n[objective and descriptive done]\n/ compute total, set pass or fail
+Evaluated --> Published : resultReleased\n/ notify student
+Published --> UnderReview : recheckRequested\n[within 7 days]
+UnderReview --> Published : recheckCompleted\n/ update marks, notify student
+Published --> [*] : archived\n[retention period over]
 Expired --> [*]
 Terminated --> [*]
 @enduml

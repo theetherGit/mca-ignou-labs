@@ -5,9 +5,11 @@
  *
  *   <Diagram src="/code/mcsl-222/section-1/session-1/online_shopping_class.svg" alt="Class diagram of the online shopping system" />
  *
- * Shows the PlantUML source below the picture when `source` is given (path of the .puml/.dot file);
- * the source is for regenerating or editing the picture, not for the lab record.
+ * The SVG's size is read at build time. Wide pictures (landscape, wider than a printed page can
+ * show legibly) get `nb-diagram-wide` and are printed turned 90°, so they use the page's long edge.
  */
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { withBase } from "@cloudflare/nimbus-docs/runtime";
 
 interface Props {
@@ -17,8 +19,23 @@ interface Props {
 }
 const { src, alt, caption } = Astro.props;
 const href = withBase(src, import.meta.env.BASE_URL);
+
+// Printable width is 182 mm ≈ 688 CSS px. Past this width text shrinks below 7 pt;
+// turning a landscape picture sideways gives it up to 245 mm instead.
+const PRINT_PX = 688;
+let ratio = 1;
+try {
+  const svg = readFileSync(join(process.cwd(), "public", src), "utf8");
+  const vb = /viewBox="[\d.\s-]*?([\d.]+)\s+([\d.]+)"/.exec(svg);
+  if (vb) ratio = Number(vb[1]) / Number(vb[2]);
+  const w = vb ? Number(vb[1]) : 0;
+  if (!(w > PRINT_PX && ratio >= 1.15)) ratio = 0;
+} catch {
+  ratio = 0;
+}
+const wide = ratio > 0;
 ---
-<figure class="nb-diagram my-5">
+<figure class:list={["nb-diagram my-5", { "nb-diagram-wide": wide }]} style={wide ? `--ar:${ratio.toFixed(3)}` : undefined}>
   <a href={href} target="_blank" rel="noopener" class="nb-diagram-link" title="Open full size in a new tab">
     <img src={href} alt={alt} loading="lazy" decoding="async" />
   </a>

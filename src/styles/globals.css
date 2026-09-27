@@ -942,6 +942,26 @@ body {
 		max-height: 240mm;
 		object-fit: contain;
 	}
+	/* Landscape pictures wider than the page: turn them 90° so the long edge runs down the page.
+	   --ar is width/height (set by Diagram.astro). The picture's width becomes the box height. */
+	.nb-diagram-wide .nb-diagram-link {
+		--w: min(245mm, calc(182mm * var(--ar)));
+		position: relative;
+		height: var(--w);
+		width: calc(var(--w) / var(--ar));
+		margin: 0 auto;
+	}
+	.nb-diagram-wide img {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: var(--w);
+		max-width: none;
+		max-height: none;
+		height: auto;
+		transform: rotate(90deg) translateY(-100%);
+		transform-origin: top left;
+	}
 }
 
 /* Collapsed diagram source under a picture; closed by default and not printed. */

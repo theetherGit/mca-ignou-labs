@@ -49,7 +49,7 @@ Activity Diagram Online Banking System.
 
 The Online Banking System lets a registered customer of a bank use banking services through a web browser without visiting a branch. The customer logs in with a user ID and password issued by the bank. After a successful login the system shows a dashboard from which the customer can view the balance of a linked account or transfer money to a registered beneficiary. A fund transfer needs a second factor: the bank sends a one-time password (OTP) to the customer's registered mobile number, and the transfer proceeds only when the OTP is entered correctly within its validity period. The core banking system holds the accounts. It checks the available balance, debits the sender, credits the beneficiary and records the transaction. After a successful transfer the system sends an SMS alert, sends an email receipt and updates the transaction history. These three actions do not depend on each other, so they run in parallel. The customer can perform several services in one session and ends the session by logging out.
 
-The activity diagram models this whole session as one workflow. It is the right diagram here because the interesting part of the problem is the order of actions, the points where the flow branches (login check, balance check, OTP check) and the point where it splits into parallel work (notifications), not the structure of the classes. Three swimlanes show who is responsible for each action: the Customer, the Web Server that runs the net banking application, and the Core Banking system that owns the accounts. Every decision node carries guards on all of its outgoing edges, and the guards on one decision together cover every possible case. The fork and join around the notifications pair up. The flow ends at a final node after logout, and also after a failed login, because those are the two ways a session can end. A wrong OTP or an insufficient balance does not end the session; the flow returns to the dashboard through a merge node so the customer can try another service.
+The activity diagram models this session as one workflow drawn in two parts so that each part fits an A4 page at a readable size: part 1 is the login and the service menu, part 2 is the fund transfer that the menu calls. It is the right diagram here because the interesting part of the problem is the order of actions, the points where the flow branches (login check, balance check, OTP check) and the point where it splits into parallel work (notifications), not the structure of the classes. Swimlanes show who is responsible for each action. Part 1 has three lanes: the Customer, the Web Server that runs the net banking application, and the Core Banking system that owns the accounts. Part 2 keeps the Customer lane and merges the two bank lanes into one Bank System lane; the table below still says which of the two performs each action. Every decision node carries guards on all of its outgoing edges, and the guards on one decision together cover every possible case. The fork and join around the notifications pair up. The flow ends at a final node after logout, and also after a failed login, because those are the two ways a session can end. A wrong OTP or an insufficient balance does not end the session; the flow returns to the dashboard through a merge node so the customer can try another service.
 
 The diagram is deliberately limited to two services. Bill payment, cheque book request and mini statement follow the same shape as the two shown and would only add width to the drawing. Beneficiary registration and account locking are separate use cases with their own workflows.
 
@@ -65,7 +65,7 @@ The diagram is deliberately limited to two services. Bill payment, cheque book r
 #### Steps
 
 1. Open StarUML, press Ctrl+N for a new project and choose Model, Add Diagram, Activity Diagram. Name it "Online Banking Activity".
-2. In the Toolbox choose Swimlane (Vertical) and click on the canvas three times. Select each lane and set Name in the Editor to Customer, Web Server and Core Banking.
+2. In the Toolbox choose Swimlane (Vertical) and click on the canvas three times. Select each lane and set Name in the Editor to Customer, Web Server and Core Banking. Draw the fund transfer as a second diagram (Model, Add Diagram, Activity Diagram, name it "Fund Transfer Activity") with two lanes, Customer and Bank System, and in the first diagram show it as one action, "Fund transfer".
 3. Choose Initial Node and click in the Customer lane. Choose Action and place every action from the table below in its lane; double-click each one to type its name.
 4. Choose Decision Node for the four decisions (credentials valid, service, balance sufficient, OTP correct) and Merge Node where the service branches rejoin before "another service".
 5. Choose Fork Node and Join Node for the notification bar. Draw three Control Flows out of the fork and three into the join.
@@ -87,10 +87,10 @@ The diagram is deliberately limited to two services. Bill payment, cheque book r
 | OTP correct | Decision | Web Server | Guards `[yes]` (matches and within 3 minutes) and `[no]` |
 | another service | Decision | Customer | Guards `[yes]` loops to Choose service, `[no]` goes to Logout |
 | Merge node | Merge | Web Server | Joins the four service outcomes before "another service" |
-| Fork and join | Fork, Join | Web Server | Three parallel branches: SMS, email, history |
-| Final nodes | Activity final | Web Server | One after End session, one after Show login error |
+| Fork and join | Fork, Join | Web Server | Three parallel branches: SMS, email, history (part 2) |
+| Final nodes | Activity final | Web Server | One after End session, one after Show login error; part 2 ends where it returns to the service menu |
 
-<Diagram src="/code/mcsl-222/section-1/session-5/online_banking_activity.svg" alt="Activity Diagram: Online Banking System" />
+<Diagram src="/code/mcsl-222/section-1/session-5/online_banking_activity.svg" alt="Activity Diagram: Online Banking System, part 1 of 2: login and service menu" />
 
 <details class="nb-source">
 <summary>PlantUML source (online_banking_activity.puml)</summary>
@@ -101,9 +101,20 @@ The diagram is deliberately limited to two services. Bill payment, cheque book r
 
 </details>
 
+<Diagram src="/code/mcsl-222/section-1/session-5/online_banking_transfer_activity.svg" alt="Activity Diagram: Online Banking System, part 2 of 2: fund transfer" />
+
+<details class="nb-source">
+<summary>PlantUML source (online_banking_transfer_activity.puml)</summary>
+
+```text title="online_banking_transfer_activity.puml" file=<rootDir>/public/code/mcsl-222/section-1/session-5/online_banking_transfer_activity.puml
+
+```
+
+</details>
+
 #### Explanation
 
-The diagram reads top to bottom, one action per rounded box, and each box sits in the lane of the party that performs it. The four decisions are the places where the workflow can go two ways, and each decision has exactly two guards that are mutually exclusive and together exhaustive: valid or not, sufficient or not, correct or not, another service or not. The `service` decision has two guards because only two services are modelled; adding a third service means adding a third guard, not a second decision. The fork bar after Record transaction says that SMS, email and history update can happen in any order or at the same time; the join bar says that the confirmation screen waits for all three. The `repeat` block in the PlantUML source is the merge node plus the "another service" decision: every service outcome, successful or not, flows back to the same point. Two final nodes are correct because a failed login and a logout are both legitimate ends of the session.
+Both parts read top to bottom, one action per rounded box, and each box sits in the lane of the party that performs it. Part 1 treats the whole fund transfer as one action; part 2 expands it, starting where the customer enters the transfer details and ending where control returns to the service menu. The four decisions are the places where the workflow can go two ways, and each decision has exactly two guards that are mutually exclusive and together exhaustive: valid or not, sufficient or not, correct or not, another service or not. The `service` decision has two guards because only two services are modelled; adding a third service means adding a third guard, not a second decision. The fork bar after Record transaction says that SMS, email and history update can happen in any order or at the same time; the join bar says that the confirmation screen waits for all three. The `repeat` block in the PlantUML source is the merge node plus the "another service" decision: every service outcome, successful or not, flows back to the same point. Two final nodes are correct because a failed login and a logout are both legitimate ends of the session.
 
 ## Question 13
 
@@ -217,7 +228,7 @@ The two early decisions protect the rest of the flow: a student who fails login 
 
 <Notebook />
 
-- Question 12: activity diagram for Online Banking with lanes Customer, Web Server, Core Banking; four guarded decisions, a three-branch fork and join, a service loop; PlantUML source `online_banking_activity.puml`
+- Question 12: activity diagram for Online Banking in two parts (login and service menu with lanes Customer, Web Server, Core Banking; fund transfer with lanes Customer, Bank System); four guarded decisions, a three-branch fork and join, a service loop; PlantUML sources `online_banking_activity.puml` and `online_banking_transfer_activity.puml`
 - Question 13: activity diagram for Online Examination with lanes Student, Exam Server, Evaluator; answer loop, fork for objective and descriptive marking, pass or fail decision; PlantUML source `online_examination_activity.puml`
 - Problem description (300 to 500 words) and assumptions for every diagram, written before the drawing
 - Element table and ASCII sketch for each diagram, ready to redraw in StarUML and export as PNG

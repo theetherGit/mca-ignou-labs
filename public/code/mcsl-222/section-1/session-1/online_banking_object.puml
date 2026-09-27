@@ -1,4 +1,7 @@
 @startuml
+skinparam linetype ortho
+skinparam nodesep 50
+skinparam ranksep 60
 title Object Diagram - Online Banking System (after Ravi transfers 5000 to Priya)
 
 object "sbi : Bank" as sbi {

@@ -1,4 +1,5 @@
 @startuml
+skinparam defaultFontSize 16
 title Activity Diagram: Online Examination System
 |Student|
 start
