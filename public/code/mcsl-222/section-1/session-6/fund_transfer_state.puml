@@ -1,0 +1,29 @@
+@startuml
+title State Chart: Transfer (Online Fund Transfer through Net Banking)
+[*] --> Initiated : submitTransferForm / create Transfer record
+Initiated : entry / validate beneficiary, amount, limit
+Authenticated : entry / generate OTP
+OtpPending : entry / send OTP, start 3 minute timer
+Processing : entry / debit sender account
+Processing : do / send credit to beneficiary bank
+Completed : entry / send SMS and email, update statement
+Failed : entry / release hold, notify customer
+Reversed : entry / re-credit sender, notify customer
+
+Initiated --> Authenticated : passwordVerified [beneficiary active and amount within balance and daily limit]
+Initiated --> Initiated : passwordWrong [attempts below 3] / show error
+Initiated --> Failed : passwordWrong [attempts equal 3]
+Initiated --> Failed : validationFailed [beneficiary inactive or amount above balance or limit]
+Authenticated --> OtpPending : otpGenerated / send OTP, start timer
+OtpPending --> Processing : otpEntered [OTP matches and timer running]
+OtpPending --> OtpPending : otpEntered [OTP wrong and attempts below 3] / show error
+OtpPending --> OtpPending : resendOtp [resends below 3] / send new OTP, restart timer
+OtpPending --> Failed : otpEntered [OTP wrong and attempts equal 3]
+OtpPending --> Failed : timeout
+Processing --> Completed : creditConfirmed / send SMS and email, update statement
+Processing --> Failed : debitFailed
+Processing --> Reversed : creditRejected / re-credit sender
+Completed --> [*]
+Failed --> [*]
+Reversed --> [*]
+@enduml

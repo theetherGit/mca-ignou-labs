@@ -1,0 +1,17 @@
+@startuml
+title Topology: four nodes on one CSMA bus, 2 Mbit/s
+left to right direction
+node "n0\n10.1.1.1" as n0
+node "n1\n10.1.1.2" as n1
+node "n2\n10.1.1.3" as n2
+node "n3\n10.1.1.4" as n3
+rectangle "CSMA bus, 2 Mbit/s, 6560 ns delay" as bus
+n0 -- bus
+n1 -- bus
+n2 -- bus
+n3 -- bus
+n0 ..> n2 : TCP1 to port 8080
+n1 ..> n3 : TCP2 to port 8081
+n2 ..> n0 : UDP1 to port 9000
+n3 ..> n1 : UDP2 to port 9001
+@enduml

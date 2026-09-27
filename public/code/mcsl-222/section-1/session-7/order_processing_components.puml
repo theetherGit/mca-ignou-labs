@@ -1,0 +1,64 @@
+@startuml
+left to right direction
+title Component Diagram: Order Processing Application
+package "Presentation" {
+  component "Storefront" as store
+  component "Admin Console" as admin
+}
+package "Application" {
+  component "Customer Service" as cust
+  component "Catalog Service" as catalog
+  component "Inventory Service" as inv
+  component "Order Service" as order
+  component "Payment Adapter" as payad
+  component "Shipping Adapter" as shipad
+  component "Notification Service" as notify
+}
+package "Data" {
+  component "Order Database" as db
+}
+package "External" {
+  component "Payment Gateway" as gateway
+  component "Courier System" as courier
+}
+interface ICustomer
+interface ICatalog
+interface IInventory
+interface IOrder
+interface IPayment
+interface IShipping
+interface INotify
+interface IDataAccess
+interface IGatewayAPI
+interface ICourierAPI
+
+cust -- ICustomer
+catalog -- ICatalog
+inv -- IInventory
+order -- IOrder
+payad -- IPayment
+shipad -- IShipping
+notify -- INotify
+db -- IDataAccess
+gateway -- IGatewayAPI
+courier -- ICourierAPI
+
+store ..> ICustomer
+store ..> ICatalog
+store ..> IOrder
+admin ..> ICustomer
+admin ..> ICatalog
+admin ..> IInventory
+admin ..> IOrder
+order ..> ICatalog
+order ..> IInventory
+order ..> IPayment
+order ..> IShipping
+order ..> INotify
+order ..> IDataAccess
+cust ..> IDataAccess
+catalog ..> IDataAccess
+inv ..> IDataAccess
+payad ..> IGatewayAPI
+shipad ..> ICourierAPI
+@enduml

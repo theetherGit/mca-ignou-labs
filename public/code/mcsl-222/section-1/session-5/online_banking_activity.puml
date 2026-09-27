@@ -1,0 +1,63 @@
+@startuml
+title Activity Diagram: Online Banking System
+|Customer|
+start
+:Open net banking site;
+:Enter user ID and password;
+|Web Server|
+:Validate credentials;
+if (credentials valid?) then (yes)
+  :Show dashboard;
+else (no)
+  :Show login error;
+  stop
+endif
+repeat
+  |Customer|
+  :Choose service;
+  if (service?) then (view balance)
+    |Core Banking|
+    :Read account balance;
+    |Web Server|
+    :Display balance;
+  else (fund transfer)
+    |Customer|
+    :Enter beneficiary, amount, remarks;
+    |Core Banking|
+    :Check available balance;
+    if (balance sufficient?) then (yes)
+      |Web Server|
+      :Send OTP to registered mobile;
+      |Customer|
+      :Enter OTP;
+      |Web Server|
+      :Check OTP;
+      if (OTP correct?) then (yes)
+        |Core Banking|
+        :Debit sender account;
+        :Credit beneficiary account;
+        :Record transaction;
+        |Web Server|
+        fork
+          :Send SMS alert;
+        fork again
+          :Send email receipt;
+        fork again
+          :Update transaction history;
+        end fork
+        :Show transfer confirmation;
+      else (no)
+        :Show OTP error, cancel transfer;
+      endif
+    else (no)
+      |Web Server|
+      :Show insufficient balance message;
+    endif
+  endif
+  |Customer|
+repeat while (another service?) is (yes) not (no)
+:Logout;
+|Web Server|
+:End session;
+stop
+@enduml

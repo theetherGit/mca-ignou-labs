@@ -1,0 +1,26 @@
+@startuml
+title Object links after the first three assign calls
+object "rajdhani : Train" as rajdhani {
+  Train_No = 12951
+  assignedJourny = [ j1, j2 ]
+}
+object "shatabdi : Train" as shatabdi {
+  Train_No = 12009
+  assignedJourny = [ j3 ]
+}
+object "j1 : TrainJourney" as j1 {
+  Train_No = 12951
+}
+object "j2 : TrainJourney" as j2 {
+  Train_No = 12951
+}
+object "j3 : TrainJourney" as j3 {
+  Train_No = 12009
+}
+rajdhani --> j1 : assignedJourny
+rajdhani --> j2 : assignedJourny
+shatabdi --> j3 : assignedJourny
+j1 --> rajdhani : assignedTrain
+j2 --> rajdhani : assignedTrain
+j3 --> shatabdi : assignedTrain
+@enduml

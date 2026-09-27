@@ -74,11 +74,16 @@ One script, `dumbbell-cwnd.cc`, answers questions 19 to 22. It rebuilds the Sess
 
 #### Diagram
 
-```text
-   n0 10.1.1.1 (TCP BulkSend, 1 s)  --10 Mbps, 1 ms--\                                  /--10 Mbps, 1 ms--  n4 10.1.4.2 (TCP sink :8080)
-                                                      n2 ---- 1 Mbps, 10 ms bridge ---- n3
-   n1 10.1.2.1 (UDP OnOff, 20 s)    --10 Mbps, 1 ms--/        DropTail 100 packets      \--10 Mbps, 1 ms--  n5 10.1.5.2 (UDP sink :9000)
+<Diagram src="/code/mcsl-223/section-1/session-8/topology.svg" alt="Topology: dumbbell, TCP and UDP sharing a 1 Mbit/s bottleneck" />
+
+<details class="nb-source">
+<summary>PlantUML source (topology.puml)</summary>
+
+```text title="topology.puml" file=<rootDir>/public/code/mcsl-223/section-1/session-8/topology.puml
+
 ```
+
+</details>
 
 #### Output
 

@@ -1,0 +1,78 @@
+@startuml
+title Object Diagram - Online Banking System (after Ravi transfers 5000 to Priya)
+
+object "sbi : Bank" as sbi {
+  name = "State Bank of India"
+  ifscPrefix = "SBIN"
+}
+object "noida : Branch" as noida {
+  branchCode = "01234"
+  city = "Noida"
+}
+object "ravi : Customer" as ravi {
+  customerId = "C1001"
+  name = "Ravi Kumar"
+  phone = "9876543210"
+}
+object "priya : Customer" as priya {
+  customerId = "C1002"
+  name = "Priya Singh"
+  phone = "9123456780"
+}
+object "login1 : Credential" as login1 {
+  userId = "ravi1001"
+  passwordHash = "****"
+  dailyLimit = 50000.00
+}
+object "acc1 : SavingsAccount" as acc1 {
+  accountNo = "SB1001"
+  balance = 40000.00
+  openedOn = 2021-04-01
+  interestRate = 3.5
+  minBalance = 1000.00
+}
+object "acc2 : CurrentAccount" as acc2 {
+  accountNo = "CA2001"
+  balance = 125000.00
+  openedOn = 2023-01-15
+  overdraftLimit = 50000.00
+}
+object "acc3 : SavingsAccount" as acc3 {
+  accountNo = "SB1002"
+  balance = 27000.00
+  openedOn = 2022-08-10
+  interestRate = 3.5
+  minBalance = 1000.00
+}
+object "ben1 : Beneficiary" as ben1 {
+  nickname = "Priya"
+  accountNo = "SB1002"
+  ifsc = "SBIN0001234"
+}
+object "t1 : Transaction" as t1 {
+  txnId = "T5001"
+  type = "DEBIT"
+  amount = 5000.00
+  date = 2026-09-26
+  reference = "TR26092601"
+}
+object "t2 : Transaction" as t2 {
+  txnId = "T5002"
+  type = "CREDIT"
+  amount = 5000.00
+  date = 2026-09-26
+  reference = "TR26092601"
+}
+
+sbi -- noida
+noida -- ravi
+noida -- priya
+ravi -- login1
+ravi -- acc1
+ravi -- acc2
+ravi -- ben1
+ben1 -- acc3
+priya -- acc3
+acc1 -- t1
+acc3 -- t2
+@enduml

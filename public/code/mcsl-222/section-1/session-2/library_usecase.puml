@@ -1,0 +1,51 @@
+@startuml
+left to right direction
+title Use Case Diagram - Library Management System
+
+actor Member as member
+actor Librarian as librarian
+actor Administrator as admin
+
+rectangle "Library Management System" {
+  usecase "Search Catalogue" as UC1
+  usecase "Reserve Book" as UC2
+  usecase "Borrow Book" as UC3
+  usecase "Return Book" as UC4
+  usecase "Renew Book" as UC5
+  usecase "Pay Fine" as UC6
+  usecase "Notify Reserver" as UC7
+  usecase "Verify Membership" as UC8
+  usecase "View Loans and Fines" as UC9
+  usecase "Register Member" as UC10
+  usecase "Manage Copies" as UC11
+  usecase "Generate Reports" as UC12
+  usecase "Manage Librarians" as UC13
+  usecase "Set Lending Policy" as UC14
+}
+
+member -- UC1
+member -- UC2
+member -- UC3
+member -- UC4
+member -- UC5
+member -- UC6
+member -- UC9
+UC1 -- librarian
+UC3 -- librarian
+UC4 -- librarian
+UC5 -- librarian
+UC6 -- librarian
+UC10 -- librarian
+UC11 -- librarian
+UC12 -- librarian
+UC13 -- admin
+UC14 -- admin
+
+UC2 .[norank].> UC8 : <<include>>
+UC3 .[norank].> UC8 : <<include>>
+UC4 .[norank].> UC8 : <<include>>
+UC5 .[norank].> UC8 : <<include>>
+UC9 .[norank].> UC8 : <<include>>
+UC6 .[norank].> UC4 : <<extend>>
+UC7 .[norank].> UC4 : <<extend>>
+@enduml

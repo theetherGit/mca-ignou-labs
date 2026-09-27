@@ -108,92 +108,16 @@ The diagram therefore has one initial pseudo-state, ten states, one final pseudo
 | Expired | | | | final |
 | Terminated | | | | final |
 
-<Tabs record="all">
-<TabItem label="Sketch">
-```text
-      (*)
-       | student enrols / create attempt record
-       v
- +------------+  windowClosed [not started]   +---------+
- | Registered |------------------------------>| Expired |----> (X)
- +------------+                               +---------+
-       | startExam [window open] / load paper
-       v
- +---------------------------+  answerSaved / save answer
- | InProgress                |<-------------+
- | entry / start timer       |------------- +
- | do / accept, save answers |
- | exit / stop timer         |  connectionLost      +--------------+
- +---------------------------+--------------------->| Disconnected |
-   |      |         ^                               +--------------+
-   |      |         +--- reconnect [time left] ------------+  |
-   |      |                                                   | timeUp / auto-submit
-   |      | malpracticeDetected / lock, flag   +------------+ |
-   |      +----------------------------------->| Terminated |-|-> (X)
-   |                                           +------------+ |
-   | submit / lock answers                                    |
-   | timeUp / auto-submit                                     |
-   v                                                          |
- +-----------+<-------------------------------------------- --+
- | Submitted |
- +-----------+
-       | evaluationStarted / auto-grade objective
-       v
- +------------+  allMarksEntered [objective and descriptive done]
- | Evaluating |-----------------------------------+
- +------------+                                   |  / compute total, set pass or fail
-                                                  v
-                                            +-----------+
-                                            | Evaluated |
-                                            +-----------+
-                                                  | resultReleased / notify student
-                                                  v
- +-------------+  recheckRequested [within 7 days] +-----------+
- | UnderReview |<----------------------------------| Published |
- +-------------+---------------------------------->+-----------+
-                  recheckCompleted / update marks        | archived [retention period over]
-                                                         v
-                                                        (X)
-```
-</TabItem>
-<TabItem label="exam_attempt_state.puml">
-```text title="exam_attempt_state.puml"
-@startuml
-title State Chart: ExamAttempt (Online Examination System)
-[*] --> Registered : student enrols / create attempt record
-Registered : entry / create attempt record
-InProgress : entry / start timer
-InProgress : do / accept and save answers
-InProgress : exit / stop timer
-Disconnected : do / keep timer running
-Submitted : entry / lock answers
-Evaluating : entry / auto-grade objective answers
-Evaluated : entry / compute total, set pass or fail
-Published : entry / notify student
-UnderReview : do / re-mark disputed answers
-Terminated : entry / flag attempt
+<Diagram src="/code/mcsl-222/section-1/session-6/exam_attempt_state.svg" alt="State Chart: ExamAttempt (Online Examination System)" />
 
-Registered --> InProgress : startExam [window open] / load paper
-Registered --> Expired : windowClosed [not started]
-InProgress --> InProgress : answerSaved / save answer
-InProgress --> Disconnected : connectionLost
-Disconnected --> InProgress : reconnect [time left] / resume
-Disconnected --> Submitted : timeUp / auto-submit saved answers
-InProgress --> Submitted : submit / lock answers
-InProgress --> Submitted : timeUp / auto-submit saved answers
-InProgress --> Terminated : malpracticeDetected / lock answers, flag attempt
-Submitted --> Evaluating : evaluationStarted / auto-grade objective
-Evaluating --> Evaluated : allMarksEntered [objective and descriptive done] / compute total, set pass or fail
-Evaluated --> Published : resultReleased / notify student
-Published --> UnderReview : recheckRequested [within 7 days]
-UnderReview --> Published : recheckCompleted / update marks, notify student
-Published --> [*] : archived [retention period over]
-Expired --> [*]
-Terminated --> [*]
-@enduml
+<details class="nb-source">
+<summary>PlantUML source (exam_attempt_state.puml)</summary>
+
+```text title="exam_attempt_state.puml" file=<rootDir>/public/code/mcsl-222/section-1/session-6/exam_attempt_state.puml
+
 ```
-</TabItem>
-</Tabs>
+
+</details>
 
 #### Explanation
 
@@ -267,82 +191,16 @@ The object whose life this describes is the Transfer, the record created the mom
 | Failed | | | | final |
 | Reversed | | | | final |
 
-<Tabs record="all">
-<TabItem label="Sketch">
-```text
-   (*)
-    | submitTransferForm / create Transfer record
-    v
- +-----------+  passwordWrong [attempts below 3] / show error
- | Initiated |<-----------+
- +-----------+----------- +
-    |   |
-    |   | validationFailed [beneficiary inactive or amount above balance or limit]
-    |   | passwordWrong [attempts equal 3]
-    |   +-----------------------------------------------------------+
-    | passwordVerified [beneficiary active and amount within limit]  |
-    v                                                                |
- +---------------+                                                   |
- | Authenticated |                                                   |
- +---------------+                                                   |
-    | otpGenerated / send OTP, start timer                           |
-    v                                                                |
- +------------+  otpEntered [wrong and attempts below 3] / show error|
- | OtpPending |<-----------+                                         |
- |            |----------- +                                         |
- +------------+  resendOtp [resends below 3] / send new OTP          v
-    |   |                                                       +--------+
-    |   | otpEntered [wrong and attempts equal 3]               | Failed |---> (X)
-    |   | timeout                                               +--------+
-    |   +----------------------------------------------------------^  ^
-    | otpEntered [OTP matches and timer running]                      |
-    v                                                                 |
- +----------------------------------------+   debitFailed             |
- | Processing                             |---------------------------+
- | entry / debit sender account           |
- | do / send credit to beneficiary bank   |   creditRejected / re-credit sender   +----------+
- +----------------------------------------+-------------------------------------->| Reversed |---> (X)
-    | creditConfirmed / send SMS and email, update statement                     +----------+
-    v
- +-----------+
- | Completed |---> (X)
- +-----------+
-```
-</TabItem>
-<TabItem label="fund_transfer_state.puml">
-```text title="fund_transfer_state.puml"
-@startuml
-title State Chart: Transfer (Online Fund Transfer through Net Banking)
-[*] --> Initiated : submitTransferForm / create Transfer record
-Initiated : entry / validate beneficiary, amount, limit
-Authenticated : entry / generate OTP
-OtpPending : entry / send OTP, start 3 minute timer
-Processing : entry / debit sender account
-Processing : do / send credit to beneficiary bank
-Completed : entry / send SMS and email, update statement
-Failed : entry / release hold, notify customer
-Reversed : entry / re-credit sender, notify customer
+<Diagram src="/code/mcsl-222/section-1/session-6/fund_transfer_state.svg" alt="State Chart: Transfer (Online Fund Transfer through Net Banking)" />
 
-Initiated --> Authenticated : passwordVerified [beneficiary active and amount within balance and daily limit]
-Initiated --> Initiated : passwordWrong [attempts below 3] / show error
-Initiated --> Failed : passwordWrong [attempts equal 3]
-Initiated --> Failed : validationFailed [beneficiary inactive or amount above balance or limit]
-Authenticated --> OtpPending : otpGenerated / send OTP, start timer
-OtpPending --> Processing : otpEntered [OTP matches and timer running]
-OtpPending --> OtpPending : otpEntered [OTP wrong and attempts below 3] / show error
-OtpPending --> OtpPending : resendOtp [resends below 3] / send new OTP, restart timer
-OtpPending --> Failed : otpEntered [OTP wrong and attempts equal 3]
-OtpPending --> Failed : timeout
-Processing --> Completed : creditConfirmed / send SMS and email, update statement
-Processing --> Failed : debitFailed
-Processing --> Reversed : creditRejected / re-credit sender
-Completed --> [*]
-Failed --> [*]
-Reversed --> [*]
-@enduml
+<details class="nb-source">
+<summary>PlantUML source (fund_transfer_state.puml)</summary>
+
+```text title="fund_transfer_state.puml" file=<rootDir>/public/code/mcsl-222/section-1/session-6/fund_transfer_state.puml
+
 ```
-</TabItem>
-</Tabs>
+
+</details>
 
 #### Explanation
 

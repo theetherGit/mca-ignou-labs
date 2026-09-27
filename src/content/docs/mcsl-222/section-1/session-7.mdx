@@ -83,88 +83,16 @@ Each dependency between components is drawn as a named interface. The component 
 | Notification Service | Application | INotify | none |
 | Exam Database | Data | IDataAccess | none |
 
-<Tabs record="all">
-<TabItem label="Sketch">
-```text
- Legend: O provided interface (lollipop), C required interface (socket)
+<Diagram src="/code/mcsl-222/section-1/session-7/online_examination_components.svg" alt="Component Diagram: Online Examination System" />
 
- Presentation  +----------------+                    +-----------------+
-               | Student Portal |                    | Faculty Console |
-               +----------------+                    +-----------------+
-                 C      C      C                       C      C      C
-       IAuthentication  IExamDelivery  IResult  IAuthentication IQuestionBank IEvaluation
-                 O      O      O                       O      O      O
- Application +----------------+ +-------------+ +----------------+ +---------------+ +--------------------+
-             | Authentication | | Exam Engine | | Result Service | | Question Bank | | Evaluation Service |
-             |    Service     | +-------------+ +----------------+ +---------------+ +--------------------+
-             +----------------+  C  C  C  C       C  C  C            C                   C
-                 C        IQuestionBank IEvaluation INotify  IEvaluation INotify        |                   |
-                 |               |  |  |  |         |  |  |            |                   |
-                 |               |  |  |  +--O INotify O--+  +----------------------+     |                   |
-                 |               |  |  |                     | Notification Service |     |                   |
-                 |               |  |  |                     +----------------------+     |                   |
-                 +---------------+--+--+---------------------------- IDataAccess ---------+-------------------+
-                                                O
- Data                                  +---------------+
-                                       | Exam Database |
-                                       +---------------+
+<details class="nb-source">
+<summary>PlantUML source (online_examination_components.puml)</summary>
+
+```text title="online_examination_components.puml" file=<rootDir>/public/code/mcsl-222/section-1/session-7/online_examination_components.puml
+
 ```
-</TabItem>
-<TabItem label="online_examination_components.puml">
-```text title="online_examination_components.puml"
-@startuml
-title Component Diagram: Online Examination System
-package "Presentation" {
-  component "Student Portal" as portal
-  component "Faculty Console" as faculty
-}
-package "Application" {
-  component "Authentication Service" as auth
-  component "Exam Engine" as engine
-  component "Question Bank" as qbank
-  component "Evaluation Service" as eval
-  component "Result Service" as result
-  component "Notification Service" as notify
-}
-package "Data" {
-  component "Exam Database" as db
-}
-interface IAuthentication
-interface IExamDelivery
-interface IQuestionBank
-interface IEvaluation
-interface IResult
-interface INotify
-interface IDataAccess
 
-auth -- IAuthentication
-engine -- IExamDelivery
-qbank -- IQuestionBank
-eval -- IEvaluation
-result -- IResult
-notify -- INotify
-db -- IDataAccess
-
-portal ..> IAuthentication
-portal ..> IExamDelivery
-portal ..> IResult
-faculty ..> IAuthentication
-faculty ..> IQuestionBank
-faculty ..> IEvaluation
-engine ..> IQuestionBank
-engine ..> IEvaluation
-engine ..> INotify
-engine ..> IDataAccess
-result ..> IEvaluation
-result ..> INotify
-result ..> IDataAccess
-auth ..> IDataAccess
-qbank ..> IDataAccess
-eval ..> IDataAccess
-@enduml
-```
-</TabItem>
-</Tabs>
+</details>
 
 #### Explanation
 
@@ -222,105 +150,16 @@ The important design decision that the diagram records is the adapter pattern fo
 | Payment Gateway | External | IGatewayAPI | none |
 | Courier System | External | ICourierAPI | none |
 
-<Tabs record="all">
-<TabItem label="Sketch">
-```text
- Legend: O provided (lollipop), C required (socket), dashed = uses
+<Diagram src="/code/mcsl-222/section-1/session-7/order_processing_components.svg" alt="Component Diagram: Order Processing Application" />
 
- Presentation   +------------+                 +---------------+
-                | Storefront |                 | Admin Console |
-                +------------+                 +---------------+
-                  C    C   C                     C   C    C   C
-            ICustomer ICatalog IOrder      ICustomer ICatalog IInventory IOrder
-                  O    O   O                     O   O    O   O
- Application
-  +------------------+ +-----------------+ +-------------------+ +---------------+
-  | Customer Service | | Catalog Service | | Inventory Service | | Order Service |
-  +------------------+ +-----------------+ +-------------------+ +---------------+
-          C                    C                    C            C  C  C  C  C  C
-          |                    |                    |     ICatalog IInventory   |
-          |                    |                    |            |  |           |
-          |                    |                    |       IPayment IShipping INotify
-          |                    |                    |            O    O    O
-          |                    |                    |  +-----------------+ +------------------+ +----------------------+
-          |                    |                    |  | Payment Adapter | | Shipping Adapter | | Notification Service |
-          |                    |                    |  +-----------------+ +------------------+ +----------------------+
-          |                    |                    |          C                   C
-          +--------------------+--------------------+--- IDataAccess          IGatewayAPI          ICourierAPI
-                                                          O                        O                   O
- Data                                             +----------------+   External  +-----------------+ +----------------+
-                                                  | Order Database |             | Payment Gateway | | Courier System |
-                                                  +----------------+             +-----------------+ +----------------+
+<details class="nb-source">
+<summary>PlantUML source (order_processing_components.puml)</summary>
+
+```text title="order_processing_components.puml" file=<rootDir>/public/code/mcsl-222/section-1/session-7/order_processing_components.puml
+
 ```
-</TabItem>
-<TabItem label="order_processing_components.puml">
-```text title="order_processing_components.puml"
-@startuml
-title Component Diagram: Order Processing Application
-package "Presentation" {
-  component "Storefront" as store
-  component "Admin Console" as admin
-}
-package "Application" {
-  component "Customer Service" as cust
-  component "Catalog Service" as catalog
-  component "Inventory Service" as inv
-  component "Order Service" as order
-  component "Payment Adapter" as payad
-  component "Shipping Adapter" as shipad
-  component "Notification Service" as notify
-}
-package "Data" {
-  component "Order Database" as db
-}
-package "External" {
-  component "Payment Gateway" as gateway
-  component "Courier System" as courier
-}
-interface ICustomer
-interface ICatalog
-interface IInventory
-interface IOrder
-interface IPayment
-interface IShipping
-interface INotify
-interface IDataAccess
-interface IGatewayAPI
-interface ICourierAPI
 
-cust -- ICustomer
-catalog -- ICatalog
-inv -- IInventory
-order -- IOrder
-payad -- IPayment
-shipad -- IShipping
-notify -- INotify
-db -- IDataAccess
-gateway -- IGatewayAPI
-courier -- ICourierAPI
-
-store ..> ICustomer
-store ..> ICatalog
-store ..> IOrder
-admin ..> ICustomer
-admin ..> ICatalog
-admin ..> IInventory
-admin ..> IOrder
-order ..> ICatalog
-order ..> IInventory
-order ..> IPayment
-order ..> IShipping
-order ..> INotify
-order ..> IDataAccess
-cust ..> IDataAccess
-catalog ..> IDataAccess
-inv ..> IDataAccess
-payad ..> IGatewayAPI
-shipad ..> ICourierAPI
-@enduml
-```
-</TabItem>
-</Tabs>
+</details>
 
 #### Explanation
 
@@ -385,81 +224,16 @@ The artefacts follow the component diagram of the same system: the web archive c
 | Application Server | Payment Gateway | HTTPS REST |
 | Application Server | Mail and SMS Gateway | SMTP 587 and HTTPS |
 
-<Tabs record="all">
-<TabItem label="Sketch">
-```text
- <<device>> Applicant PC or Phone        <<device>> Admission Officer PC
- [ <<exec env>> Web Browser ]            [ <<exec env>> Web Browser ]
-              |  HTTPS 443                            |  HTTPS 443 (campus)
-              +------------------+-------------------+
-                                 |
-               +-----------------+------------------+
-               | <<device>> Web Server              |
-               |  <<exec env>> Nginx 1.24           |
-               |    artifact: static bundle          |
-               +-----------------+------------------+
-                                 |  HTTP 8080 (reverse proxy)
-               +-----------------+------------------+
-               | <<device>> Application Server      |
-               |  <<exec env>> Apache Tomcat 10     |
-               |    artifact: admission.war          |
-               |    artifact: application.properties |
-               +---+----------+-----------+--------+-+
-   JDBC TCP 3306   |          | NFS       | HTTPS   | SMTP 587 / HTTPS
-                   |          |           | REST    |
- +-----------------+--+ +-----+--------+ +--------+ +---------------------+
- | <<device>>         | | <<device>>   | | Payment| | Mail and SMS Gateway|
- | Database Server    | | File Server  | | Gateway| |   (external)        |
- |  <<exec env>>      | |  artifact:   | |(extern)| +---------------------+
- |  MySQL 8           | |  uploaded    | +--------+
- |  artifact:         | |  documents   |
- |  admission_db      | +--------------+
- +--------------------+
-```
-</TabItem>
-<TabItem label="admission_deployment.puml">
-```text title="admission_deployment.puml"
-@startuml
-title Deployment Diagram: Online Student Admission System
-node "Applicant PC or Phone" <<device>> as applicant {
-  node "Web Browser" <<execution environment>> as browser1
-}
-node "Admission Officer PC" <<device>> as officer {
-  node "Web Browser" <<execution environment>> as browser2
-}
-node "Web Server" <<device>> as web {
-  node "Nginx 1.24" <<execution environment>> as nginx {
-    artifact "static bundle (html, css, js)" as static
-  }
-}
-node "Application Server" <<device>> as app {
-  node "Apache Tomcat 10" <<execution environment>> as tomcat {
-    artifact "admission.war" as war
-    artifact "application.properties" as props
-  }
-}
-node "Database Server" <<device>> as dbserver {
-  node "MySQL 8" <<execution environment>> as mysql {
-    artifact "admission_db schema" as schema
-  }
-}
-node "File Server" <<device>> as files {
-  artifact "uploaded documents" as docs
-}
-cloud "Payment Gateway" as gateway
-cloud "Mail and SMS Gateway" as mail
+<Diagram src="/code/mcsl-222/section-1/session-7/admission_deployment.svg" alt="Deployment Diagram: Online Student Admission System" />
 
-browser1 -- nginx : HTTPS 443
-browser2 -- nginx : HTTPS 443 (campus network)
-nginx -- tomcat : HTTP 8080 (reverse proxy)
-tomcat -- mysql : JDBC over TCP 3306
-tomcat -- files : NFS
-tomcat -- gateway : HTTPS REST
-tomcat -- mail : SMTP 587 and HTTPS
-@enduml
+<details class="nb-source">
+<summary>PlantUML source (admission_deployment.puml)</summary>
+
+```text title="admission_deployment.puml" file=<rootDir>/public/code/mcsl-222/section-1/session-7/admission_deployment.puml
+
 ```
-</TabItem>
-</Tabs>
+
+</details>
 
 #### Explanation
 

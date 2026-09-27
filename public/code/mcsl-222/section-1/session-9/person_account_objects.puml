@@ -1,0 +1,16 @@
+@startuml
+title Object links after the two addAccount calls (one-way)
+object "asha : Person" as asha {
+  Person_ID = "P001"
+  accounts = [ savings, current ]
+}
+object "savings : BankAccount" as savings {
+  Acc_No = "SB-1001"
+}
+object "current : BankAccount" as current {
+  Acc_No = "CA-2001"
+}
+asha --> savings : accounts
+asha --> current : accounts
+note bottom of savings : no pointer back to asha:\nBankAccount has no Person member
+@enduml

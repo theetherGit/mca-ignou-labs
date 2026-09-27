@@ -15,6 +15,7 @@
     "deploy": "pnpm build && wrangler deploy",
     "build:site": "astro build",
     "build:pdf": "astro build && node scripts/build-pdfs.mjs",
+    "build:diagrams": "node scripts/build-diagrams.mjs",
     "prepare": "git rev-parse --git-dir >/dev/null 2>&1 && git config core.hooksPath .githooks || true"
   },
   "dependencies": {

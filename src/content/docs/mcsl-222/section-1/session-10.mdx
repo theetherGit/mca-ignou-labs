@@ -80,74 +80,16 @@ OrderLine (order_id FK -> Orders, Product_ID FK -> Product, Quantity, UnitSalePr
 
 Foreign keys drawn as arrows from the referencing column to the referenced key:
 
-```text
- +-------------+        +----------------------+        +-------------------+
- |  Customer   |        |       Orders         |        |     Product       |
- |-------------|        |----------------------|        |-------------------|
- | customer_id |<-------| customer_id  (FK)    |        | Product_ID (PK)   |
- | C_Name      |  1..1  | order_id     (PK)    |        | P_Name            |
- | C_Phone     |        | OrderDate            |        | P_Manufacturer    |
- | C_Address   |        | ProductSoldBy        |        | UnitPrice         |
- | C_Pin       |        | ProductOrderCost     |        | Units_in_Stock    |
- | C_Email     |        +----------------------+        +-------------------+
- +-------------+                 ^                               ^
-                                 | 0..*                          | 1..*
-                        +--------+-------------------------------+--------+
-                        |                  OrderLine                      |
-                        |-------------------------------------------------|
-                        | order_id (FK, PK part)   Product_ID (FK, PK part)|
-                        | Quantity                 UnitSalePrice           |
-                        +-------------------------------------------------+
+<Diagram src="/code/mcsl-222/section-1/session-10/customer_order_tables.svg" alt="Relational schema: Customer, Orders, Product and OrderLine tables with their keys" />
+
+<details class="nb-source">
+<summary>PlantUML source (customer_order_tables.puml)</summary>
+
+```text title="customer_order_tables.puml" file=<rootDir>/public/code/mcsl-222/section-1/session-10/customer_order_tables.puml
+
 ```
 
-The same four tables as PlantUML, for a rendered copy of the schema:
-
-```text title="customer_order_tables.puml"
-@startuml
-hide circle
-skinparam linetype ortho
-
-entity "Customer" as customer {
-  * customer_id : INT <<PK>>
-  --
-  C_Name : VARCHAR(100)
-  C_Phone : VARCHAR(15)
-  C_Address : VARCHAR(200)
-  C_Pin : CHAR(6)
-  C_Email : VARCHAR(100)
-}
-
-entity "Orders" as orders {
-  * order_id : INT <<PK>>
-  --
-  OrderDate : DATE
-  ProductSoldBy : VARCHAR(100)
-  ProductOrderCost : DECIMAL(10,2)
-  customer_id : INT <<FK>>
-}
-
-entity "Product" as product {
-  * Product_ID : INT <<PK>>
-  --
-  P_Name : VARCHAR(100)
-  P_Manufacturer : VARCHAR(100)
-  UnitPrice : DECIMAL(10,2)
-  Units_in_Stock : INT
-}
-
-entity "OrderLine" as orderline {
-  * order_id : INT <<PK, FK>>
-  * Product_ID : INT <<PK, FK>>
-  --
-  Quantity : INT
-  UnitSalePrice : DECIMAL(10,2)
-}
-
-customer ||--o{ orders : places
-orders ||--|{ orderline : has lines
-product ||--o{ orderline : appears in
-@enduml
-```
+</details>
 
 How the objects of Session 8, Question 20 become rows. One object is one row; one link is one foreign key value; one OrderLine object is one row of the junction table:
 

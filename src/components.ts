@@ -8,6 +8,7 @@ import { Aside } from "./components/ui/aside";
 import Render from "./components/Render.astro";
 import PrintButton from "./components/PrintButton.astro";
 import Preview from "./components/Preview.astro";
+import Diagram from "./components/Diagram.astro";
 import Notebook from "./components/Notebook.astro";
 import Explain from "./components/Explain.astro";
 import Math from "./components/Math.astro";
@@ -21,6 +22,7 @@ import { Tabs, TabItem } from "./components/ui/tabs";
 export const components = {
   Aside,
   Card,
+  Diagram,
   Explain,
   LanguagePicker,
   Math,

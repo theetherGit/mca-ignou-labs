@@ -1,0 +1,44 @@
+@startuml
+hide circle
+skinparam linetype ortho
+
+entity "Customer" as customer {
+  * customer_id : INT <<PK>>
+  --
+  C_Name : VARCHAR(100)
+  C_Phone : VARCHAR(15)
+  C_Address : VARCHAR(200)
+  C_Pin : CHAR(6)
+  C_Email : VARCHAR(100)
+}
+
+entity "Orders" as orders {
+  * order_id : INT <<PK>>
+  --
+  OrderDate : DATE
+  ProductSoldBy : VARCHAR(100)
+  ProductOrderCost : DECIMAL(10,2)
+  customer_id : INT <<FK>>
+}
+
+entity "Product" as product {
+  * Product_ID : INT <<PK>>
+  --
+  P_Name : VARCHAR(100)
+  P_Manufacturer : VARCHAR(100)
+  UnitPrice : DECIMAL(10,2)
+  Units_in_Stock : INT
+}
+
+entity "OrderLine" as orderline {
+  * order_id : INT <<PK, FK>>
+  * Product_ID : INT <<PK, FK>>
+  --
+  Quantity : INT
+  UnitSalePrice : DECIMAL(10,2)
+}
+
+customer ||--o{ orders : places
+orders ||--|{ orderline : has lines
+product ||--o{ orderline : appears in
+@enduml

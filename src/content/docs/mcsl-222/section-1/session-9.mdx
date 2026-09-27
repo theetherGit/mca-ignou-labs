@@ -70,15 +70,16 @@ Association: TrainJourney `0..*` (role `assignedJourny`) to Train `0..1` (role `
 
 How the objects point at each other after the first three `assign` calls in `main` (each arrow is a pointer stored in the object at its tail):
 
-```text
- rajdhani (Train 12951)                shatabdi (Train 12009)
- assignedJourny: [ j1, j2 ]            assignedJourny: [ j3 ]
-     |      |                              |
-     v      v                              v
-    j1     j2                             j3
- assignedTrain ---> rajdhani           assignedTrain ---> shatabdi
- assignedTrain ---> rajdhani
+<Diagram src="/code/mcsl-222/section-1/session-9/train_journey_objects.svg" alt="Object links after the first three assign calls" />
+
+<details class="nb-source">
+<summary>PlantUML source (train_journey_objects.puml)</summary>
+
+```text title="train_journey_objects.puml" file=<rootDir>/public/code/mcsl-222/section-1/session-9/train_journey_objects.puml
+
 ```
+
+</details>
 
 Every journey in a train's vector points back at that train, and no journey is in two vectors. `assign` and `unassign` are the only code that may change this picture.
 
@@ -200,14 +201,16 @@ Association: Person `1` has BankAccount `*`, navigable from Person only.
 
 Pointers after the two `addAccount` calls in `main`:
 
-```text
- asha (Person P001)
- accounts: [ savings, current ]
-     |         |
-     v         v
-  savings    current          (no arrow back to asha:
-  SB-1001    CA-2001           BankAccount has no Person member)
+<Diagram src="/code/mcsl-222/section-1/session-9/person_account_objects.svg" alt="Object links after the two addAccount calls (one-way)" />
+
+<details class="nb-source">
+<summary>PlantUML source (person_account_objects.puml)</summary>
+
+```text title="person_account_objects.puml" file=<rootDir>/public/code/mcsl-222/section-1/session-9/person_account_objects.puml
+
 ```
+
+</details>
 
 #### Steps
 

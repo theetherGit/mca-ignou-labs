@@ -1,0 +1,52 @@
+@startuml
+title Sequence Diagram - Online Examination System (Take Exam)
+
+actor Student as student
+participant "exam : Exam" as exam
+participant "attempt : Attempt" as attempt
+participant "ans : Answer" as ans
+participant "q : Question" as q
+participant "result : Result" as result
+
+student -> exam : 1: start(studentId)
+activate exam
+exam -> exam : 1.1: isOpen() and noAttemptYet(studentId)
+create attempt
+exam -> attempt : 1.2: <<create>> Attempt(student, exam)
+activate attempt
+attempt -> attempt : 1.2.1: begin()
+attempt --> student : question list
+deactivate attempt
+deactivate exam
+
+loop until submit or timer expiry
+  student -> attempt : 2: answer(q, o)
+  activate attempt
+  create ans
+  attempt -> ans : 2.1: <<create>> Answer(q, o)
+  attempt --> student : saved
+  deactivate attempt
+end
+
+alt student submits
+  student -> attempt : 3: submit()
+else timer expires
+  exam -> attempt : 3: submit()
+end
+activate attempt
+attempt -> attempt : 3.1: evaluate()
+loop each answer
+  attempt -> q : 3.1.1: isCorrect(ans.option)
+  activate q
+  q --> attempt : true / false
+  deactivate q
+  attempt -> q : 3.1.2: getMarks()
+  activate q
+  q --> attempt : marks
+  deactivate q
+end
+create result
+attempt -> result : 3.2: <<create>> Result(marks, percentage, status)
+attempt --> student : 3.3: submitted, result pending publication
+deactivate attempt
+@enduml

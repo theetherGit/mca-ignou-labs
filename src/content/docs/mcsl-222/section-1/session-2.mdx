@@ -99,102 +99,16 @@ Assumptions:
 | Manage Products | Administrator | includes Login |
 | Ship Order | Administrator, Courier Service | includes Login |
 
-<Tabs record="all">
-<TabItem label="Sketch">
-```text
-                 +------------------------------------------------------+
-                 |              Online Shopping System                  |
-                 |                                                      |
-   Customer -----|--( Register )                                        |
-      |          |                                                      |
-      +----------|--( Browse Catalogue )   ( Search Product )--+        |
-      |          |                                             |        |
-      +----------|--( Manage Cart )-------<<include>>-----+    |        |
-      |          |                                        v    |        |
-      +----------|--( Place Order )-------<<include>>--( Login )--------|----- Administrator
-      |          |     ^      |                           ^  ^          |        |    |
-      |          |     |      +--<<include>>--( Make Payment )----------|--+     |    |
-      |          |  <<extend>>                            |  |          |  |     |    |
-      |          |     |                                  |  |          |  |     |    |
-      +----------|--( Apply Coupon )                      |  |          |  |     |    |
-      |          |                                        |  |          |  |     |    |
-      +----------|--( Track Order )------<<include>>------+  |          |  |     |    |
-      |          |                                           |          |  |     |    |
-      +----------|--( Cancel Order )---<<include>>-( Refund Payment )---|--+     |    |
-      |          |                                                      |  |     |    |
-      +----------|--( Manage Addresses )                                |  |     |    |
-                 |                                                      |  |     |    |
-                 |  ( Manage Products )---------------------------------|--|-----+    |
-                 |                                                      |  |          |
-                 |  ( Ship Order )----------------------------------+---|--|----------+
-                 |                                                  |   |  |
-                 +--------------------------------------------------|---+  |
-                                                                    |      |
-                                                       Courier Service   Payment Gateway
-                                                        (also Track Order)
+<Diagram src="/code/mcsl-222/section-1/session-2/online_shopping_usecase.svg" alt="Use Case Diagram - Online Shopping System" />
+
+<details class="nb-source">
+<summary>PlantUML source (online_shopping_usecase.puml)</summary>
+
+```text title="online_shopping_usecase.puml" file=<rootDir>/public/code/mcsl-222/section-1/session-2/online_shopping_usecase.puml
+
 ```
-</TabItem>
-<TabItem label="online_shopping_usecase.puml">
-```text title="online_shopping_usecase.puml"
-@startuml
-left to right direction
-title Use Case Diagram - Online Shopping System
 
-actor Customer as customer
-actor Administrator as admin
-actor "Payment Gateway" as gateway
-actor "Courier Service" as courier
-
-rectangle "Online Shopping System" {
-  usecase "Register" as UC1
-  usecase "Login" as UC2
-  usecase "Browse Catalogue" as UC3
-  usecase "Search Product" as UC4
-  usecase "Manage Cart" as UC5
-  usecase "Place Order" as UC6
-  usecase "Make Payment" as UC7
-  usecase "Apply Coupon" as UC8
-  usecase "Track Order" as UC9
-  usecase "Cancel Order" as UC10
-  usecase "Refund Payment" as UC11
-  usecase "Manage Addresses" as UC12
-  usecase "Manage Products" as UC13
-  usecase "Ship Order" as UC14
-}
-
-customer -- UC1
-customer -- UC2
-customer -- UC3
-customer -- UC4
-customer -- UC5
-customer -- UC6
-customer -- UC8
-customer -- UC9
-customer -- UC10
-customer -- UC12
-admin -- UC2
-admin -- UC13
-admin -- UC14
-
-UC7 -- gateway
-UC11 -- gateway
-UC14 -- courier
-UC9 -- courier
-
-UC5 ..> UC2 : <<include>>
-UC6 ..> UC2 : <<include>>
-UC6 ..> UC7 : <<include>>
-UC8 ..> UC6 : <<extend>>
-UC9 ..> UC2 : <<include>>
-UC10 ..> UC2 : <<include>>
-UC10 ..> UC11 : <<include>>
-UC12 ..> UC2 : <<include>>
-UC13 ..> UC2 : <<include>>
-UC14 ..> UC2 : <<include>>
-@enduml
-```
-</TabItem>
-</Tabs>
+</details>
 
 #### Explanation
 
@@ -265,93 +179,16 @@ Assumptions:
 | Manage Librarians | Administrator | none |
 | Set Lending Policy | Administrator | none |
 
-<Tabs record="all">
-<TabItem label="Sketch">
-```text
-              +----------------------------------------------------------+
-              |               Library Management System                  |
-              |                                                          |
-  Member -----|--( Search Catalogue )------------------------------------|----- Librarian
-     |        |                                                          |        |
-     +--------|--( Reserve Book )----<<include>>---+                     |        |
-     |        |                                    v                     |        |
-     +--------|--( Borrow Book )-----<<include>>--( Verify Membership )--|--------+
-     |        |                                    ^   ^                 |        |
-     +--------|--( Return Book )-----<<include>>---+   |                 |--------+
-     |        |     ^      ^                           |                 |        |
-     |        | <<extend>> <<extend>>                  |                 |        |
-     |        |     |      |                           |                 |        |
-     +--------|--( Pay Fine ) ( Notify Reserver )      |                 |--------+
-     |        |                                        |                 |        |
-     +--------|--( Renew Book )------<<include>>-------+                 |--------+
-     |        |                                        |                 |        |
-     +--------|--( View Loans and Fines )-<<include>>--+                 |        |
-              |                                                          |        |
-              |  ( Register Member )-------------------------------------|--------+
-              |  ( Manage Copies )---------------------------------------|--------+
-              |  ( Generate Reports )------------------------------------|--------+
-              |                                                          |
-              |  ( Manage Librarians )----------------------------------------- Administrator
-              |  ( Set Lending Policy )---------------------------------------------+
-              +----------------------------------------------------------+
+<Diagram src="/code/mcsl-222/section-1/session-2/library_usecase.svg" alt="Use Case Diagram - Library Management System" />
+
+<details class="nb-source">
+<summary>PlantUML source (library_usecase.puml)</summary>
+
+```text title="library_usecase.puml" file=<rootDir>/public/code/mcsl-222/section-1/session-2/library_usecase.puml
+
 ```
-</TabItem>
-<TabItem label="library_usecase.puml">
-```text title="library_usecase.puml"
-@startuml
-left to right direction
-title Use Case Diagram - Library Management System
 
-actor Member as member
-actor Librarian as librarian
-actor Administrator as admin
-
-rectangle "Library Management System" {
-  usecase "Search Catalogue" as UC1
-  usecase "Reserve Book" as UC2
-  usecase "Borrow Book" as UC3
-  usecase "Return Book" as UC4
-  usecase "Renew Book" as UC5
-  usecase "Pay Fine" as UC6
-  usecase "Notify Reserver" as UC7
-  usecase "Verify Membership" as UC8
-  usecase "View Loans and Fines" as UC9
-  usecase "Register Member" as UC10
-  usecase "Manage Copies" as UC11
-  usecase "Generate Reports" as UC12
-  usecase "Manage Librarians" as UC13
-  usecase "Set Lending Policy" as UC14
-}
-
-member -- UC1
-member -- UC2
-member -- UC3
-member -- UC4
-member -- UC5
-member -- UC6
-member -- UC9
-librarian -- UC1
-librarian -- UC3
-librarian -- UC4
-librarian -- UC5
-librarian -- UC6
-librarian -- UC10
-librarian -- UC11
-librarian -- UC12
-admin -- UC13
-admin -- UC14
-
-UC2 ..> UC8 : <<include>>
-UC3 ..> UC8 : <<include>>
-UC4 ..> UC8 : <<include>>
-UC5 ..> UC8 : <<include>>
-UC9 ..> UC8 : <<include>>
-UC6 ..> UC4 : <<extend>>
-UC7 ..> UC4 : <<extend>>
-@enduml
-```
-</TabItem>
-</Tabs>
+</details>
 
 #### Explanation
 

@@ -1,0 +1,29 @@
+---
+/**
+ * A rendered diagram (SVG from a PlantUML or Graphviz source next to it in public/code).
+ * Build the SVGs with `pnpm run build:diagrams` (the pre-commit hook does it when a source is staged).
+ *
+ *   <Diagram src="/code/mcsl-222/section-1/session-1/online_shopping_class.svg" alt="Class diagram of the online shopping system" />
+ *
+ * Shows the PlantUML source below the picture when `source` is given (path of the .puml/.dot file);
+ * the source is for regenerating or editing the picture, not for the lab record.
+ */
+import { withBase } from "@cloudflare/nimbus-docs/runtime";
+
+interface Props {
+  src: string;
+  alt: string;
+  caption?: string;
+}
+const { src, alt, caption } = Astro.props;
+const href = withBase(src, import.meta.env.BASE_URL);
+---
+<figure class="nb-diagram my-5">
+  <a href={href} target="_blank" rel="noopener" class="nb-diagram-link" title="Open full size in a new tab">
+    <img src={href} alt={alt} loading="lazy" decoding="async" />
+  </a>
+  <figcaption class="mt-1 flex items-center justify-between gap-3 text-xs text-muted-foreground">
+    <span>{caption ?? alt}</span>
+    <a href={href} target="_blank" rel="noopener" class="no-print shrink-0 hover:text-foreground">Open full size ↗</a>
+  </figcaption>
+</figure>

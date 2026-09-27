@@ -1,0 +1,51 @@
+@startuml
+left to right direction
+title Component Diagram: Online Examination System
+package "Presentation" {
+  component "Student Portal" as portal
+  component "Faculty Console" as faculty
+}
+package "Application" {
+  component "Authentication Service" as auth
+  component "Exam Engine" as engine
+  component "Question Bank" as qbank
+  component "Evaluation Service" as eval
+  component "Result Service" as result
+  component "Notification Service" as notify
+}
+package "Data" {
+  component "Exam Database" as db
+}
+interface IAuthentication
+interface IExamDelivery
+interface IQuestionBank
+interface IEvaluation
+interface IResult
+interface INotify
+interface IDataAccess
+
+auth -- IAuthentication
+engine -- IExamDelivery
+qbank -- IQuestionBank
+eval -- IEvaluation
+result -- IResult
+notify -- INotify
+db -- IDataAccess
+
+portal ..> IAuthentication
+portal ..> IExamDelivery
+portal ..> IResult
+faculty ..> IAuthentication
+faculty ..> IQuestionBank
+faculty ..> IEvaluation
+engine ..> IQuestionBank
+engine ..> IEvaluation
+engine ..> INotify
+engine ..> IDataAccess
+result ..> IEvaluation
+result ..> INotify
+result ..> IDataAccess
+auth ..> IDataAccess
+qbank ..> IDataAccess
+eval ..> IDataAccess
+@enduml

@@ -90,132 +90,16 @@ Assumptions:
 | Payment | paymentId: int, amount: double, mode: String, status: String | process(), refund() | for 1 Order |
 | Shipment | shipmentId: int, courier: String, trackingNo: String, status: String | dispatch(), deliver() | for 1 Order |
 
-<Tabs record="all">
-<TabItem label="Sketch">
-```text
- +----------+ 1     1..* +---------+      +----------+ 1   0..* +---------+ 0..*    1 +-------+
- | Customer |------------| Address |      | Category |<>--------| Product |-----------| Admin |
- +----------+            +---------+      +----------+          +---------+  manages  +-------+
-   |1        |1                                                   ^ 1   ^ 1
-   |         | (comp)                                             |     |
-   |         v 1                                                  |     |
-   |   +--------------+ 1      0..* +----------+ 0..*             |     |
-   |   | ShoppingCart |<*>----------| CartItem |------------------+     |
-   |   +--------------+             +----------+                        |
-   | places                                                             |
-   v 0..*                                                               |
- +-------+ 1     1..* +-----------+ 0..*                                |
- | Order |<*>---------| OrderLine |-------------------------------------+
- +-------+            +-----------+
-   |1        |1          |0..*
-   |1        |0..1       |1  delivered to (same Address class as above)
- +---------+ +----------+ +---------+
- | Payment | | Shipment | | Address |
- +---------+ +----------+ +---------+
+<Diagram src="/code/mcsl-222/section-1/session-1/online_shopping_class.svg" alt="Class Diagram - Online Shopping System" />
 
- <*>-- filled diamond = composition    <>-- hollow diamond = aggregation
- -->  arrow = directed association     plain line = association
+<details class="nb-source">
+<summary>PlantUML source (online_shopping_class.puml)</summary>
+
+```text title="online_shopping_class.puml" file=<rootDir>/public/code/mcsl-222/section-1/session-1/online_shopping_class.puml
+
 ```
-</TabItem>
-<TabItem label="online_shopping_class.puml">
-```text title="online_shopping_class.puml"
-@startuml
-skinparam classAttributeIconSize 0
-title Class Diagram - Online Shopping System
 
-class Customer {
-  - customerId: int
-  - name: String
-  - email: String
-  - phone: String
-  + register()
-  + login()
-  + placeOrder()
-}
-class Address {
-  - line1: String
-  - city: String
-  - pin: String
-}
-class ShoppingCart {
-  - cartId: int
-  - createdOn: Date
-  + addItem(p: Product, qty: int)
-  + removeItem(p: Product)
-  + getTotal(): double
-  + checkout(): Order
-}
-class CartItem {
-  - quantity: int
-  + subtotal(): double
-}
-class Category {
-  - categoryId: int
-  - name: String
-}
-class Product {
-  - productId: int
-  - name: String
-  - price: double
-  - stock: int
-  + isAvailable(qty: int): boolean
-  + reduceStock(qty: int)
-  + restoreStock(qty: int)
-}
-class Admin {
-  - adminId: int
-  - name: String
-  + addProduct()
-  + updateStock()
-  + shipOrder()
-}
-class Order {
-  - orderId: int
-  - orderDate: Date
-  - status: String
-  - total: double
-  + confirm()
-  + cancel()
-  + track(): String
-}
-class OrderLine {
-  - quantity: int
-  - unitPrice: double
-  + subtotal(): double
-}
-class Payment {
-  - paymentId: int
-  - amount: double
-  - mode: String
-  - status: String
-  + process(): boolean
-  + refund()
-}
-class Shipment {
-  - shipmentId: int
-  - courier: String
-  - trackingNo: String
-  - status: String
-  + dispatch()
-  + deliver()
-}
-
-Customer "1" -- "1..*" Address
-Customer "1" *-- "1" ShoppingCart
-ShoppingCart "1" *-- "0..*" CartItem
-CartItem "0..*" --> "1" Product
-Category "1" o-- "0..*" Product
-Admin "1" -- "0..*" Product : manages
-Customer "1" -- "0..*" Order : places
-Order "1" *-- "1..*" OrderLine
-OrderLine "0..*" --> "1" Product
-Order "1" -- "1" Payment
-Order "1" -- "0..1" Shipment
-Order "0..*" --> "1" Address : delivered to
-@enduml
-```
-</TabItem>
-</Tabs>
+</details>
 
 #### Explanation
 
@@ -276,138 +160,16 @@ Assumptions:
 | Answer | answerId: int | none | for 1 Question; selects 1 Option |
 | Result | resultId: int, marksObtained: int, percentage: double, status: String, published: boolean | publish() | of 1 Attempt |
 
-<Tabs record="all">
-<TabItem label="Sketch">
-```text
-                    +-----------+ (abstract)
-                    |   User    |<-------creates 0..*---+
-                    +-----------+                       |
-                     ^    ^    ^                        |
-        +------------+    |    +-------------+          |
- +---------+       +----------+          +-------+------+
- | Student |       | Examiner |          | Admin |
- +---------+       +----------+          +-------+
-   |1..*  |1         |1     |1
-   |      |          |1..*  |sets 0..*
-   |      |     +---------+ |
-   |      +-----| Subject |-|-----------------+
-   | enrolled   +---------+ |                 |
-   | 1..*         |1        |            0..* |
-   |         0..* |         v            +------+ 1    0..* +---------+
-   |      +----------+ 1..*   0..*       |      |-----------| Attempt |
-   |      | Question |-------------------| Exam |           +---------+
-   |      +----------+ uses              +------+            ^    |1   |1
-   |        |1    ^ 1 for                          makes 0..* |    |    |0..1
-   |   2..4 |     |                                          |    |    v
-   |  +--------+  |     +--------+ 0..* (comp)               |    | +--------+
-   |  | Option |<-+-----| Answer |----------------------------|----+ | Result |
-   |  +--------+  1     +--------+                            |      +--------+
-   |    selects                                               |
-   +----------------------------------------------------------+
-```
-</TabItem>
-<TabItem label="online_examination_class.puml">
-```text title="online_examination_class.puml"
-@startuml
-skinparam classAttributeIconSize 0
-title Class Diagram - Online Examination System
+<Diagram src="/code/mcsl-222/section-1/session-1/online_examination_class.svg" alt="Class Diagram - Online Examination System" />
 
-abstract class User {
-  - userId: int
-  - name: String
-  - email: String
-  - password: String
-  + login(): boolean
-  + logout()
-}
-class Student {
-  - rollNo: String
-  - programme: String
-  + viewExams()
-  + startExam(e: Exam): Attempt
-  + viewResult()
-}
-class Examiner {
-  - employeeId: String
-  + addQuestion()
-  + scheduleExam()
-  + publishResult()
-}
-class Admin {
-  + createUser()
-  + mapStudent()
-}
-class Subject {
-  - subjectCode: String
-  - title: String
-}
-class Exam {
-  - examId: int
-  - title: String
-  - date: Date
-  - startTime: Time
-  - duration: int
-  - totalMarks: int
-  - passMarks: int
-  + schedule()
-  + start(s: Student): Attempt
-  + end()
-  + isOpen(): boolean
-}
-class Question {
-  - questionId: int
-  - text: String
-  - marks: int
-  + isCorrect(o: Option): boolean
-}
-class Option {
-  - optionId: int
-  - text: String
-  - isCorrect: boolean
-}
-class Attempt {
-  - attemptId: int
-  - startTime: Time
-  - endTime: Time
-  - status: String
-  + begin()
-  + answer(q: Question, o: Option)
-  + submit()
-  + evaluate(): Result
-}
-class Answer {
-  - answerId: int
-}
-class Result {
-  - resultId: int
-  - marksObtained: int
-  - percentage: double
-  - status: String
-  - published: boolean
-  + publish()
-}
+<details class="nb-source">
+<summary>PlantUML source (online_examination_class.puml)</summary>
 
-User <|-- Student
-User <|-- Examiner
-User <|-- Admin
-Admin "1" -- "0..*" User : creates
-Student "1..*" -- "1..*" Subject : enrolled in
-Examiner "1" -- "1..*" Subject : handles
-Examiner "1" -- "0..*" Exam : sets
-Subject "1" -- "0..*" Question
-Subject "1" -- "0..*" Exam
-Exam "0..*" -- "1..*" Question : uses
-Question "1" *-- "2..4" Option
-Exam "1" -- "0..*" Attempt
-Student "1" -- "0..*" Attempt : makes
-Attempt "1" *-- "0..*" Answer
-Answer "0..*" --> "1" Question : for
-Answer "0..*" --> "1" Option : selects
-Attempt "1" -- "0..1" Result
-@enduml
+```text title="online_examination_class.puml" file=<rootDir>/public/code/mcsl-222/section-1/session-1/online_examination_class.puml
+
 ```
-</TabItem>
-</Tabs>
+
+</details>
 
 #### Explanation
 
@@ -468,124 +230,16 @@ Objects at the snapshot instant:
 | t1 | Transaction | txnId = T5001, type = DEBIT, amount = 5000.00, date = 2026-09-26, reference = TR26092601 | acc1 |
 | t2 | Transaction | txnId = T5002, type = CREDIT, amount = 5000.00, date = 2026-09-26, reference = TR26092601 | acc3 |
 
-<Tabs record="all">
-<TabItem label="Sketch">
-```text
- +-------------------+     +----------------------+
- | sbi : Bank        |-----| noida : Branch       |
- | name = SBI        |     | branchCode = 01234   |
- +-------------------+     +----+------------+----+
-                                |            |
- +-----------------------+  +---------------------+     +-----------------------+
- | login1 : Credential   |--| ravi : Customer     |     | priya : Customer      |
- | userId = ravi1001     |  | customerId = C1001  |     | customerId = C1002    |
- | dailyLimit = 50000.00 |  | name = Ravi Kumar   |     | name = Priya Singh    |
- +-----------------------+  +--+------+-------+---+     +-----------+-----------+
-                               |      |       |                     |
- +------------------------+    |      |  +----+-----------------+   |
- | acc1 : SavingsAccount  |----+      |  | ben1 : Beneficiary   |   |
- | accountNo = SB1001     |           |  | nickname = Priya     |   |
- | balance = 40000.00     |           |  | accountNo = SB1002   |   |
- +-----------+------------+           |  +----------+-----------+   |
-             |                        |             |               |
- +-----------+------------+  +--------+----------+  |  +------------+-----------+
- | t1 : Transaction       |  | acc2 : CurrentAcc |  +--| acc3 : SavingsAccount  |
- | txnId = T5001          |  | accountNo = CA2001|     | accountNo = SB1002     |
- | type = DEBIT           |  | balance=125000.00 |     | balance = 27000.00     |
- | amount = 5000.00       |  +-------------------+     +------------+-----------+
- | reference = TR26092601 |                                         |
- +------------------------+                            +------------+-----------+
-                                                       | t2 : Transaction       |
- (object names are underlined when drawn by hand;      | txnId = T5002          |
-  full attribute values are in the table above)        | type = CREDIT          |
-                                                       | amount = 5000.00       |
-                                                       | reference = TR26092601 |
-                                                       +------------------------+
-```
-</TabItem>
-<TabItem label="online_banking_object.puml">
-```text title="online_banking_object.puml"
-@startuml
-title Object Diagram - Online Banking System (after Ravi transfers 5000 to Priya)
+<Diagram src="/code/mcsl-222/section-1/session-1/online_banking_object.svg" alt="Object Diagram - Online Banking System (after Ravi transfers 5000 to Priya)" />
 
-object "sbi : Bank" as sbi {
-  name = "State Bank of India"
-  ifscPrefix = "SBIN"
-}
-object "noida : Branch" as noida {
-  branchCode = "01234"
-  city = "Noida"
-}
-object "ravi : Customer" as ravi {
-  customerId = "C1001"
-  name = "Ravi Kumar"
-  phone = "9876543210"
-}
-object "priya : Customer" as priya {
-  customerId = "C1002"
-  name = "Priya Singh"
-  phone = "9123456780"
-}
-object "login1 : Credential" as login1 {
-  userId = "ravi1001"
-  passwordHash = "****"
-  dailyLimit = 50000.00
-}
-object "acc1 : SavingsAccount" as acc1 {
-  accountNo = "SB1001"
-  balance = 40000.00
-  openedOn = 2021-04-01
-  interestRate = 3.5
-  minBalance = 1000.00
-}
-object "acc2 : CurrentAccount" as acc2 {
-  accountNo = "CA2001"
-  balance = 125000.00
-  openedOn = 2023-01-15
-  overdraftLimit = 50000.00
-}
-object "acc3 : SavingsAccount" as acc3 {
-  accountNo = "SB1002"
-  balance = 27000.00
-  openedOn = 2022-08-10
-  interestRate = 3.5
-  minBalance = 1000.00
-}
-object "ben1 : Beneficiary" as ben1 {
-  nickname = "Priya"
-  accountNo = "SB1002"
-  ifsc = "SBIN0001234"
-}
-object "t1 : Transaction" as t1 {
-  txnId = "T5001"
-  type = "DEBIT"
-  amount = 5000.00
-  date = 2026-09-26
-  reference = "TR26092601"
-}
-object "t2 : Transaction" as t2 {
-  txnId = "T5002"
-  type = "CREDIT"
-  amount = 5000.00
-  date = 2026-09-26
-  reference = "TR26092601"
-}
+<details class="nb-source">
+<summary>PlantUML source (online_banking_object.puml)</summary>
 
-sbi -- noida
-noida -- ravi
-noida -- priya
-ravi -- login1
-ravi -- acc1
-ravi -- acc2
-ravi -- ben1
-ben1 -- acc3
-priya -- acc3
-acc1 -- t1
-acc3 -- t2
-@enduml
+```text title="online_banking_object.puml" file=<rootDir>/public/code/mcsl-222/section-1/session-1/online_banking_object.puml
+
 ```
-</TabItem>
-</Tabs>
+
+</details>
 
 #### Explanation
 

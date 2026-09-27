@@ -45,6 +45,7 @@ pnpm install
 pnpm dev        # local server
 pnpm build      # site + ZIPs of the committed PDFs (what Cloudflare runs)
 pnpm run build:pdf  # re-render changed session PDFs into public/downloads (needs: pnpm exec playwright install chromium)
+pnpm run build:diagrams  # render public/code/**/*.puml and *.dot to SVG (needs: brew install plantuml)
 pnpm lint:docs  # content lint (frontmatter, internal links)
 pnpm run deploy # manual deploy; pushes to main deploy through Cloudflare Workers Builds
 ```
@@ -54,6 +55,7 @@ pnpm run deploy # manual deploy; pushes to main deploy through Cloudflare Worker
 - `src/content/docs/` — lab pages (MDX). Folder tree drives URLs and sidebar.
 - `public/code/` — solution files (C/Python/Rust, HTML/CSS/JS). Imported into pages with ` ```c file=<rootDir>/public/code/... ` and served as-is for iframe previews.
 - `src/components/demo/` — interactive demos (Svelte islands).
+- Diagrams are PlantUML (`.puml`) or Graphviz (`.dot`) sources beside the code in `public/code/`, rendered to SVG by `scripts/build-diagrams.mjs` (style in `scripts/plantuml.skin`) and shown with `<Diagram src alt />`. The pre-commit hook re-renders when a source is staged; SVGs are committed.
 
 ### Authoring conventions
 

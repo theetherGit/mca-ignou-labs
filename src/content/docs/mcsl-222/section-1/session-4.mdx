@@ -100,63 +100,16 @@ Assumptions:
 | 2.3 | reg | s1 | addRegistration(reg) |
 | 2.4 | reg | student | registration slip (reply) |
 
-<Tabs record="all">
-<TabItem label="Sketch">
-```text
-                    1: register(semester, courseCodes)
-    +---------+  ------------------------------------>  +---------------+  1.1: isEligible(s1, sem)  +------------------+
-    | student |  <- - - 1.6: fee due - - - - - - - - -  | s1 : Student  | ------------------------->  | prog : Programme |
-    | (actor) |                                         +---------------+                            +------------------+
-    +---------+                                           |         ^                                   ^
-       |    ^                     1.2: <<create>> Registration(s1, sem)                                  |
-       |    |                                             v         |  2.3: addRegistration(reg)          | 1.3: getCourses(sem)
-       |    |   2: payFee(amount, mode)              +--------------------+                                |
-       +----|------------------------------------->  | reg : Registration | ------------------------------+
-            |                                        +--------------------+  2.2: confirm() (self)
-            +- - - 2.4: registration slip - - - - -    |          |         \
-                                                       |          |          \ 2.1: <<create>> FeeReceipt(reg, amount, mode)
-                                    1.4: hasSeat()     |          |           v
-                                    [each course]      |          |        +------------------+
-                                                       v          |        | fee : FeeReceipt |
-                                                 +-------------+  |        +------------------+
-                                                 | c1 : Course |  | 1.5: <<create>> Enrolment(reg, c1)
-                                                 +-------------+  |
-                                                       ^          v
-                                                       |     +-----------------+
-                                                       +---- | enr : Enrolment |
-                                          1.5.1: reserveSeat() +-----------------+
-```
-</TabItem>
-<TabItem label="student_registration_collab.puml">
-```text title="student_registration_collab.puml"
-@startuml
-title Collaboration Diagram - Student Registration (Register for Semester)
+<Diagram src="/code/mcsl-222/section-1/session-4/student_registration_collab.svg" alt="Collaboration Diagram - Student Registration (Register for Semester)" />
 
-object "student" as student <<actor>>
-object "s1 : Student" as s1
-object "prog : Programme" as prog
-object "reg : Registration" as reg
-object "c1 : Course" as c1
-object "enr : Enrolment" as enr
-object "fee : FeeReceipt" as fee
+<details class="nb-source">
+<summary>PlantUML source (student_registration_collab.puml)</summary>
 
-student -right-> s1 : 1: register(semester, courseCodes)
-s1 -right-> prog : 1.1: isEligible(s1, semester)
-s1 -down-> reg : 1.2: <<create>> Registration(s1, semester)
-reg -up-> prog : 1.3: getCourses(semester)
-reg -down-> c1 : 1.4: hasSeat() [each course]
-reg -down-> enr : 1.5: <<create>> Enrolment(reg, c1)
-enr -left-> c1 : 1.5.1: reserveSeat()
-s1 -left-> student : 1.6: fee due
-student -down-> reg : 2: payFee(amount, mode)
-reg -right-> fee : 2.1: <<create>> FeeReceipt(reg, amount, mode)
-reg -> reg : 2.2: confirm()
-reg -up-> s1 : 2.3: addRegistration(reg)
-reg -left-> student : 2.4: registration slip
-@enduml
+```text title="student_registration_collab.puml" file=<rootDir>/public/code/mcsl-222/section-1/session-4/student_registration_collab.puml
+
 ```
-</TabItem>
-</Tabs>
+
+</details>
 
 #### Explanation
 
@@ -227,68 +180,16 @@ Assumptions:
 | 2.5 | sbi | login1 | addToDailyUsage(5000) |
 | 2.6 | sbi | ravi | receipt(ref) (reply) |
 
-<Tabs record="all">
-<TabItem label="Sketch">
-```text
-                                          1.1: verify(password)
-                                          2.1: withinDailyLimit(5000)
-                                          2.5: addToDailyUsage(5000)
-                                    +------------------------------------>  +---------------------+
-   1: login(userId, password)       |                                       | login1 : Credential |
-   2: transferFunds(SB1001,ben1,5000)                                       +---------------------+
- +--------+  ---------------------> +------------+  2.2: getTargetAccount()  +--------------------+
- |  ravi  |                         | sbi : Bank | ------------------------> | ben1 : Beneficiary |
- | (actor)|  <- - - - - - - - - - - +------------+                           +--------------------+
- +--------+   1.2: session ok         |        |                                        |
-              2.6: receipt(ref)       |        |                                        | (link: target account)
-                                      |        |                                        v
-                   2.3: debit(5000,ref)        | 2.4: credit(5000, ref)     +------------------------+
-                                      |        +--------------------------> | acc3 : SavingsAccount  |
-                                      v                                     +------------------------+
-                        +------------------------+                                      |
-                        | acc1 : SavingsAccount  | --+                                  | 2.4.1: <<create>>
-                        +------------------------+   | 2.3.1: checkMinBalance(5000)     |   Transaction(CREDIT, 5000, ref)
-                                      |  ^-----------+                                  v
-                                      | 2.3.2: <<create>>                     +------------------+
-                                      |   Transaction(DEBIT, 5000, ref)       | t2 : Transaction |
-                                      v                                       +------------------+
-                            +------------------+
-                            | t1 : Transaction |
-                            +------------------+
-```
-</TabItem>
-<TabItem label="online_banking_collab.puml">
-```text title="online_banking_collab.puml"
-@startuml
-title Collaboration Diagram - Online Banking System (Transfer Funds)
+<Diagram src="/code/mcsl-222/section-1/session-4/online_banking_collab.svg" alt="Collaboration Diagram - Online Banking System (Transfer Funds)" />
 
-object "ravi" as ravi <<actor>>
-object "sbi : Bank" as sbi
-object "login1 : Credential" as login1
-object "acc1 : SavingsAccount" as acc1
-object "ben1 : Beneficiary" as ben1
-object "acc3 : SavingsAccount" as acc3
-object "t1 : Transaction" as t1
-object "t2 : Transaction" as t2
+<details class="nb-source">
+<summary>PlantUML source (online_banking_collab.puml)</summary>
 
-ravi -right-> sbi : 1: login(userId, password)
-sbi -up-> login1 : 1.1: verify(password)
-sbi -left-> ravi : 1.2: session ok
-ravi -right-> sbi : 2: transferFunds(SB1001, ben1, 5000)
-sbi -up-> login1 : 2.1: withinDailyLimit(5000)
-sbi -right-> ben1 : 2.2: getTargetAccount()
-sbi -down-> acc1 : 2.3: debit(5000, ref)
-acc1 -> acc1 : 2.3.1: checkMinBalance(5000)
-acc1 -down-> t1 : 2.3.2: <<create>> Transaction(DEBIT, 5000, ref)
-sbi -down-> acc3 : 2.4: credit(5000, ref)
-acc3 -down-> t2 : 2.4.1: <<create>> Transaction(CREDIT, 5000, ref)
-sbi -up-> login1 : 2.5: addToDailyUsage(5000)
-sbi -left-> ravi : 2.6: receipt(ref)
-ben1 -- acc3 : target account
-@enduml
+```text title="online_banking_collab.puml" file=<rootDir>/public/code/mcsl-222/section-1/session-4/online_banking_collab.puml
+
 ```
-</TabItem>
-</Tabs>
+
+</details>
 
 #### Explanation
 
@@ -356,52 +257,16 @@ Assumptions:
 | 2.2.1 | emp | bal | [approved] deduct(type, days) |
 | 2.3 | mgr | manager | decision recorded (reply) |
 
-<Tabs record="all">
-<TabItem label="Sketch">
-```text
-              1: applyLeave(from, to, type)                       1.3: forward(req)                      2: approve(requestId)
- +----------+ ------------------------------> +----------------+ -----------------------> +---------------+ <------------------- +---------+
- | employee |                                 | emp : Employee |                          | mgr : Manager |                      | manager |
- | (actor)  | <- - - 1.4: requestId - - - - - +----------------+                          +---------------+ - - 2.3: decision -> | (actor) |
- +----------+                                   |   ^      ^                                     |                recorded       +---------+
-                                                |   |      |  2.2: notify(status)                | 2.1: setStatus(Approved)
-                       1.1: hasBalance(type, days)  |      |                                     |
-                 2.2.1: [approved] deduct(type, days)      |         +--------------------+       |
-                                                |   |      +---------| req : LeaveRequest | <-----+
-                                                v   |                +--------------------+
-                                       +--------------------+                 ^
-                                       | bal : LeaveBalance |                 |
-                                       +--------------------+   1.2: [balance sufficient] <<create>> LeaveRequest(from, to, type)
-                                                                              |
-                                                                    (from emp, drawn on the emp to req link)
-```
-</TabItem>
-<TabItem label="employee_leave_collab.puml">
-```text title="employee_leave_collab.puml"
-@startuml
-title Collaboration Diagram - Employee Management System (Apply for Leave)
+<Diagram src="/code/mcsl-222/section-1/session-4/employee_leave_collab.svg" alt="Collaboration Diagram - Employee Management System (Apply for Leave)" />
 
-object "employee" as employee <<actor>>
-object "emp : Employee" as emp
-object "bal : LeaveBalance" as bal
-object "req : LeaveRequest" as req
-object "mgr : Manager" as mgr
-object "manager" as manager <<actor>>
+<details class="nb-source">
+<summary>PlantUML source (employee_leave_collab.puml)</summary>
 
-employee -right-> emp : 1: applyLeave(from, to, type)
-emp -down-> bal : 1.1: hasBalance(type, days)
-emp -right-> req : 1.2: [balance sufficient] <<create>> LeaveRequest(from, to, type)
-emp -right-> mgr : 1.3: forward(req)
-emp -left-> employee : 1.4: requestId
-manager -left-> mgr : 2: approve(requestId)
-mgr -down-> req : 2.1: setStatus(Approved)
-req -left-> emp : 2.2: notify(status)
-emp -down-> bal : 2.2.1: [approved] deduct(type, days)
-mgr -right-> manager : 2.3: decision recorded
-@enduml
+```text title="employee_leave_collab.puml" file=<rootDir>/public/code/mcsl-222/section-1/session-4/employee_leave_collab.puml
+
 ```
-</TabItem>
-</Tabs>
+
+</details>
 
 #### Explanation
 

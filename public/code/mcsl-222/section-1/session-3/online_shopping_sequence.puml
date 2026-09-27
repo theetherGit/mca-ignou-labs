@@ -1,0 +1,53 @@
+@startuml
+title Sequence Diagram - Online Shopping System (Place Order)
+
+actor Customer as customer
+participant "cart : ShoppingCart" as cart
+participant "item : CartItem" as item
+participant "p : Product" as p
+participant "order : Order" as order
+participant "pay : Payment" as pay
+actor "Payment Gateway" as gateway
+
+customer -> cart : 1: checkout(address)
+activate cart
+loop each item in cart
+  cart -> item : 1.1: subtotal()
+  activate item
+  item -> p : 1.1.1: getPrice()
+  activate p
+  p --> item : price
+  deactivate p
+  item --> cart : amount
+  deactivate item
+  cart -> p : 1.2: isAvailable(qty)
+  activate p
+  p --> cart : true
+  deactivate p
+end
+create order
+cart -> order : 1.3: <<create>> Order(customer, lines, address)
+cart --> customer : order, total
+deactivate cart
+
+customer -> order : 2: confirm(mode)
+activate order
+create pay
+order -> pay : 2.1: <<create>> Payment(total, mode)
+order -> pay : 2.2: process()
+activate pay
+pay -> gateway : 2.2.1: authorize(amount, details)
+gateway --> pay : approved / declined
+pay --> order : result
+deactivate pay
+alt approved
+  order -> order : 2.3: setStatus(Paid)
+  loop each order line
+    order -> p : 2.4: reduceStock(qty)
+  end
+else declined
+  order -> order : 2.5: setStatus(PaymentFailed)
+end
+order --> customer : orderId, status
+deactivate order
+@enduml

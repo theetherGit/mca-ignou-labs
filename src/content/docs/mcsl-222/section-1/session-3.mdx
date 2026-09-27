@@ -100,99 +100,16 @@ Assumptions:
 | 2.4 | order | p | reduceStock(qty) (loop, each line) | none |
 | 2.5 | order | order | setStatus(PaymentFailed) (alt declined) | none |
 
-<Tabs record="all">
-<TabItem label="Sketch">
-```text
- customer      cart:ShoppingCart   item:CartItem   p:Product   order:Order   pay:Payment   gateway
-    |                |                  |              |            |             |            |
-    |-1 checkout()-->|                  |              |            |             |            |
-    |          +-----|------------------|--------------|-----+      |             |            |
-    |          |loop | [each item]      |              |     |      |             |            |
-    |          |     |-1.1 subtotal()-->|              |     |      |             |            |
-    |          |     |                  |-1.1.1 getPrice()-->|      |             |            |
-    |          |     |                  |<- - price - -|     |      |             |            |
-    |          |     |<- - amount - - - |              |     |      |             |            |
-    |          |     |-1.2 isAvailable(qty)----------->|     |      |             |            |
-    |          |     |<- - true - - - - - - - - - - - -|     |      |             |            |
-    |          +-----|------------------|--------------|-----+      |             |            |
-    |                |-1.3 <<create>> Order(customer, lines, addr)->|             |            |
-    |<- - order, total - -|             |              |            |             |            |
-    |                |                  |              |            |             |            |
-    |-2 confirm(mode)------------------------------------------>|             |            |
-    |                |                  |              |            |-2.1 <<create>> Payment-->|
-    |                |                  |              |            |-2.2 process()->|         |
-    |                |                  |              |            |             |-2.2.1 authorize()->|
-    |                |                  |              |            |             |<- - approved - - -|
-    |                |                  |              |            |<- - result -|            |
-    |          +-----|------------------|--------------|------------|-------+     |            |
-    |          |alt  | [approved]       |              |            |       |     |            |
-    |          |     |                  |              |            |-2.3 setStatus(Paid)       |
-    |          |     |                  |   loop [each line]        |       |     |            |
-    |          |     |                  |              |<-2.4 reduceStock(qty)-|   |            |
-    |          |- - -|- - - - - - - - - |- - - - - - - |- - - - - - |- - - -|     |            |
-    |          |     | [declined]       |              |            |-2.5 setStatus(PaymentFailed)
-    |          +-----|------------------|--------------|------------|-------+     |            |
-    |<- - orderId, status - - - - - - - - - - - - - - - - - - - - -|             |            |
+<Diagram src="/code/mcsl-222/section-1/session-3/online_shopping_sequence.svg" alt="Sequence Diagram - Online Shopping System (Place Order)" />
+
+<details class="nb-source">
+<summary>PlantUML source (online_shopping_sequence.puml)</summary>
+
+```text title="online_shopping_sequence.puml" file=<rootDir>/public/code/mcsl-222/section-1/session-3/online_shopping_sequence.puml
+
 ```
-</TabItem>
-<TabItem label="online_shopping_sequence.puml">
-```text title="online_shopping_sequence.puml"
-@startuml
-title Sequence Diagram - Online Shopping System (Place Order)
 
-actor Customer as customer
-participant "cart : ShoppingCart" as cart
-participant "item : CartItem" as item
-participant "p : Product" as p
-participant "order : Order" as order
-participant "pay : Payment" as pay
-actor "Payment Gateway" as gateway
-
-customer -> cart : 1: checkout(address)
-activate cart
-loop each item in cart
-  cart -> item : 1.1: subtotal()
-  activate item
-  item -> p : 1.1.1: getPrice()
-  activate p
-  p --> item : price
-  deactivate p
-  item --> cart : amount
-  deactivate item
-  cart -> p : 1.2: isAvailable(qty)
-  activate p
-  p --> cart : true
-  deactivate p
-end
-create order
-cart -> order : 1.3: <<create>> Order(customer, lines, address)
-cart --> customer : order, total
-deactivate cart
-
-customer -> order : 2: confirm(mode)
-activate order
-create pay
-order -> pay : 2.1: <<create>> Payment(total, mode)
-order -> pay : 2.2: process()
-activate pay
-pay -> gateway : 2.2.1: authorize(amount, details)
-gateway --> pay : approved / declined
-pay --> order : result
-deactivate pay
-alt approved
-  order -> order : 2.3: setStatus(Paid)
-  loop each order line
-    order -> p : 2.4: reduceStock(qty)
-  end
-else declined
-  order -> order : 2.5: setStatus(PaymentFailed)
-end
-order --> customer : orderId, status
-deactivate order
-@enduml
-```
-</TabItem>
-</Tabs>
+</details>
 
 #### Explanation
 
@@ -265,100 +182,16 @@ Assumptions:
 | 3.2 | attempt | result | create Result(marks, percentage, status) | result |
 | 3.3 | attempt | student | submitted, result pending publication | none |
 
-<Tabs record="all">
-<TabItem label="Sketch">
-```text
- student        exam:Exam        attempt:Attempt     ans:Answer     q:Question    result:Result
-    |               |                   |                 |              |               |
-    |-1 start(id)-->|                   |                 |              |               |
-    |               |-1.1 isOpen()--+   |                 |              |               |
-    |               |<--------------+   |                 |              |               |
-    |               |-1.2 <<create>> Attempt(student, exam)-->|          |               |
-    |               |                   |-1.2.1 begin()-+ |              |               |
-    |               |                   |<--------------+ |              |               |
-    |<- - question list - - - - - - - - |                 |              |               |
-    |               |                   |                 |              |               |
-  +-|---------------|-------------------|-----------------|--+           |               |
-  |loop [until submit or timer expiry]  |                 |  |           |               |
-  | |-2 answer(q, o)------------------->|                 |  |           |               |
-  | |               |                   |-2.1 <<create>> Answer(q, o)->| |               |
-  | |<- - saved - - - - - - - - - - - - |                 |  |           |               |
-  +-|---------------|-------------------|-----------------|--+           |               |
-    |               |                   |                 |              |               |
-  +-|---------------|-------------------|-----------------|--------------|-----+         |
-  |alt [student submits]                |                 |              |     |         |
-  | |-3 submit()----------------------->|                 |              |     |         |
-  |- - - - - - - - - - - - - - - - - - -|- - - - - - - - -|- - - - - - - |- - -|         |
-  |   [timer expires]                   |                 |              |     |         |
-  | |               |-3 submit()------->|                 |              |     |         |
-  +-|---------------|-------------------|-----------------|--------------|-----+         |
-    |               |                   |-3.1 evaluate()-+|              |               |
-    |               |                   |   loop [each answer]           |               |
-    |               |                   |-3.1.1 isCorrect(ans.option)--->|               |
-    |               |                   |<- - true - - - - - - - - - - - |               |
-    |               |                   |-3.1.2 getMarks()-------------->|               |
-    |               |                   |<- - marks - - - - - - - - - - -|               |
-    |               |                   |-3.2 <<create>> Result(marks, pct, status)----->|
-    |<- - 3.3 submitted, result pending publication - -|              |               |
+<Diagram src="/code/mcsl-222/section-1/session-3/online_examination_sequence.svg" alt="Sequence Diagram - Online Examination System (Take Exam)" />
+
+<details class="nb-source">
+<summary>PlantUML source (online_examination_sequence.puml)</summary>
+
+```text title="online_examination_sequence.puml" file=<rootDir>/public/code/mcsl-222/section-1/session-3/online_examination_sequence.puml
+
 ```
-</TabItem>
-<TabItem label="online_examination_sequence.puml">
-```text title="online_examination_sequence.puml"
-@startuml
-title Sequence Diagram - Online Examination System (Take Exam)
 
-actor Student as student
-participant "exam : Exam" as exam
-participant "attempt : Attempt" as attempt
-participant "ans : Answer" as ans
-participant "q : Question" as q
-participant "result : Result" as result
-
-student -> exam : 1: start(studentId)
-activate exam
-exam -> exam : 1.1: isOpen() and noAttemptYet(studentId)
-create attempt
-exam -> attempt : 1.2: <<create>> Attempt(student, exam)
-activate attempt
-attempt -> attempt : 1.2.1: begin()
-attempt --> student : question list
-deactivate attempt
-deactivate exam
-
-loop until submit or timer expiry
-  student -> attempt : 2: answer(q, o)
-  activate attempt
-  create ans
-  attempt -> ans : 2.1: <<create>> Answer(q, o)
-  attempt --> student : saved
-  deactivate attempt
-end
-
-alt student submits
-  student -> attempt : 3: submit()
-else timer expires
-  exam -> attempt : 3: submit()
-end
-activate attempt
-attempt -> attempt : 3.1: evaluate()
-loop each answer
-  attempt -> q : 3.1.1: isCorrect(ans.option)
-  activate q
-  q --> attempt : true / false
-  deactivate q
-  attempt -> q : 3.1.2: getMarks()
-  activate q
-  q --> attempt : marks
-  deactivate q
-end
-create result
-attempt -> result : 3.2: <<create>> Result(marks, percentage, status)
-attempt --> student : 3.3: submitted, result pending publication
-deactivate attempt
-@enduml
-```
-</TabItem>
-</Tabs>
+</details>
 
 #### Explanation
 
@@ -428,85 +261,16 @@ Assumptions:
 | 2.2.1 | emp | bal | deduct(type, days) (alt approved) | none |
 | 2.3 | mgr | manager | decision recorded (reply) | none |
 
-<Tabs record="all">
-<TabItem label="Sketch">
-```text
- employee     emp:Employee     bal:LeaveBalance   req:LeaveRequest    mgr:Manager     manager
-    |              |                  |                  |                 |              |
-    |-1 applyLeave(from,to,type)-->|  |                  |                 |              |
-    |              |-1.1 hasBalance(type, days)-->|      |                 |              |
-    |              |<- - true - - - - |                  |                 |              |
-  +-|--------------|------------------|------------------|-----------------|--+           |
-  |alt [balance sufficient]           |                  |                 |  |           |
-  | |              |-1.2 <<create>> LeaveRequest(from,to,type)-->|         |  |           |
-  | |              |-1.3 forward(req)------------------------------------>|  |           |
-  | |<- - 1.4 requestId - -|          |                  |                 |  |           |
-  |- - - - - - - - |- - - - - - - - - |- - - - - - - - - |- - - - - - - - -|- |           |
-  |   [insufficient]                  |                  |                 |  |           |
-  | |<- - refused: shortfall - -|     |                  |                 |  |           |
-  +-|--------------|------------------|------------------|-----------------|--+           |
-    |              |                  |                  |                 |              |
-    |              |                  |                  |                 |<-2 approve(requestId)-|
-    |              |                  |                  |<-2.1 setStatus(Approved)-|      |
-    |              |<-2.2 notify(status)-----------------|                 |              |
-  +-|--------------|------------------|------------------|--+              |              |
-  |alt [approved]  |                  |                  |  |              |              |
-  | |              |-2.2.1 deduct(type, days)-->|        |  |              |              |
-  |- - - - - - - - |- - - - - - - - - |- - - - - - - - - |- |              |              |
-  |   [rejected]   |     (no change)  |                  |  |              |              |
-  +-|--------------|------------------|------------------|--+              |              |
-    |              |                  |                  |                 |- - 2.3 decision recorded ->|
+<Diagram src="/code/mcsl-222/section-1/session-3/employee_leave_sequence.svg" alt="Sequence Diagram - Employee Management System (Apply for Leave)" />
+
+<details class="nb-source">
+<summary>PlantUML source (employee_leave_sequence.puml)</summary>
+
+```text title="employee_leave_sequence.puml" file=<rootDir>/public/code/mcsl-222/section-1/session-3/employee_leave_sequence.puml
+
 ```
-</TabItem>
-<TabItem label="employee_leave_sequence.puml">
-```text title="employee_leave_sequence.puml"
-@startuml
-title Sequence Diagram - Employee Management System (Apply for Leave)
 
-actor Employee as employee
-participant "emp : Employee" as emp
-participant "bal : LeaveBalance" as bal
-participant "req : LeaveRequest" as req
-participant "mgr : Manager" as mgr
-actor Manager as manager
-
-employee -> emp : 1: applyLeave(from, to, type)
-activate emp
-emp -> bal : 1.1: hasBalance(type, days)
-activate bal
-bal --> emp : true / false
-deactivate bal
-alt balance sufficient
-  create req
-  emp -> req : 1.2: <<create>> LeaveRequest(from, to, type)
-  emp -> mgr : 1.3: forward(req)
-  activate mgr
-  deactivate mgr
-  emp --> employee : 1.4: requestId
-else insufficient
-  emp --> employee : refused: shortfall
-end
-deactivate emp
-
-manager -> mgr : 2: approve(requestId)
-activate mgr
-mgr -> req : 2.1: setStatus(Approved)
-activate req
-req -> emp : 2.2: notify(status)
-activate emp
-alt approved
-  emp -> bal : 2.2.1: deduct(type, days)
-else rejected
-  note over emp, bal : balance unchanged
-end
-deactivate emp
-deactivate req
-mgr --> manager : 2.3: decision recorded
-deactivate mgr
-@enduml
-```
-</TabItem>
-</Tabs>
+</details>
 
 #### Explanation
 

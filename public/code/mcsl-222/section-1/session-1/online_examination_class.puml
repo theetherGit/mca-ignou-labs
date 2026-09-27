@@ -1,0 +1,97 @@
+@startuml
+skinparam classAttributeIconSize 0
+title Class Diagram - Online Examination System
+
+abstract class User {
+  - userId: int
+  - name: String
+  - email: String
+  - password: String
+  + login(): boolean
+  + logout()
+}
+class Student {
+  - rollNo: String
+  - programme: String
+  + viewExams()
+  + startExam(e: Exam): Attempt
+  + viewResult()
+}
+class Examiner {
+  - employeeId: String
+  + addQuestion()
+  + scheduleExam()
+  + publishResult()
+}
+class Admin {
+  + createUser()
+  + mapStudent()
+}
+class Subject {
+  - subjectCode: String
+  - title: String
+}
+class Exam {
+  - examId: int
+  - title: String
+  - date: Date
+  - startTime: Time
+  - duration: int
+  - totalMarks: int
+  - passMarks: int
+  + schedule()
+  + start(s: Student): Attempt
+  + end()
+  + isOpen(): boolean
+}
+class Question {
+  - questionId: int
+  - text: String
+  - marks: int
+  + isCorrect(o: Option): boolean
+}
+class Option {
+  - optionId: int
+  - text: String
+  - isCorrect: boolean
+}
+class Attempt {
+  - attemptId: int
+  - startTime: Time
+  - endTime: Time
+  - status: String
+  + begin()
+  + answer(q: Question, o: Option)
+  + submit()
+  + evaluate(): Result
+}
+class Answer {
+  - answerId: int
+}
+class Result {
+  - resultId: int
+  - marksObtained: int
+  - percentage: double
+  - status: String
+  - published: boolean
+  + publish()
+}
+
+User <|-- Student
+User <|-- Examiner
+User <|-- Admin
+Admin "1" -- "0..*" User : creates
+Student "1..*" -- "1..*" Subject : enrolled in
+Examiner "1" -- "1..*" Subject : handles
+Examiner "1" -- "0..*" Exam : sets
+Subject "1" -- "0..*" Question
+Subject "1" -- "0..*" Exam
+Exam "0..*" -- "1..*" Question : uses
+Question "1" *-- "2..4" Option
+Exam "1" -- "0..*" Attempt
+Student "1" -- "0..*" Attempt : makes
+Attempt "1" *-- "0..*" Answer
+Answer "0..*" --> "1" Question : for
+Answer "0..*" --> "1" Option : selects
+Attempt "1" -- "0..1" Result
+@enduml

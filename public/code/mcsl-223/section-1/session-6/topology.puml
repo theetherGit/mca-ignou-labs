@@ -1,0 +1,9 @@
+@startuml
+title Topology: two 802.11a ad-hoc nodes, distance d
+left to right direction
+node "n0\n10.1.1.1\n(0, 0, 1.5 m)" as n0
+node "n1\n10.1.1.2\n(d, 0, 1.5 m)" as n1
+n0 -[dashed]- n1 : 802.11a ad-hoc, 6 Mbit/s\nConstantSpeedPropagationDelay
+n0 --> n1 : UdpClient -> UdpServer (port 9)
+n0 --> n1 : OnOff CBR -> PacketSink (port 10)
+@enduml

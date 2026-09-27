@@ -1,0 +1,33 @@
+@startuml
+title State Chart: ExamAttempt (Online Examination System)
+[*] --> Registered : student enrols / create attempt record
+Registered : entry / create attempt record
+InProgress : entry / start timer
+InProgress : do / accept and save answers
+InProgress : exit / stop timer
+Disconnected : do / keep timer running
+Submitted : entry / lock answers
+Evaluating : entry / auto-grade objective answers
+Evaluated : entry / compute total, set pass or fail
+Published : entry / notify student
+UnderReview : do / re-mark disputed answers
+Terminated : entry / flag attempt
+
+Registered --> InProgress : startExam [window open] / load paper
+Registered --> Expired : windowClosed [not started]
+InProgress --> InProgress : answerSaved / save answer
+InProgress --> Disconnected : connectionLost
+Disconnected --> InProgress : reconnect [time left] / resume
+Disconnected --> Submitted : timeUp / auto-submit saved answers
+InProgress --> Submitted : submit / lock answers
+InProgress --> Submitted : timeUp / auto-submit saved answers
+InProgress --> Terminated : malpracticeDetected / lock answers, flag attempt
+Submitted --> Evaluating : evaluationStarted / auto-grade objective
+Evaluating --> Evaluated : allMarksEntered [objective and descriptive done] / compute total, set pass or fail
+Evaluated --> Published : resultReleased / notify student
+Published --> UnderReview : recheckRequested [within 7 days]
+UnderReview --> Published : recheckCompleted / update marks, notify student
+Published --> [*] : archived [retention period over]
+Expired --> [*]
+Terminated --> [*]
+@enduml

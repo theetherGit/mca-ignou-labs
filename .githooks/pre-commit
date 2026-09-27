@@ -22,6 +22,16 @@ if command -v fnm >/dev/null 2>&1; then
   eval "$(fnm env)" && fnm use --silent-if-unchanged >/dev/null 2>&1
 fi
 
+# Diagram sources changed? Re-render their SVGs first (brew install plantuml).
+if git diff --cached --name-only --diff-filter=ACMR | grep -qE '^public/code/.*\.(puml|dot)$'; then
+  echo "pre-commit: rendering diagrams..."
+  if ! node scripts/build-diagrams.mjs; then
+    echo "pre-commit: diagram build failed. Install PlantUML: brew install plantuml   (or SKIP_PDF=1 git commit to skip)"
+    exit 1
+  fi
+  git ls-files -mo --exclude-standard public/code | grep '\.svg$' | xargs git add --
+fi
+
 echo "pre-commit: refreshing session PDFs (only changed pages render)..."
 if ! pnpm run --silent build:pdf; then
   echo "pre-commit: PDF build failed. First time on this machine? Run: pnpm exec playwright install chromium"

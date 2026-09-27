@@ -1,0 +1,28 @@
+@startuml
+skinparam linetype polyline
+title Collaboration Diagram - Online Banking System (Transfer Funds)
+
+object "ravi" as ravi <<actor>>
+object "sbi : Bank" as sbi
+object "login1 : Credential" as login1
+object "acc1 : SavingsAccount" as acc1
+object "ben1 : Beneficiary" as ben1
+object "acc3 : SavingsAccount" as acc3
+object "t1 : Transaction" as t1
+object "t2 : Transaction" as t2
+
+ravi -right-> sbi : 1: login(userId, password)
+sbi -up-> login1 : 1.1: verify(password)
+sbi -left-> ravi : 1.2: session ok
+ravi -right-> sbi : 2: transferFunds(SB1001, ben1, 5000)
+sbi -up-> login1 : 2.1: withinDailyLimit(5000)
+sbi -right-> ben1 : 2.2: getTargetAccount()
+sbi -down-> acc1 : 2.3: debit(5000, ref)
+acc1 -> acc1 : 2.3.1: checkMinBalance(5000)
+acc1 -down-> t1 : 2.3.2: <<create>> Transaction(DEBIT, 5000, ref)
+sbi -down-> acc3 : 2.4: credit(5000, ref)
+acc3 -down-> t2 : 2.4.1: <<create>> Transaction(CREDIT, 5000, ref)
+sbi -up-> login1 : 2.5: addToDailyUsage(5000)
+sbi -left-> ravi : 2.6: receipt(ref)
+ben1 -- acc3 : target account
+@enduml

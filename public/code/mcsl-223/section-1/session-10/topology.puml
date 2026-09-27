@@ -1,0 +1,7 @@
+@startuml
+title Topology: one point-to-point link with queue, delay and error model
+left to right direction
+node "n0\n10.1.1.1\nBulkSend to :8080\npcap p2p-params-0-0.pcap" as n0
+node "n1\n10.1.1.2\nPacketSink\npcap p2p-params-1-0.pcap" as n1
+n0 -- n1 : 5 Mbit/s, 5 ms one way\nDropTail 10 packets at n0\nRateErrorModel 1e-6 at n1
+@enduml

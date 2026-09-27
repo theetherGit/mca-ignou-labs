@@ -1,0 +1,38 @@
+@startuml
+title Deployment Diagram: Online Student Admission System
+node "Applicant PC or Phone" <<device>> as applicant {
+  node "Web Browser" <<execution environment>> as browser1
+}
+node "Admission Officer PC" <<device>> as officer {
+  node "Web Browser" <<execution environment>> as browser2
+}
+node "Web Server" <<device>> as web {
+  node "Nginx 1.24" <<execution environment>> as nginx {
+    artifact "static bundle (html, css, js)" as static
+  }
+}
+node "Application Server" <<device>> as app {
+  node "Apache Tomcat 10" <<execution environment>> as tomcat {
+    artifact "admission.war" as war
+    artifact "application.properties" as props
+  }
+}
+node "Database Server" <<device>> as dbserver {
+  node "MySQL 8" <<execution environment>> as mysql {
+    artifact "admission_db schema" as schema
+  }
+}
+node "File Server" <<device>> as files {
+  artifact "uploaded documents" as docs
+}
+cloud "Payment Gateway" as gateway
+cloud "Mail and SMS Gateway" as mail
+
+browser1 -- nginx : HTTPS 443
+browser2 -- nginx : HTTPS 443 (campus network)
+nginx -- tomcat : HTTP 8080 (reverse proxy)
+tomcat -- mysql : JDBC over TCP 3306
+tomcat -- files : NFS
+tomcat -- gateway : HTTPS REST
+tomcat -- mail : SMTP 587 and HTTPS
+@enduml

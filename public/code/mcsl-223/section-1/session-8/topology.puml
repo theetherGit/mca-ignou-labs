@@ -1,0 +1,15 @@
+@startuml
+title Topology: dumbbell, TCP and UDP sharing a 1 Mbit/s bottleneck
+left to right direction
+node "n0\n10.1.1.1\nTCP BulkSend from 1 s" as n0
+node "n1\n10.1.2.1\nUDP OnOff from 20 s" as n1
+node "n2\nrouter" as n2
+node "n3\nrouter" as n3
+node "n4\n10.1.4.2\nTCP sink :8080" as n4
+node "n5\n10.1.5.2\nUDP sink :9000" as n5
+n0 -- n2 : 10 Mbit/s, 1 ms
+n1 -- n2 : 10 Mbit/s, 1 ms
+n2 -- n3 : 1 Mbit/s, 10 ms\nDropTail 100 packets
+n3 -- n4 : 10 Mbit/s, 1 ms
+n3 -- n5 : 10 Mbit/s, 1 ms
+@enduml

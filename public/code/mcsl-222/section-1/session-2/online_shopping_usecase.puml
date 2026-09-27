@@ -1,0 +1,56 @@
+@startuml
+left to right direction
+title Use Case Diagram - Online Shopping System
+
+actor Customer as customer
+actor Administrator as admin
+actor "Payment Gateway" as gateway
+actor "Courier Service" as courier
+
+rectangle "Online Shopping System" {
+  usecase "Register" as UC1
+  usecase "Login" as UC2
+  usecase "Browse Catalogue" as UC3
+  usecase "Search Product" as UC4
+  usecase "Manage Cart" as UC5
+  usecase "Place Order" as UC6
+  usecase "Make Payment" as UC7
+  usecase "Apply Coupon" as UC8
+  usecase "Track Order" as UC9
+  usecase "Cancel Order" as UC10
+  usecase "Refund Payment" as UC11
+  usecase "Manage Addresses" as UC12
+  usecase "Manage Products" as UC13
+  usecase "Ship Order" as UC14
+}
+
+customer -- UC1
+customer -- UC2
+customer -- UC3
+customer -- UC4
+customer -- UC5
+customer -- UC6
+customer -- UC8
+customer -- UC9
+customer -- UC10
+customer -- UC12
+admin -- UC2
+admin -- UC13
+admin -- UC14
+
+UC7 -- gateway
+UC11 -- gateway
+UC14 -- courier
+UC9 -- courier
+
+UC5 .[norank].> UC2 : <<include>>
+UC6 .[norank].> UC2 : <<include>>
+UC6 .[norank].> UC7 : <<include>>
+UC8 .[norank].> UC6 : <<extend>>
+UC9 .[norank].> UC2 : <<include>>
+UC10 .[norank].> UC2 : <<include>>
+UC10 .[norank].> UC11 : <<include>>
+UC12 .[norank].> UC2 : <<include>>
+UC13 .[norank].> UC2 : <<include>>
+UC14 .[norank].> UC2 : <<include>>
+@enduml

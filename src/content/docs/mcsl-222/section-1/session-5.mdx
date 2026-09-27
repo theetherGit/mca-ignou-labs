@@ -90,134 +90,16 @@ The diagram is deliberately limited to two services. Bill payment, cheque book r
 | Fork and join | Fork, Join | Web Server | Three parallel branches: SMS, email, history |
 | Final nodes | Activity final | Web Server | One after End session, one after Show login error |
 
-<Tabs record="all">
-<TabItem label="Sketch">
-```text
- Customer                 | Web Server                     | Core Banking
---------------------------+--------------------------------+-------------------------
- (*)                      |                                |
-  |                       |                                |
- [Open net banking site]  |                                |
-  |                       |                                |
- [Enter user ID, password]--->[Validate credentials]       |
-                          |        |                       |
-                          |   <credentials valid?>         |
-                          |   [no]|        |[yes]          |
-                          | [Show login    |               |
-                          |  error]        v               |
-                          |    |      [Show dashboard]     |
-                          |   (X)          |               |
-  +<----------------------------------------+               |
-  |                       |                                |
- [Choose service]<-------------------------------+ [yes]   |
-  |                       |                     |          |
- <service?>               |                     |          |
-  |[view balance]------------------------------------------>[Read account balance]
-  |                       |  [Display balance]<-------------------+
-  |[fund transfer]        |        |            |          |
- [Enter beneficiary,      |        |            |          |
-  amount, remarks]---------------------------------------->[Check available balance]
-                          |        |            |          |        |
-                          |        |            |          |   <balance sufficient?>
-                          | [Show insufficient |          |   [no]|        |[yes]
-                          |  balance]<-----------------------------+        |
-                          |        |            |          |                |
-                          | [Send OTP]<----------------------------------- +
- [Enter OTP]<-----------------+    |            |          |
-  +---------------------->[Check OTP]           |          |
-                          |        |            |          |
-                          |   <OTP correct?>    |          |
-                          |   [no]|      |[yes] |          |
-                          | [Show OTP    |      |          |
-                          |  error]      +------------------>[Debit sender account]
-                          |    |               |          |        |
-                          |    |               |          | [Credit beneficiary account]
-                          |    |               |          |        |
-                          |    |               |          | [Record transaction]
-                          |    |               |          |        |
-                          |    |  ====================== fork <-----+
-                          |    |  [Send SMS] [Send email] [Update history]
-                          |    |  ====================== join
-                          |    |               |          |
-                          | [Show transfer confirmation]  |
-                          |    |               |          |
-                          |   (merge) <-- all four service outcomes
-                          |        |                      |
- <another service?>-------+        |                      |
-  |[no]                   |                                |
- [Logout]---------------->[End session]                    |
-                          |    |                           |
-                          |   (X)                          |
+<Diagram src="/code/mcsl-222/section-1/session-5/online_banking_activity.svg" alt="Activity Diagram: Online Banking System" />
+
+<details class="nb-source">
+<summary>PlantUML source (online_banking_activity.puml)</summary>
+
+```text title="online_banking_activity.puml" file=<rootDir>/public/code/mcsl-222/section-1/session-5/online_banking_activity.puml
+
 ```
-</TabItem>
-<TabItem label="online_banking_activity.puml">
-```text title="online_banking_activity.puml"
-@startuml
-title Activity Diagram: Online Banking System
-|Customer|
-start
-:Open net banking site;
-:Enter user ID and password;
-|Web Server|
-:Validate credentials;
-if (credentials valid?) then (yes)
-  :Show dashboard;
-else (no)
-  :Show login error;
-  stop
-endif
-repeat
-  |Customer|
-  :Choose service;
-  if (service?) then (view balance)
-    |Core Banking|
-    :Read account balance;
-    |Web Server|
-    :Display balance;
-  else (fund transfer)
-    |Customer|
-    :Enter beneficiary, amount, remarks;
-    |Core Banking|
-    :Check available balance;
-    if (balance sufficient?) then (yes)
-      |Web Server|
-      :Send OTP to registered mobile;
-      |Customer|
-      :Enter OTP;
-      |Web Server|
-      :Check OTP;
-      if (OTP correct?) then (yes)
-        |Core Banking|
-        :Debit sender account;
-        :Credit beneficiary account;
-        :Record transaction;
-        |Web Server|
-        fork
-          :Send SMS alert;
-        fork again
-          :Send email receipt;
-        fork again
-          :Update transaction history;
-        end fork
-        :Show transfer confirmation;
-      else (no)
-        :Show OTP error, cancel transfer;
-      endif
-    else (no)
-      |Web Server|
-      :Show insufficient balance message;
-    endif
-  endif
-  |Customer|
-repeat while (another service?) is (yes) not (no)
-:Logout;
-|Web Server|
-:End session;
-stop
-@enduml
-```
-</TabItem>
-</Tabs>
+
+</details>
 
 #### Explanation
 
@@ -277,120 +159,16 @@ The scope excludes exam creation by the faculty, question bank maintenance, re-e
 | Merge nodes | Merge | Exam Server | Before Publish result and at the loop head |
 | Final nodes | Activity final | Exam Server, Student | After login error, after exam not available, after View result |
 
-<Tabs record="all">
-<TabItem label="Sketch">
-```text
- Student                        | Exam Server                          | Evaluator
--------------------------------+--------------------------------------+---------------------
- (*)                           |                                      |
-  |                            |                                      |
- [Log in with enrolment       ---->[Validate credentials]             |
-  number and password]         |          |                           |
-                               |    <credentials valid?>              |
-                               |    [no]|         |[yes]              |
-                               | [Show login      v                   |
-                               |  error]    [List scheduled exams]    |
-                               |    |             |                   |
-                               |   (X)            |                   |
- [Select exam]<----------------------------------+                    |
-  |                            |                                      |
-  +--------------------------->  <exam available?>                    |
-                               |    [no]|         |[yes]              |
-                               | [Show exam not   v                   |
-                               |  available]  [Create exam attempt]   |
-                               |    |             |                   |
-                               |   (X)      [Load question paper,     |
-                               |             start timer]             |
-  +<--------------------------------------------+                     |
-  |                            |                                      |
- (merge)<---------------------------------------+ [yes]               |
-  |                            |                |                     |
- [Answer current question]--->[Save answer]     |                     |
-                               |    |           |                     |
- <time left and not submitted?><----+           |                     |
-  |[no]                        |                |                     |
-  +--------------------------->[Lock attempt]                         |
-                               |    |                                 |
-                               | ============== fork ==============   |
-                               |    |                        |        |
-                               | [Auto-evaluate              +------->[Evaluate descriptive
-                               |  objective answers]                  |  answers]
-                               |    |                                 |     |
-                               |    |                                 | [Enter marks]
-                               |    |                        +--------------+
-                               | ============== join ==============   |
-                               |    |                                 |
-                               | [Compute total marks]                |
-                               |    |                                 |
-                               | <total at least pass marks?>         |
-                               | [yes]|            |[no]              |
-                               | [Mark result   [Mark result          |
-                               |  PASS]          FAIL]                |
-                               |    |              |                  |
-                               |   (merge)<--------+                  |
-                               |    |                                 |
-                               | [Publish result]                     |
- [View result]<-----------------------+                               |
-  |                            |                                      |
- (X)                           |                                      |
+<Diagram src="/code/mcsl-222/section-1/session-5/online_examination_activity.svg" alt="Activity Diagram: Online Examination System" />
+
+<details class="nb-source">
+<summary>PlantUML source (online_examination_activity.puml)</summary>
+
+```text title="online_examination_activity.puml" file=<rootDir>/public/code/mcsl-222/section-1/session-5/online_examination_activity.puml
+
 ```
-</TabItem>
-<TabItem label="online_examination_activity.puml">
-```text title="online_examination_activity.puml"
-@startuml
-title Activity Diagram: Online Examination System
-|Student|
-start
-:Log in with enrolment number and password;
-|Exam Server|
-:Validate credentials;
-if (credentials valid?) then (yes)
-  :List scheduled exams;
-else (no)
-  :Show login error;
-  stop
-endif
-|Student|
-:Select exam;
-|Exam Server|
-if (exam available?) then (yes)
-  :Create exam attempt;
-  :Load question paper and start timer;
-else (no)
-  :Show exam not available;
-  stop
-endif
-|Student|
-repeat
-  :Answer current question;
-  |Exam Server|
-  :Save answer;
-  |Student|
-repeat while (time left and not submitted?) is (yes) not (no)
-|Exam Server|
-:Lock attempt;
-fork
-  :Auto-evaluate objective answers;
-fork again
-  |Evaluator|
-  :Evaluate descriptive answers;
-  :Enter marks;
-  |Exam Server|
-end fork
-:Compute total marks;
-if (total at least pass marks?) then (yes)
-  :Mark result PASS;
-else (no)
-  :Mark result FAIL;
-endif
-:Publish result;
-|Student|
-:View result;
-stop
-@enduml
-```
-</TabItem>
-</Tabs>
+
+</details>
 
 #### Explanation
 

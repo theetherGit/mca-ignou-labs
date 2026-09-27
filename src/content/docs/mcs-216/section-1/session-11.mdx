@@ -53,9 +53,9 @@ Determine the cost and structure of an optimal binary search tree for a set of `
 
 <Notebook />
 
-For `n = 7` keys with the given probabilities, the minimum expected search cost is 3.20.
+For `n = 7` keys with the given probabilities, the minimum expected search cost is 3.12 (exactly 78/25) with $k_5$ at the root.
 
-<img src="/216-sc1-ss11-1.png" class="rounded-xl mt-5"/>
+<Diagram src="/code/mcs-216/section-1/session-11/1/obst.svg" alt="Optimal binary search tree for the 7 keys: k5 at the root, cost 3.12" />
 
 ### Step-by-Step 
 
@@ -97,22 +97,35 @@ Example for `l=1, i=1, j=1`:
 
 Repeating this for all `l` yields the final tables:
 
-| `i \ j` | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+| `e[i][j]` | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
 |---------|---|---|---|---|---|---|---|
-| 1 | 0.28 | 0.62 | 1.02 | 1.38 | 1.87 | 2.50 | 3.20 | 
-| 2 |      | 0.30 | 0.68 | 0.96 | 1.45 | 2.02 | 2.68 |
-| 3 |      |      | 0.32 | 0.60 | 1.07 | 1.54 | 2.20 |
-| 4 |      |      |      | 0.26 | 0.60 | 1.06 | 1.61 |
-| 5 |      |      |      |      | 0.32 | 0.75 | 1.25 |
-| 6 |      |      |      |      |      | 0.34 | 0.81 |
-| 7 |      |      |      |      |      |      | 0.36 |
+| 1 | 0.28 | 0.62 | 1.02 | 1.34 | 1.83 | 2.44 | **3.12** |
+| 2 |      | 0.30 | 0.68 | 0.93 | 1.41 | 1.96 | 2.61 |
+| 3 |      |      | 0.32 | 0.57 | 1.04 | 1.48 | 2.13 |
+| 4 |      |      |      | 0.24 | 0.57 | 1.01 | 1.55 |
+| 5 |      |      |      |      | 0.30 | 0.72 | 1.20 |
+| 6 |      |      |      |      |      | 0.32 | 0.78 |
+| 7 |      |      |      |      |      |      | 0.34 |
+
+| `root[i][j]` | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+|---------|---|---|---|---|---|---|---|
+| 1 | 1 | 2 | 2 | 2 | 3 | 3 | **5** |
+| 2 |   | 2 | 3 | 3 | 3 | 5 | 5 |
+| 3 |   |   | 3 | 3 | 4 | 5 | 5 |
+| 4 |   |   |   | 4 | 5 | 5 | 6 |
+| 5 |   |   |   |   | 5 | 6 | 6 |
+| 6 |   |   |   |   |   | 6 | 7 |
+| 7 |   |   |   |   |   |   | 7 |
+
+Check on the diagonal: `e[4][4] = e[4][3] + e[5][4] + w[4][4] = 0.06 + 0.05 + (0.06 + 0.02 + 0.05) = 0.24`. Note $q_4 = 0.05$, not 0.06; that is where a hand calculation usually slips.
 
 #### Tree Reconstruction
 
 Starting from root[1][7] = 5, we recursively find subtrees:
-- `root[1][4] = 2` → `k2` is left child of `k5`
-- `root[6][7] = 7` → `k7` is right child of `k5`
-- Continue recursively until all `root[i][j]` and base dummy keys are placed.
+- `root[1][4] = 2` → $k_2$ is the left child of $k_5$; `root[6][7] = 7` → $k_7$ is the right child.
+- `root[1][1] = 1` and `root[3][4] = 3` → $k_1$ and $k_3$ under $k_2$; `root[4][4] = 4` → $k_4$ is the right child of $k_3$.
+- `root[6][6] = 6` → $k_6$ is the left child of $k_7$; the right child of $k_7$ is the dummy $d_7$.
+- Every empty range `[i, i-1]` becomes the dummy leaf $d_{i-1}$: $d_0, d_1$ under $k_1$; $d_2$ under $k_3$; $d_3, d_4$ under $k_4$; $d_5, d_6$ under $k_6$.
 
 ### Implementation
 
@@ -267,7 +280,7 @@ We use three $O(n^2)$ tables:
 
 <Notebook />
 
-<img src="/216-sc1-ss11-1.png" class="rounded-xl mt-5"/>
+<Diagram src="/code/mcs-216/section-1/session-11/1/obst.svg" alt="Optimal binary search tree for the 7 keys: k5 at the root, cost 3.12" />
 
 ### Implementation
 

@@ -1,0 +1,35 @@
+' Shared PlantUML style: print-friendly, black on white, no shadows, no icons.
+' Applied by scripts/build-diagrams.mjs (plantuml -config).
+skinparam monochrome true
+skinparam shadowing false
+skinparam backgroundColor white
+skinparam defaultFontName Helvetica
+skinparam defaultFontSize 13
+skinparam classAttributeIconSize 0
+skinparam roundCorner 0
+skinparam ArrowThickness 1.2
+skinparam titleFontSize 15
+skinparam titleFontStyle bold
+skinparam sequenceMessageAlign center
+skinparam classBackgroundColor white
+skinparam objectBackgroundColor white
+skinparam entityBackgroundColor white
+skinparam packageBackgroundColor white
+skinparam rectangleBackgroundColor white
+skinparam componentBackgroundColor white
+skinparam interfaceBackgroundColor white
+skinparam nodeBackgroundColor white
+skinparam databaseBackgroundColor white
+skinparam usecaseBackgroundColor white
+skinparam actorBackgroundColor white
+skinparam sequenceParticipantBackgroundColor white
+skinparam sequenceLifeLineBackgroundColor white
+skinparam sequenceGroupBackgroundColor white
+skinparam sequenceBoxBackgroundColor white
+skinparam activityBackgroundColor white
+skinparam activityDiamondBackgroundColor white
+skinparam stateBackgroundColor white
+skinparam noteBackgroundColor white
+skinparam partitionBackgroundColor white
+hide circle
+hide footbox

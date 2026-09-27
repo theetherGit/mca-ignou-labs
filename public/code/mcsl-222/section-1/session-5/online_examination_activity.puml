@@ -1,0 +1,51 @@
+@startuml
+title Activity Diagram: Online Examination System
+|Student|
+start
+:Log in with enrolment number and password;
+|Exam Server|
+:Validate credentials;
+if (credentials valid?) then (yes)
+  :List scheduled exams;
+else (no)
+  :Show login error;
+  stop
+endif
+|Student|
+:Select exam;
+|Exam Server|
+if (exam available?) then (yes)
+  :Create exam attempt;
+  :Load question paper and start timer;
+else (no)
+  :Show exam not available;
+  stop
+endif
+|Student|
+repeat
+  :Answer current question;
+  |Exam Server|
+  :Save answer;
+  |Student|
+repeat while (time left and not submitted?) is (yes) not (no)
+|Exam Server|
+:Lock attempt;
+fork
+  :Auto-evaluate objective answers;
+fork again
+  |Evaluator|
+  :Evaluate descriptive answers;
+  :Enter marks;
+  |Exam Server|
+end fork
+:Compute total marks;
+if (total at least pass marks?) then (yes)
+  :Mark result PASS;
+else (no)
+  :Mark result FAIL;
+endif
+:Publish result;
+|Student|
+:View result;
+stop
+@enduml
